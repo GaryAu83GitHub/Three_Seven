@@ -75,6 +75,11 @@ public class Cube : MonoBehaviour
         }
     }
 
+    public void RotateCube(int aDir)
+    {
+        transform.Rotate(Vector3.back, aDir * 90);
+    }
+
     #region LinkedCube devision
     /// <summary>
     /// Get the cube from the given slot index of a vector
