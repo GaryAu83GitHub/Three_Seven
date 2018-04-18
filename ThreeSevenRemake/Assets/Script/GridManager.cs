@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grid
+public class GridManager
 {
-    public static Grid Instance
+    public static GridManager Instance
     {
         get
         {
             if(mInstance == null)
             {
-                mInstance = new Grid();
+                mInstance = new GridManager();
             }
             return mInstance;
         }
     }
-    private static Grid mInstance;
+    private static GridManager mInstance;
 
     private Vector2Int mGridSize = new Vector2Int(10, 19);
 

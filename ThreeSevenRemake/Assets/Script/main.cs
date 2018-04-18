@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class main : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    private void Awake()
+    {
+        GridManager.Instance.GenerateGrid();
+    }
+    // Use this for initialization
+    void Start () {
 		
 	}
 	

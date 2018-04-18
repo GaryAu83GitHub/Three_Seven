@@ -38,7 +38,7 @@ public class Block : MonoBehaviour
     void Start ()
     {
         mCubes.Add(transform.GetChild(0).GetComponent<Cube>());
-        mCubes[0].GridPos = Grid.Instance.StartPosition;
+        mCubes[0].GridPos = GridManager.Instance.StartPosition;
         mCubes[0].name = "RootCube";
         mCubes[0].Init(this, mCubeNumbers[0]);
 
@@ -66,7 +66,7 @@ public class Block : MonoBehaviour
 
     private void Move(Vector3 aDir)
     {
-        transform.Translate(aDir * Grid.Instance.CubeDistance);
+        transform.Translate(aDir * GridManager.Instance.CubeDistance);
         Vector2Int dir = new Vector2Int((int)aDir.x, (int)aDir.y);
         mCubes[0].GridPos += dir;
         mCubes[1].GridPos += dir;
