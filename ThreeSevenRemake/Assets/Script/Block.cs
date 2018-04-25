@@ -90,6 +90,14 @@ public class Block : MonoBehaviour
         ClockPos(-1);
     }
 
+    public void Landing()
+    {
+        foreach(Cube c in mCubes)
+        {
+            GridManager.Instance.PutInCube(c);
+        }
+    }
+
     private void Move(Vector3 aDir)
     {
         transform.Translate(aDir * GridManager.Instance.CubeGap);

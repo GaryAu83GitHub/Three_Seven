@@ -81,7 +81,7 @@ public class main : MonoBehaviour
     private void Landed(Block aBlock)
     {
         aBlock.name = "Block " + mLandedBlockCount.ToString();
-
+        aBlock.Landing();
         mLandedBlockCount++;
         mLandedBlock.Add(aBlock);
         CreateNewBlock();
