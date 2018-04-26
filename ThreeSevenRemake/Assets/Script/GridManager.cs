@@ -31,6 +31,9 @@ public class GridManager
     public Dictionary<int, List<Cube>> Grid { get { return mGrid; } }
     private Dictionary<int, List<Cube>> mGrid = new Dictionary<int, List<Cube>>();
 
+    public List<Block> LandedBlocks { get { return mLandedBlocks; } }
+    private List<Block> mLandedBlocks = new List<Block>();
+
     public void GenerateGrid()
     {
         mGridMax = mGridSize + new Vector2Int(-1, -1);
@@ -47,6 +50,9 @@ public class GridManager
 
     public Cube GetCubeFrom(Vector2Int aGridPos)
     {
+        if (aGridPos.x < 0 || aGridPos.x > mGridMax.x || aGridPos.y < 0 || aGridPos.y > mGridMax.y)
+            return null;
+
         if (!GridIsVacantAt(aGridPos))
             return mGrid[aGridPos.y][aGridPos.x];
         return null;
@@ -156,6 +162,49 @@ public class GridManager
             if (aBlock.ClockDir == Block.ClockDirection.CLOCK_3 && GetCubeFrom(pos + Vector2Int.down) == null)
                 return true;
         }
+        return false;
+    }
+
+    public bool CubeScoring(Vector2Int aGridPos)
+    {
+        if (CheckScoring(aGridPos, Vector2Int.up, Vector2Int.down))
+            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
+
+        if (CheckScoring(aGridPos, Vector2Int.left, Vector2Int.right))
+            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
+
+        if (CheckScoring(aGridPos, Vector2Int.up, Vector2Int.up * 2))
+            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
+
+        if (CheckScoring(aGridPos, Vector2Int.left, Vector2Int.left * 2))
+            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
+
+        if (CheckScoring(aGridPos, Vector2Int.down, Vector2Int.down * 2))
+            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
+
+        if (CheckScoring(aGridPos, Vector2Int.right, Vector2Int.right * 2))
+            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
+
+        if (GetCubeFrom(aGridPos).IsScoring)
+            return true;
+        return false;
+    }
+
+    private bool CheckScoring(Vector2Int aOrg, Vector2Int aDir1, Vector2Int aDir2)
+    {
+        if (GetCubeFrom(aOrg + aDir1) == null || GetCubeFrom(aOrg + aDir2) == null)
+            return false;
+
+        int sum = GetCubeFrom(aOrg).Number + GetCubeFrom(aOrg + aDir1).Number + GetCubeFrom(aOrg + aDir2).Number;
+
+        if (sum == 7 || sum == 21)
+        {
+            GetCubeFrom(aOrg).IsScoring = true;
+            GetCubeFrom(aOrg + aDir1).IsScoring = true;
+            GetCubeFrom(aOrg + aDir2).IsScoring = true;
+            return true;
+        }
+
         return false;
     }
 }

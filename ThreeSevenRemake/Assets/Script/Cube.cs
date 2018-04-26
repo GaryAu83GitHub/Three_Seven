@@ -17,8 +17,19 @@ public class Cube : MonoBehaviour
     private Vector2Int mGridPosition;
     public Vector2Int GridPos { get { return mGridPosition; } set { mGridPosition = value; } }
 
+    [SerializeField]
     private int mCubeNumber;
     public int Number { get { return mCubeNumber; } }
+
+    private bool mIsScoring = false;
+    public bool IsScoring
+    {
+        get { return mIsScoring; }
+        set
+        {
+            mIsScoring = value;
+        }
+    }
 
     private void Awake()
     {
@@ -78,6 +89,7 @@ public class Cube : MonoBehaviour
     public void RotateCube(int aDir)
     {
         transform.Rotate(Vector3.back, aDir * 90);
+        mTextMesh.transform.Rotate(Vector3.back, -aDir * 90);
     }
 
     #region LinkedCube devision

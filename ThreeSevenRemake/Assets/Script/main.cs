@@ -19,7 +19,10 @@ public class main : MonoBehaviour
 
     private List<Block> mLandedBlock = new List<Block>();
 
-    private int mLandedBlockCount = 0;
+    private int mBlockCount = 0;
+
+    [SerializeField]
+    private int mScores = 0;
     
     private void Awake()
     {
@@ -55,7 +58,7 @@ public class main : MonoBehaviour
             if (GridManager.Instance.AvailableMove(Vector2Int.down, mCurrentBlock))
                 mCurrentBlock.DropDown();
             else
-                Landed(mCurrentBlock);
+                BlockLanded(mCurrentBlock);
         }
 
         if (Input.GetKeyDown(KeyCode.Q) && GridManager.Instance.AvailableRot((int)TurningIndex.COUNTER_CLOCK_WISE, mCurrentBlock))
@@ -68,6 +71,9 @@ public class main : MonoBehaviour
     private void CreateNewBlock()
     {
         GameObject newBlock = Instantiate(BlockObject, GridManager.Instance.StartWorldPosition, Quaternion.identity);
+        newBlock.name = "Block " + mBlockCount.ToString();
+        mBlockCount++;
+
         if (newBlock.GetComponent<Block>() != null)
             mCurrentBlock = newBlock.GetComponent<Block>();
     }
@@ -78,12 +84,54 @@ public class main : MonoBehaviour
         CreateNewBlock();
     }
 
-    private void Landed(Block aBlock)
+    private void BlockLanded(Block aBlock)
     {
-        aBlock.name = "Block " + mLandedBlockCount.ToString();
         aBlock.Landing();
-        mLandedBlockCount++;
         mLandedBlock.Add(aBlock);
+        
+        aBlock.Scoring();
+        if (aBlock.IsScoring)
+            mScores += aBlock.ScoringTimes;
+
+        List<Block> scoredBoxes = new List<Block>();
+
+        foreach (Block b in mLandedBlock)
+        {
+            if (b.IsScoring)
+            {
+                b.AfterScoreChange();
+                scoredBoxes.Add(b);
+            }
+        }
+
+        for(int i = scoredBoxes.Count -1; i > -1; i--)
+        {
+            if (scoredBoxes[i].Cubes.Count == 0)
+            {
+                Destroy(scoredBoxes[i].gameObject);
+                scoredBoxes.Remove(scoredBoxes[i]);
+            }
+            else
+            {
+
+            }
+        }
+
+        /*for (int i = mLandedBlock.Count - 1; i > 0; i--)
+        {
+            if (mLandedBlock[i].IsScoring)
+            {
+                mLandedBlock[i].AfterScoreChange();
+                if (mLandedBlock[i].Cubes.Count == 0)
+                {
+                    Destroy(mLandedBlock[i].gameObject);
+                    mLandedBlock.RemoveAt(i);
+                }
+                else
+                    scoredBoxes.Add(mLandedBlock[i]);
+            }
+        }*/
+
         CreateNewBlock();
     }
 }

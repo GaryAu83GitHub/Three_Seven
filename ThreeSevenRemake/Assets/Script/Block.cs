@@ -12,6 +12,7 @@ public class Block : MonoBehaviour
         CLOCK_9
     }
 
+    [SerializeField]
     private List<Cube> mCubes = new List<Cube>();
     public List<Cube> Cubes { get { return mCubes; } }
     public Cube RootCube { get { return (mCubes[0] != null ? mCubes[0] : null); } }
@@ -28,11 +29,31 @@ public class Block : MonoBehaviour
     private Vector2Int mMinPosition;
     public Vector2Int MinGridPos { get { return mMinPosition; } }
 
+    private List<int> mCubeNumbers = new List<int>();
+    public List<int> CubeNumbers { get { return mCubeNumbers; } }
+
     private ClockDirection mCurrentClockDirection;
     public ClockDirection ClockDir { get { return mCurrentClockDirection; } }
 
-    private List<int> mCubeNumbers = new List<int>();
-    public List<int> CubeNumbers { get { return mCubeNumbers; } }
+    private int mScoringTimes = 0;
+    public int ScoringTimes { get { return mScoringTimes; } set { mScoringTimes = value; } }
+
+    public bool IsScoring
+    {
+        get
+        {
+            if (RootCube.IsScoring || SubCube.IsScoring)
+                return true;
+
+            if (mCubes.Count == 0)
+                return true;
+
+            if (mScoringTimes > 0)
+                return true;
+
+            return false;
+        }
+    }
 
     void Start ()
     {
@@ -72,21 +93,11 @@ public class Block : MonoBehaviour
 
     public void TurnClockWise()
     {
-        //Joint.Rotate(Vector3.back, 90f);
-        //mCurrentClockDirection++;
-        //if (mCurrentClockDirection > ClockDirection.CLOCK_9)
-        //    mCurrentClockDirection = ClockDirection.CLOCK_12;
-
         ClockPos(1);
     }
 
     public void TurnCounterClockWise()
     {
-        //Joint.Rotate(Vector3.back, -90f);
-        //mCurrentClockDirection--;
-        //if (mCurrentClockDirection < ClockDirection.CLOCK_12)
-        //    mCurrentClockDirection = ClockDirection.CLOCK_9;
-
         ClockPos(-1);
     }
 
@@ -96,6 +107,45 @@ public class Block : MonoBehaviour
         {
             GridManager.Instance.PutInCube(c);
         }
+    }
+
+    public void Scoring()
+    {
+        foreach (Cube c in mCubes)
+            GridManager.Instance.CubeScoring(c.GridPos);
+    }
+
+    public void AfterScoreChange()
+    {
+        Destroy(Joint.gameObject);
+
+        if (RootCube.IsScoring && !SubCube.IsScoring)
+        {
+            GridManager.Instance.NullifyCubeAt(RootCube.GridPos);
+            transform.position = new Vector3(SubCube.GridPos.x * GridManager.Instance.CubeGap, SubCube.GridPos.y * GridManager.Instance.CubeGap, 0f);
+            SubCube.transform.position = RootCube.transform.position;
+            
+            Destroy(RootCube.gameObject);
+            mCubes.Remove(RootCube);
+        }
+        else if(!RootCube.IsScoring && SubCube.IsScoring)
+        {
+            GridManager.Instance.NullifyCubeAt(SubCube.GridPos);
+            
+            Destroy(SubCube.gameObject);
+            mCubes.Remove(SubCube);
+        }
+        else if (RootCube.IsScoring && SubCube.IsScoring)
+        {
+            GridManager.Instance.NullifyCubeAt(RootCube.GridPos);
+            GridManager.Instance.NullifyCubeAt(SubCube.GridPos);
+            Destroy(SubCube.gameObject);
+            Destroy(RootCube.gameObject);
+            mCubes.Clear();
+        }
+
+
+
     }
 
     private void Move(Vector3 aDir)
@@ -118,6 +168,9 @@ public class Block : MonoBehaviour
             mCurrentClockDirection = ClockDirection.CLOCK_12;
         else if (mCurrentClockDirection < ClockDirection.CLOCK_12)
             mCurrentClockDirection = ClockDirection.CLOCK_9;
+
+        //foreach (Cube c in mCubes)
+        //    c.RotateCube(aDir);
 
         switch (mCurrentClockDirection)
         {
