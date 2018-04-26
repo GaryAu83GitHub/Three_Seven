@@ -109,11 +109,16 @@ public class main : MonoBehaviour
             if (scoredBoxes[i].Cubes.Count == 0)
             {
                 Destroy(scoredBoxes[i].gameObject);
+                mLandedBlock.Remove(scoredBoxes[i]);
                 scoredBoxes.Remove(scoredBoxes[i]);
             }
             else
             {
-
+                while(GridManager.Instance.AvailableMove(Vector2Int.down, scoredBoxes[i]))
+                {
+                    scoredBoxes[i].DropDown();
+                }
+                scoredBoxes[i].Landing();
             }
         }
 

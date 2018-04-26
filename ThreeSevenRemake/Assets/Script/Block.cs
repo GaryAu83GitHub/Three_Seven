@@ -42,7 +42,7 @@ public class Block : MonoBehaviour
     {
         get
         {
-            if (RootCube.IsScoring || SubCube.IsScoring)
+            if (AnyCubeScoring())
                 return true;
 
             if (mCubes.Count == 0)
@@ -117,35 +117,55 @@ public class Block : MonoBehaviour
 
     public void AfterScoreChange()
     {
-        Destroy(Joint.gameObject);
+        if(Joint != null)
+            Destroy(Joint.gameObject);
 
-        if (RootCube.IsScoring && !SubCube.IsScoring)
+        if (mCubes.Count == 2)
         {
-            GridManager.Instance.NullifyCubeAt(RootCube.GridPos);
-            transform.position = new Vector3(SubCube.GridPos.x * GridManager.Instance.CubeGap, SubCube.GridPos.y * GridManager.Instance.CubeGap, 0f);
-            SubCube.transform.position = RootCube.transform.position;
-            
-            Destroy(RootCube.gameObject);
-            mCubes.Remove(RootCube);
+            if (RootCube.IsScoring && !SubCube.IsScoring)
+            {
+                GridManager.Instance.NullifyCubeAt(RootCube.GridPos);
+                transform.position = new Vector3(SubCube.GridPos.x * GridManager.Instance.CubeGap, SubCube.GridPos.y * GridManager.Instance.CubeGap, 0f);
+                SubCube.transform.position = RootCube.transform.position;
+
+                mMinPosition = SubCube.GridPos;
+                mMaxPosition = SubCube.GridPos;
+
+                Destroy(RootCube.gameObject);
+                mCubes.Remove(RootCube);
+            }
+            else if (!RootCube.IsScoring && SubCube.IsScoring)
+            {
+                GridManager.Instance.NullifyCubeAt(SubCube.GridPos);
+
+                mMinPosition = RootCube.GridPos;
+                mMaxPosition = RootCube.GridPos;
+
+                Destroy(SubCube.gameObject);
+                mCubes.Remove(SubCube);
+            }
+            else if (RootCube.IsScoring && SubCube.IsScoring)
+            {
+                GridManager.Instance.NullifyCubeAt(RootCube.GridPos);
+                GridManager.Instance.NullifyCubeAt(SubCube.GridPos);
+                Destroy(SubCube.gameObject);
+                Destroy(RootCube.gameObject);
+                mCubes.Clear();
+            }
         }
-        else if(!RootCube.IsScoring && SubCube.IsScoring)
+        else
         {
-            GridManager.Instance.NullifyCubeAt(SubCube.GridPos);
-            
-            Destroy(SubCube.gameObject);
-            mCubes.Remove(SubCube);
-        }
-        else if (RootCube.IsScoring && SubCube.IsScoring)
-        {
-            GridManager.Instance.NullifyCubeAt(RootCube.GridPos);
-            GridManager.Instance.NullifyCubeAt(SubCube.GridPos);
-            Destroy(SubCube.gameObject);
-            Destroy(RootCube.gameObject);
+            GridManager.Instance.NullifyCubeAt(mCubes[0].GridPos);
+            Destroy(mCubes[0].gameObject);
             mCubes.Clear();
         }
 
-
-
+        mScoringTimes = 0;
+        if(mCubes.Count != 0)
+        {
+            foreach (Cube c in mCubes)
+                c.IsScoring = false;
+        }
     }
 
     private void Move(Vector3 aDir)
@@ -153,7 +173,8 @@ public class Block : MonoBehaviour
         transform.Translate(aDir * GridManager.Instance.CubeGap);
         Vector2Int dir = new Vector2Int((int)aDir.x, (int)aDir.y);
         mCubes[0].GridPos += dir;
-        mCubes[1].GridPos += dir;
+        if(mCubes.Count > 1)
+            mCubes[1].GridPos += dir;
 
         mMinPosition += dir;
         mMaxPosition += dir;
@@ -176,23 +197,23 @@ public class Block : MonoBehaviour
         {
             case ClockDirection.CLOCK_12:
                 SubCubPosition(Vector2Int.up);
-                mMinPosition = mCubes[0].GridPos;
-                mMaxPosition = mCubes[1].GridPos;
+                mMinPosition = RootCube.GridPos;
+                mMaxPosition = SubCube.GridPos;
                 break;
             case ClockDirection.CLOCK_3:
                 SubCubPosition(Vector2Int.right);
-                mMinPosition = mCubes[0].GridPos;
-                mMaxPosition = mCubes[1].GridPos;
+                mMinPosition = RootCube.GridPos;
+                mMaxPosition = SubCube.GridPos;
                 break;
             case ClockDirection.CLOCK_6:
                 SubCubPosition(Vector2Int.down);
-                mMinPosition = mCubes[1].GridPos;
-                mMaxPosition = mCubes[0].GridPos;
+                mMinPosition = SubCube.GridPos;
+                mMaxPosition = RootCube.GridPos;
                 break;
             case ClockDirection.CLOCK_9:
                 SubCubPosition(Vector2Int.left);
-                mMinPosition = mCubes[1].GridPos;
-                mMaxPosition = mCubes[0].GridPos;
+                mMinPosition = SubCube.GridPos;
+                mMaxPosition = RootCube.GridPos;
                 break;
         }
     }
@@ -201,5 +222,15 @@ public class Block : MonoBehaviour
     {
         mCubes[1].transform.position = mCubes[0].transform.position + new Vector3(aDir.x * GridManager.Instance.CubeGap, aDir.y * GridManager.Instance.CubeGap, 0f);
         mCubes[1].GridPos = mCubes[0].GridPos + aDir;
+    }
+
+    private bool AnyCubeScoring()
+    {
+        foreach(Cube c in mCubes)
+        {
+            if (c.IsScoring)
+                return true;
+        }
+        return false;
     }
 }

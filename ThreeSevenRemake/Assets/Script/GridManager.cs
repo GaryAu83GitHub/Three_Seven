@@ -103,22 +103,36 @@ public class GridManager
         }
         else if (aDir == Vector2Int.down)
         {
-            if (aBlock.ClockDir == Block.ClockDirection.CLOCK_3 || aBlock.ClockDir == Block.ClockDirection.CLOCK_9)
+            if (aBlock.Cubes.Count == 2)
             {
-                Vector2Int rootPos = aBlock.RootCube.GridPos + aDir;
-                Vector2Int subPos = aBlock.SubCube.GridPos + aDir;
+                if (aBlock.ClockDir == Block.ClockDirection.CLOCK_3 || aBlock.ClockDir == Block.ClockDirection.CLOCK_9)
+                {
+                    Vector2Int rootPos = aBlock.RootCube.GridPos + aDir;
+                    Vector2Int subPos = aBlock.SubCube.GridPos + aDir;
 
-                if (rootPos.y > -1 && subPos.y > -1 &&
-                    mGrid[rootPos.y][(rootPos.x)] == null &&
-                    mGrid[subPos.y][(subPos.x)] == null)
-                    return true;
+                    if (rootPos.y > -1 && subPos.y > -1 &&
+                        mGrid[rootPos.y][(rootPos.x)] == null &&
+                        mGrid[subPos.y][(subPos.x)] == null)
+                        return true;
+                }
+                else
+                {
+                    Vector2Int pos = aBlock.MinGridPos + aDir;
+
+                    if (pos.y > -1 && mGrid[pos.y][(pos.x)] == null)
+                        return true;
+                }
             }
-            else
+            // When a block has alone cube in it and belove is null, the block is able to drop down and in the meantime null the grid data too
+            else if (aBlock.Cubes.Count == 1)
             {
                 Vector2Int pos = aBlock.MinGridPos + aDir;
 
                 if (pos.y > -1 && mGrid[pos.y][(pos.x)] == null)
+                {
+                    NullifyCubeAt(aBlock.MinGridPos);
                     return true;
+                }
             }
         }
         return false;
