@@ -85,6 +85,14 @@ public class main : MonoBehaviour
         CreateNewBlock();
     }
 
+    /// <summary>
+    /// When the current dropping block had landed on ground or on another previous landed block
+    /// its cubes will be registrated into the grid for scoring purpose and in the same time be store
+    /// into the list of landed blocks.
+    /// It'll go through if the current block had manage any scores and if does it'll rearrange all blocks
+    /// that had their cubes involved to change, and lastly create a new block at the top of the starting 
+    /// position.
+    /// </summary>
     private void Landed()
     {
         mCurrentBlock.Landing();
@@ -93,16 +101,23 @@ public class main : MonoBehaviour
         mCurrentBlock.Scoring();
         if (mCurrentBlock.IsScoring)
         {
+            // when this block is scoring, it'll involved other blocks around it so all the block that
+            // was involved will have their cubes position in the grid to be nullify.
+            NullifyGridFromScoringBlocks();
+
+            // how many times the block scored will be added into the score interger
             mScores += mCurrentBlock.ScoringTimes;
+
+            // All blocks that was involve have too rearrange their position or been removed.
             Rearrangement();
         }
+
+        // called for create the a new falling block.
         CreateNewBlock();
     }
 
     private void Rearrangement()
     {
-        List<Block> floatingBlocks = new List<Block>();
-
         // Check for any block is scoring
         foreach (var b in mLandedBlock.ToList())
         {
@@ -116,23 +131,27 @@ public class main : MonoBehaviour
                 {
                     Destroy(b.gameObject);
                     mLandedBlock.Remove(b);
-                }
-                // if there's one cube remaing, it'll check if below it is vacant and if does the block will drop until it landed on the ground or on another block
-                else
-                {
-                    while (GridManager.Instance.AvailableMove(Vector2Int.down, b))
-                    {
-                        b.DropDown();
-                    }
-                    b.Landing();
-                }
+                }                
             }
+
+            // if below the block is empty, it'll keep droping until it lands on the ground or on another block
+            while (GridManager.Instance.AvailableMove(Vector2Int.down, b))
+            {
+                b.DropDown();
+            }
+            b.Landing();
         }
     }
 
+    /// <summary>
+    /// Nullify all landed block that was involved in scoring in the grid.
+    /// </summary>
     private void NullifyGridFromScoringBlocks()
     {
         foreach (Block b in mLandedBlock)
-            GridManager.Instance.NullifyGridWithBlock(b);
+        {
+            if(b.IsScoring)
+                GridManager.Instance.NullifyGridWithBlock(b);
+        }
     }
 }
