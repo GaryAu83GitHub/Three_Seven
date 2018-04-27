@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class main : MonoBehaviour
@@ -58,7 +59,7 @@ public class main : MonoBehaviour
             if (GridManager.Instance.AvailableMove(Vector2Int.down, mCurrentBlock))
                 mCurrentBlock.DropDown();
             else
-                BlockLanded(mCurrentBlock);
+                Landed();
         }
 
         if (Input.GetKeyDown(KeyCode.Q) && GridManager.Instance.AvailableRot((int)TurningIndex.COUNTER_CLOCK_WISE, mCurrentBlock))
@@ -84,59 +85,54 @@ public class main : MonoBehaviour
         CreateNewBlock();
     }
 
-    private void BlockLanded(Block aBlock)
+    private void Landed()
     {
-        aBlock.Landing();
-        mLandedBlock.Add(aBlock);
-        
-        aBlock.Scoring();
-        if (aBlock.IsScoring)
-            mScores += aBlock.ScoringTimes;
+        mCurrentBlock.Landing();
+        mLandedBlock.Add(mCurrentBlock);
 
-        List<Block> scoredBoxes = new List<Block>();
-
-        foreach (Block b in mLandedBlock)
+        mCurrentBlock.Scoring();
+        if (mCurrentBlock.IsScoring)
         {
+            mScores += mCurrentBlock.ScoringTimes;
+            Rearrangement();
+        }
+        CreateNewBlock();
+    }
+
+    private void Rearrangement()
+    {
+        List<Block> floatingBlocks = new List<Block>();
+
+        // Check for any block is scoring
+        foreach (var b in mLandedBlock.ToList())
+        {
+            // if it scoring the block will changed and depending on how it change it'll act different 
             if (b.IsScoring)
             {
                 b.AfterScoreChange();
-                scoredBoxes.Add(b);
-            }
-        }
-
-        for(int i = scoredBoxes.Count -1; i > -1; i--)
-        {
-            if (scoredBoxes[i].Cubes.Count == 0)
-            {
-                Destroy(scoredBoxes[i].gameObject);
-                mLandedBlock.Remove(scoredBoxes[i]);
-                scoredBoxes.Remove(scoredBoxes[i]);
-            }
-            else
-            {
-                while(GridManager.Instance.AvailableMove(Vector2Int.down, scoredBoxes[i]))
+                
+                // if both cube in the clock scores, it'll be remove from the storage of landing blocks
+                if(b.Cubes.Count == 0)
                 {
-                    scoredBoxes[i].DropDown();
+                    Destroy(b.gameObject);
+                    mLandedBlock.Remove(b);
                 }
-                scoredBoxes[i].Landing();
-            }
-        }
-
-        /*for (int i = mLandedBlock.Count - 1; i > 0; i--)
-        {
-            if (mLandedBlock[i].IsScoring)
-            {
-                mLandedBlock[i].AfterScoreChange();
-                if (mLandedBlock[i].Cubes.Count == 0)
-                {
-                    Destroy(mLandedBlock[i].gameObject);
-                    mLandedBlock.RemoveAt(i);
-                }
+                // if there's one cube remaing, it'll check if below it is vacant and if does the block will drop until it landed on the ground or on another block
                 else
-                    scoredBoxes.Add(mLandedBlock[i]);
+                {
+                    while (GridManager.Instance.AvailableMove(Vector2Int.down, b))
+                    {
+                        b.DropDown();
+                    }
+                    b.Landing();
+                }
             }
-        }*/
+        }
+    }
 
-        CreateNewBlock();
+    private void NullifyGridFromScoringBlocks()
+    {
+        foreach (Block b in mLandedBlock)
+            GridManager.Instance.NullifyGridWithBlock(b);
     }
 }

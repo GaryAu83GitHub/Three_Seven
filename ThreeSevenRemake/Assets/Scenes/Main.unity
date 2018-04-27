@@ -224,8 +224,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c791c79f9a8199b429445a4c56d5c771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlockObject: {fileID: 1477741451248376, guid: 03ad5dab546e26140a9097171ed563c1,
+  BlockObject: {fileID: 1522182820706444, guid: d95a1fe0be9fbd542beeb0a4366a932e,
     type: 2}
+  mScores: 0
 --- !u!4 &434038362
 Transform:
   m_ObjectHideFlags: 0

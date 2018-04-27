@@ -180,7 +180,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1522182820706444}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.28, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4112151698526220}
@@ -497,6 +497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 181d6da23f75faf438a1669d02d16aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mCubes: []
 --- !u!114 &114532616255011598
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -508,6 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f119f68075fd514d9e17c3b479e2eb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mCubeNumber: 0
 --- !u!114 &114686627807080740
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -519,6 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f119f68075fd514d9e17c3b479e2eb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mCubeNumber: 0
 --- !u!136 &136334994637528324
 CapsuleCollider:
   m_ObjectHideFlags: 1

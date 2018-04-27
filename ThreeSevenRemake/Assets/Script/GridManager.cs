@@ -65,10 +65,16 @@ public class GridManager
         return false;
     }
 
-    public void NullifyCubeAt(Vector2Int aGridpos)
+    public void NullifyGridWithCubeAt(Vector2Int aGridpos)
     {
         if(!GridIsVacantAt(aGridpos))
             mGrid[aGridpos.y][aGridpos.x] = null;
+    }
+
+    public void NullifyGridWithBlock(Block aBlock)
+    {
+        foreach (Cube c in aBlock.Cubes)
+            NullifyGridWithCubeAt(c.GridPos);
     }
 
     public void PutInCube(Cube aCube)
@@ -82,7 +88,7 @@ public class GridManager
     {
         Vector2Int pos = aCube.GridPos;
         if (GridIsVacantAt(pos) && GetCubeFrom(pos) == aCube)
-            NullifyCubeAt(pos);
+            NullifyGridWithCubeAt(pos);
     }
 
     public bool AvailableMove(Vector2Int aDir, Block aBlock)
@@ -130,7 +136,7 @@ public class GridManager
 
                 if (pos.y > -1 && mGrid[pos.y][(pos.x)] == null)
                 {
-                    NullifyCubeAt(aBlock.MinGridPos);
+                    NullifyGridWithCubeAt(aBlock.MinGridPos);
                     return true;
                 }
             }

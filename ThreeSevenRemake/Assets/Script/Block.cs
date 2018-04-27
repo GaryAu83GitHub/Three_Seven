@@ -124,7 +124,7 @@ public class Block : MonoBehaviour
         {
             if (RootCube.IsScoring && !SubCube.IsScoring)
             {
-                GridManager.Instance.NullifyCubeAt(RootCube.GridPos);
+                GridManager.Instance.NullifyGridWithCubeAt(RootCube.GridPos);
                 transform.position = new Vector3(SubCube.GridPos.x * GridManager.Instance.CubeGap, SubCube.GridPos.y * GridManager.Instance.CubeGap, 0f);
                 SubCube.transform.position = RootCube.transform.position;
 
@@ -136,7 +136,7 @@ public class Block : MonoBehaviour
             }
             else if (!RootCube.IsScoring && SubCube.IsScoring)
             {
-                GridManager.Instance.NullifyCubeAt(SubCube.GridPos);
+                GridManager.Instance.NullifyGridWithCubeAt(SubCube.GridPos);
 
                 mMinPosition = RootCube.GridPos;
                 mMaxPosition = RootCube.GridPos;
@@ -146,8 +146,8 @@ public class Block : MonoBehaviour
             }
             else if (RootCube.IsScoring && SubCube.IsScoring)
             {
-                GridManager.Instance.NullifyCubeAt(RootCube.GridPos);
-                GridManager.Instance.NullifyCubeAt(SubCube.GridPos);
+                GridManager.Instance.NullifyGridWithCubeAt(RootCube.GridPos);
+                GridManager.Instance.NullifyGridWithCubeAt(SubCube.GridPos);
                 Destroy(SubCube.gameObject);
                 Destroy(RootCube.gameObject);
                 mCubes.Clear();
@@ -155,7 +155,7 @@ public class Block : MonoBehaviour
         }
         else
         {
-            GridManager.Instance.NullifyCubeAt(mCubes[0].GridPos);
+            GridManager.Instance.NullifyGridWithCubeAt(mCubes[0].GridPos);
             Destroy(mCubes[0].gameObject);
             mCubes.Clear();
         }
