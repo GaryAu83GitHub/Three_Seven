@@ -95,9 +95,18 @@ public class main : MonoBehaviour
     /// </summary>
     private void Landed()
     {
+        // set the current block to landing
         mCurrentBlock.Landing();
+
+        // store the landing block into the list of remaining blocks in the grid
         mLandedBlock.Add(mCurrentBlock);
 
+        // sort the list of landings block base on the minimum y position (this is more than a matter of "just in case" to prevent
+        // blocks landing miss placing)
+        var sortBlockList = mLandedBlock.OrderBy(b => b.MinGridPos.y).ThenBy(b => b.MinGridPos.x);
+        mLandedBlock = sortBlockList.ToList();
+
+        // the current block check if it score
         mCurrentBlock.Scoring();
         if (mCurrentBlock.IsScoring)
         {
@@ -118,9 +127,6 @@ public class main : MonoBehaviour
 
     private void Rearrangement()
     {
-        var sortBlockList = mLandedBlock.OrderBy(b => b.MinGridPos.y).ThenBy(b => b.MinGridPos.x);
-        mLandedBlock = sortBlockList.ToList();
-
         // Check for any block is scoring
         foreach (var b in mLandedBlock.ToList())
         {
