@@ -24,6 +24,9 @@ public class main : MonoBehaviour
 
     [SerializeField]
     private int mScores = 0;
+
+    private float mDropRate = 1f;
+    private float mNextDropTime = 0;
     
     private void Awake()
     {
@@ -54,12 +57,13 @@ public class main : MonoBehaviour
             mCurrentBlock.MoveRight();
         }
 
-        if(Input.GetKeyDown(KeyCode.S))
+        if(Input.GetKeyDown(KeyCode.S) || Time.time > mNextDropTime)
         {
             if (GridManager.Instance.AvailableMove(Vector2Int.down, mCurrentBlock))
                 mCurrentBlock.DropDown();
             else
                 Landed();
+            mNextDropTime = Time.time + mDropRate;
         }
 
         if (Input.GetKeyDown(KeyCode.Q) && GridManager.Instance.AvailableRot((int)TurningIndex.COUNTER_CLOCK_WISE, mCurrentBlock))
@@ -77,6 +81,8 @@ public class main : MonoBehaviour
 
         if (newBlock.GetComponent<Block>() != null)
             mCurrentBlock = newBlock.GetComponent<Block>();
+
+        mNextDropTime = Time.time + mDropRate;
     }
 
     private void ReplaceTheBlock()
