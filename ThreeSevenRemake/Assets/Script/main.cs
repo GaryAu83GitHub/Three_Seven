@@ -118,6 +118,9 @@ public class main : MonoBehaviour
 
     private void Rearrangement()
     {
+        var sortBlockList = mLandedBlock.OrderBy(b => b.MinGridPos.y).ThenBy(b => b.MinGridPos.x);
+        mLandedBlock = sortBlockList.ToList();
+
         // Check for any block is scoring
         foreach (var b in mLandedBlock.ToList())
         {
