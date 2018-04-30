@@ -21,10 +21,16 @@ public class main : MonoBehaviour
     private List<Block> mLandedBlock = new List<Block>();
 
     private int mBlockCount = 0;
+    
+    [SerializeField]
+    private int mTotalScores = 0;
+    private int mScoreMultiplies = 0;
 
     [SerializeField]
-    private int mScores = 0;
+    private int mCurrentLevel = 0;
+    private int mNextLevelUpScore = 250;
 
+    [SerializeField]
     private float mDropRate = 1f;
     private float mNextDropTime = 0;
     
@@ -63,6 +69,7 @@ public class main : MonoBehaviour
                 mCurrentBlock.DropDown();
             else
                 Landed();
+
             mNextDropTime = Time.time + mDropRate;
         }
 
@@ -121,7 +128,7 @@ public class main : MonoBehaviour
             NullifyGridFromScoringBlocks();
 
             // how many times the block scored will be added into the score interger
-            mScores += mCurrentBlock.ScoringTimes;
+            mScoreMultiplies += mCurrentBlock.ScoringTimes;
 
             // All blocks that was involve have too rearrange their position or been removed.
             Rearrangement();
@@ -156,6 +163,19 @@ public class main : MonoBehaviour
             }
             b.Landing();
         }
+    }
+
+    private void ScoreCalclulation()
+    {
+        mTotalScores += mCurrentLevel + (mCurrentLevel * mScoreMultiplies);
+        if(mTotalScores >= mNextLevelUpScore)
+        {
+            mCurrentLevel++;
+            mNextLevelUpScore += mNextLevelUpScore + (mNextLevelUpScore / 2);
+            if (mCurrentLevel % 3 == 0)
+                mDropRate = (mDropRate * .95f);
+        }
+
     }
 
     /// <summary>

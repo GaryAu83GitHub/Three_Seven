@@ -187,33 +187,22 @@ public class GridManager
 
     public bool CubeScoring(Vector2Int aGridPos)
     {
-        if (CheckScoring(aGridPos, Vector2Int.up, Vector2Int.down))
-            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
-
-        if (CheckScoring(aGridPos, Vector2Int.left, Vector2Int.right))
-            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
-
-        if (CheckScoring(aGridPos, Vector2Int.up, Vector2Int.up * 2))
-            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
-
-        if (CheckScoring(aGridPos, Vector2Int.left, Vector2Int.left * 2))
-            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
-
-        if (CheckScoring(aGridPos, Vector2Int.down, Vector2Int.down * 2))
-            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
-
-        if (CheckScoring(aGridPos, Vector2Int.right, Vector2Int.right * 2))
-            GetCubeFrom(aGridPos).ParentBlock.ScoringTimes++;
+        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.up, Vector2Int.down);
+        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.left, Vector2Int.right);
+        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.up, Vector2Int.up * 2);
+        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.left, Vector2Int.left * 2);
+        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.down, Vector2Int.down * 2);
+        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.right, Vector2Int.right * 2);
 
         if (GetCubeFrom(aGridPos).IsScoring)
             return true;
         return false;
     }
 
-    private bool CheckScoring(Vector2Int aOrg, Vector2Int aDir1, Vector2Int aDir2)
+    private int CheckScoring(Vector2Int aOrg, Vector2Int aDir1, Vector2Int aDir2)
     {
         if (GetCubeFrom(aOrg + aDir1) == null || GetCubeFrom(aOrg + aDir2) == null)
-            return false;
+            return 0;
 
         int sum = GetCubeFrom(aOrg).Number + GetCubeFrom(aOrg + aDir1).Number + GetCubeFrom(aOrg + aDir2).Number;
 
@@ -222,9 +211,13 @@ public class GridManager
             GetCubeFrom(aOrg).IsScoring = true;
             GetCubeFrom(aOrg + aDir1).IsScoring = true;
             GetCubeFrom(aOrg + aDir2).IsScoring = true;
-            return true;
+
+            if (sum == 7)
+                return 1;
+            else if (sum == 21)
+                return 2;
         }
 
-        return false;
+        return 0;
     }
 }
