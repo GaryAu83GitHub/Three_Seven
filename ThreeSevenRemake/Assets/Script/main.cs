@@ -14,6 +14,8 @@ public class main : MonoBehaviour
         CLOCK_WISE = 1,
     }
 
+    public delegate void OnCreateNewBlock(Block aNewBlock);
+    public static OnCreateNewBlock createNewBlock;
     private Block mCurrentBlock;
 
     private Vector3 mBlockStartPosition;
@@ -93,6 +95,9 @@ public class main : MonoBehaviour
         GameObject newBlock = Instantiate(BlockObject, GridManager.Instance.StartWorldPosition, Quaternion.identity);
         newBlock.name = "Block " + mBlockCount.ToString();
         mBlockCount++;
+
+        if(createNewBlock != null)
+            createNewBlock(newBlock.GetComponent<Block>());
 
         if (newBlock.GetComponent<Block>() != null)
             mCurrentBlock = newBlock.GetComponent<Block>();
@@ -178,12 +183,14 @@ public class main : MonoBehaviour
     private void ScoreCalclulation()
     {
         mTotalScores += mCurrentLevel + (mCurrentLevel * mScoreMultiplies);
-        scoreChanging(mTotalScores);
+        if(scoreChanging != null)
+            scoreChanging(mTotalScores);
 
         if(mTotalScores >= mNextLevelUpScore)
         {
             mCurrentLevel++;
-            levelUpdate(mCurrentLevel);
+            if(levelUpdate != null)
+                levelUpdate(mCurrentLevel);
 
             mNextLevelUpScore += mNextLevelUpScore + (mNextLevelUpScore / 2);
             if (mCurrentLevel % 3 == 0)

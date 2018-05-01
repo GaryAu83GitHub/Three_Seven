@@ -22,12 +22,14 @@ public class GUI : MonoBehaviour
     {
         main.scoreChanging += UpdateScore;
         main.levelUpdate += UpdateLevel;
+        main.createNewBlock += TransferNewBlock;
     }
 
     private void OnDisable()
     {
         main.scoreChanging -= UpdateScore;
         main.levelUpdate -= UpdateLevel;
+        main.createNewBlock -= TransferNewBlock;
     }
 
     private void Update()
@@ -51,5 +53,12 @@ public class GUI : MonoBehaviour
     {
         LevelText.text = aNewLevel.ToString();
     }
+
+    public void TransferNewBlock(Block aNewBlock)
+    {
+        aNewBlock.SetCubeNumbers(NextBlockGUI.NewNumber());
+    }
+
+
 
 }
