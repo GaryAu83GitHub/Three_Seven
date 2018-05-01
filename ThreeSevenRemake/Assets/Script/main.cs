@@ -41,7 +41,9 @@ public class main : MonoBehaviour
 
     private float mButtonDownDropRate = .1f;
     private float mButtonDownNextDropTime = 0f;
-    
+
+    private bool mIsPause = false;
+
     private void Awake()
     {
         
@@ -61,6 +63,9 @@ public class main : MonoBehaviour
         // It can helped to get new block without filling up the grid
         //if (Input.GetKeyDown(KeyCode.Space))
         //    ReplaceTheBlock();
+
+        if (Input.GetKeyDown(KeyCode.P))
+            PauseGame();
 
         if (Input.GetKeyDown(KeyCode.A) && GridManager.Instance.AvailableMove(Vector2Int.left, mCurrentBlock))
         {
@@ -88,6 +93,16 @@ public class main : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && GridManager.Instance.AvailableRot((int)TurningIndex.CLOCK_WISE, mCurrentBlock))
             mCurrentBlock.TurnClockWise();
+    }
+
+    private void PauseGame()
+    {
+        mIsPause = !mIsPause;
+
+        if (mIsPause)
+            Time.timeScale = 0;
+        else
+            Time.timeScale = 1;
     }
 
     private void CreateNewBlock()

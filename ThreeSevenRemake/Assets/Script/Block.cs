@@ -64,6 +64,7 @@ public class Block : MonoBehaviour
         mCubes.Add(transform.GetChild(1).GetComponent<Cube>());
         mCubes[1].name = "SubCube";
         
+        // this is for creating the first block when the game start
         if(mCubeNumbers.Count == 0)
         {
             mCubes[0].Init(this, SupportTools.RNG(0, 8));
