@@ -25,7 +25,6 @@ public class main : MonoBehaviour
     public delegate void OnScoreChange(int aNewScore);
     public static OnScoreChange scoreChanging;
 
-    [SerializeField]
     private int mTotalScores = 0;
     private int mScoreMultiplies = 0;
 
@@ -35,9 +34,11 @@ public class main : MonoBehaviour
     private int mCurrentLevel = 1;
     private int mNextLevelUpScore = 250;
 
-    [SerializeField]
     private float mDropRate = 1f;
     private float mNextDropTime = 0;
+
+    private float mButtonDownDropRate = .1f;
+    private float mButtonDownNextDropTime = 0f;
     
     private void Awake()
     {
@@ -69,13 +70,14 @@ public class main : MonoBehaviour
             mCurrentBlock.MoveRight();
         }
 
-        if(Input.GetKeyDown(KeyCode.S) || Time.time > mNextDropTime)
+        if((Input.GetKey(KeyCode.S) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
         {
+            mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
+
             if (GridManager.Instance.AvailableMove(Vector2Int.down, mCurrentBlock))
                 mCurrentBlock.DropDown();
             else
                 Landed();
-
             mNextDropTime = Time.time + mDropRate;
         }
 
