@@ -21,13 +21,18 @@ public class main : MonoBehaviour
     private List<Block> mLandedBlock = new List<Block>();
 
     private int mBlockCount = 0;
-    
+
+    public delegate void OnScoreChange(int aNewScore);
+    public static OnScoreChange scoreChanging;
+
     [SerializeField]
     private int mTotalScores = 0;
     private int mScoreMultiplies = 0;
 
-    [SerializeField]
-    private int mCurrentLevel = 0;
+    public delegate void OnLevelChange(int aLevelUpdate);
+    public static OnLevelChange levelUpdate;
+
+    private int mCurrentLevel = 1;
     private int mNextLevelUpScore = 250;
 
     [SerializeField]
@@ -36,6 +41,7 @@ public class main : MonoBehaviour
     
     private void Awake()
     {
+        
         GridManager.Instance.GenerateGrid();
         mBlockStartPosition = GridManager.Instance.StartWorldPosition;
     }
@@ -50,8 +56,8 @@ public class main : MonoBehaviour
         // this input is use for developing purpose for discarding the current block and replace it with the next block.
         // In the same time a new next block will be generate
         // It can helped to get new block without filling up the grid
-        if (Input.GetKeyDown(KeyCode.Space))
-            ReplaceTheBlock();
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //    ReplaceTheBlock();
 
         if (Input.GetKeyDown(KeyCode.A) && GridManager.Instance.AvailableMove(Vector2Int.left, mCurrentBlock))
         {
@@ -134,6 +140,8 @@ public class main : MonoBehaviour
             Rearrangement();
         }
 
+        ScoreCalclulation();
+
         // called for create the a new falling block.
         CreateNewBlock();
     }
@@ -168,9 +176,13 @@ public class main : MonoBehaviour
     private void ScoreCalclulation()
     {
         mTotalScores += mCurrentLevel + (mCurrentLevel * mScoreMultiplies);
+        scoreChanging(mTotalScores);
+
         if(mTotalScores >= mNextLevelUpScore)
         {
             mCurrentLevel++;
+            levelUpdate(mCurrentLevel);
+
             mNextLevelUpScore += mNextLevelUpScore + (mNextLevelUpScore / 2);
             if (mCurrentLevel % 3 == 0)
                 mDropRate = (mDropRate * .95f);

@@ -57,7 +57,9 @@ public class Cube : MonoBehaviour
     {
         mCubeNumber = aNumber;
         mTextMesh.text = mCubeNumber.ToString();
-        switch (aNumber)
+        mRenderer.material.color = SupportTools.GetCubeColorOf(mCubeNumber);
+
+        /*switch (aNumber)
         {
             case 1:
                 mRenderer.material.color = ColorConverter(148f, 0f, 211f);  // violet 
@@ -83,7 +85,7 @@ public class Cube : MonoBehaviour
             default:
                 mRenderer.material.color = ColorConverter(255f, 255f, 255f);  // white
                 break;
-        }
+        }*/
     }
 
     public void RotateCube(int aDir)

@@ -60,12 +60,12 @@ public class Block : MonoBehaviour
         mCubes.Add(transform.GetChild(0).GetComponent<Cube>());
         mCubes[0].GridPos = GridManager.Instance.StartPosition;
         mCubes[0].name = "RootCube";
-        mCubes[0].Init(this, Random.Range(0, 8));
+        mCubes[0].Init(this, SupportTools.RNG(0, 8));
         //mCubes[0].Init(this, mCubeNumbers[0]);
 
         mCubes.Add(transform.GetChild(1).GetComponent<Cube>());
         mCubes[1].name = "SubCube";
-        mCubes[1].Init(this, Random.Range(0, 8));
+        mCubes[1].Init(this, SupportTools.RNG(0, 8));
         //mCubes[1].Init(this, mCubeNumbers[1]);
 
         mCurrentClockDirection = ClockDirection.CLOCK_12;
