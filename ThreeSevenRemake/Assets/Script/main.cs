@@ -58,12 +58,6 @@ public class main : MonoBehaviour
 	
 	void Update ()
     {
-        // this input is use for developing purpose for discarding the current block and replace it with the next block.
-        // In the same time a new next block will be generate
-        // It can helped to get new block without filling up the grid
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //    ReplaceTheBlock();
-
         if (Input.GetKeyDown(KeyCode.P))
             PauseGame();
 
@@ -79,12 +73,12 @@ public class main : MonoBehaviour
 
         if((Input.GetKey(KeyCode.S) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
         {
-            mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
-
             if (GridManager.Instance.AvailableMove(Vector2Int.down, mCurrentBlock))
                 mCurrentBlock.DropDown();
             else
                 Landed();
+
+            mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
             mNextDropTime = Time.time + mDropRate;
         }
 
