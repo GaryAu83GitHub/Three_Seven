@@ -43,6 +43,7 @@ public class main : MonoBehaviour
     private float mButtonDownNextDropTime = 0f;
 
     private bool mIsPause = false;
+    private bool mGameOver = false;
 
     private void Awake()
     {
@@ -58,6 +59,9 @@ public class main : MonoBehaviour
 	
 	void Update ()
     {
+        if (mGameOver)
+            return;
+
         if (Input.GetKeyDown(KeyCode.P))
             PauseGame();
 
@@ -135,6 +139,12 @@ public class main : MonoBehaviour
 
         // store the landing block into the list of remaining blocks in the grid
         mLandedBlock.Add(mCurrentBlock);
+
+        if(GridManager.Instance.PassingLimit())
+        {
+            mGameOver = true;
+            return;
+        }
 
         // sort the list of landings block base on the minimum y position (this is more than a matter of "just in case" to prevent
         // blocks landing miss placing)

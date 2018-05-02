@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GridManager
@@ -17,7 +18,7 @@ public class GridManager
     }
     private static GridManager mInstance;
 
-    private Vector2Int mGridSize = new Vector2Int(10, 19);
+    private Vector2Int mGridSize = new Vector2Int(10, 20);
 
     private Vector2Int mGridMax;
 
@@ -196,6 +197,14 @@ public class GridManager
 
         if (GetCubeFrom(aGridPos).IsScoring)
             return true;
+        return false;
+    }
+
+    public bool PassingLimit()
+    {
+        if (mGrid[18].FirstOrDefault(x => x != null) || mGrid[19].FirstOrDefault(x => x != null))
+            return true;
+
         return false;
     }
 
