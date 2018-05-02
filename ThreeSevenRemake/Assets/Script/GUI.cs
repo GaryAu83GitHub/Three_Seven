@@ -34,14 +34,7 @@ public class GUI : MonoBehaviour
 
     private void Update()
     {
-        mGameTimer += Time.deltaTime;
-
-        int seconds = (int)(mGameTimer % 60);
-        int minutes = (int)((mGameTimer / 60) % 60);
-        int hours = (int)((mGameTimer / 3600) % 24);
-
-        string timerString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
-        TimeText.text = timerString;
+        Clock();
     }
 
     public void UpdateScore(int aNewScore)
@@ -59,6 +52,16 @@ public class GUI : MonoBehaviour
         aNewBlock.SetCubeNumbers(NextBlockGUI.NewNumber());
     }
 
+    private void Clock()
+    {
+        mGameTimer += Time.deltaTime;
 
+        int seconds = (int)(mGameTimer % 60);
+        int minutes = (int)((mGameTimer / 60) % 60);
+        int hours = (int)((mGameTimer / 3600) % 24);
+
+        string timerString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
+        TimeText.text = timerString;
+    }
 
 }

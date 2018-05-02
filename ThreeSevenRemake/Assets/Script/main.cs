@@ -5,8 +5,12 @@ using UnityEngine;
 
 public class main : MonoBehaviour
 {
-
+    /// <summary>
+    /// Prefab for the dropping blocks
+    /// </summary>
     public GameObject BlockObject;
+
+    public Light DirectionalLight;
 
     private enum TurningIndex
     {
@@ -54,8 +58,17 @@ public class main : MonoBehaviour
 
     void Start ()
     {
+        StartCoroutine(StartGame());
+    }
+
+    private IEnumerator StartGame()
+    {
+        yield return new WaitForSeconds(3f);
         CreateNewBlock();
-	}
+
+        if (levelUpdate != null)
+            levelUpdate(mCurrentLevel);
+    }
 	
 	void Update ()
     {
@@ -64,6 +77,9 @@ public class main : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
             PauseGame();
+
+        if (mCurrentBlock == null)
+            return;
 
         if (Input.GetKeyDown(KeyCode.A) && GridManager.Instance.AvailableMove(Vector2Int.left, mCurrentBlock))
         {
@@ -98,9 +114,15 @@ public class main : MonoBehaviour
         mIsPause = !mIsPause;
 
         if (mIsPause)
+        {
             Time.timeScale = 0;
+            DirectionalLight.intensity = 0;
+        }
         else
+        {
             Time.timeScale = 1;
+            DirectionalLight.intensity = 1.2f;
+        }
     }
 
     private void CreateNewBlock()
