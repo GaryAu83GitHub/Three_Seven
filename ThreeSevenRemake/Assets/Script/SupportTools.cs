@@ -11,22 +11,22 @@ public class SupportTools
         switch (aCubeNumber)
         {
             case 1:
-                color = new Vector3(148f, 0f, 211f);  // violet 
+                color = new Vector3(180, 95f, 211f);  // violet 
                 break;
             case 2:
-                color = new Vector3(75f, 0f, 130f);  // indigo
+                color = new Vector3(95f, 95f, 255f);  // indigo
                 break;
             case 3:
-                color = new Vector3(0f, 0f, 255f);  // blue
+                color = new Vector3(95f, 242f, 255f);  // blue
                 break;
             case 4:
-                color = new Vector3(0f, 255f, 0f);  // green
+                color = new Vector3(115f, 255f, 95f);  // green
                 break;
             case 5:
-                color = new Vector3(255f, 255f, 0f);  // yellow
+                color = new Vector3(255f, 251f, 95f);  // yellow
                 break;
             case 6:
-                color = new Vector3(255f, 127f, 0f);  // orange
+                color = new Vector3(255f, 178f, 95f);  // orange
                 break;
             case 7:
                 color = new Vector3(255f, 0f, 0f);  // red

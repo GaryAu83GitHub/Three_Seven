@@ -11,6 +11,7 @@ public class GUI : MonoBehaviour
     public Text LevelText;
 
     private float mGameTimer = 0f;
+    private bool mGameIsPlaying;
 
     // Use this for initialization
     void Awake ()
@@ -23,6 +24,7 @@ public class GUI : MonoBehaviour
         main.scoreChanging += UpdateScore;
         main.levelUpdate += UpdateLevel;
         main.createNewBlock += TransferNewBlock;
+        main.gameIsPlaying += GameIsPlaying;
     }
 
     private void OnDisable()
@@ -30,6 +32,7 @@ public class GUI : MonoBehaviour
         main.scoreChanging -= UpdateScore;
         main.levelUpdate -= UpdateLevel;
         main.createNewBlock -= TransferNewBlock;
+        main.gameIsPlaying -= GameIsPlaying;
     }
 
     private void Update()
@@ -52,8 +55,16 @@ public class GUI : MonoBehaviour
         aNewBlock.SetCubeNumbers(NextBlockGUI.NewNumber());
     }
 
+    public void GameIsPlaying(bool anIsPlaying)
+    {
+        mGameIsPlaying = anIsPlaying;
+    }
+
     private void Clock()
     {
+        if (!mGameIsPlaying)
+            return;
+
         mGameTimer += Time.deltaTime;
 
         int seconds = (int)(mGameTimer % 60);

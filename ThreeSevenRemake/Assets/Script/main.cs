@@ -46,12 +46,14 @@ public class main : MonoBehaviour
     private float mButtonDownDropRate = .1f;
     private float mButtonDownNextDropTime = 0f;
 
+    public delegate void GameActive(bool anActive);
+    public static GameActive gameIsPlaying;
+
     private bool mIsPause = false;
     private bool mGameOver = false;
 
     private void Awake()
-    {
-        
+    {   
         GridManager.Instance.GenerateGrid();
         mBlockStartPosition = GridManager.Instance.StartWorldPosition;
     }
@@ -68,16 +70,19 @@ public class main : MonoBehaviour
 
         if (levelUpdate != null)
             levelUpdate(mCurrentLevel);
+
+        if (gameIsPlaying != null)
+            gameIsPlaying(true);
     }
 	
 	void Update ()
     {
-        if (mGameOver)
-            return;
-
         if (Input.GetKeyDown(KeyCode.P))
             PauseGame();
 
+        if (mGameOver)
+            return;
+        
         if (mCurrentBlock == null)
             return;
 
@@ -112,6 +117,8 @@ public class main : MonoBehaviour
     private void PauseGame()
     {
         mIsPause = !mIsPause;
+
+        gameIsPlaying(mIsPause);
 
         if (mIsPause)
         {
@@ -165,6 +172,7 @@ public class main : MonoBehaviour
         if(GridManager.Instance.PassingLimit())
         {
             mGameOver = true;
+            gameIsPlaying(!mGameOver);
             return;
         }
 
