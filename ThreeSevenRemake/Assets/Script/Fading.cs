@@ -11,6 +11,11 @@ public class Fading : MonoBehaviour
     private float mAlpha = 1f;
     private int mFadeDir = -1;
 
+    private void Start()
+    {
+        //FadeOutTexture.alphaIsTransparency = true;
+    }
+
     private void OnGUI()
     {
         mAlpha += mFadeDir * FadeSpeed * Time.deltaTime;

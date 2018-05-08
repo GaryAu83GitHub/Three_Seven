@@ -77,12 +77,15 @@ public class main : MonoBehaviour
 	
 	void Update ()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-            PauseGame();
+        //if (Input.GetKeyDown(KeyCode.P) && !mGameOver)
+        //    PauseGame();
 
         if (mGameOver)
+        {
+            TowerCollapse();
             return;
-        
+        }
+
         if (mCurrentBlock == null)
             return;
 
@@ -112,6 +115,20 @@ public class main : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && GridManager.Instance.AvailableRot((int)TurningIndex.CLOCK_WISE, mCurrentBlock))
             mCurrentBlock.TurnClockWise();
+    }
+
+    private void Reset()
+    {
+        mBlockCount = 0;
+        mCurrentLevel = 1;
+        mTotalScores = 0;
+        mScoreMultiplies = 0;
+        mNextLevelUpScore = 250;
+        mDropRate = 1f;
+
+        mLandedBlock.Clear();
+
+
     }
 
     private void PauseGame()
@@ -258,5 +275,11 @@ public class main : MonoBehaviour
             if(b.IsScoring)
                 GridManager.Instance.NullifyGridWithBlock(b);
         }
+    }
+
+    private void TowerCollapse()
+    {
+        foreach (Block b in mLandedBlock)
+            b.GetComponent<Rigidbody>().useGravity = true;
     }
 }

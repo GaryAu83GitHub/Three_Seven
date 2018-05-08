@@ -37,6 +37,8 @@ public class GridManager
 
     public void GenerateGrid()
     {
+        mGrid.Clear();
+
         mGridMax = mGridSize + new Vector2Int(-1, -1);
 
         for (int y = 0; y < mGridSize.y+1; y++)

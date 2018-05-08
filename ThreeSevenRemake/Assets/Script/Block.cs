@@ -84,6 +84,11 @@ public class Block : MonoBehaviour
         ClockPos(0);
     }
 
+    private void OnBecameInvisible()
+    {
+        Destroy(gameObject);
+    }
+
     public void SetCubeNumbers(List<int> someNumbers)
     {
         foreach (int n in someNumbers)

@@ -23,7 +23,8 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
-        FadingScript.gameObject.SetActive(true);
+        //SceneManager.LoadScene("Main");
+        //FadingScript.gameObject.SetActive(true);
         StartCoroutine(GoToGame());
     }
 
@@ -46,6 +47,6 @@ public class MainMenu : MonoBehaviour
     {
         float fadeTime = FadingScript.BeginFade(1);
         yield return new WaitForSeconds(fadeTime);
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene(1);
     }
 }

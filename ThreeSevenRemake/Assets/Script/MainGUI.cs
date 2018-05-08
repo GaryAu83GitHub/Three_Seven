@@ -21,6 +21,7 @@ public class MainGUI : MonoBehaviour
 
     private void Start()
     {
+        mGameTimer = 0f;
         main.scoreChanging += UpdateScore;
         main.levelUpdate += UpdateLevel;
         main.createNewBlock += TransferNewBlock;
