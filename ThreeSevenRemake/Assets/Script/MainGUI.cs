@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GUI : MonoBehaviour
+public class MainGUI : MonoBehaviour
 {
     public BlockGUI NextBlockGUI;
     public Text ScoreText;
