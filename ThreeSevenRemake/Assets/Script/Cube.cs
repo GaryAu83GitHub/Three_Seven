@@ -14,6 +14,7 @@ public class Cube : MonoBehaviour
 
     private Dictionary<Vector2Int, Cube> mLinkedCubes = new Dictionary<Vector2Int, Cube>();
 
+    [SerializeField]
     private Vector2Int mGridPosition;
     public Vector2Int GridPos { get { return mGridPosition; } set { mGridPosition = value; } }
 

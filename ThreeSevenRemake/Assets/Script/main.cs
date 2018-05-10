@@ -49,8 +49,15 @@ public class main : MonoBehaviour
     public delegate void GameActive(bool anActive);
     public static GameActive gameIsPlaying;
 
+    public delegate string TimeSpendToString();
+    public static TimeSpendToString spendTime;
+    public string mTimeSpend = "";
+
     private bool mIsPause = false;
     private bool mGameOver = false;
+
+    public delegate void InitlizeResult(int aReachedLevel, string aSpendTimeString, int aBlockCount, int aTotalScore);
+    public static InitlizeResult finalResult;
 
     private void Awake()
     {   
@@ -83,6 +90,7 @@ public class main : MonoBehaviour
         if (mGameOver)
         {
             TowerCollapse();
+            GameResult();
             return;
         }
 
@@ -94,12 +102,12 @@ public class main : MonoBehaviour
             mCurrentBlock.MoveLeft();
         }
 
-        if (Input.GetKeyDown(KeyCode.D) && GridManager.Instance.AvailableMove(Vector2Int.right, mCurrentBlock))
+        else if (Input.GetKeyDown(KeyCode.D) && GridManager.Instance.AvailableMove(Vector2Int.right, mCurrentBlock))
         {
             mCurrentBlock.MoveRight();
         }
 
-        if((Input.GetKey(KeyCode.S) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
+        else if((Input.GetKey(KeyCode.S) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
         {
             if (GridManager.Instance.AvailableMove(Vector2Int.down, mCurrentBlock))
                 mCurrentBlock.DropDown();
@@ -110,10 +118,10 @@ public class main : MonoBehaviour
             mNextDropTime = Time.time + mDropRate;
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && GridManager.Instance.AvailableRot((int)TurningIndex.COUNTER_CLOCK_WISE, mCurrentBlock))
+        else if (Input.GetKeyDown(KeyCode.Q) && GridManager.Instance.AvailableRot((int)TurningIndex.COUNTER_CLOCK_WISE, mCurrentBlock))
             mCurrentBlock.TurnCounterClockWise();
 
-        if (Input.GetKeyDown(KeyCode.E) && GridManager.Instance.AvailableRot((int)TurningIndex.CLOCK_WISE, mCurrentBlock))
+        else if (Input.GetKeyDown(KeyCode.E) && GridManager.Instance.AvailableRot((int)TurningIndex.CLOCK_WISE, mCurrentBlock))
             mCurrentBlock.TurnClockWise();
     }
 
@@ -281,5 +289,12 @@ public class main : MonoBehaviour
     {
         foreach (Block b in mLandedBlock)
             b.GetComponent<Rigidbody>().useGravity = true;
+    }
+
+    private void GameResult()
+    {
+        mTimeSpend = spendTime();
+        if(finalResult != null)
+            finalResult(mCurrentLevel, mTimeSpend, mBlockCount, mTotalScores);
     }
 }

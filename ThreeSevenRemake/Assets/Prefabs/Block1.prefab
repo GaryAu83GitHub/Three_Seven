@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4575659910534188}
   - component: {fileID: 114415805968684020}
-  - component: {fileID: 54996598327351716}
+  - component: {fileID: 54477766095355328}
   m_Layer: 0
   m_Name: Block1
   m_TagString: Untagged
@@ -421,7 +421,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1418092142762244}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &54996598327351716
+--- !u!54 &54477766095355328
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -525,6 +525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f119f68075fd514d9e17c3b479e2eb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGridPosition: {x: 0, y: 0}
   mCubeNumber: 0
 --- !u!114 &114686627807080740
 MonoBehaviour:
@@ -537,6 +538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f119f68075fd514d9e17c3b479e2eb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGridPosition: {x: 0, y: 0}
   mCubeNumber: 0
 --- !u!136 &136334994637528324
 CapsuleCollider:

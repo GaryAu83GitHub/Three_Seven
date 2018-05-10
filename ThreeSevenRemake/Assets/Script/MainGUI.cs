@@ -11,6 +11,7 @@ public class MainGUI : MonoBehaviour
     public Text LevelText;
 
     private float mGameTimer = 0f;
+    private string mGameTimeString = "";
     private bool mGameIsPlaying;
 
     // Use this for initialization
@@ -26,6 +27,7 @@ public class MainGUI : MonoBehaviour
         main.levelUpdate += UpdateLevel;
         main.createNewBlock += TransferNewBlock;
         main.gameIsPlaying += GameIsPlaying;
+        main.spendTime += SpendingTime;
     }
 
     private void OnDisable()
@@ -34,6 +36,7 @@ public class MainGUI : MonoBehaviour
         main.levelUpdate -= UpdateLevel;
         main.createNewBlock -= TransferNewBlock;
         main.gameIsPlaying -= GameIsPlaying;
+        main.spendTime -= SpendingTime;
     }
 
     private void Update()
@@ -61,6 +64,11 @@ public class MainGUI : MonoBehaviour
         mGameIsPlaying = anIsPlaying;
     }
 
+    public string SpendingTime()
+    {
+        return mGameTimeString;
+    }
+
     private void Clock()
     {
         if (!mGameIsPlaying)
@@ -72,8 +80,8 @@ public class MainGUI : MonoBehaviour
         int minutes = (int)((mGameTimer / 60) % 60);
         int hours = (int)((mGameTimer / 3600) % 24);
 
-        string timerString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
-        TimeText.text = timerString;
+        mGameTimeString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
+        TimeText.text = mGameTimeString;
     }
 
 }
