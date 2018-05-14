@@ -134,6 +134,16 @@ public class Block : MonoBehaviour
             GridManager.Instance.CubeScoring(c.GridPos);
     }
 
+    public void Swap()
+    {
+        int rootNum = RootCube.Number;
+        int subNum = SubCube.Number;
+
+        mCubes[0].SetCubeNumber(subNum);
+        mCubes[1].SetCubeNumber(rootNum);
+
+    }
+
     /// <summary>
     /// After had check if the block had scored it'll need to remove the scoring cube and rearrange it't min and max position
     /// and reset the remaining cube for next scoring purpose.

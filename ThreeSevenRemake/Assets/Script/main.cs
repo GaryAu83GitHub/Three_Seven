@@ -107,7 +107,7 @@ public class main : MonoBehaviour
             mCurrentBlock.MoveRight();
         }
 
-        else if((Input.GetKey(KeyCode.S) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
+        else if ((Input.GetKey(KeyCode.S) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
         {
             if (GridManager.Instance.AvailableMove(Vector2Int.down, mCurrentBlock))
                 mCurrentBlock.DropDown();
@@ -123,6 +123,9 @@ public class main : MonoBehaviour
 
         else if (Input.GetKeyDown(KeyCode.E) && GridManager.Instance.AvailableRot((int)TurningIndex.CLOCK_WISE, mCurrentBlock))
             mCurrentBlock.TurnClockWise();
+
+        else if (Input.GetKeyDown(KeyCode.Space))
+            mCurrentBlock.Swap();
     }
 
     private void Reset()
