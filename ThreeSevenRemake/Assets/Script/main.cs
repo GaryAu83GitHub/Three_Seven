@@ -97,17 +97,17 @@ public class main : MonoBehaviour
         if (mCurrentBlock == null)
             return;
 
-        if (Input.GetKeyDown(KeyCode.A) && GridManager.Instance.AvailableMove(Vector2Int.left, mCurrentBlock))
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && GridManager.Instance.AvailableMove(Vector2Int.left, mCurrentBlock))
         {
             mCurrentBlock.MoveLeft();
         }
 
-        else if (Input.GetKeyDown(KeyCode.D) && GridManager.Instance.AvailableMove(Vector2Int.right, mCurrentBlock))
+        else if (Input.GetKeyDown(KeyCode.RightArrow) && GridManager.Instance.AvailableMove(Vector2Int.right, mCurrentBlock))
         {
             mCurrentBlock.MoveRight();
         }
 
-        else if ((Input.GetKey(KeyCode.S) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
+        else if ((Input.GetKey(KeyCode.DownArrow) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
         {
             if (GridManager.Instance.AvailableMove(Vector2Int.down, mCurrentBlock))
                 mCurrentBlock.DropDown();
@@ -117,11 +117,7 @@ public class main : MonoBehaviour
             mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
             mNextDropTime = Time.time + mDropRate;
         }
-
-        else if (Input.GetKeyDown(KeyCode.Q) && GridManager.Instance.AvailableRot((int)TurningIndex.COUNTER_CLOCK_WISE, mCurrentBlock))
-            mCurrentBlock.TurnCounterClockWise();
-
-        else if (Input.GetKeyDown(KeyCode.E) && GridManager.Instance.AvailableRot((int)TurningIndex.CLOCK_WISE, mCurrentBlock))
+        else if (Input.GetKeyDown(KeyCode.UpArrow) && GridManager.Instance.AvailableRot((int)TurningIndex.CLOCK_WISE, mCurrentBlock))
             mCurrentBlock.TurnClockWise();
 
         else if (Input.GetKeyDown(KeyCode.Space))
