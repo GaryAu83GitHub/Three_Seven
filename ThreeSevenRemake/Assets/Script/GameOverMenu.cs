@@ -16,6 +16,7 @@ public class GameOverMenu : MonoBehaviour
 
     public Fading FadingScript;
     public Button LeaveButton;
+    public GameObject LeavePanel;
 
     public GameObject GameOverMenuUI;
 
@@ -24,8 +25,11 @@ public class GameOverMenu : MonoBehaviour
     private void Start()
     {
         PanelAnimation = GameOverMenuUI.GetComponent<Animator>();
-        //LeaveButton.onClick.AddListener(LeaveToMainMenu);
+        AnimationClip[] clips = PanelAnimation.runtimeAnimatorController.animationClips;
+
+        LeaveButton.onClick.AddListener(LeaveToMainMenu);
         main.finalResult += Result;
+        LeavePanel.SetActive(false);
     }
 
     private void OnDisable()
@@ -42,7 +46,7 @@ public class GameOverMenu : MonoBehaviour
         BlockLandedText.text = aBlockCount.ToString();
         TotalScoreText.text = aTotalScore.ToString();
         PanelAnimation.Play("GameOverMenuIn");
-        StartCoroutine(GoToStart());
+        StartCoroutine(LeavePanelAppear());
     }
 
     public void LeaveToMainMenu()
@@ -51,9 +55,16 @@ public class GameOverMenu : MonoBehaviour
         StartCoroutine(GoToStart());
     }
 
-    IEnumerator GoToStart()
+    IEnumerator LeavePanelAppear()
     {
         yield return new WaitForSeconds(5);
+        LeavePanel.SetActive(true);
+    }
+
+    IEnumerator GoToStart()
+    {
+        //yield return new WaitForSeconds(5);
+        LeavePanel.SetActive(false);
         float fadeTime = FadingScript.BeginFade(1);
         yield return new WaitForSeconds(fadeTime);
         SceneManager.LoadScene(0);
