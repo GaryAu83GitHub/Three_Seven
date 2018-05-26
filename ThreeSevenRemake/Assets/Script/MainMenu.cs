@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Assets.Script.Tools;
 
 public class MainMenu : MonoBehaviour
 {
@@ -25,7 +26,8 @@ public class MainMenu : MonoBehaviour
     {
         //SceneManager.LoadScene("Main");
         //FadingScript.gameObject.SetActive(true);
-        StartCoroutine(GoToGame());
+        //StartCoroutine(GoToGame());
+        ScreenTransistor.Instance.FadeToSceneWithIndex(1);
     }
 
     public void InstructingGame()

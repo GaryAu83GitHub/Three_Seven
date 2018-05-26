@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Assets.Script.Tools;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -52,7 +53,8 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1;
         GameIsPause = false;
         //SceneManager.LoadScene("Menu");
-        StartCoroutine(GoToStart());
+        //StartCoroutine(GoToStart());
+        ScreenTransistor.Instance.FadeToSceneWithIndex(0);
     }
 
     IEnumerator GoToStart()

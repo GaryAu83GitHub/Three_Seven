@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Assets.Script.Tools;
 
 public class GameOverMenu : MonoBehaviour
 {
@@ -53,7 +54,9 @@ public class GameOverMenu : MonoBehaviour
     public void LeaveToMainMenu()
     {
         GameIsOver = false;
-        StartCoroutine(GoToStart());
+        LeavePanel.SetActive(false);
+        ScreenTransistor.Instance.FadeToSceneWithIndex(0);
+        //StartCoroutine(GoToStart());
     }
 
     IEnumerator LeavePanelAppear()
