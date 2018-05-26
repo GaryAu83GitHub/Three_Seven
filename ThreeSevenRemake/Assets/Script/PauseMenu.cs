@@ -57,7 +57,6 @@ public class PauseMenu : MonoBehaviour
 
     IEnumerator GoToStart()
     {
-        
         float fadeTime = FadingScript.BeginFade(1);
         yield return new WaitForSeconds(fadeTime);
         SceneManager.LoadScene(0);

@@ -21,12 +21,13 @@ public class GameOverMenu : MonoBehaviour
     public GameObject GameOverMenuUI;
 
     private Animator PanelAnimation;
+    private float myAnimationDuration = 5f;
 
     private void Start()
     {
         PanelAnimation = GameOverMenuUI.GetComponent<Animator>();
         AnimationClip[] clips = PanelAnimation.runtimeAnimatorController.animationClips;
-
+        myAnimationDuration = clips[0].length;
         LeaveButton.onClick.AddListener(LeaveToMainMenu);
         main.finalResult += Result;
         LeavePanel.SetActive(false);
@@ -57,7 +58,7 @@ public class GameOverMenu : MonoBehaviour
 
     IEnumerator LeavePanelAppear()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(myAnimationDuration);
         LeavePanel.SetActive(true);
     }
 
