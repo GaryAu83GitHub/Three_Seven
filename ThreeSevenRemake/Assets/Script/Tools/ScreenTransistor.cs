@@ -24,14 +24,16 @@ namespace Assets.Script.Tools
         {
             myFadeToSceneWithName = false;
             mySceneIndex = aSceneIndex;
-            animator.SetTrigger("FadeOut");
+            //animator.SetTrigger("FadeOut");
+            OnFadeComplete();
         }
 
         public void FadeToSceneWithName(string aSceneName)
         {
             myFadeToSceneWithName = true;
             mySceneName = aSceneName;
-            animator.SetTrigger("FadeOut");
+            //animator.SetTrigger("FadeOut");
+            OnFadeComplete();
         }
 
         public void OnFadeComplete()
