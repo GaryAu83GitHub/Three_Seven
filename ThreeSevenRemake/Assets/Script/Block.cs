@@ -42,9 +42,11 @@ public class Block : MonoBehaviour
     {
         get
         {
+            // Checking if any of the cub3e in the block is scoring
             if (AnyCubeScoring())
                 return true;
 
+            // Check if both cube has been removed from the first fall
             if (mCubes.Count == 0)
                 return true;
 
