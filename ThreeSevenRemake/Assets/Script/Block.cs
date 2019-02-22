@@ -42,7 +42,7 @@ public class Block : MonoBehaviour
     {
         get
         {
-            // Checking if any of the cub3e in the block is scoring
+            // Checking if any of the cube in the block is scoring
             if (AnyCubeScoring())
                 return true;
 
@@ -84,6 +84,15 @@ public class Block : MonoBehaviour
         Limb = Joint.GetChild(0);
 
         ClockPos(0);
+    }
+
+    private void Update()
+    {
+        //if (Input.GetKey(KeyCode.G))
+        //    mCubes[0].PlayAnimation();
+        //if (Input.GetKey(KeyCode.H))
+        //    mCubes[1].PlayAnimation();
+
     }
 
     private void OnBecameInvisible()
@@ -130,6 +139,9 @@ public class Block : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Check
+    /// </summary>
     public void Scoring()
     {
         foreach (Cube c in mCubes)
@@ -159,40 +171,44 @@ public class Block : MonoBehaviour
         {
             if (RootCube.IsScoring && !SubCube.IsScoring)
             {
-                GridManager.Instance.NullifyGridWithCubeAt(RootCube.GridPos);
-                transform.position = new Vector3(SubCube.GridPos.x * GridManager.Instance.CubeGap, SubCube.GridPos.y * GridManager.Instance.CubeGap, 0f);
-                SubCube.transform.position = RootCube.transform.position;
-
                 mMinPosition = SubCube.GridPos;
                 mMaxPosition = SubCube.GridPos;
 
-                Destroy(RootCube.gameObject);
-                mCubes.Remove(RootCube);
+                transform.position = new Vector3(SubCube.GridPos.x * GridManager.Instance.CubeGap, SubCube.GridPos.y * GridManager.Instance.CubeGap, 0f);
+                SubCube.transform.position = RootCube.transform.position;
+
+                //GridManager.Instance.NullifyGridWithCubeAt(RootCube.GridPos);
+                //Destroy(RootCube.gameObject);
+                //mCubes.Remove(RootCube);
+                DestroyScoringCube(RootCube);
             }
             else if (!RootCube.IsScoring && SubCube.IsScoring)
             {
-                GridManager.Instance.NullifyGridWithCubeAt(SubCube.GridPos);
-
                 mMinPosition = RootCube.GridPos;
                 mMaxPosition = RootCube.GridPos;
 
-                Destroy(SubCube.gameObject);
-                mCubes.Remove(SubCube);
+                //GridManager.Instance.NullifyGridWithCubeAt(SubCube.GridPos);
+                //Destroy(SubCube.gameObject);
+                //mCubes.Remove(SubCube);
+                DestroyScoringCube(SubCube);
             }
             else if (RootCube.IsScoring && SubCube.IsScoring)
             {
-                GridManager.Instance.NullifyGridWithCubeAt(RootCube.GridPos);
-                GridManager.Instance.NullifyGridWithCubeAt(SubCube.GridPos);
-                Destroy(SubCube.gameObject);
-                Destroy(RootCube.gameObject);
-                mCubes.Clear();
+                //GridManager.Instance.NullifyGridWithCubeAt(RootCube.GridPos);
+                //GridManager.Instance.NullifyGridWithCubeAt(SubCube.GridPos);
+                //Destroy(SubCube.gameObject);
+                //Destroy(RootCube.gameObject);
+                //mCubes.Clear();
+                DestroyScoringCube(RootCube);
+                DestroyScoringCube(SubCube);
             }
         }
         else
         {
-            GridManager.Instance.NullifyGridWithCubeAt(mCubes[0].GridPos);
-            Destroy(mCubes[0].gameObject);
-            mCubes.Clear();
+            //GridManager.Instance.NullifyGridWithCubeAt(mCubes[0].GridPos);
+            //Destroy(mCubes[0].gameObject);
+            //mCubes.Clear();
+            DestroyScoringCube(mCubes[0]);
         }
 
         mScoringTimes = 0;
@@ -267,5 +283,15 @@ public class Block : MonoBehaviour
                 return true;
         }
         return false;
+    }
+
+    private void DestroyScoringCube(Cube aCube)
+    {
+        GridManager.Instance.NullifyGridWithCubeAt(aCube.GridPos);
+        Destroy(aCube.gameObject);
+        mCubes.Remove(aCube);
+
+        if (mCubes.Count == 0)
+            mCubes.Clear();
     }
 }

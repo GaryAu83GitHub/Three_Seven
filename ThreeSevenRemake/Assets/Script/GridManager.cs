@@ -201,7 +201,7 @@ public class GridManager
         return false;
     }
 
-    public bool CubeScoring(Vector2Int aGridPos)
+    public void CubeScoring(Vector2Int aGridPos)
     {
         GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.up, Vector2Int.down);
         GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.left, Vector2Int.right);
@@ -210,9 +210,9 @@ public class GridManager
         GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.down, Vector2Int.down * 2);
         GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.right, Vector2Int.right * 2);
 
-        if (GetCubeFrom(aGridPos).IsScoring)
-            return true;
-        return false;
+        //if (GetCubeFrom(aGridPos).IsScoring)
+        //    return true;
+        //return false;
     }
 
     public bool PassingLimit()

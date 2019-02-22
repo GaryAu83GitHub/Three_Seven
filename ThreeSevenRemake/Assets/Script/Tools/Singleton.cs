@@ -8,7 +8,7 @@ namespace Assets.Script.Tools
 
         private static object myLock = new object();
 
-        private static bool myApplicationIsQuitting = false;
+        //private static bool myApplicationIsQuitting = false;
 
         public static T Instance
         {

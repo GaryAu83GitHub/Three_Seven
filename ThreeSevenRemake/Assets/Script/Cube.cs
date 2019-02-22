@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
+    public ParticleSystem mParticleSystem;
     private TextMesh mTextMesh;
     private MeshRenderer mRenderer;
 
@@ -32,10 +33,27 @@ public class Cube : MonoBehaviour
         }
     }
 
+    private bool mAnimationFinish = false;
+    public bool AnimationFinish { get { return mAnimationFinish; } }
+
+    private bool mIsFading = false;
+
     private void Awake()
     {
         mTextMesh = transform.GetChild(0).GetComponent<TextMesh>();
         mRenderer = GetComponent<MeshRenderer>();
+    }
+
+    private void Update()
+    {
+        if(mIsFading)
+        {
+            Color tempColor = mRenderer.material.color;
+            tempColor.a -= 0.35f * Time.deltaTime;
+            mRenderer.material.color = tempColor;
+            if (tempColor.a < 0f)
+                mAnimationFinish = true;
+        }
     }
 
     public void Init(Block aParentBlock, int aNumber)
@@ -57,42 +75,24 @@ public class Cube : MonoBehaviour
     public void SetCubeNumber(int aNumber)
     {
         mCubeNumber = aNumber;
+        Vector3 color = SupportTools.GetCubeColorVectorOf(mCubeNumber);
+
         mTextMesh.text = mCubeNumber.ToString();
         mRenderer.material.color = SupportTools.GetCubeColorOf(mCubeNumber);
-
-        /*switch (aNumber)
-        {
-            case 1:
-                mRenderer.material.color = ColorConverter(148f, 0f, 211f);  // violet 
-                break;
-            case 2:
-                mRenderer.material.color = ColorConverter(75f, 0f, 130f);  // indigo
-                break;
-            case 3:
-                mRenderer.material.color = ColorConverter(0f, 0f, 255f);  // blue
-                break;
-            case 4:
-                mRenderer.material.color = ColorConverter(0f, 255f, 0f);  // green
-                break;
-            case 5:
-                mRenderer.material.color = ColorConverter(255f, 255f, 0f);  // yellow
-                break;
-            case 6:
-                mRenderer.material.color = ColorConverter(255f, 127f, 0f);  // orange
-                break;
-            case 7:
-                mRenderer.material.color = ColorConverter(255f, 0f, 0f);  // red
-                break;
-            default:
-                mRenderer.material.color = ColorConverter(255f, 255f, 255f);  // white
-                break;
-        }*/
+        ParticleSystem.MainModule _main = mParticleSystem.main;
+        _main.startColor = new Color(color.x, color.y, color.z);
     }
 
     public void RotateCube(int aDir)
     {
         transform.Rotate(Vector3.back, aDir * 90);
         mTextMesh.transform.Rotate(Vector3.back, -aDir * 90);
+    }
+
+    public void PlayAnimation()
+    {
+        mParticleSystem.Play();
+        mIsFading = true;
     }
 
     #region LinkedCube devision

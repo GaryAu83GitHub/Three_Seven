@@ -56,6 +56,7 @@ public class main : MonoBehaviour
 
     private bool mIsPause = false;
     private bool mGameOver = false;
+    private bool mBlockLanded = false;
 
     public delegate void InitlizeResult(int aReachedLevel, string aSpendTimeString, int aBlockCount, int aTotalScore);
     public static InitlizeResult finalResult;
@@ -98,6 +99,12 @@ public class main : MonoBehaviour
         if (mCurrentBlock == null)
             return;
 
+        if(mBlockLanded)
+        {
+            ScoringPart();
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.LeftArrow) && GridManager.Instance.AvailableMove(Vector2Int.left, mCurrentBlock))
         {
             mCurrentBlock.MoveLeft();
@@ -123,6 +130,8 @@ public class main : MonoBehaviour
 
         else if (Input.GetKeyDown(KeyCode.Space))
             mCurrentBlock.Swap();
+
+
     }
 
     private void Reset()
@@ -130,13 +139,11 @@ public class main : MonoBehaviour
         mBlockCount = 0;
         mCurrentLevel = 1;
         mTotalScores = 0;
-        mScoreMultiplies = 0;
+        //mScoreMultiplies = 0;
         mNextLevelUpScore = 250;
         mDropRate = 1f;
 
         mLandedBlock.Clear();
-
-
     }
 
     private void PauseGame()
@@ -170,6 +177,8 @@ public class main : MonoBehaviour
             mCurrentBlock = newBlock.GetComponent<Block>();
 
         mNextDropTime = Time.time + mDropRate;
+
+        mBlockLanded = false;
     }
 
     private void ReplaceTheBlock()
@@ -206,6 +215,11 @@ public class main : MonoBehaviour
         var sortBlockList = mLandedBlock.OrderBy(b => b.MinGridPos.y).ThenBy(b => b.MinGridPos.x);
         mLandedBlock = sortBlockList.ToList();
 
+        mBlockLanded = true;
+    }
+
+    private void ScoringPart()
+    {
         // the current block check if it score
         mCurrentBlock.Scoring();
         if (mCurrentBlock.IsScoring)
@@ -215,13 +229,20 @@ public class main : MonoBehaviour
             NullifyGridFromScoringBlocks();
 
             // how many times the block scored will be added into the score interger
-            mScoreMultiplies += mCurrentBlock.ScoringTimes;
+            ScoreCalclulation(mCurrentBlock.ScoringTimes);
+            //mScoreMultiplies += mCurrentBlock.ScoringTimes;
+
 
             // All blocks that was involve have too rearrange their position or been removed.
             Rearrangement();
         }
+        else
+        {
+            ScoreCalclulation(0);
+        }
 
-        ScoreCalclulation();
+        // Calculate the scoring for either lading the block or fulfill the multiply scoring condition
+        
 
         // called for create the a new falling block.
         CreateNewBlock();
@@ -254,9 +275,9 @@ public class main : MonoBehaviour
         }
     }
 
-    private void ScoreCalclulation()
+    private void ScoreCalclulation(int aScoreMultiply)
     {
-        mTotalScores += mCurrentLevel + (mCurrentLevel * mScoreMultiplies);
+        mTotalScores += mCurrentLevel + (mCurrentLevel * aScoreMultiply);
         if(scoreChanging != null)
             scoreChanging(mTotalScores);
 
