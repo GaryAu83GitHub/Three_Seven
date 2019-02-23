@@ -177,38 +177,33 @@ public class Block : MonoBehaviour
                 transform.position = new Vector3(SubCube.GridPos.x * GridManager.Instance.CubeGap, SubCube.GridPos.y * GridManager.Instance.CubeGap, 0f);
                 SubCube.transform.position = RootCube.transform.position;
 
-                //GridManager.Instance.NullifyGridWithCubeAt(RootCube.GridPos);
-                //Destroy(RootCube.gameObject);
-                //mCubes.Remove(RootCube);
-                DestroyScoringCube(RootCube);
+                GridManager.Instance.NullifyGridWithCubeAt(RootCube.GridPos);
+                Destroy(RootCube.gameObject);
+                mCubes.Remove(RootCube);
             }
             else if (!RootCube.IsScoring && SubCube.IsScoring)
             {
                 mMinPosition = RootCube.GridPos;
                 mMaxPosition = RootCube.GridPos;
 
-                //GridManager.Instance.NullifyGridWithCubeAt(SubCube.GridPos);
-                //Destroy(SubCube.gameObject);
-                //mCubes.Remove(SubCube);
-                DestroyScoringCube(SubCube);
+                GridManager.Instance.NullifyGridWithCubeAt(SubCube.GridPos);
+                Destroy(SubCube.gameObject);
+                mCubes.Remove(SubCube);
             }
             else if (RootCube.IsScoring && SubCube.IsScoring)
             {
-                //GridManager.Instance.NullifyGridWithCubeAt(RootCube.GridPos);
-                //GridManager.Instance.NullifyGridWithCubeAt(SubCube.GridPos);
-                //Destroy(SubCube.gameObject);
-                //Destroy(RootCube.gameObject);
-                //mCubes.Clear();
-                DestroyScoringCube(RootCube);
-                DestroyScoringCube(SubCube);
+                GridManager.Instance.NullifyGridWithCubeAt(RootCube.GridPos);
+                GridManager.Instance.NullifyGridWithCubeAt(SubCube.GridPos);
+                Destroy(SubCube.gameObject);
+                Destroy(RootCube.gameObject);
+                mCubes.Clear();
             }
         }
         else
         {
-            //GridManager.Instance.NullifyGridWithCubeAt(mCubes[0].GridPos);
-            //Destroy(mCubes[0].gameObject);
-            //mCubes.Clear();
-            DestroyScoringCube(mCubes[0]);
+            GridManager.Instance.NullifyGridWithCubeAt(mCubes[0].GridPos);
+            Destroy(mCubes[0].gameObject);
+            mCubes.Clear();
         }
 
         mScoringTimes = 0;
@@ -289,9 +284,10 @@ public class Block : MonoBehaviour
     {
         GridManager.Instance.NullifyGridWithCubeAt(aCube.GridPos);
         Destroy(aCube.gameObject);
-        mCubes.Remove(aCube);
-
+        
         if (mCubes.Count == 0)
             mCubes.Clear();
+        else
+            mCubes.Remove(aCube);
     }
 }
