@@ -32,8 +32,11 @@ public class main : MonoBehaviour
     public delegate void OnScoreChange(int aNewScore);
     public static OnScoreChange scoreChanging;
 
+    public delegate void OnBlockLandedDebug(Dictionary<int, List<Cube>> aGrid);
+    public static OnBlockLandedDebug blockLandedDebug;
+
     private int mTotalScores = 0;
-    private int mScoreMultiplies = 0;
+    //private int mScoreMultiplies = 0;
 
     public delegate void OnLevelChange(int aLevelUpdate);
     public static OnLevelChange levelUpdate;
@@ -41,6 +44,7 @@ public class main : MonoBehaviour
     private int mCurrentLevel = 1;
     private int mNextLevelUpScore = 250;
 
+    // the elapse time between each drop of the falling block
     private float mDropRate = 1f;
     private float mNextDropTime = 0;
 
@@ -65,6 +69,8 @@ public class main : MonoBehaviour
     {   
         GridManager.Instance.GenerateGrid();
         mBlockStartPosition = GridManager.Instance.StartWorldPosition;
+        if (blockLandedDebug != null)
+            blockLandedDebug(GridManager.Instance.Grid);
     }
 
     void Start ()
@@ -130,7 +136,8 @@ public class main : MonoBehaviour
 
         else if (Input.GetKeyDown(KeyCode.Space))
             mCurrentBlock.Swap();
-
+        else if (Input.GetKeyDown(KeyCode.End))
+            ReplaceTheBlock();
 
     }
 
@@ -139,7 +146,6 @@ public class main : MonoBehaviour
         mBlockCount = 0;
         mCurrentLevel = 1;
         mTotalScores = 0;
-        //mScoreMultiplies = 0;
         mNextLevelUpScore = 250;
         mDropRate = 1f;
 
@@ -199,6 +205,9 @@ public class main : MonoBehaviour
     {
         // set the current block to landing
         mCurrentBlock.Landing();
+        // these delegate is use for debug and developing purpose
+        if (blockLandedDebug != null)
+            blockLandedDebug(GridManager.Instance.Grid);
 
         // store the landing block into the list of remaining blocks in the grid
         mLandedBlock.Add(mCurrentBlock);
@@ -235,6 +244,8 @@ public class main : MonoBehaviour
 
             // All blocks that was involve have too rearrange their position or been removed.
             Rearrangement();
+            if (blockLandedDebug != null)
+                blockLandedDebug(GridManager.Instance.Grid);
         }
         else
         {

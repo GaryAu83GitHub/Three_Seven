@@ -10,6 +10,9 @@ public class SupportTools
 
         switch (aCubeNumber)
         {
+            case -1:
+                color = new Vector3(146, 146f, 146f);  // wall colour 
+                break;
             case 1:
                 color = new Vector3(180, 95f, 211f);  // violet 
                 break;
