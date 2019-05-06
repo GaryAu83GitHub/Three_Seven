@@ -13,6 +13,9 @@ public class Cube : MonoBehaviour
     private Block mParentBlock;
     public Block ParentBlock { get { return mParentBlock; } }
 
+    private BlockDeveloping mParentBlockDeveloping;
+    public BlockDeveloping ParentBlockDeveloping { get { return mParentBlockDeveloping; } }
+
     private Dictionary<Vector2Int, Cube> mLinkedCubes = new Dictionary<Vector2Int, Cube>();
 
     [SerializeField]
@@ -59,6 +62,17 @@ public class Cube : MonoBehaviour
     public void Init(Block aParentBlock, int aNumber)
     {
         mParentBlock = aParentBlock;
+        SetCubeNumber(aNumber);
+
+        mLinkedCubes.Add(Vector2Int.up, null);
+        mLinkedCubes.Add(Vector2Int.left, null);
+        mLinkedCubes.Add(Vector2Int.down, null);
+        mLinkedCubes.Add(Vector2Int.right, null);
+    }
+
+    public void Init(BlockDeveloping aParentBlock, int aNumber)
+    {
+        mParentBlockDeveloping = aParentBlock;
         SetCubeNumber(aNumber);
 
         mLinkedCubes.Add(Vector2Int.up, null);

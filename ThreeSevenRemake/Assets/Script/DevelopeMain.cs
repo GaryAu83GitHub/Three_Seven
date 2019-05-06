@@ -10,14 +10,54 @@ public class DevelopeMain : MonoBehaviour
 
     public Light DirectionalLight;
 
+    // delegates
+    public delegate void GameActive(bool anActive);
+    public static GameActive gameIsPlaying;
+
+    public delegate void OnCreateNewBlock(Block aNewBlock);
+    public static OnCreateNewBlock createNewBlock;
+
+    public delegate void OnScoreChange(int aNewScore);
+    public static OnScoreChange scoreChanging;
+
+    public delegate void OnLevelChange(int aLevelUpdate);
+    public static OnLevelChange levelUpdate;
+
+    public delegate void InitlizeResult(int aReachedLevel, string aSpendTimeString, int aBlockCount, int aTotalScore);
+    public static InitlizeResult finalResult;
+
+    public delegate void OnBlockLandedDebug(Dictionary<int, List<int>> aGrid);
+    public static OnBlockLandedDebug blockLandedDebug;
+
+    // variablers
+    // objects
     private Block mCurrentBlock;
+
+        // vectors
     private Vector3 mBlockStartPosition;
 
+        // intergear
+    private int mBlockCount = 0;
+    private int mCurrentLevel = 1;
+    private int mNextLevelUpScore = 250;
+    private int mTotalScores = 0;
+
+        // floats
+    private float mNextDropTime = 0f;
+    private float mDropRate = 1f;
+    private float mButtonDownNextDropTime = 0f;
+    private float mButtonDownDropRate = .1f;
+
+    // boolean
+    private bool mIsPause = false;
     private bool mGameOver = false;
+    private bool mBlockLanded = false;
 
     private void Awake()
     {
-        
+        GridData.Instance.GenerateGrid();
+        if (blockLandedDebug != null)
+            blockLandedDebug(GridData.Instance.Grid);
     }
 
     private void Start()
@@ -29,12 +69,23 @@ public class DevelopeMain : MonoBehaviour
     private void Update()
     {
         // If mGameOver is equal to true, don't proceed futher of this 
-        // block and do the following things
-            // Call the function to collapse the table
-            // Call the function to display the result
+        if (mGameOver)
+        {
+            // block and do the following things
+                // Call the function to collapse the table
+                // Call the function to display the result
+            return;
+        }
+        NavigationInput();
 
         // If the currentBlock is null or undergoing scoreing progression
+        if (mCurrentBlock == null)
+        {
             // don't proceed futher of this block
+            return;
+        }
+
+        
 
         // If the currenBlock has landed
             // Call the function for Scoring calcultating
@@ -80,6 +131,12 @@ public class DevelopeMain : MonoBehaviour
 
         // debug input for removing the current block to a new block.
         // for testing purpose
+
+        if(Input.GetKey(KeyCode.Space))
+        {
+            if (blockLandedDebug != null)
+                blockLandedDebug(GridData.Instance.Grid);
+        }
     }
 
     /// <summary>
@@ -93,5 +150,34 @@ public class DevelopeMain : MonoBehaviour
     {
 
         return true;
+    }
+
+    private IEnumerator StartGame()
+    {
+        yield return new WaitForSeconds(3f);
+        CreateNewBlock();
+
+        if (levelUpdate != null)
+            levelUpdate(mCurrentLevel);
+
+        if (gameIsPlaying != null)
+            gameIsPlaying(true);
+    }
+
+    private void CreateNewBlock()
+    {
+        GameObject newBlock = Instantiate(BlockObject, GridManager.Instance.StartWorldPosition, Quaternion.identity);
+        newBlock.name = "Block " + mBlockCount.ToString();
+        mBlockCount++;
+
+        if (createNewBlock != null)
+            createNewBlock(newBlock.GetComponent<Block>());
+
+        if (newBlock.GetComponent<Block>() != null)
+            mCurrentBlock = newBlock.GetComponent<Block>();
+
+        mNextDropTime = Time.time + mDropRate;
+
+        //mBlockLanded = false;
     }
 }

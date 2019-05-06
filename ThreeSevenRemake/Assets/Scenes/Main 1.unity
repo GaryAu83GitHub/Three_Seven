@@ -1147,13 +1147,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 434038360}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c791c79f9a8199b429445a4c56d5c771, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d324616387f646488657d545bd70e6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlockObject: {fileID: 1522182820706444, guid: d95a1fe0be9fbd542beeb0a4366a932e,
+  BlockObject: {fileID: 6910912495299484449, guid: aa954b9eca0d7e54ba1ea209fa96fcb3,
     type: 3}
   DirectionalLight: {fileID: 1406303461}
-  mTimeSpend: 
 --- !u!4 &434038362
 Transform:
   m_ObjectHideFlags: 0
@@ -3687,7 +3686,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1628987182}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78f4acb6d52e28746a65a98a11d03cda, type: 3}
+  m_Script: {fileID: 11500000, guid: f6d4bdeb6cff2474aad5f918a9408452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   NextBlockGUI: {fileID: 91790432}

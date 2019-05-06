@@ -226,6 +226,11 @@ public class Block : MonoBehaviour
         mMaxPosition += dir;
     }
 
+    /// <summary>
+    /// Rearrange the subcube's in the block and change the min and max
+    /// grid position according to the block's current rotation
+    /// </summary>
+    /// <param name="aDir"></param>
     private void ClockPos(int aDir)
     {
         Joint.Rotate(Vector3.back, aDir * 90);
@@ -264,6 +269,10 @@ public class Block : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the subcubes grid position according to the direction
+    /// </summary>
+    /// <param name="aDir"></param>
     private void SubCubPosition(Vector2Int aDir)
     {
         mCubes[1].transform.position = mCubes[0].transform.position + new Vector3(aDir.x * GridManager.Instance.CubeGap, aDir.y * GridManager.Instance.CubeGap, 0f);
