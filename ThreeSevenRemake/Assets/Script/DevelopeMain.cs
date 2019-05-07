@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using Assets.Script.Tools;
 
 public class DevelopeMain : MonoBehaviour
 {
@@ -14,7 +12,7 @@ public class DevelopeMain : MonoBehaviour
     public delegate void GameActive(bool anActive);
     public static GameActive gameIsPlaying;
 
-    public delegate void OnCreateNewBlock(Block aNewBlock);
+    public delegate void OnCreateNewBlock(BlockDeveloping aNewBlock);
     public static OnCreateNewBlock createNewBlock;
 
     public delegate void OnScoreChange(int aNewScore);
@@ -31,7 +29,7 @@ public class DevelopeMain : MonoBehaviour
 
     // variablers
     // objects
-    private Block mCurrentBlock;
+    private BlockDeveloping mCurrentBlock;
 
         // vectors
     private Vector3 mBlockStartPosition;
@@ -63,20 +61,21 @@ public class DevelopeMain : MonoBehaviour
     private void Start()
     {
         // When the game start, begin delay for the first block to be created
-        // StartCoroutine(StartGame())
+        StartCoroutine(StartGame());
     }
 
     private void Update()
     {
         // If mGameOver is equal to true, don't proceed futher of this 
-        if (mGameOver)
+        if (mGameOver || mCurrentBlock == null)
         {
-            // block and do the following things
+            // if mGameover == true, block and cubes will do the following things
                 // Call the function to collapse the table
                 // Call the function to display the result
             return;
         }
-        NavigationInput();
+
+        CheckInput();
 
         // If the currentBlock is null or undergoing scoreing progression
         if (mCurrentBlock == null)
@@ -95,10 +94,13 @@ public class DevelopeMain : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// A checking method in use of call the "Drop" function in Block if the grid cell
+    /// below the current block's mininum grid position is vacant.
+    /// If it vaccant then the block will keep dropping or else it'll stop and the block's
+    /// cube's number will be registrate into the grid's data
     /// </summary>
-    /// <returns></returns>
-    private bool BlockDropping()
+    /// <returns>if the cell below the block is vaccant it'll return true or else false</returns>
+    private bool IsBlockDropping()
     {
         // navigate the block as long the lower row still is vacant
 
@@ -115,28 +117,49 @@ public class DevelopeMain : MonoBehaviour
     /// All navigation input to the block include suspend the game is done from 
     /// this block
     /// </summary>
-    private void NavigationInput()
+    private void CheckInput()
     {
         // input for move the block left if the left column is vacant
+        if(Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            mCurrentBlock.MoveLeft();
+        }
 
         // input for move the block right if the right column is vacant
+        if(Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            mCurrentBlock.MoveRight();
+        }
 
         // input for move the block downward one row if the row below is vacant
         // and if the time between each keypress has expired
+        if((Input.GetKey(KeyCode.DownArrow) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
+        {
+            mCurrentBlock.DropDown();
+
+            mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
+            mNextDropTime = Time.time + mDropRate;
+        }
 
         // input for rotate the block clockwise if the column or row of where the block
         // rotate to is vacant
+        if(Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            mCurrentBlock.Rotate();
+        }
 
         // input for swaping the cubes value inside the block
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            //if (blockLandedDebug != null)
+            //    blockLandedDebug(GridData.Instance.Grid);
+
+            mCurrentBlock.Swap();
+        }
 
         // debug input for removing the current block to a new block.
         // for testing purpose
 
-        if(Input.GetKey(KeyCode.Space))
-        {
-            if (blockLandedDebug != null)
-                blockLandedDebug(GridData.Instance.Grid);
-        }
     }
 
     /// <summary>
@@ -171,10 +194,10 @@ public class DevelopeMain : MonoBehaviour
         mBlockCount++;
 
         if (createNewBlock != null)
-            createNewBlock(newBlock.GetComponent<Block>());
+            createNewBlock(newBlock.GetComponent<BlockDeveloping>());
 
-        if (newBlock.GetComponent<Block>() != null)
-            mCurrentBlock = newBlock.GetComponent<Block>();
+        if (newBlock.GetComponent<BlockDeveloping>() != null)
+            mCurrentBlock = newBlock.GetComponent<BlockDeveloping>();
 
         mNextDropTime = Time.time + mDropRate;
 

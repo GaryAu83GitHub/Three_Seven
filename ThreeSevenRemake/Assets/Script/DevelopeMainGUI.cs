@@ -52,7 +52,7 @@ public class DevelopeMainGUI : MonoBehaviour
         LevelText.text = aNewLevel.ToString();
     }
 
-    public void TransferNewBlock(Block aNewBlock)
+    public void TransferNewBlock(BlockDeveloping aNewBlock)
     {
         aNewBlock.SetCubeNumbers(NextBlockGUI.NewNumber());
     }

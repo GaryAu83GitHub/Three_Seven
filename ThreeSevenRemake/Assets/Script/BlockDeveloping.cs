@@ -16,8 +16,15 @@ public class BlockDeveloping : MonoBehaviour
     private Vector2Int mMinPosition;
     public Vector2Int MinGridPos { get { return mMinPosition; } }
 
+    private List<int> mCubeNumbers = new List<int>();
+    public List<int> CubeNumbers { get { return mCubeNumbers; } }
+
     private Transform Joint;
     private Transform Limb;
+
+    private const float mCubeGap = .5f;
+
+    private int mCurrentRotation = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -44,5 +51,91 @@ public class BlockDeveloping : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void SetCubeNumbers(List<int> someNumbers)
+    {
+        foreach (int n in someNumbers)
+            mCubeNumbers.Add(n);
+    }
+
+    public void Swap()
+    {
+        int rootNumber = RootCube.Number;
+        int subNumber = SubCube.Number;
+
+        mCubes[0].SetCubeNumber(subNumber);
+        mCubes[1].SetCubeNumber(rootNumber);
+    }
+
+    public void DropDown()
+    {
+        Move(Vector3.down);
+    }
+
+    public void MoveLeft()
+    {
+        Move(Vector3.left);
+    }
+
+    public void MoveRight()
+    {
+        Move(Vector3.right);
+    }
+
+    public void Rotate()
+    {
+        Joint.Rotate(Vector3.back, 90);
+        mCurrentRotation += 90;
+        if (mCurrentRotation >= 360)
+            mCurrentRotation = 0;
+
+        switch(mCurrentRotation)
+        {
+            case 0:
+                SetSubCubPosition(Vector2Int.up);
+                break;
+            case 90:
+                SetSubCubPosition(Vector2Int.right);
+                break;
+            case 180:
+                SetSubCubPosition(Vector2Int.down);
+                break;
+            case 270:
+                SetSubCubPosition(Vector2Int.left);
+                break;
+
+        }
+        
+    }
+
+    private void Move(Vector3 aDir)
+    {
+        transform.Translate(aDir * mCubeGap);
+        Vector2Int dir = new Vector2Int((int)aDir.x, (int)aDir.y);
+        mCubes[0].GridPos += dir;
+        if (mCubes.Count > 1)
+            mCubes[1].GridPos += dir;
+
+        mMinPosition += dir;
+        mMaxPosition += dir;
+    }
+
+    private void SetSubCubPosition(Vector2Int aDir)
+    {
+        mCubes[1].transform.position = mCubes[0].transform.position + new Vector3(aDir.x * mCubeGap, aDir.y * mCubeGap, 0f);
+        mCubes[1].GridPos = mCubes[0].GridPos + aDir;
+
+        if(mCubes[1].GridPos.x > mCubes[0].GridPos.x || 
+            mCubes[1].GridPos.y > mCubes[0].GridPos.y)
+        {
+            mMinPosition = RootCube.GridPos;
+            mMaxPosition = SubCube.GridPos;
+        }
+        else
+        {
+            mMinPosition = SubCube.GridPos;
+            mMaxPosition = RootCube.GridPos;
+        }
     }
 }
