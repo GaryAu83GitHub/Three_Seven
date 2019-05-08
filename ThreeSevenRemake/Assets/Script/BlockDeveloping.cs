@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,19 +23,22 @@ public class BlockDeveloping : MonoBehaviour
     private Transform Joint;
     private Transform Limb;
 
-    private const float mCubeGap = .5f;
-
+    private float mCubeGap = 0f;
     private int mCurrentRotation = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         mCubes.Add(transform.GetChild(0).GetComponent<Cube>());
-        mCubes[0].GridPos = GridManager.Instance.StartPosition;
+        mCubes[0].GridPos = GridData.Instance.GridStartPosition;
         mCubes[0].name = "RootCube";
 
         mCubes.Add(transform.GetChild(1).GetComponent<Cube>());
+        mCubes[1].GridPos = mCubes[0].GridPos + Vector2Int.up;
         mCubes[1].name = "SubCube";
+
+        mMinPosition = mCubes[0].GridPos;
+        mMaxPosition = mCubes[1].GridPos;
 
         // this is for creating the first block when the game start
         mCubes[0].Init(this, SupportTools.RNG(0, 8));
@@ -45,12 +49,21 @@ public class BlockDeveloping : MonoBehaviour
 
         Joint = transform.GetChild(2);
         Limb = Joint.GetChild(0);
+
+        mCubeGap = GridData.Instance.CubeGapDistance;
+
+        GridPositionDebugLog();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void SetGridStartPosition(Vector2Int aPosition)
+    {
+
     }
 
     public void SetCubeNumbers(List<int> someNumbers)
@@ -106,19 +119,26 @@ public class BlockDeveloping : MonoBehaviour
                 break;
 
         }
-        
+        GridPositionDebugLog();
     }
 
     private void Move(Vector3 aDir)
     {
-        transform.Translate(aDir * mCubeGap);
         Vector2Int dir = new Vector2Int((int)aDir.x, (int)aDir.y);
+
+        // check for the cell to move is vacant
+        if (!GridData.Instance.IsCellVacant(mMinPosition + dir) || !GridData.Instance.IsCellVacant(mMaxPosition + dir))
+            return;
+
+        transform.Translate(aDir * mCubeGap);
         mCubes[0].GridPos += dir;
         if (mCubes.Count > 1)
             mCubes[1].GridPos += dir;
 
         mMinPosition += dir;
         mMaxPosition += dir;
+
+        GridPositionDebugLog();
     }
 
     private void SetSubCubPosition(Vector2Int aDir)
@@ -137,5 +157,13 @@ public class BlockDeveloping : MonoBehaviour
             mMinPosition = SubCube.GridPos;
             mMaxPosition = RootCube.GridPos;
         }
+    }
+
+    private void GridPositionDebugLog()
+    {
+        string output = String.Format("RootCube {0} : {1}, SubCube {2} : {3}.",
+                              mCubes[0].GridPos.x, mCubes[0].GridPos.y,
+                              mCubes[1].GridPos.x, mCubes[1].GridPos.y);
+        Debug.Log(output);
     }
 }

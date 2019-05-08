@@ -27,7 +27,22 @@ public class GridData
     /// the index in the list in the dictionary stands for the rows "Y"
     /// </summary>
     private Dictionary<int, List<int>> mGrid;
+
+    /// <summary>
+    /// The vector that hold the size of the grid size
+    /// </summary>
     private Vector2Int mGridSize = new Vector2Int(10, 20);
+    public Vector2Int GridSize { get { return mGridSize; } }
+
+    private Vector2Int mBlockStartPosition = new Vector2Int(6, 18);
+    public Vector2Int GridStartPosition { get { return mBlockStartPosition; } }
+    public Vector3 StartWorldPosition { get { return new Vector3(mBlockStartPosition.x * mCubeGapDistance, mBlockStartPosition.y * mCubeGapDistance, 0f); } }
+
+    /// <summary>
+    /// The distance between cubes.
+    /// </summary>
+    private const float mCubeGapDistance = .5f;
+    public float CubeGapDistance { get { return mCubeGapDistance; } }
 
     public Dictionary<int, List<int>> Grid { get { return mGrid; } }
 
@@ -78,7 +93,7 @@ public class GridData
     public bool IsCellVacant(Vector2Int aPos)
     {
         // Boundary check
-        if (aPos.x < 0 || aPos.x > mGridSize.x || aPos.y <0)
+        if (aPos.x < 0 || aPos.x >= mGridSize.x || aPos.y < 0)
             return false;
 
         // Checking cells

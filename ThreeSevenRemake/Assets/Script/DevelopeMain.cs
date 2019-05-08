@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DevelopeMain : MonoBehaviour
 {
+    // Object sync with the unity
     public GameObject BlockObject;
-
     public Light DirectionalLight;
 
     // delegates
@@ -27,12 +27,11 @@ public class DevelopeMain : MonoBehaviour
     public delegate void OnBlockLandedDebug(Dictionary<int, List<int>> aGrid);
     public static OnBlockLandedDebug blockLandedDebug;
 
+
+
     // variablers
     // objects
     private BlockDeveloping mCurrentBlock;
-
-        // vectors
-    private Vector3 mBlockStartPosition;
 
         // intergear
     private int mBlockCount = 0;
@@ -189,7 +188,7 @@ public class DevelopeMain : MonoBehaviour
 
     private void CreateNewBlock()
     {
-        GameObject newBlock = Instantiate(BlockObject, GridManager.Instance.StartWorldPosition, Quaternion.identity);
+        GameObject newBlock = Instantiate(BlockObject, GridData.Instance.StartWorldPosition, Quaternion.identity);
         newBlock.name = "Block " + mBlockCount.ToString();
         mBlockCount++;
 
@@ -197,8 +196,9 @@ public class DevelopeMain : MonoBehaviour
             createNewBlock(newBlock.GetComponent<BlockDeveloping>());
 
         if (newBlock.GetComponent<BlockDeveloping>() != null)
+        {
             mCurrentBlock = newBlock.GetComponent<BlockDeveloping>();
-
+        }
         mNextDropTime = Time.time + mDropRate;
 
         //mBlockLanded = false;
