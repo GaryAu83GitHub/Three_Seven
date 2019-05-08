@@ -102,6 +102,38 @@ public class GridData
         return true;
     }
 
+    public bool IsRotateAvailable(Vector2Int aPos, float anAngle)
+    {
+        // the block is about to rotate from 0(360) to 90 degree
+        // the restriction will be that if:
+        // - the block is at the rightmost cell of the table
+        // - the cell to the right of the rotate cube (CoreCube) is not vacant
+        if (anAngle == 90 && !IsCellVacant(aPos + Vector2Int.right))
+            return false;
+
+        // the block is about to rotate from 90 to 180 degree
+        // the restriction will be that if:
+        // - the block is at the bottom row of the table
+        // - the cell below the rotate cube (CoreCube) is not vacant
+        if (anAngle == 180 && !IsCellVacant(aPos + Vector2Int.down))
+            return false;
+
+        // the block is about to rotate from 180 to 270 degree
+        // the restriction will be that if:
+        // - the block is at the leftmost cell of the table
+        // - the cell to the left of the rotate cube (CoreCube) is not vacant
+        if (anAngle == 270 && !IsCellVacant(aPos + Vector2Int.left))
+            return false;
+
+        // the block is about to rotate from 270 to 0(360) degree (the odds for this too occure is very thin)
+        // the restriction will be that if:
+        // - the cell above the rotate cube (CoreCube) is not vacant
+        if (anAngle == 360 && !IsCellVacant(aPos + Vector2Int.up))
+            return false;
+
+        return true;
+    }
+
     /// <summary>
     /// Collecting the grid position of those cell that together with
     /// the cell of the given position would made a score

@@ -98,6 +98,11 @@ public class BlockDeveloping : MonoBehaviour
 
     public void Rotate()
     {
+        // check if the rotaion is possible with the block's current position and it current
+        // add the comming degree of rotaion from the GridData
+        if (!GridData.Instance.IsRotateAvailable(mCubes[0].GridPos, mCurrentRotation + 90))
+            return;
+
         Joint.Rotate(Vector3.back, 90);
         mCurrentRotation += 90;
         if (mCurrentRotation >= 360)
