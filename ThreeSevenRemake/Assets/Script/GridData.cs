@@ -249,6 +249,11 @@ public class GridData
         {
             List<int> tempList = mGrid[r];
             bool fullrow = (tempList.Contains(-1) ? true : false);
+
+            if(fullrow)
+            {
+                foreach()
+            }
         }
 
         return scoringPositions;
