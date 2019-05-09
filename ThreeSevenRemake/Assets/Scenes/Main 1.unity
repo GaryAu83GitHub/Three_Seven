@@ -1979,6 +1979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProtoCube: {fileID: 1558113970095728430, guid: 7488758873cd89142a99f2c3d47031ff,
     type: 3}
+  UIText: {fileID: 88329868}
 --- !u!114 &741201545
 MonoBehaviour:
   m_ObjectHideFlags: 0
