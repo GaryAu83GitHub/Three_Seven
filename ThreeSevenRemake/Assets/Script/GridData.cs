@@ -237,6 +237,24 @@ public class GridData
     }
 
     /// <summary>
+    /// Development purpose, work like the GetScoreingPositions method, but instead of get
+    /// score for 3 cubes sum will be 7, here is to check the table rows is filled
+    /// and gather it position.
+    /// </summary>
+    public List<Vector2Int> TempScoringMethod()
+    {
+        List<Vector2Int> scoringPositions = new List<Vector2Int>();
+
+        foreach(int r in mGrid.Keys)
+        {
+            List<int> tempList = mGrid[r];
+            bool fullrow = (tempList.Contains(-1) ? true : false);
+        }
+
+        return scoringPositions;
+    }
+
+    /// <summary>
     /// Collecting the scoring position into the given list
     /// If the list already contain the position, it'll be ignored 
     /// </summary>

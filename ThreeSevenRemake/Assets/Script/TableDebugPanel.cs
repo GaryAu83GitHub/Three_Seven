@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TableDebugPanel : MonoBehaviour
 {
     public TableDebugCube ProtoCube;
+    public Text UIText;
 
     private Dictionary<int, List<TableDebugCube>> mGrid = new Dictionary<int, List<TableDebugCube>>();
 
@@ -72,6 +74,8 @@ public class TableDebugPanel : MonoBehaviour
 
     private void GridUpdate(Dictionary<int, List<int>> aGrid)
     {
+        UIText.text = BlockManager.Instance.BlockCount.ToString();
+
         for (int x = 0; x < aGrid.Count; x++)
         {
             for (int y = 0; y < aGrid[x].Count; y++)

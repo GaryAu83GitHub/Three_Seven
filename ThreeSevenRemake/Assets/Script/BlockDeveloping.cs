@@ -19,7 +19,7 @@ public class BlockDeveloping : MonoBehaviour
 
     private List<int> mCubeNumbers = new List<int>();
     public List<int> CubeNumbers { get { return mCubeNumbers; } }
-
+    
     private Transform Joint;
     private Transform Limb;
 

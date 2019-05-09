@@ -31,13 +31,17 @@ public class BlockManager
     }
     private static BlockManager mInstance;
 
-    private List<Block> mBlocks = new List<Block>();
+    public int BlockCount { get { return mBlocks.Count; } }
+
+    private List<BlockDeveloping> mBlocks = new List<BlockDeveloping>();
     private List<Cube> mScoringsCubes = new List<Cube>();
 
     // Add in the new landed and rearranged block
-    public void Add(Block aBlock)
+    public void Add(BlockDeveloping aBlock)
     {
         mBlocks.Add(aBlock);
+        foreach (Cube c in aBlock.Cubes)
+            GridData.Instance.RegistrateCell(c);
     }
 
     // Add in cubes that had scored

@@ -53,8 +53,7 @@ public class DevelopeMain : MonoBehaviour
     private void Awake()
     {
         GridData.Instance.GenerateGrid();
-        if (blockLandedDebug != null)
-            blockLandedDebug(GridData.Instance.Grid);
+        UpdateDebugBoard();
     }
 
     private void Start()
@@ -66,7 +65,7 @@ public class DevelopeMain : MonoBehaviour
     private void Update()
     {
         // If mGameOver is equal to true, don't proceed futher of this 
-        if (mGameOver || mCurrentBlock == null)
+        if (mGameOver)
         {
             // if mGameover == true, block and cubes will do the following things
                 // Call the function to collapse the table
@@ -74,16 +73,19 @@ public class DevelopeMain : MonoBehaviour
             return;
         }
 
-        CheckInput();
-
         // If the currentBlock is null or undergoing scoreing progression
         if (mCurrentBlock == null)
         {
-            // don't proceed futher of this block
-            return;
+            // the block was confirm nullified by the currentblock landed
+            if(mBlockLanded)
+            {
+                // Create a new block to fall into the table
+                CreateNewBlock();
+            }
+            
+            return; // don't proceed futher of this block
         }
-
-        
+        CheckInput();
 
         // If the currenBlock has landed
             // Call the function for Scoring calcultating
@@ -134,7 +136,18 @@ public class DevelopeMain : MonoBehaviour
         // and if the time between each keypress has expired
         if((Input.GetKey(KeyCode.DownArrow) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
         {
-            mCurrentBlock.DropDown();
+            if (!GridData.Instance.IsCellVacant(mCurrentBlock.MinGridPos + Vector2Int.down) ||
+                !GridData.Instance.IsCellVacant(mCurrentBlock.MaxGridPos + Vector2Int.down))
+            {
+                BlockManager.Instance.Add(mCurrentBlock);
+
+                UpdateDebugBoard();
+
+                mCurrentBlock = null;
+                mBlockLanded = true;
+            }
+            else
+                mCurrentBlock.DropDown();
 
             mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
             mNextDropTime = Time.time + mDropRate;
@@ -199,8 +212,19 @@ public class DevelopeMain : MonoBehaviour
         {
             mCurrentBlock = newBlock.GetComponent<BlockDeveloping>();
         }
+        
+        mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
         mNextDropTime = Time.time + mDropRate;
 
-        //mBlockLanded = false;
+        mBlockLanded = false;
+    }
+
+    /// <summary>
+    /// For debug purpose
+    /// </summary>
+    private void UpdateDebugBoard()
+    {
+        if (blockLandedDebug != null)
+            blockLandedDebug(GridData.Instance.Grid);
     }
 }
