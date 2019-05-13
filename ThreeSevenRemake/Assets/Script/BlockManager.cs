@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 /// <summary>
 /// This class is use to managing the all blocks that had been created
@@ -57,6 +58,24 @@ public class BlockManager
         {
             c.PlayAnimation();
         }
+    }
+
+    public bool IsScoring()
+    {
+        List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethod();
+        if (scoringPositions.Any())
+        {
+            for(int i = 0; i < mBlocks.Count; i++)
+            {
+                foreach (Cube c in mBlocks[i].Cubes)
+                {
+                    if (scoringPositions.Contains(c.GridPos))
+                        AddScoringCubes(c);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     public void RearrangeBlocks()

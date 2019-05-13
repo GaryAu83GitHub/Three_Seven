@@ -245,16 +245,30 @@ public class GridData
     {
         List<Vector2Int> scoringPositions = new List<Vector2Int>();
 
-        foreach(int r in mGrid.Keys)
+        for(int y = 0; y < mGridSize.y; y++)
         {
-            List<int> tempList = mGrid[r];
-            bool fullrow = (tempList.Contains(-1) ? true : false);
+            List<int> tempList = new List<int>();
+            for (int x = 0; x < mGridSize.x; x++)
+                tempList.Add(mGrid[x][y]);
 
-            if(fullrow)
+            if (!tempList.Contains(-1))
             {
-                foreach()
+                for(int x = 0; x < tempList.Count; x++)
+                    scoringPositions.Add(new Vector2Int(x, y));
             }
+
         }
+        //foreach(int x in mGrid.Keys)
+        //{
+        //    List<int> tempList = mGrid[x];
+        //    bool fullrow = (tempList.Contains(-1) ? true : false);
+
+        //    if(fullrow)
+        //    {
+        //        foreach (int y in tempList)
+        //            scoringPositions.Add(new Vector2Int(x, y));
+        //    }
+        //}
 
         return scoringPositions;
     }

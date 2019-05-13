@@ -72,6 +72,22 @@ public class BlockDeveloping : MonoBehaviour
             mCubeNumbers.Add(n);
     }
 
+    public void ChangeCubeArrangement()
+    {
+        if(mCubes[0] == null)
+        {
+            Cube tempCube = mCubes[1];
+            mCubes[0] = mCubes[1];
+            mCubes.RemoveAt(1);
+        }
+        if(mCubes[1] == null)
+        {
+            mCubes.RemoveAt(1);
+        }
+        if (mCubes[0] == null && mCubes[1] == null)
+            Destroy(this);
+    }
+
     public void Swap()
     {
         int rootNumber = RootCube.Number;

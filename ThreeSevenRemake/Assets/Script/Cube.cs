@@ -9,6 +9,7 @@ public class Cube : MonoBehaviour
     public ParticleSystem mParticleSystem;
     private TextMesh mTextMesh;
     private MeshRenderer mRenderer;
+    private Color mTransparentColor = new Color(0f, 0f, 0f, 0f);
 
     private Block mParentBlock;
     public Block ParentBlock { get { return mParentBlock; } }
@@ -39,6 +40,8 @@ public class Cube : MonoBehaviour
     private bool mAnimationFinish = false;
     public bool AnimationFinish { get { return mAnimationFinish; } }
 
+    private float mFadingTime = 0;
+
     private bool mIsFading = false;
 
     private void Awake()
@@ -51,11 +54,11 @@ public class Cube : MonoBehaviour
     {
         if(mIsFading)
         {
-            Color tempColor = mRenderer.material.color;
-            tempColor.a -= 0.35f * Time.deltaTime;
-            mRenderer.material.color = tempColor;
-            if (tempColor.a < 0f)
-                mAnimationFinish = true;
+            mRenderer.material.color = Color.Lerp(mRenderer.material.color, mTransparentColor, mFadingTime);
+            if (mFadingTime < 1)
+                mFadingTime += Time.deltaTime / mParticleSystem.main.duration;
+            if (mRenderer.material.color.a <= 0f)
+                Destroy(this);
         }
     }
 
@@ -105,7 +108,8 @@ public class Cube : MonoBehaviour
 
     public void PlayAnimation()
     {
-        mParticleSystem.Play();
+        if(mIsFading == false)
+            mParticleSystem.Play();
         mIsFading = true;
     }
 

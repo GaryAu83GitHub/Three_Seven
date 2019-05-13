@@ -79,8 +79,11 @@ public class DevelopeMain : MonoBehaviour
             // the block was confirm nullified by the currentblock landed
             if(mBlockLanded)
             {
-                // Create a new block to fall into the table
-                CreateNewBlock();
+                // if the block manager detect any scoring from 
+                if (BlockManager.Instance.IsScoring())
+                    ScoringProgress();
+                else
+                    CreateNewBlock();
             }
             
             return; // don't proceed futher of this block
@@ -175,16 +178,14 @@ public class DevelopeMain : MonoBehaviour
     }
 
     /// <summary>
-    /// Checking for if the just landed block and those that have rows belows 
-    /// vacant and dropped scored
+    /// Scoring had been detected from the last block landed and the scoring progress will be active. 
     /// if scored the cube vanish animation plays and the position of the blocks
     /// in the grid will be rearranged
     /// </summary>
-    /// <returns>return if the scoring is under progress</returns>
-    private bool UndergoingScoringProgression()
+    private void ScoringProgress()
     {
+        BlockManager.Instance.PlayScoringAnimation();
 
-        return true;
     }
 
     private IEnumerator StartGame()
