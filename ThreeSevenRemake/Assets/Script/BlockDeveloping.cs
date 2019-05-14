@@ -21,7 +21,6 @@ public class BlockDeveloping : MonoBehaviour
     public List<int> CubeNumbers { get { return mCubeNumbers; } }
     
     private Transform Joint;
-    private Transform Limb;
 
     private float mCubeGap = 0f;
     private int mCurrentRotation = 0;
@@ -48,7 +47,6 @@ public class BlockDeveloping : MonoBehaviour
         //mCurrentClockDirection = ClockDirection.CLOCK_12;
 
         Joint = transform.GetChild(2);
-        Limb = Joint.GetChild(0);
 
         mCubeGap = GridData.Instance.CubeGapDistance;
 
@@ -86,6 +84,12 @@ public class BlockDeveloping : MonoBehaviour
         }
         if (mCubes[0] == null && mCubes[1] == null)
             Destroy(this);
+    }
+
+    public void DestroyJoint()
+    {
+        if (Joint != null)
+            Destroy(Joint.gameObject);
     }
 
     public void Swap()

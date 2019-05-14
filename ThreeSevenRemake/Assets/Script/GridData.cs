@@ -253,22 +253,14 @@ public class GridData
 
             if (!tempList.Contains(-1))
             {
-                for(int x = 0; x < tempList.Count; x++)
+                for (int x = 0; x < tempList.Count; x++)
+                {
                     scoringPositions.Add(new Vector2Int(x, y));
+                    
+                }
             }
 
         }
-        //foreach(int x in mGrid.Keys)
-        //{
-        //    List<int> tempList = mGrid[x];
-        //    bool fullrow = (tempList.Contains(-1) ? true : false);
-
-        //    if(fullrow)
-        //    {
-        //        foreach (int y in tempList)
-        //            scoringPositions.Add(new Vector2Int(x, y));
-        //    }
-        //}
 
         return scoringPositions;
     }

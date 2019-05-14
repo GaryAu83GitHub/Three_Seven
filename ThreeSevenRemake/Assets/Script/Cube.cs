@@ -108,9 +108,12 @@ public class Cube : MonoBehaviour
 
     public void PlayAnimation()
     {
-        if(mIsFading == false)
+        if (mIsFading == false)
+        {
             mParticleSystem.Play();
-        mIsFading = true;
+            mParentBlockDeveloping.DestroyJoint();
+            mIsFading = !mIsFading;
+        }
     }
 
     #region LinkedCube devision

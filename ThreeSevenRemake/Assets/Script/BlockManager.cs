@@ -57,6 +57,7 @@ public class BlockManager
         foreach(Cube c in mScoringsCubes)
         {
             c.PlayAnimation();
+            GridData.Instance.UnregistrateCell(c.GridPos);
         }
     }
 
