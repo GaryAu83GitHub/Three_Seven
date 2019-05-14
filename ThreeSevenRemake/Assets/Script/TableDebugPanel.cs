@@ -74,6 +74,7 @@ public class TableDebugPanel : MonoBehaviour
 
     private void GridUpdate(Dictionary<int, List<int>> aGrid)
     {
+        //UIText.text = BlockManager.Instance.BlockOrderInString();
         UIText.text = BlockManager.Instance.BlockCount.ToString();
 
         for (int x = 0; x < aGrid.Count; x++)

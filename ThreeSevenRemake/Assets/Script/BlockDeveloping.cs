@@ -11,9 +11,11 @@ public class BlockDeveloping : MonoBehaviour
     public Cube RootCube { get { return (mCubes[0] != null ? mCubes[0] : null); } }
     public Cube SubCube { get { return (mCubes[1] != null ? mCubes[1] : null); } }
 
+    [SerializeField]
     private Vector2Int mMaxPosition;
     public Vector2Int MaxGridPos { get { return mMaxPosition; } }
 
+    [SerializeField]
     private Vector2Int mMinPosition;
     public Vector2Int MinGridPos { get { return mMinPosition; } }
 
@@ -49,14 +51,29 @@ public class BlockDeveloping : MonoBehaviour
         Joint = transform.GetChild(2);
 
         mCubeGap = GridData.Instance.CubeGapDistance;
-
-        GridPositionDebugLog();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public bool CheckIfCellIsVacantBeneath()
+    {
+        if (GridData.Instance.IsCellVacant(mMinPosition + Vector2Int.down) && GridData.Instance.IsCellVacant(mMaxPosition + Vector2Int.down))
+            return true;
+        return false;
+    }
+
+    public bool IsAnimationPlaying()
+    {
+        foreach(Cube c in mCubes)
+        {
+            if (c.AnimationIsPlaying)
+                return true;
+        }
+        return false;
     }
 
     public void SetGridStartPosition(Vector2Int aPosition)
@@ -70,20 +87,25 @@ public class BlockDeveloping : MonoBehaviour
             mCubeNumbers.Add(n);
     }
 
-    public void ChangeCubeArrangement()
+    public bool ChangeCubeArrangement()
     {
-        if(mCubes[0] == null)
-        {
-            Cube tempCube = mCubes[1];
-            mCubes[0] = mCubes[1];
-            mCubes.RemoveAt(1);
-        }
-        if(mCubes[1] == null)
-        {
-            mCubes.RemoveAt(1);
-        }
         if (mCubes[0] == null && mCubes[1] == null)
-            Destroy(this);
+        {
+            Destroy(this.gameObject);
+            return true;
+        }
+
+        if (mCubes[0] == null)
+        {
+            mCubes.RemoveAt(0);
+        }
+        if (mCubes.Count == 2 && mCubes[1] == null)
+            mCubes.RemoveAt(1);
+
+        mMinPosition = mCubes[0].GridPos;
+        mMaxPosition = mCubes[0].GridPos;
+
+        return false;
     }
 
     public void DestroyJoint()
@@ -144,7 +166,6 @@ public class BlockDeveloping : MonoBehaviour
                 break;
 
         }
-        GridPositionDebugLog();
     }
 
     private void Move(Vector3 aDir)
@@ -152,7 +173,8 @@ public class BlockDeveloping : MonoBehaviour
         Vector2Int dir = new Vector2Int((int)aDir.x, (int)aDir.y);
 
         // check for the cell to move is vacant
-        if (!GridData.Instance.IsCellVacant(mMinPosition + dir) || !GridData.Instance.IsCellVacant(mMaxPosition + dir))
+        //if (!GridData.Instance.IsCellVacant(mMinPosition + dir) || !GridData.Instance.IsCellVacant(mMaxPosition + dir))
+        if(!CheckNeighborCellIsVacant(dir))
             return;
 
         transform.Translate(aDir * mCubeGap);
@@ -162,8 +184,6 @@ public class BlockDeveloping : MonoBehaviour
 
         mMinPosition += dir;
         mMaxPosition += dir;
-
-        GridPositionDebugLog();
     }
 
     private void SetSubCubPosition(Vector2Int aDir)
@@ -182,6 +202,14 @@ public class BlockDeveloping : MonoBehaviour
             mMinPosition = SubCube.GridPos;
             mMaxPosition = RootCube.GridPos;
         }
+    }
+
+    private bool CheckNeighborCellIsVacant(Vector2Int aDir)
+    {
+        if (GridData.Instance.IsCellVacant(mMinPosition + aDir) || GridData.Instance.IsCellVacant(mMaxPosition + aDir))
+            return true;
+
+        return false;
     }
 
     private void GridPositionDebugLog()

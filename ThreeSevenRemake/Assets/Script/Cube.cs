@@ -11,8 +11,8 @@ public class Cube : MonoBehaviour
     private MeshRenderer mRenderer;
     private Color mTransparentColor = new Color(0f, 0f, 0f, 0f);
 
-    private Block mParentBlock;
-    public Block ParentBlock { get { return mParentBlock; } }
+    //private Block mParentBlock;
+    //public Block ParentBlock { get { return mParentBlock; } }
 
     private BlockDeveloping mParentBlockDeveloping;
     public BlockDeveloping ParentBlockDeveloping { get { return mParentBlockDeveloping; } }
@@ -37,8 +37,8 @@ public class Cube : MonoBehaviour
         }
     }
 
-    private bool mAnimationFinish = false;
-    public bool AnimationFinish { get { return mAnimationFinish; } }
+    private bool mAnimationIsPlaying = false;
+    public bool AnimationIsPlaying { get { return mAnimationIsPlaying; } }
 
     private float mFadingTime = 0;
 
@@ -58,13 +58,13 @@ public class Cube : MonoBehaviour
             if (mFadingTime < 1)
                 mFadingTime += Time.deltaTime / mParticleSystem.main.duration;
             if (mRenderer.material.color.a <= 0f)
-                Destroy(this);
+                Destroy(this.gameObject);
         }
     }
 
     public void Init(Block aParentBlock, int aNumber)
     {
-        mParentBlock = aParentBlock;
+        //mParentBlock = aParentBlock;
         SetCubeNumber(aNumber);
 
         mLinkedCubes.Add(Vector2Int.up, null);
@@ -112,6 +112,7 @@ public class Cube : MonoBehaviour
         {
             mParticleSystem.Play();
             mParentBlockDeveloping.DestroyJoint();
+            mAnimationIsPlaying = !mAnimationIsPlaying;
             mIsFading = !mIsFading;
         }
     }

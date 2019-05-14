@@ -203,12 +203,12 @@ public class GridManager
 
     public void CubeScoring(Vector2Int aGridPos)
     {
-        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.up, Vector2Int.down);
-        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.left, Vector2Int.right);
-        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.up, Vector2Int.up * 2);
-        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.left, Vector2Int.left * 2);
-        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.down, Vector2Int.down * 2);
-        GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.right, Vector2Int.right * 2);
+        //GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.up, Vector2Int.down);
+        //GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.left, Vector2Int.right);
+        //GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.up, Vector2Int.up * 2);
+        //GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.left, Vector2Int.left * 2);
+        //GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.down, Vector2Int.down * 2);
+        //GetCubeFrom(aGridPos).ParentBlock.ScoringTimes += CheckScoring(aGridPos, Vector2Int.right, Vector2Int.right * 2);
 
         //if (GetCubeFrom(aGridPos).IsScoring)
         //    return true;

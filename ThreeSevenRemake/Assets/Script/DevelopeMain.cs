@@ -79,9 +79,17 @@ public class DevelopeMain : MonoBehaviour
             // the block was confirm nullified by the currentblock landed
             if(mBlockLanded)
             {
-                // if the block manager detect any scoring from 
+                if (BlockManager.Instance.AnyBlockPlayingAnimation())
+                    return;
+
+                //BlockManager.Instance.ClearCubeLessBlocks();
+
+                UpdateDebugBoard();
+                // if the block manager detect any scoring from the last landing block, the animation will be played
                 if (BlockManager.Instance.IsScoring())
-                    ScoringProgress();
+                    BlockManager.Instance.PlayScoringAnimation();
+                else if (BlockManager.Instance.CheckIfAnyBlocksIsFloating())
+                    BlockManager.Instance.RearrangeBlocks();
                 else
                     CreateNewBlock();
             }
@@ -142,7 +150,7 @@ public class DevelopeMain : MonoBehaviour
             if (!GridData.Instance.IsCellVacant(mCurrentBlock.MinGridPos + Vector2Int.down) ||
                 !GridData.Instance.IsCellVacant(mCurrentBlock.MaxGridPos + Vector2Int.down))
             {
-                BlockManager.Instance.Add(mCurrentBlock);
+                BlockManager.Instance.AddBlock(mCurrentBlock);
 
                 UpdateDebugBoard();
 
@@ -184,7 +192,7 @@ public class DevelopeMain : MonoBehaviour
     /// </summary>
     private void ScoringProgress()
     {
-        BlockManager.Instance.PlayScoringAnimation();
+        
 
     }
 

@@ -35,14 +35,17 @@ public class BlockManager
     public int BlockCount { get { return mBlocks.Count; } }
 
     private List<BlockDeveloping> mBlocks = new List<BlockDeveloping>();
+    private List<BlockDeveloping> mFloatingBlocks = new List<BlockDeveloping>();
     private List<Cube> mScoringsCubes = new List<Cube>();
 
     // Add in the new landed and rearranged block
-    public void Add(BlockDeveloping aBlock)
+    public void AddBlock(BlockDeveloping aBlock)
     {
         mBlocks.Add(aBlock);
         foreach (Cube c in aBlock.Cubes)
             GridData.Instance.RegistrateCell(c);
+
+        SortTheBlocks();
     }
 
     // Add in cubes that had scored
@@ -59,11 +62,25 @@ public class BlockManager
             c.PlayAnimation();
             GridData.Instance.UnregistrateCell(c.GridPos);
         }
+
+        //for (int i = mBlocks.Count - 1; i > 0; i--)
+        //    mBlocks[i].ChangeCubeArrangement();
+    }
+
+    public string BlockOrderInString()
+    {
+        string blockOrderString = "";
+        foreach (BlockDeveloping b in mBlocks)
+            blockOrderString += b.name + "\n";
+
+        return blockOrderString;
     }
 
     public bool IsScoring()
     {
+        // scoring method to list
         List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethod();
+
         if (scoringPositions.Any())
         {
             for(int i = 0; i < mBlocks.Count; i++)
@@ -79,6 +96,73 @@ public class BlockManager
         return false;
     }
 
+    /// <summary>
+    /// Checking if any block have any of it's cube playing scoring animation
+    /// </summary>
+    /// <returns></returns>
+    public bool AnyBlockPlayingAnimation()
+    {
+        ClearCubeLessBlocks();
+        for(int i = 0; i < mBlocks.Count; i++)
+        {
+            if (mBlocks[i].IsAnimationPlaying())
+                return true;
+        }
+        return false;
+    }
+
+    public void ClearCubeLessBlocks()
+    {
+        if (!mBlocks.Any())
+            return;
+        
+        mBlocks.RemoveAll((block) => {
+            return block.ChangeCubeArrangement();
+            });
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public void RearrangeBlocks()
-    { }
+    {
+        for (int i = 0; i < mFloatingBlocks.Count; i++)
+        {
+            mFloatingBlocks[i].DropDown();
+            if (!GridData.Instance.IsCellVacant(mFloatingBlocks[i].MinGridPos + Vector2Int.down) ||
+                !GridData.Instance.IsCellVacant(mFloatingBlocks[i].MaxGridPos + Vector2Int.down))
+            {
+                AddBlock(mFloatingBlocks[i]);
+            }
+        }
+    }
+
+    /// <summary>
+    /// After the scoring, some block might have have several cell vacant beneath their current position on the table.
+    /// This is to return if it true or not by checking every blocks that had been storred in the list of block of the
+    /// manager
+    /// </summary>
+    /// <returns>True if any block in the list happened to have a block that have a cell beneath vacant</returns>
+    public bool CheckIfAnyBlocksIsFloating()
+    {
+        mFloatingBlocks.Clear();
+
+        for (int i = mBlocks.Count - 1; i >= 0; i--)
+        {
+            if (mBlocks[i].CheckIfCellIsVacantBeneath())
+            {
+                foreach (Cube c in mBlocks[i].Cubes)
+                    GridData.Instance.UnregistrateCell(c.GridPos);
+                mFloatingBlocks.Add(mBlocks[i]);
+                mBlocks.RemoveAt(i);
+            }
+        }
+        return mFloatingBlocks.Any();
+    }
+
+    private void SortTheBlocks()
+    {
+        List<BlockDeveloping> SortedList = mBlocks.OrderBy(o => o.MinGridPos.x).ThenBy(o => o.MinGridPos.y).ToList();
+        mBlocks = SortedList;
+    }
 }
