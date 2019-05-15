@@ -78,8 +78,9 @@ public class BlockManager
 
     public bool IsScoring()
     {
+        mScoringsCubes.Clear();
         // scoring method to list
-        List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethod();
+        List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodRowFilling();
 
         if (scoringPositions.Any())
         {
@@ -129,11 +130,12 @@ public class BlockManager
         for (int i = 0; i < mFloatingBlocks.Count; i++)
         {
             mFloatingBlocks[i].DropDown();
-            if (!GridData.Instance.IsCellVacant(mFloatingBlocks[i].MinGridPos + Vector2Int.down) ||
-                !GridData.Instance.IsCellVacant(mFloatingBlocks[i].MaxGridPos + Vector2Int.down))
-            {
-                AddBlock(mFloatingBlocks[i]);
-            }
+            AddBlock(mFloatingBlocks[i]);
+            //if (!GridData.Instance.IsCellVacant(mFloatingBlocks[i].MinGridPos + Vector2Int.down) ||
+            //    !GridData.Instance.IsCellVacant(mFloatingBlocks[i].MaxGridPos + Vector2Int.down))
+            //{
+                
+            //}
         }
     }
 

@@ -241,7 +241,7 @@ public class GridData
     /// score for 3 cubes sum will be 7, here is to check the table rows is filled
     /// and gather it position.
     /// </summary>
-    public List<Vector2Int> TempScoringMethod()
+    public List<Vector2Int> TempScoringMethodRowFilling()
     {
         List<Vector2Int> scoringPositions = new List<Vector2Int>();
 

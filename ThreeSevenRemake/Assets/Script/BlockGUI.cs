@@ -26,7 +26,7 @@ public class BlockGUI : MonoBehaviour
         RootCube.color = SupportTools.GetCubeColorOf(RootNumber);
 
         // add in the new number for the root cube
-        mPreviousNumber.Add(RootNumber);
+        //mPreviousNumber.Add(RootNumber);
 
         // randomize a new number for the sub cube
         mSubNumber = RandomNewNumber();
@@ -47,7 +47,7 @@ public class BlockGUI : MonoBehaviour
         RootCube.color = SupportTools.GetCubeColorOf(RootNumber);
 
         // add in the new number for the root cube
-        mPreviousNumber.Add(RootNumber);
+        //mPreviousNumber.Add(RootNumber);
 
         // randomize a new number for the sub cube
         mSubNumber = RandomNewNumber();
