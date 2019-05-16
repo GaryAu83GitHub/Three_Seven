@@ -256,12 +256,106 @@ public class GridData
                 for (int x = 0; x < tempList.Count; x++)
                 {
                     scoringPositions.Add(new Vector2Int(x, y));
-                    
                 }
             }
 
         }
 
+        return scoringPositions;
+    }
+
+    /// <summary>
+    /// This is a test method in use during the development for develpe the base of the original scoring method
+    /// The main idea is to score when three aligned with each other and have a sum of 7
+    /// The base of the original scoring method is to have three cube align with both horizontal and vertical
+    /// to score.
+    /// This method will serve as the core of the scoring method
+    /// </summary>
+    /// <param name="someNewLandedCubes">Cubes that just had landed will going through the scoring checks</param>
+    /// <returns>A list of positions of cubes that had manage to score</returns>
+    public List<Vector2Int> TempScoringMethodThreeInRows(List<Cube> someNewLandedCubes)
+    {
+        List<Vector2Int> scoringPositions = new List<Vector2Int>();
+
+        foreach(Cube c in someNewLandedCubes)
+        {
+            // horizontal
+            //  the horizont cross [N][G][N]
+            if (GetValueOn(c.GridPos + Vector2Int.left) > -1 && GetValueOn(c.GridPos + Vector2Int.right) > -1)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.left))
+                    scoringPositions.Add(c.GridPos + Vector2Int.left);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.right))
+                    scoringPositions.Add(c.GridPos + Vector2Int.right);
+            }
+
+            //  the right [G][N][N]
+            if (GetValueOn(c.GridPos + Vector2Int.right) > -1 && GetValueOn(c.GridPos + (Vector2Int.right * 2)) > -1)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.right))
+                    scoringPositions.Add(c.GridPos + Vector2Int.right);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.right * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.right * 2));
+            }
+
+            //  the left [N][N][G]
+            if (GetValueOn(c.GridPos + Vector2Int.left) > -1 && GetValueOn(c.GridPos + (Vector2Int.left * 2)) > -1)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.left))
+                    scoringPositions.Add(c.GridPos + Vector2Int.left);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.left * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.left * 2));
+            }
+
+            // vertical
+            //  the verticla cross
+            // [N]
+            // [G]
+            // [N]
+            if (GetValueOn(c.GridPos + Vector2Int.up) > -1 && GetValueOn(c.GridPos + Vector2Int.down) > -1)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.up))
+                    scoringPositions.Add(c.GridPos + Vector2Int.up);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.down))
+                    scoringPositions.Add(c.GridPos + Vector2Int.down);
+            }
+
+            //  the up
+            // [N]
+            // [N]
+            // [G]
+            if (GetValueOn(c.GridPos + Vector2Int.up) > -1 && GetValueOn(c.GridPos + (Vector2Int.up * 2)) > -1)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.up))
+                    scoringPositions.Add(c.GridPos + Vector2Int.up);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.up * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.up * 2));
+            }
+
+            //  the down
+            // [G]
+            // [N]
+            // [N]
+            if (GetValueOn(c.GridPos + Vector2Int.down) > -1 && GetValueOn(c.GridPos + (Vector2Int.down * 2)) > -1)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.down))
+                    scoringPositions.Add(c.GridPos + Vector2Int.down);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.down * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.down * 2));
+            }
+        }
         return scoringPositions;
     }
 
@@ -289,7 +383,7 @@ public class GridData
     private int GetValueOn(Vector2Int aPos)
     {
         // Boundary check
-        if (aPos.x < 0 || aPos.x > mGridSize.x || aPos.y < 0 || aPos.y > mGridSize.y)
+        if (aPos.x < 0 || aPos.x >= mGridSize.x || aPos.y < 0 || aPos.y >= mGridSize.y)
             return -1;
 
         //return mGridInt[aPos.x, aPos.y];

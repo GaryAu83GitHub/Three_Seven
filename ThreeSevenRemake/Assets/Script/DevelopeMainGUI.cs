@@ -9,10 +9,14 @@ public class DevelopeMainGUI : MonoBehaviour
     public Text ScoreText;
     public Text TimeText;
     public Text LevelText;
+    //public Image TestImage;
+    public GameObject DebugPanel;
 
     private float mGameTimer = 0f;
     private string mGameTimeString = "";
     private bool mGameIsPlaying;
+
+    private float mLerpValue = 0f;
 
     private void Awake()
     {
@@ -26,6 +30,8 @@ public class DevelopeMainGUI : MonoBehaviour
         DevelopeMain.levelUpdate += UpdateLevel;
         DevelopeMain.createNewBlock += TransferNewBlock;
         DevelopeMain.gameIsPlaying += GameIsPlaying;
+
+        //TestImage.color = Color.green;
     }
 
     private void OnDisable()
@@ -40,6 +46,18 @@ public class DevelopeMainGUI : MonoBehaviour
     private void Update()
     {
         Clock();
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            if (DebugPanel.GetComponent<CanvasGroup>().alpha >= 1f)
+                DebugPanel.GetComponent<CanvasGroup>().alpha = 0f;
+            else
+                DebugPanel.GetComponent<CanvasGroup>().alpha = 1f;
+            //mLerpValue += .125f;
+            //if (mLerpValue > 1)
+            //    mLerpValue = 0f;
+            //TestImage.color = Color.Lerp(Color.green, Color.red, mLerpValue);
+        }
     }
 
     public void UpdateScore(int aNewScore)

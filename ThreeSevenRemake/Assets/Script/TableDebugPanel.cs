@@ -33,7 +33,6 @@ public class TableDebugPanel : MonoBehaviour
     public void GenerateGrid(int aWidth, int aHeigh)
     {
         mGrid.Clear();
-
        
         for (int y = 0; y < aHeigh; y++)
         {

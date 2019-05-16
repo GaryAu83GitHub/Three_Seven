@@ -37,14 +37,24 @@ public class BlockManager
     private List<BlockDeveloping> mBlocks = new List<BlockDeveloping>();
     private List<BlockDeveloping> mFloatingBlocks = new List<BlockDeveloping>();
     private List<Cube> mScoringsCubes = new List<Cube>();
+    private List<Cube> mNewLandedCubes = new List<Cube>();
 
-    // Add in the new landed and rearranged block
+    /// <summary>
+    /// Add in the new landed and registrate it's cubes into the GridData.
+    /// At the same time the cubes of the new block will be added into a seperate list 
+    /// The order of the block list will be rearranged in their x then y position.
+    /// </summary>
+    /// <param name="aBlock">The new landed block</param>
     public void AddBlock(BlockDeveloping aBlock)
     {
         mBlocks.Add(aBlock);
+
         foreach (Cube c in aBlock.Cubes)
+        {
             GridData.Instance.RegistrateCell(c);
 
+            mNewLandedCubes.Add(c);
+        }
         SortTheBlocks();
     }
 
@@ -62,9 +72,6 @@ public class BlockManager
             c.PlayAnimation();
             GridData.Instance.UnregistrateCell(c.GridPos);
         }
-
-        //for (int i = mBlocks.Count - 1; i > 0; i--)
-        //    mBlocks[i].ChangeCubeArrangement();
     }
 
     public string BlockOrderInString()
@@ -78,9 +85,13 @@ public class BlockManager
 
     public bool IsScoring()
     {
-        mScoringsCubes.Clear();
         // scoring method to list
-        List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodRowFilling();
+        // Scoring with filled rows List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodRowFilling();
+
+        List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodThreeInRows(mNewLandedCubes);
+
+        mScoringsCubes.Clear();
+        mNewLandedCubes.Clear();
 
         if (scoringPositions.Any())
         {
@@ -131,11 +142,6 @@ public class BlockManager
         {
             mFloatingBlocks[i].DropDown();
             AddBlock(mFloatingBlocks[i]);
-            //if (!GridData.Instance.IsCellVacant(mFloatingBlocks[i].MinGridPos + Vector2Int.down) ||
-            //    !GridData.Instance.IsCellVacant(mFloatingBlocks[i].MaxGridPos + Vector2Int.down))
-            //{
-                
-            //}
         }
     }
 

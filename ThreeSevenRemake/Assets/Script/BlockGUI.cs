@@ -18,9 +18,14 @@ public class BlockGUI : MonoBehaviour
     public int SubNumber { get { return mSubNumber; } }
 
     private List<int> mPreviousNumber = new List<int>();
+    private bool[] mUsedNumber = new bool[8];
+    private int mRandomCounter = 0;
 
     private void Start()
     {
+        for (int i = 0; i < mUsedNumber.Length; i++)
+            mUsedNumber[i] = false;
+
         mRootNumber = RandomNewNumber();
         RootNumberText.text = RootNumber.ToString();
         RootCube.color = SupportTools.GetCubeColorOf(RootNumber);
@@ -61,8 +66,20 @@ public class BlockGUI : MonoBehaviour
     private int RandomNewNumber()
     {
         int newNumber = SupportTools.RNG(0, 8);
-        while (mPreviousNumber.Contains(newNumber))
+        while (mUsedNumber[newNumber] == true)
+        {
             newNumber = SupportTools.RNG(0, 8);
+        }
+
+        mUsedNumber[newNumber] = true;
+        mRandomCounter++;
+        if(mRandomCounter == 7)
+        {
+            for (int i = 0; i < mUsedNumber.Length; i++)
+                mUsedNumber[i] = false;
+
+            mRandomCounter = 0;
+        }
 
         return newNumber;
     }
