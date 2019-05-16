@@ -2012,6 +2012,7 @@ GameObject:
   - component: {fileID: 741201546}
   - component: {fileID: 741201545}
   - component: {fileID: 741201544}
+  - component: {fileID: 741201547}
   m_Layer: 5
   m_Name: TableDebugPanel
   m_TagString: Untagged
@@ -2091,6 +2092,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 741201542}
   m_CullTransparentMesh: 0
+--- !u!225 &741201547
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 741201542}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &865196445
 GameObject:
   m_ObjectHideFlags: 0
@@ -3774,6 +3787,7 @@ MonoBehaviour:
   ScoreText: {fileID: 1157607912}
   TimeText: {fileID: 19051810}
   LevelText: {fileID: 652319460}
+  DebugPanel: {fileID: 741201542}
 --- !u!114 &1628987184
 MonoBehaviour:
   m_ObjectHideFlags: 0
