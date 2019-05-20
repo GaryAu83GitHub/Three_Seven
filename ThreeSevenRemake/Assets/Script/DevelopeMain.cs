@@ -36,12 +36,10 @@ public class DevelopeMain : MonoBehaviour
         // intergear
     private int mBlockCount = 0;
     private int mCurrentLevel = 1;
-    private int mNextLevelUpScore = 250;
-    private int mTotalScores = 0;
 
         // floats
     private float mNextDropTime = 0f;
-    private float mDropRate = 1f;
+    private float mDropRate = 1;
     private float mButtonDownNextDropTime = 0f;
     private float mButtonDownDropRate = .1f;
 
@@ -81,8 +79,6 @@ public class DevelopeMain : MonoBehaviour
             {
                 if (BlockManager.Instance.AnyBlockPlayingAnimation())
                     return;
-
-                //BlockManager.Instance.ClearCubeLessBlocks();
 
                 UpdateDebugBoard();
                 // if the block manager detect any scoring from the last landing block, the animation will be played
@@ -221,7 +217,10 @@ public class DevelopeMain : MonoBehaviour
         {
             mCurrentBlock = newBlock.GetComponent<BlockDeveloping>();
         }
-        
+
+        // Get the block's droprate of the current level from GameManager
+        mDropRate = GameManager.Instance.GetCurrentDroppingRate();
+
         mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
         mNextDropTime = Time.time + mDropRate;
 

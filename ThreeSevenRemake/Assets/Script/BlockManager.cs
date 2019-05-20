@@ -49,6 +49,8 @@ public class BlockManager
     {
         mBlocks.Add(aBlock);
 
+        GameManager.Instance.AddSoftScore();
+
         foreach (Cube c in aBlock.Cubes)
         {
             GridData.Instance.RegistrateCell(c);
