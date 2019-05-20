@@ -146,91 +146,94 @@ public class GridData
     /// </summary>
     /// <param name="aPos">The given position</param>
     /// <returns></returns>
-    public List<Vector2Int> GetScoreingPositions(Vector2Int aPos)
+    public List<Vector2Int> ScoringMethodThreeSeven(List<Cube> someNewLandedCubes)
     {
         List<Vector2Int> scoringPositions = new List<Vector2Int>();
 
-        // horizontal
-        //  the horizont cross [N][G][N]
-        if (TotalValue(
-            GetValueOn(aPos),
-            GetValueOn(aPos + new Vector2Int(1, 0)),
-            GetValueOn(aPos + new Vector2Int(-1, 0))
-            ))
+        foreach (Cube c in someNewLandedCubes)
         {
-            ScoringPosCollection(scoringPositions, aPos);
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(1, 0));
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(-1, 0));
-        }
+            // horizontal
+            //  the horizont cross [N][G][N]
+            if (TotalValueFromPositions(c.GridPos + Vector2Int.left, c.GridPos, c.GridPos + Vector2Int.right) == 7 ||
+                TotalValueFromPositions(c.GridPos + Vector2Int.left, c.GridPos, c.GridPos + Vector2Int.right) == 21)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.left))
+                    scoringPositions.Add(c.GridPos + Vector2Int.left);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.right))
+                    scoringPositions.Add(c.GridPos + Vector2Int.right);
+            }
 
-        //  the right [G][N][N]
-        if (TotalValue(
-            GetValueOn(aPos),
-            GetValueOn(aPos + new Vector2Int(1, 0)),
-            GetValueOn(aPos + new Vector2Int(2, 0))
-            ))
-        {
-            ScoringPosCollection(scoringPositions, aPos);
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(1, 0));
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(2, 0));
-        }
+            //  the right [G][N][N]
+            if (TotalValueFromPositions(c.GridPos, c.GridPos + Vector2Int.right, c.GridPos + (Vector2Int.right * 2)) == 7 ||
+                TotalValueFromPositions(c.GridPos, c.GridPos + Vector2Int.right, c.GridPos + (Vector2Int.right * 2)) == 21)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.right))
+                    scoringPositions.Add(c.GridPos + Vector2Int.right);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.right * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.right * 2));
+            }
 
-        //  the left [N][N][G]
-        if (TotalValue(
-            GetValueOn(aPos),
-            GetValueOn(aPos + new Vector2Int(-1, 0)),
-            GetValueOn(aPos + new Vector2Int(-2, 0))
-            ))
-        {
-            ScoringPosCollection(scoringPositions, aPos);
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(-1, 0));
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(-2, 0));
-        }
+            //  the left [N][N][G]
+            if (TotalValueFromPositions(c.GridPos + (Vector2Int.left * 2), c.GridPos + Vector2Int.left, c.GridPos) == 7 ||
+                TotalValueFromPositions(c.GridPos + (Vector2Int.left * 2), c.GridPos + Vector2Int.left, c.GridPos) == 21)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.left))
+                    scoringPositions.Add(c.GridPos + Vector2Int.left);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.left * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.left * 2));
+            }
 
-        // vertical
-        //  the verticla cross
-        // [N]
-        // [G]
-        // [N]
-        if (TotalValue(
-            GetValueOn(aPos),
-            GetValueOn(aPos + new Vector2Int(0, 1)),
-            GetValueOn(aPos + new Vector2Int(0, -1))
-            ))
-        {
-            ScoringPosCollection(scoringPositions, aPos);
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(1, 0));
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(-1, 0));
-        }
+            // vertical
+            //  the verticla cross
+            // [N]
+            // [G]
+            // [N]
+            if (TotalValueFromPositions(c.GridPos + Vector2Int.up, c.GridPos, c.GridPos + Vector2Int.down) == 7 ||
+                TotalValueFromPositions(c.GridPos + Vector2Int.up, c.GridPos, c.GridPos + Vector2Int.down) == 21)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.up))
+                    scoringPositions.Add(c.GridPos + Vector2Int.up);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.down))
+                    scoringPositions.Add(c.GridPos + Vector2Int.down);
+            }
 
-        //  the up
-        // [N]
-        // [N]
-        // [G]
-        if (TotalValue(
-            GetValueOn(aPos),
-            GetValueOn(aPos + new Vector2Int(0, 1)),
-            GetValueOn(aPos + new Vector2Int(0, 2))
-            ))
-        {
-            ScoringPosCollection(scoringPositions, aPos);
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(0, 1));
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(0, 2));
-        }
+            //  the up
+            // [N]
+            // [N]
+            // [G]
+            if (TotalValueFromPositions(c.GridPos + (Vector2Int.up * 2), c.GridPos + Vector2Int.up, c.GridPos) == 7 ||
+                TotalValueFromPositions(c.GridPos + (Vector2Int.up * 2), c.GridPos + Vector2Int.up, c.GridPos) == 21)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.up))
+                    scoringPositions.Add(c.GridPos + Vector2Int.up);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.up * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.up * 2));
+            }
 
-        //  the down
-        // [G]
-        // [N]
-        // [N]
-        if (TotalValue(
-            GetValueOn(aPos),
-            GetValueOn(aPos + new Vector2Int(0, -1)),
-            GetValueOn(aPos + new Vector2Int(0, -2))
-            ))
-        {
-            ScoringPosCollection(scoringPositions, aPos);
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(0, -1));
-            ScoringPosCollection(scoringPositions, aPos + new Vector2Int(0, -2));
+            //  the down
+            // [G]
+            // [N]
+            // [N]
+            if (TotalValueFromPositions(c.GridPos, c.GridPos + Vector2Int.down, c.GridPos + (Vector2Int.down * 2)) == 7 ||
+                TotalValueFromPositions(c.GridPos, c.GridPos + Vector2Int.down, c.GridPos + (Vector2Int.down * 2)) == 21)
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.down))
+                    scoringPositions.Add(c.GridPos + Vector2Int.down);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.down * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.down * 2));
+            }
         }
 
         return scoringPositions;
@@ -397,10 +400,10 @@ public class GridData
     /// <param name="aV2">value 2</param>
     /// <param name="aV3">value 3</param>
     /// <returns></returns>
-    private bool TotalValue(int aV1, int aV2, int aV3)
+    private int TotalValueFromPositions(Vector2Int aPos1, Vector2Int aPos2, Vector2Int aPos3)
     {
-        int value = aV1 + aV2 + aV3;
+        int value = GetValueOn(aPos1) + GetValueOn(aPos2) + GetValueOn(aPos3);
 
-        return (value == 7 || value == 21);
+        return value;
     }
 }
