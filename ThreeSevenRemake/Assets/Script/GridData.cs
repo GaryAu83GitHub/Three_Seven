@@ -418,6 +418,8 @@ public class GridData
     private int TotalValueFromPositions(Vector2Int aPos1, Vector2Int aPos2, Vector2Int aPos3)
     {
         int value = GetValueOn(aPos1) + GetValueOn(aPos2) + GetValueOn(aPos3);
+        if (value == 7 || value == 21)
+            return value;
 
         return value;
     }

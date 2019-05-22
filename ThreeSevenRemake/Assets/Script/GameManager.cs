@@ -33,7 +33,7 @@ public class GameManager
     public int ComboScore { get { return mComboScore; } }
 
 
-    private int[] mBaseScoreList = new int[] {50, 100, 300, 1200, 6000};
+    private List<int> mBaseScoreList = new List<int>() { 50 };
 
     private int mNextLevelUpScore = 10;
     private int mCurrentLevelPoint = 0;
@@ -61,10 +61,10 @@ public class GameManager
     {
         mComboScore = 0;
 
-        if(aCombo < mBaseScoreList.Length)
+        if(aCombo < mBaseScoreList.Count)
             mComboScore = mBaseScoreList[aCombo] * (mCurrentLevel + 1);
         else
-            mComboScore = mBaseScoreList[mBaseScoreList.Length - 1] * (mCurrentLevel + 1);
+            mComboScore = mBaseScoreList[mBaseScoreList.Count - 1] * (mCurrentLevel + 1);
 
         mCurrentScore += mComboScore;
     }
@@ -79,5 +79,24 @@ public class GameManager
             droprate = 0.1f;
 
         return droprate;
+    }
+
+    private int GetBaseScore(int aCombo)
+    {
+        if (aCombo > mBaseScoreList.Count)
+            AddBaseScore(aCombo);
+
+        return mBaseScoreList[aCombo];
+    }
+
+    private void AddBaseScore(int aNewComboLimit)
+    {
+        do
+        {
+            int currentLenght = mBaseScoreList.Count;
+            int nextBaseScore = mBaseScoreList[currentLenght - 1] * currentLenght + 1;
+            mBaseScoreList.Add(nextBaseScore);
+
+        } while (mBaseScoreList.Count < aNewComboLimit);
     }
 }
