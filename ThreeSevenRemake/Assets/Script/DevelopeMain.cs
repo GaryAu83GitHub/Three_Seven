@@ -24,7 +24,7 @@ public class DevelopeMain : MonoBehaviour
     public delegate void InitlizeResult(int aReachedLevel, string aSpendTimeString, int aBlockCount, int aTotalScore);
     public static InitlizeResult finalResult;
 
-    public delegate void OnBlockLandedDebug(Dictionary<int, List<int>> aGrid);
+    public delegate void OnBlockLandedDebug(Dictionary<int, List<Cube>> aGrid);
     public static OnBlockLandedDebug blockLandedDebug;
 
 

@@ -26,7 +26,7 @@ public class GridData
     /// The keys ID to the dictionary stands for the columns "X"
     /// the index in the list in the dictionary stands for the rows "Y"
     /// </summary>
-    private Dictionary<int, List<int>> mGrid;
+    private Dictionary<int, List<Cube>> mGrid;
 
     /// <summary>
     /// The vector that hold the size of the grid size
@@ -44,7 +44,7 @@ public class GridData
     private const float mCubeGapDistance = .5f;
     public float CubeGapDistance { get { return mCubeGapDistance; } }
 
-    public Dictionary<int, List<int>> Grid { get { return mGrid; } }
+    public Dictionary<int, List<Cube>> Grid { get { return mGrid; } }
 
     /// <summary>
     ///  Generate the grid with default value along with the list of the
@@ -52,13 +52,13 @@ public class GridData
     /// </summary>
     public void GenerateGrid()
     {
-        mGrid = new Dictionary<int, List<int>>();
+        mGrid = new Dictionary<int, List<Cube>>();
         for (int x = 0; x < mGridSize.x; x++)
         {
-            mGrid.Add(x, new List<int>());
+            mGrid.Add(x, new List<Cube>());
             for (int y = 0; y < mGridSize.y; y++)
             {
-                mGrid[x].Add(-1);
+                mGrid[x].Add(null);
             }
         }
     }
@@ -70,7 +70,7 @@ public class GridData
     /// <param name="aCube">The cube that will be registrate</param>
     public void RegistrateCell(Cube aCube)
     {
-        mGrid[aCube.GridPos.x][aCube.GridPos.y] = aCube.Number;
+        mGrid[aCube.GridPos.x][aCube.GridPos.y] = aCube;
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ public class GridData
     /// <param name="aPos"></param>
     public void UnregistrateCell(Vector2Int aPos)
     {
-        mGrid[aPos.x][aPos.y] = -1;
+        mGrid[aPos.x][aPos.y] = null;
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ public class GridData
             return false;
 
         // Checking cells
-        if (mGrid[aPos.x][aPos.y] > -1)
+        if (mGrid[aPos.x][aPos.y] != null)
             return false;
         return true;
     }
@@ -265,11 +265,11 @@ public class GridData
 
         for(int y = 0; y < mGridSize.y; y++)
         {
-            List<int> tempList = new List<int>();
+            List<Cube> tempList = new List<Cube>();
             for (int x = 0; x < mGridSize.x; x++)
                 tempList.Add(mGrid[x][y]);
 
-            if (!tempList.Contains(-1))
+            if (!tempList.Contains(null))
             {
                 for (int x = 0; x < tempList.Count; x++)
                 {
@@ -299,7 +299,7 @@ public class GridData
         {
             // horizontal
             //  the horizont cross [N][G][N]
-            if (GetValueOn(c.GridPos + Vector2Int.left) > -1 && GetValueOn(c.GridPos + Vector2Int.right) > -1)
+            if (GetCubeOn(c.GridPos + Vector2Int.left) != null && GetCubeOn(c.GridPos + Vector2Int.right) != null)
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -310,7 +310,7 @@ public class GridData
             }
 
             //  the right [G][N][N]
-            if (GetValueOn(c.GridPos + Vector2Int.right) > -1 && GetValueOn(c.GridPos + (Vector2Int.right * 2)) > -1)
+            if (GetCubeOn(c.GridPos + Vector2Int.right) != null && GetCubeOn(c.GridPos + (Vector2Int.right * 2)) != null)
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -321,7 +321,7 @@ public class GridData
             }
 
             //  the left [N][N][G]
-            if (GetValueOn(c.GridPos + Vector2Int.left) > -1 && GetValueOn(c.GridPos + (Vector2Int.left * 2)) > -1)
+            if (GetCubeOn(c.GridPos + Vector2Int.left) != null && GetCubeOn(c.GridPos + (Vector2Int.left * 2)) != null)
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -336,7 +336,7 @@ public class GridData
             // [N]
             // [G]
             // [N]
-            if (GetValueOn(c.GridPos + Vector2Int.up) > -1 && GetValueOn(c.GridPos + Vector2Int.down) > -1)
+            if (GetCubeOn(c.GridPos + Vector2Int.up) != null && GetCubeOn(c.GridPos + Vector2Int.down) != null)
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -350,7 +350,7 @@ public class GridData
             // [N]
             // [N]
             // [G]
-            if (GetValueOn(c.GridPos + Vector2Int.up) > -1 && GetValueOn(c.GridPos + (Vector2Int.up * 2)) > -1)
+            if (GetCubeOn(c.GridPos + Vector2Int.up) != null && GetCubeOn(c.GridPos + (Vector2Int.up * 2)) != null)
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -364,7 +364,7 @@ public class GridData
             // [G]
             // [N]
             // [N]
-            if (GetValueOn(c.GridPos + Vector2Int.down) > -1 && GetValueOn(c.GridPos + (Vector2Int.down * 2)) > -1)
+            if (GetCubeOn(c.GridPos + Vector2Int.down) != null && GetCubeOn(c.GridPos + (Vector2Int.down * 2)) != null)
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -398,11 +398,11 @@ public class GridData
     /// <returns>return the value of the cell from the given position,
     /// and if the position is out of boundary, it'll return 
     /// the default value</returns>
-    private int GetValueOn(Vector2Int aPos)
+    private Cube GetCubeOn(Vector2Int aPos)
     {
         // Boundary check
         if (aPos.x < 0 || aPos.x >= mGridSize.x || aPos.y < 0 || aPos.y >= mGridSize.y)
-            return -1;
+            return null;
 
         //return mGridInt[aPos.x, aPos.y];
         return mGrid[aPos.x][aPos.y];
@@ -417,10 +417,11 @@ public class GridData
     /// <returns></returns>
     private int TotalValueFromPositions(Vector2Int aPos1, Vector2Int aPos2, Vector2Int aPos3)
     {
-        int value = GetValueOn(aPos1) + GetValueOn(aPos2) + GetValueOn(aPos3);
-        if (value == 7 || value == 21)
-            return value;
+        if (GetCubeOn(aPos1) == null || GetCubeOn(aPos2) == null || GetCubeOn(aPos3) == null)
+            return -1;
 
+        int value = GetCubeOn(aPos1).Number + GetCubeOn(aPos2).Number + GetCubeOn(aPos3).Number;
+        
         return value;
     }
 }

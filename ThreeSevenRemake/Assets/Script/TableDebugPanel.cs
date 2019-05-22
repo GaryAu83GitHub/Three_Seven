@@ -71,7 +71,7 @@ public class TableDebugPanel : MonoBehaviour
     //    }
     //}
 
-    private void GridUpdate(Dictionary<int, List<int>> aGrid)
+    private void GridUpdate(Dictionary<int, List<Cube>> aGrid)
     {
         //UIText.text = BlockManager.Instance.BlockOrderInString();
         UIText.text = BlockManager.Instance.BlockCount.ToString();
@@ -83,14 +83,14 @@ public class TableDebugPanel : MonoBehaviour
                 Color tempColor = new Color();
                 string tempString = "";
 
-                if (aGrid[x][y] == -1)
+                if (aGrid[x][y] == null)
                 {
                     tempColor = SupportTools.GetCubeColorOf(-1);
                     tempString = "n";
                 }
                 else
                 {
-                    tempColor = SupportTools.GetCubeColorOf(aGrid[x][y]);
+                    tempColor = SupportTools.GetCubeColorOf(aGrid[x][y].Number);
                     tempString = aGrid[x][y].ToString();
                 }
 
