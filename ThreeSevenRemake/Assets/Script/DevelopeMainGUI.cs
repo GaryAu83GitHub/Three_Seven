@@ -10,13 +10,18 @@ public class DevelopeMainGUI : MonoBehaviour
     public Text TimeText;
     public Text LevelText;
     //public Image TestImage;
+
+    public Text ComboCountText;
+    public Text ComboTitleText;
+    public Text ComboScoreText;
+
     public GameObject DebugPanel;
 
     private float mGameTimer = 0f;
     private string mGameTimeString = "";
     private bool mGameIsPlaying;
 
-    private float mLerpValue = 0f;
+    //private float mLerpValue = 0f;
 
     private void Awake()
     {
@@ -26,8 +31,10 @@ public class DevelopeMainGUI : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        DevelopeMain.scoreChanging += UpdateScore;
-        DevelopeMain.levelUpdate += UpdateLevel;
+        GameManager.comboOccuring += ComboAppear;
+        GameManager.levelChanging += UpdateLevel;
+        GameManager.scoreChanging += UpdateScore;
+
         DevelopeMain.createNewBlock += TransferNewBlock;
         DevelopeMain.gameIsPlaying += GameIsPlaying;
 
@@ -36,8 +43,10 @@ public class DevelopeMainGUI : MonoBehaviour
 
     private void OnDisable()
     {
-        DevelopeMain.scoreChanging -= UpdateScore;
-        DevelopeMain.levelUpdate -= UpdateLevel;
+        GameManager.comboOccuring -= ComboAppear;
+        GameManager.levelChanging -= UpdateLevel;
+        GameManager.scoreChanging -= UpdateScore;
+
         DevelopeMain.createNewBlock -= TransferNewBlock;
         DevelopeMain.gameIsPlaying -= GameIsPlaying;
     }
@@ -68,6 +77,13 @@ public class DevelopeMainGUI : MonoBehaviour
     public void UpdateLevel(int aNewLevel)
     {
         LevelText.text = aNewLevel.ToString();
+    }
+
+    public void ComboAppear(int aComboCount, int aComboScore, string aComboText)
+    {
+        ComboCountText.text = aComboCount.ToString();
+        ComboTitleText.text = aComboText;
+        ComboScoreText.text = aComboScore.ToString();
     }
 
     public void TransferNewBlock(BlockDeveloping aNewBlock)

@@ -29,11 +29,19 @@ public class GameManager
     private int mCurrentScore = 0;
     public int CurrentScore { get { return mCurrentScore; } }
 
-    private int mComboScore = 0;
-    public int ComboScore { get { return mComboScore; } }
+    private uint mComboScore = 0;
+    public uint ComboScore { get { return mComboScore; } }
 
+    public delegate void OnScoreChange(int aNewScore);
+    public static OnScoreChange scoreChanging;
 
-    private List<int> mBaseScoreList = new List<int>() { 50 };
+    public delegate void OnLevelChange(int aNewLevel);
+    public static OnLevelChange levelChanging;
+
+    public delegate void OnComboOccures(int aComboCount, int aComboScore, string aComboText);
+    public static OnComboOccures comboOccuring;
+
+    private List<uint> mComboBaseScoreList = new List<uint>() { 0, 50 };
 
     private int mNextLevelUpScore = 10;
     private int mCurrentLevelPoint = 0;
@@ -49,24 +57,30 @@ public class GameManager
         {
             mCurrentLevelPoint = 0;
             mNextLevelUpScore = 10 * (mCurrentLevel + 1);
+            mCurrentLevel++;
         }
     }
 
     public void AddSoftScore()
     {
         mCurrentScore += mSoftLandingScore + mCurrentLevel;
+
+        scoreChanging?.Invoke(mCurrentScore);
     }
 
     public void SetComboScore(int aCombo)
     {
         mComboScore = 0;
 
-        if(aCombo < mBaseScoreList.Count)
-            mComboScore = mBaseScoreList[aCombo] * (mCurrentLevel + 1);
-        else
-            mComboScore = mBaseScoreList[mBaseScoreList.Count - 1] * (mCurrentLevel + 1);
+        
+        mComboScore = (uint)(GetComboBaseScore(aCombo) * (mCurrentLevel + 1));
+        
 
-        mCurrentScore += mComboScore;
+        mCurrentScore += (int)mComboScore;
+        scoreChanging?.Invoke(mCurrentScore);
+
+        if (aCombo > 0)
+            comboOccuring?.Invoke(aCombo, (int)mComboScore, "");
     }
 
     public float GetCurrentDroppingRate()
@@ -81,22 +95,39 @@ public class GameManager
         return droprate;
     }
 
-    private int GetBaseScore(int aCombo)
+    /// <summary>
+    /// This method is called when cubes scores throught aligning and met up the condition
+    /// The function is to get the correct combo score accordingly by the number of combos the new landed
+    /// cubes had invoke
+    /// This is based on Get funciotn from the Factory pattern by take and seek for the requestedindex in 
+    /// the list.
+    /// But if the requesting index is out of bound of the list current limit, the list will be upgraded 
+    /// through the Create method
+    /// </summary>
+    /// <param name="aCombo">Requested index</param>
+    /// <returns>return the combo score base on the requested index</returns>
+    private int GetComboBaseScore(int aCombo)
     {
-        if (aCombo > mBaseScoreList.Count)
-            AddBaseScore(aCombo);
+        if (aCombo >= mComboBaseScoreList.Count)
+            CreateNewBaseScore(aCombo);
 
-        return mBaseScoreList[aCombo];
+        return (int)mComboBaseScoreList[aCombo];
     }
 
-    private void AddBaseScore(int aNewComboLimit)
+    /// <summary>
+    /// This method is use to upgrade the list of combo base scores.
+    /// By sending in a requested combo limit value, the list will go through a iteration of adding new
+    /// base score into it.
+    /// </summary>
+    /// <param name="aNewComboLimit">the new high combo that the player had made</param>
+    private void CreateNewBaseScore(int aNewComboLimit)
     {
         do
         {
-            int currentLenght = mBaseScoreList.Count;
-            int nextBaseScore = mBaseScoreList[currentLenght - 1] * currentLenght + 1;
-            mBaseScoreList.Add(nextBaseScore);
+            int lastIndex = mComboBaseScoreList.Count - 1;
+            uint nextBaseScore = mComboBaseScoreList[lastIndex] * ((uint)lastIndex + 1);
+            mComboBaseScoreList.Add(nextBaseScore);
 
-        } while (mBaseScoreList.Count < aNewComboLimit);
+        } while (mComboBaseScoreList.Count < aNewComboLimit);
     }
 }
