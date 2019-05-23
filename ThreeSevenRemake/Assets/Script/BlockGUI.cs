@@ -73,7 +73,7 @@ public class BlockGUI : MonoBehaviour
 
         mUsedNumber[newNumber] = true;
         mRandomCounter++;
-        if(mRandomCounter == 7)
+        if(mRandomCounter == 4)
         {
             for (int i = 0; i < mUsedNumber.Length; i++)
                 mUsedNumber[i] = false;

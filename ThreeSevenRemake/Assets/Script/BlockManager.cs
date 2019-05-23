@@ -90,7 +90,8 @@ public class BlockManager
         // scoring method to list
         // Scoring with filled rows List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodRowFilling();
 
-        List<Vector2Int> scoringPositions = GridData.Instance.ScoringMethodThreeSeven(mNewLandedCubes);
+        //List<Vector2Int> scoringPositions = GridData.Instance.ScoringMethodThreeSeven(mNewLandedCubes);
+        List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodThreeInRows(mNewLandedCubes);
 
         mScoringsCubes.Clear();
         mNewLandedCubes.Clear();

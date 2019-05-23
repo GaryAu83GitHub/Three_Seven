@@ -74,7 +74,6 @@ public class GameManager
 
         
         mComboScore = (uint)(GetComboBaseScore(aCombo) * (mCurrentLevel + 1));
-        
 
         mCurrentScore += (int)mComboScore;
         scoreChanging?.Invoke(mCurrentScore);
@@ -128,6 +127,6 @@ public class GameManager
             uint nextBaseScore = mComboBaseScoreList[lastIndex] * ((uint)lastIndex + 1);
             mComboBaseScoreList.Add(nextBaseScore);
 
-        } while (mComboBaseScoreList.Count < aNewComboLimit);
+        } while (mComboBaseScoreList.Count <= aNewComboLimit);
     }
 }
