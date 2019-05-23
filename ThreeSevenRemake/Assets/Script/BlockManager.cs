@@ -39,6 +39,8 @@ public class BlockManager
     private List<Cube> mScoringsCubes = new List<Cube>();
     private List<Cube> mNewLandedCubes = new List<Cube>();
 
+    private int mComboCount = 0;
+
     /// <summary>
     /// Add in the new landed and registrate it's cubes into the GridData.
     /// At the same time the cubes of the new block will be added into a seperate list 
@@ -74,6 +76,9 @@ public class BlockManager
             c.PlayAnimation();
             GridData.Instance.UnregistrateCell(c.GridPos);
         }
+
+        mScoringsCubes.Clear();
+        mNewLandedCubes.Clear();
     }
 
     public string BlockOrderInString()
@@ -91,7 +96,7 @@ public class BlockManager
         // Scoring with filled rows List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodRowFilling();
 
         //List<Vector2Int> scoringPositions = GridData.Instance.ScoringMethodThreeSeven(mNewLandedCubes);
-        List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodThreeInRows(mNewLandedCubes);
+        List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodThreeInRows(mNewLandedCubes, ref mComboCount);
 
         mScoringsCubes.Clear();
         mNewLandedCubes.Clear();
@@ -108,6 +113,8 @@ public class BlockManager
             }
             return true;
         }
+        GameManager.Instance.AddLevelPoint(mComboCount);
+        mComboCount = 0;
         return false;
     }
 

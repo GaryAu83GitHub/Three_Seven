@@ -146,10 +146,9 @@ public class GridData
     /// </summary>
     /// <param name="aPos">The given position</param>
     /// <returns></returns>
-    public List<Vector2Int> ScoringMethodThreeSeven(List<Cube> someNewLandedCubes)
+    public List<Vector2Int> ScoringMethodThreeSeven(List<Cube> someNewLandedCubes, int aComboCount)
     {
         List<Vector2Int> scoringPositions = new List<Vector2Int>();
-        int comboCount = 0;
 
         foreach (Cube c in someNewLandedCubes)
         {
@@ -165,7 +164,7 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + Vector2Int.right))
                     scoringPositions.Add(c.GridPos + Vector2Int.right);
 
-                comboCount++;
+                aComboCount++;
             }
 
             //  the right [G][N][N]
@@ -179,7 +178,7 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + (Vector2Int.right * 2)))
                     scoringPositions.Add(c.GridPos + (Vector2Int.right * 2));
 
-                comboCount++;
+                aComboCount++;
             }
 
             //  the left [N][N][G]
@@ -193,7 +192,7 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + (Vector2Int.left * 2)))
                     scoringPositions.Add(c.GridPos + (Vector2Int.left * 2));
 
-                comboCount++;
+                aComboCount++;
             }
 
             // vertical
@@ -211,7 +210,7 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + Vector2Int.down))
                     scoringPositions.Add(c.GridPos + Vector2Int.down);
 
-                comboCount++;
+                aComboCount++;
             }
 
             //  the up
@@ -228,7 +227,7 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + (Vector2Int.up * 2)))
                     scoringPositions.Add(c.GridPos + (Vector2Int.up * 2));
 
-                comboCount++;
+                aComboCount++;
             }
 
             //  the down
@@ -245,11 +244,11 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + (Vector2Int.down * 2)))
                     scoringPositions.Add(c.GridPos + (Vector2Int.down * 2));
 
-                comboCount++;
+                aComboCount++;
             }
         }
 
-        GameManager.Instance.SetComboScore(comboCount);
+        GameManager.Instance.SetComboScore(aComboCount);
 
         return scoringPositions;
     }
@@ -291,10 +290,9 @@ public class GridData
     /// </summary>
     /// <param name="someNewLandedCubes">Cubes that just had landed will going through the scoring checks</param>
     /// <returns>A list of positions of cubes that had manage to score</returns>
-    public List<Vector2Int> TempScoringMethodThreeInRows(List<Cube> someNewLandedCubes)
+    public List<Vector2Int> TempScoringMethodThreeInRows(List<Cube> someNewLandedCubes, ref int aComboCount)
     {
         List<Vector2Int> scoringPositions = new List<Vector2Int>();
-        int comboCount = 0;
 
         foreach (Cube c in someNewLandedCubes)
         {
@@ -309,7 +307,7 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + Vector2Int.right))
                     scoringPositions.Add(c.GridPos + Vector2Int.right);
 
-                comboCount++;
+                aComboCount++;
             }
 
             //  the right [G][N][N]
@@ -322,7 +320,7 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + (Vector2Int.right * 2)))
                     scoringPositions.Add(c.GridPos + (Vector2Int.right * 2));
 
-                comboCount++;
+                aComboCount++;
             }
 
             //  the left [N][N][G]
@@ -335,7 +333,7 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + (Vector2Int.left * 2)))
                     scoringPositions.Add(c.GridPos + (Vector2Int.left * 2));
 
-                comboCount++;
+                aComboCount++;
             }
 
             // vertical
@@ -352,7 +350,7 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + Vector2Int.down))
                     scoringPositions.Add(c.GridPos + Vector2Int.down);
 
-                comboCount++;
+                aComboCount++;
             }
 
             //  the up
@@ -368,7 +366,7 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + (Vector2Int.up * 2)))
                     scoringPositions.Add(c.GridPos + (Vector2Int.up * 2));
 
-                comboCount++;
+                aComboCount++;
             }
 
             //  the down
@@ -384,11 +382,11 @@ public class GridData
                 if (!scoringPositions.Contains(c.GridPos + (Vector2Int.down * 2)))
                     scoringPositions.Add(c.GridPos + (Vector2Int.down * 2));
 
-                comboCount++;
+                aComboCount++;
             }
         }
 
-        GameManager.Instance.SetComboScore(comboCount);
+        GameManager.Instance.SetComboScore(aComboCount);
         return scoringPositions;
     }
 

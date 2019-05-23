@@ -48,19 +48,33 @@ public class GameManager
 
     private const int mSoftLandingScore = 1;
     private const float mDropRateDecreaseValue = .03f;
+    private const float mMinimumDroprate = .1f;
 
+    /// <summary>
+    /// Add in point for level up to gain more score and increase the dropping speed
+    /// When a certain amount of points are aquired, the current level increase and
+    /// the next level up score will be increased based on the
+    /// current level.
+    /// </summary>
+    /// <param name="aPoint">Points that to add to level up</param>
     public void AddLevelPoint(int aPoint)
     {
         mCurrentLevelPoint += aPoint;
 
-        if(mCurrentLevelPoint > mNextLevelUpScore)
+        if (mCurrentLevelPoint > mNextLevelUpScore)
         {
-            mCurrentLevelPoint = 0;
-            mNextLevelUpScore = 10 * (mCurrentLevel + 1);
+            int restScore = mCurrentLevelPoint - mNextLevelUpScore;
+            mCurrentLevelPoint = restScore;
             mCurrentLevel++;
+            mNextLevelUpScore = 10 * (mCurrentLevel + 1);    
+
+            levelChanging?.Invoke(mCurrentLevel);
         }
     }
 
+    /// <summary>
+    /// Add score based on the current level that is scored by have the current block landed.
+    /// </summary>
     public void AddSoftScore()
     {
         mCurrentScore += mSoftLandingScore + mCurrentLevel;
@@ -68,6 +82,10 @@ public class GameManager
         scoreChanging?.Invoke(mCurrentScore);
     }
 
+    /// <summary>
+    /// Add scores based on the current level that was achieved fullfilling the scoring condition.
+    /// </summary>
+    /// <param name="aCombo"></param>
     public void SetComboScore(int aCombo)
     {
         mComboScore = 0;
@@ -82,14 +100,19 @@ public class GameManager
             comboOccuring?.Invoke(aCombo, (int)mComboScore, "");
     }
 
+    /// <summary>
+    /// Get the droprate on the block base on the current level.
+    /// The the decreasing droprate falls below the minimal speed, it'll remain on the minimal speed
+    /// </summary>
+    /// <returns>Return the new droprate</returns>
     public float GetCurrentDroppingRate()
     {
         float droprate = 1f;
 
         droprate -= (mCurrentLevel * mDropRateDecreaseValue);
 
-        if (droprate <= 0.1f)
-            droprate = 0.1f;
+        if (droprate <= mMinimumDroprate)
+            droprate = mMinimumDroprate;
 
         return droprate;
     }

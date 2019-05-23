@@ -31,6 +31,8 @@ public class DevelopeMainGUI : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        UpdateLevel(GameManager.Instance.CurrentLevel);
+
         GameManager.comboOccuring += ComboAppear;
         GameManager.levelChanging += UpdateLevel;
         GameManager.scoreChanging += UpdateScore;
@@ -56,7 +58,7 @@ public class DevelopeMainGUI : MonoBehaviour
     {
         Clock();
 
-        if(Input.GetKeyDown(KeyCode.P))
+        if(Input.GetKeyDown(KeyCode.Insert))
         {
             if (DebugPanel.GetComponent<CanvasGroup>().alpha >= 1f)
                 DebugPanel.GetComponent<CanvasGroup>().alpha = 0f;
@@ -76,7 +78,7 @@ public class DevelopeMainGUI : MonoBehaviour
 
     public void UpdateLevel(int aNewLevel)
     {
-        LevelText.text = aNewLevel.ToString();
+        LevelText.text = "Lv: " + aNewLevel.ToString();
     }
 
     public void ComboAppear(int aComboCount, int aComboScore, string aComboText)
@@ -108,6 +110,6 @@ public class DevelopeMainGUI : MonoBehaviour
         int hours = (int)((mGameTimer / 3600) % 60);
 
         mGameTimeString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
-        TimeText.text = mGameTimeString;
+        TimeText.text = "Time: " + mGameTimeString;
     }
 }
