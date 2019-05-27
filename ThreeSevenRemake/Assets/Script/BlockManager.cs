@@ -51,7 +51,8 @@ public class BlockManager
     {
         mBlocks.Add(aBlock);
 
-        GameManager.Instance.AddSoftScore();
+        if(!aBlock.CheckIfCellIsVacantBeneath())
+            GameManager.Instance.AddSoftScore();
 
         foreach (Cube c in aBlock.Cubes)
         {
@@ -150,7 +151,8 @@ public class BlockManager
     {
         for (int i = 0; i < mFloatingBlocks.Count; i++)
         {
-            mFloatingBlocks[i].DropDown();
+            while(mFloatingBlocks[i].CheckIfCellIsVacantBeneath())
+                mFloatingBlocks[i].DropDown();
             AddBlock(mFloatingBlocks[i]);
         }
     }
