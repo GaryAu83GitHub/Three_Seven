@@ -137,8 +137,7 @@ public class DevelopeMain : MonoBehaviour
         // and if the time between each keypress has expired
         if((Input.GetKey(KeyCode.DownArrow) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
         {
-            if (!GridData.Instance.IsCellVacant(mCurrentBlock.MinGridPos + Vector2Int.down) ||
-                !GridData.Instance.IsCellVacant(mCurrentBlock.MaxGridPos + Vector2Int.down))
+            if(!mCurrentBlock.CheckIfCellIsVacantBeneath())
             {
                 BlockManager.Instance.AddBlock(mCurrentBlock);
 
