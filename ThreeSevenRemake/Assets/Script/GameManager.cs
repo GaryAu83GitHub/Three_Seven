@@ -41,7 +41,7 @@ public class GameManager
     public delegate void OnComboOccures(int aComboCount, int aComboScore, string aComboText);
     public static OnComboOccures comboOccuring;
 
-    private List<uint> mComboBaseScoreList = new List<uint>() { 0, 50 };
+    private List<uint> mComboBaseScoreList = new List<uint>() { 50 };
 
     private int mNextLevelUpScore = 10;
     private int mCurrentLevelPoint = 0;
@@ -130,10 +130,13 @@ public class GameManager
     /// <returns>return the combo score base on the requested index</returns>
     private int GetComboBaseScore(int aCombo)
     {
+        if (aCombo == 0)
+            return 0;
+
         if (aCombo >= mComboBaseScoreList.Count)
             CreateNewBaseScore(aCombo);
 
-        return (int)mComboBaseScoreList[aCombo];
+        return (int)mComboBaseScoreList[aCombo - 1];
     }
 
     /// <summary>
