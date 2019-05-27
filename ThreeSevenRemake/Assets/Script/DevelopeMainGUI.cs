@@ -21,6 +21,10 @@ public class DevelopeMainGUI : MonoBehaviour
     private string mGameTimeString = "";
     private bool mGameIsPlaying;
 
+    private Color mComboTextColor = Color.black;
+    private Color mTransparentColor = new Color(0f, 0f, 0f, 0f);
+    private bool mComboAppear = false;
+    private float mComboTextFadingTime = 0f;
     //private float mLerpValue = 0f;
 
     private void Awake()
@@ -58,6 +62,9 @@ public class DevelopeMainGUI : MonoBehaviour
     {
         Clock();
 
+        if(mComboAppear)
+            ComboTextFading();
+
         if(Input.GetKeyDown(KeyCode.Insert))
         {
             if (DebugPanel.GetComponent<CanvasGroup>().alpha >= 1f)
@@ -86,6 +93,10 @@ public class DevelopeMainGUI : MonoBehaviour
         ComboCountText.text = aComboCount.ToString();
         ComboTitleText.text = aComboText;
         ComboScoreText.text = aComboScore.ToString();
+
+        mComboTextFadingTime = 0f;
+        mComboTextColor.a = 1f;
+        mComboAppear = true;
     }
 
     public void TransferNewBlock(BlockDeveloping aNewBlock)
@@ -111,5 +122,21 @@ public class DevelopeMainGUI : MonoBehaviour
 
         mGameTimeString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
         TimeText.text = "Time: " + mGameTimeString;
+    }
+
+    private void ComboTextFading()
+    {  
+        ComboCountText.color = mComboTextColor;
+        ComboTitleText.color = mComboTextColor;
+        ComboScoreText.color = mComboTextColor;
+
+        mComboTextColor = Color.Lerp(mComboTextColor, mTransparentColor, mComboTextFadingTime);
+        if (mComboTextFadingTime < 1f)
+        {
+            mComboTextFadingTime += Time.deltaTime / 50f;
+            Debug.Log(mComboTextFadingTime);
+        }
+        else
+            mComboAppear = false;
     }
 }

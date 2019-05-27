@@ -293,6 +293,8 @@ public class GridData
     public List<Vector2Int> TempScoringMethodThreeInRows(List<Cube> someNewLandedCubes, ref int aComboCount)
     {
         List<Vector2Int> scoringPositions = new List<Vector2Int>();
+        if (!someNewLandedCubes.Any())
+            return scoringPositions;
 
         foreach (Cube c in someNewLandedCubes)
         {

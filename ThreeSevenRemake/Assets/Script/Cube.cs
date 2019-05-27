@@ -40,7 +40,7 @@ public class Cube : MonoBehaviour
     private bool mAnimationIsPlaying = false;
     public bool AnimationIsPlaying { get { return mAnimationIsPlaying; } }
 
-    private float mFadingTime = 0;
+    private float mFadingTime = 0f;
 
     private bool mIsFading = false;
 
