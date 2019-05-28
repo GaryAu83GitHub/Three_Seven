@@ -35,6 +35,15 @@ public class GameManager
     private int mLimitRow = 9;
     public int LimitHigh { get { return mLimitRow; } }
 
+    private int mCurrentMaxCombo = 0;
+    public int MaxCombo { get { return mCurrentMaxCombo; } }
+
+    private string mGameTimeString = "";
+    public string GameTimeString { get { return mGameTimeString; } set { mGameTimeString = value; } }
+
+    private int mLandedBlockCount = 0;
+    public int LandedBlockCount { get { return mLandedBlockCount; } set { mLandedBlockCount = value;} }
+
     // delegates
     public delegate void OnScoreChange(int aNewScore);
     public static OnScoreChange scoreChanging;
@@ -74,10 +83,14 @@ public class GameManager
     /// When a certain amount of points are aquired, the current level increase and
     /// the next level up score will be increased based on the
     /// current level.
+    /// From here it'll store the current max combo that player had achieved.
     /// </summary>
     /// <param name="aPoint">Points that to add to level up</param>
     public void AddLevelPoint(int aPoint)
     {
+        if (aPoint > mCurrentMaxCombo)
+            mCurrentMaxCombo = aPoint;
+
         mCurrentLevelPoint += aPoint;
 
         if (mCurrentLevelPoint > mNextLevelUpScore)

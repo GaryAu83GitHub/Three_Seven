@@ -126,6 +126,7 @@ public class BlockManager
             }
             return true;
         }
+
         GameManager.Instance.AddLevelPoint(mComboCount);
         mComboCount = 0;
         return false;

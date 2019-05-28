@@ -111,7 +111,7 @@ public class DevelopeMainGUI : MonoBehaviour
 
     private void Clock()
     {
-        if (!mGameIsPlaying)
+        if (BlockManager.Instance.BlockPassedGameOverLine())
             return;
 
         mGameTimer += Time.deltaTime;
@@ -120,8 +120,8 @@ public class DevelopeMainGUI : MonoBehaviour
         int minutes = (int)((mGameTimer / 60) % 60);
         int hours = (int)((mGameTimer / 3600) % 60);
 
-        mGameTimeString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
-        TimeText.text = "Time: " + mGameTimeString;
+        GameManager.Instance.GameTimeString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
+        TimeText.text = "Time: " + GameManager.Instance.GameTimeString;
     }
 
     private void ComboTextFading()

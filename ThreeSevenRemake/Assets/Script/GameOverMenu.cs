@@ -14,6 +14,7 @@ public class GameOverMenu : MonoBehaviour
     public TextMeshProUGUI TimeSpendText;
     public TextMeshProUGUI BlockLandedText;
     public TextMeshProUGUI TotalScoreText;
+    public TextMeshProUGUI MaxComboText;
 
     public Fading FadingScript;
     public Button LeaveButton;
@@ -23,6 +24,8 @@ public class GameOverMenu : MonoBehaviour
 
     private Animator PanelAnimation;
     private float myAnimationDuration = 5f;
+    private int mScoreCounter = 0;
+    private bool mShowResult = false;
 
     private void Start()
     {
@@ -31,12 +34,31 @@ public class GameOverMenu : MonoBehaviour
         myAnimationDuration = clips[0].length;
         LeaveButton.onClick.AddListener(LeaveToMainMenu);
         main.finalResult += Result;
+        DevelopeMain.finalResult += Result;
         LeavePanel.SetActive(false);
     }
 
     private void OnDisable()
     {
         main.finalResult -= Result;
+        DevelopeMain.finalResult -= Result;
+    }
+
+    private void Update()
+    {
+        if (mShowResult)
+            ShowResult();
+    }
+
+    public void Result()
+    {
+        GameIsOver = true;
+        GameOverMenuUI.SetActive(GameIsOver);
+        LevelResultText.text = GameManager.Instance.CurrentLevel.ToString();
+        TimeSpendText.text = GameManager.Instance.GameTimeString;
+        BlockLandedText.text = GameManager.Instance.LandedBlockCount.ToString();
+        PanelAnimation.Play("GameOverMenuIn");
+        StartCoroutine(DisplayResult());
     }
 
     public void Result(int aReachedLevel, string aSpendTimeString, int aBlockCount, int aTotalScore)
@@ -72,5 +94,22 @@ public class GameOverMenu : MonoBehaviour
         float fadeTime = FadingScript.BeginFade(1);
         yield return new WaitForSeconds(fadeTime);
         SceneManager.LoadScene(0);
+    }
+
+    IEnumerator DisplayResult()
+    {
+        yield return new WaitForSeconds(myAnimationDuration);
+        mShowResult = true;
+    }
+
+    private void ShowResult()
+    {
+        if (mScoreCounter < GameManager.Instance.CurrentScore)
+        {
+            mScoreCounter++;
+            TotalScoreText.text = mScoreCounter.ToString();
+        }
+        else
+            LeavePanel.SetActive(true);
     }
 }
