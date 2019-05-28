@@ -91,13 +91,22 @@ public class BlockManager
         return blockOrderString;
     }
 
+    public bool BlockPassedGameOverLine()
+    {
+        bool gameover = (mBlocks.FirstOrDefault(x => x.MaxGridPos.y > GameManager.Instance.LimitHigh) ? true : false);
+        if(gameover)
+            Debug.Log(gameover);
+        return gameover;
+    }
+
     public bool IsScoring()
     {
         // scoring method to list
         // Scoring with filled rows List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodRowFilling();
 
         //List<Vector2Int> scoringPositions = GridData.Instance.ScoringMethodThreeSeven(mNewLandedCubes);
-        List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodThreeInRows(mNewLandedCubes, ref mComboCount);
+        //List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodThreeInRows(mNewLandedCubes, ref mComboCount);
+        List<Vector2Int> scoringPositions = GridData.Instance.TempScoringMethodRowFilling();
 
         mScoringsCubes.Clear();
         mNewLandedCubes.Clear();

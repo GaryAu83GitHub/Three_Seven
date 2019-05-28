@@ -132,10 +132,7 @@ public class DevelopeMainGUI : MonoBehaviour
 
         mComboTextColor = Color.Lerp(mComboTextColor, mTransparentColor, mComboTextFadingTime);
         if (mComboTextFadingTime < 1f)
-        {
             mComboTextFadingTime += Time.deltaTime / 50f;
-            Debug.Log(mComboTextFadingTime);
-        }
         else
             mComboAppear = false;
     }

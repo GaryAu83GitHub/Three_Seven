@@ -44,6 +44,11 @@ public class GridData
     private const float mCubeGapDistance = .5f;
     public float CubeGapDistance { get { return mCubeGapDistance; } }
 
+    /// <summary>
+    /// The Griddata storage constructed with a dictionary holding a list on each item
+    /// The Key to the Dictionary stands of the column (x) value
+    /// The Index in the list stand for the row (y) value
+    /// </summary>
     public Dictionary<int, List<Cube>> Grid { get { return mGrid; } }
 
     /// <summary>

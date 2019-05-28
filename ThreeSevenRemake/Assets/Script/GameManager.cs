@@ -32,6 +32,9 @@ public class GameManager
     private uint mComboScore = 0;
     public uint ComboScore { get { return mComboScore; } }
 
+    private int mLimitHigh = 5;
+    public int LimitHigh { get { return mLimitHigh; } }
+
     public delegate void OnScoreChange(int aNewScore);
     public static OnScoreChange scoreChanging;
 
@@ -98,6 +101,11 @@ public class GameManager
 
         if (aCombo > 0)
             comboOccuring?.Invoke(aCombo, (int)mComboScore, "");
+    }
+
+    public void SetLimitHigh(int aRowNumber)
+    {
+        mLimitHigh = aRowNumber;
     }
 
     /// <summary>

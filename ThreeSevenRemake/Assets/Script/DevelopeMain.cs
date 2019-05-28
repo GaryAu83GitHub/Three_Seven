@@ -14,13 +14,7 @@ public class DevelopeMain : MonoBehaviour
 
     public delegate void OnCreateNewBlock(BlockDeveloping aNewBlock);
     public static OnCreateNewBlock createNewBlock;
-
-    public delegate void OnScoreChange(int aNewScore);
-    public static OnScoreChange scoreChanging;
-
-    public delegate void OnLevelChange(int aLevelUpdate);
-    public static OnLevelChange levelUpdate;
-
+    
     public delegate void InitlizeResult(int aReachedLevel, string aSpendTimeString, int aBlockCount, int aTotalScore);
     public static InitlizeResult finalResult;
 
@@ -35,13 +29,12 @@ public class DevelopeMain : MonoBehaviour
 
         // intergear
     private int mBlockCount = 0;
-    private int mCurrentLevel = 1;
 
         // floats
     private float mNextDropTime = 0f;
     private float mDropRate = 1;
     private float mButtonDownNextDropTime = 0f;
-    private float mButtonDownDropRate = .1f;
+    private readonly float mButtonDownDropRate = .1f;
 
     // boolean
     private bool mIsPause = false;
@@ -62,6 +55,7 @@ public class DevelopeMain : MonoBehaviour
 
     private void Update()
     {
+        BlockManager.Instance.BlockPassedGameOverLine();
         // If mGameOver is equal to true, don't proceed futher of this 
         if (mGameOver)
         {
@@ -77,6 +71,7 @@ public class DevelopeMain : MonoBehaviour
             // the block was confirm nullified by the currentblock landed
             if(mBlockLanded)
             {
+                BlockManager.Instance.BlockPassedGameOverLine();
                 if (BlockManager.Instance.AnyBlockPlayingAnimation())
                     return;
 
@@ -190,11 +185,7 @@ public class DevelopeMain : MonoBehaviour
         yield return new WaitForSeconds(3f);
         CreateNewBlock();
 
-        if (levelUpdate != null)
-            levelUpdate(mCurrentLevel);
-
-        if (gameIsPlaying != null)
-            gameIsPlaying(true);
+        gameIsPlaying?.Invoke(true);
     }
 
     private void CreateNewBlock()
@@ -203,8 +194,7 @@ public class DevelopeMain : MonoBehaviour
         newBlock.name = "Block " + mBlockCount.ToString();
         mBlockCount++;
 
-        if (createNewBlock != null)
-            createNewBlock(newBlock.GetComponent<BlockDeveloping>());
+        createNewBlock?.Invoke(newBlock.GetComponent<BlockDeveloping>());
 
         if (newBlock.GetComponent<BlockDeveloping>() != null)
         {
@@ -225,7 +215,6 @@ public class DevelopeMain : MonoBehaviour
     /// </summary>
     private void UpdateDebugBoard()
     {
-        if (blockLandedDebug != null)
-            blockLandedDebug(GridData.Instance.Grid);
+        blockLandedDebug?.Invoke(GridData.Instance.Grid);
     }
 }
