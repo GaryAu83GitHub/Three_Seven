@@ -47,6 +47,7 @@ public class DevelopeMain : MonoBehaviour
 
     private void Start()
     {
+        LimitLine.transform.position += new Vector3(0f, .25f + (.5f * GameManager.Instance.SetLimitLineLevel(9)), 0f);
         // When the game start, begin delay for the first block to be created
         StartCoroutine(GameStart());
     }
@@ -112,7 +113,7 @@ public class DevelopeMain : MonoBehaviour
             if(!mCurrentBlock.CheckIfCellIsVacantBeneath())
             {
                 BlockManager.Instance.AddBlock(mCurrentBlock);
-
+                GameManager.Instance.LandedBlockCount++;
                 UpdateDebugBoard();
 
                 mCurrentBlock = null;
@@ -144,7 +145,7 @@ public class DevelopeMain : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         
-        LimitLine.transform.position += new Vector3(0f, .25f + (.5f * GameManager.Instance.SetLimitLineLevel(9)), 0f); 
+        
 
         CreateNewBlock();
         mGameInProgress = true;

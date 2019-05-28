@@ -18,7 +18,6 @@ public class DevelopeMainGUI : MonoBehaviour
     public GameObject DebugPanel;
 
     private float mGameTimer = 0f;
-    private string mGameTimeString = "";
     private bool mGameIsPlaying;
 
     private Color mComboTextColor = Color.black;
@@ -111,7 +110,7 @@ public class DevelopeMainGUI : MonoBehaviour
 
     private void Clock()
     {
-        if (BlockManager.Instance.BlockPassedGameOverLine())
+        if (!mGameIsPlaying || BlockManager.Instance.BlockPassedGameOverLine())
             return;
 
         mGameTimer += Time.deltaTime;
