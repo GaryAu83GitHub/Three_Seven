@@ -6,6 +6,7 @@ public class DevelopeMain : MonoBehaviour
 {
     // Object sync with the unity
     public GameObject BlockObject;
+    public GameObject LimitLine;
     public Light DirectionalLight;
 
     // delegates
@@ -15,13 +16,11 @@ public class DevelopeMain : MonoBehaviour
     public delegate void OnCreateNewBlock(BlockDeveloping aNewBlock);
     public static OnCreateNewBlock createNewBlock;
     
-    public delegate void InitlizeResult(int aReachedLevel, string aSpendTimeString, int aBlockCount, int aTotalScore);
+    public delegate void InitlizeResult();
     public static InitlizeResult finalResult;
 
     public delegate void OnBlockLandedDebug(Dictionary<int, List<Cube>> aGrid);
     public static OnBlockLandedDebug blockLandedDebug;
-
-
 
     // variablers
     // objects
@@ -37,8 +36,7 @@ public class DevelopeMain : MonoBehaviour
     private readonly float mButtonDownDropRate = .1f;
 
     // boolean
-    private bool mIsPause = false;
-    private bool mGameOver = false;
+    private bool mGameInProgress = false;
     private bool mBlockLanded = false;
 
     private void Awake()
@@ -50,21 +48,20 @@ public class DevelopeMain : MonoBehaviour
     private void Start()
     {
         // When the game start, begin delay for the first block to be created
-        StartCoroutine(StartGame());
+        StartCoroutine(GameStart());
     }
 
     private void Update()
     {
-        BlockManager.Instance.BlockPassedGameOverLine();
+        
         // If mGameOver is equal to true, don't proceed futher of this 
-        if (mGameOver)
+        if (BlockManager.Instance.BlockPassedGameOverLine())
         {
-            // if mGameover == true, block and cubes will do the following things
-                // Call the function to collapse the table
-                // Call the function to display the result
+            // Call the function to display the result
+            finalResult?.Invoke();
             return;
         }
-
+        
         // If the currentBlock is null or undergoing scoreing progression
         if (mCurrentBlock == null)
         {
@@ -88,26 +85,6 @@ public class DevelopeMain : MonoBehaviour
             return; // don't proceed futher of this block
         }
         CheckInput();
-    }
-
-    /// <summary>
-    /// A checking method in use of call the "Drop" function in Block if the grid cell
-    /// below the current block's mininum grid position is vacant.
-    /// If it vaccant then the block will keep dropping or else it'll stop and the block's
-    /// cube's number will be registrate into the grid's data
-    /// </summary>
-    /// <returns>if the cell below the block is vaccant it'll return true or else false</returns>
-    private bool IsBlockDropping()
-    {
-        // navigate the block as long the lower row still is vacant
-
-        // check if the current block can drop to the row below it
-        // if the row below is not vacant
-            // put in the block into the collection of landed block
-            // set the boolean for check for scoring to true
-            // return the block has stopped dropping
-
-        return true;
     }
 
     /// <summary>
@@ -158,34 +135,20 @@ public class DevelopeMain : MonoBehaviour
         // input for swaping the cubes value inside the block
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            //if (blockLandedDebug != null)
-            //    blockLandedDebug(GridData.Instance.Grid);
-
             mCurrentBlock.Swap();
         }
-
-        // debug input for removing the current block to a new block.
-        // for testing purpose
-
-    }
-
-    /// <summary>
-    /// Scoring had been detected from the last block landed and the scoring progress will be active. 
-    /// if scored the cube vanish animation plays and the position of the blocks
-    /// in the grid will be rearranged
-    /// </summary>
-    private void ScoringProgress()
-    {
         
-
     }
-
-    private IEnumerator StartGame()
+    
+    private IEnumerator GameStart()
     {
         yield return new WaitForSeconds(3f);
-        CreateNewBlock();
+        
+        LimitLine.transform.position += new Vector3(0f, .25f + (.5f * GameManager.Instance.SetLimitLineLevel(9)), 0f); 
 
-        gameIsPlaying?.Invoke(true);
+        CreateNewBlock();
+        mGameInProgress = true;
+        gameIsPlaying?.Invoke(mGameInProgress);
     }
 
     private void CreateNewBlock()

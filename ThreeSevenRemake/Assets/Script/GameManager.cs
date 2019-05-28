@@ -32,9 +32,10 @@ public class GameManager
     private uint mComboScore = 0;
     public uint ComboScore { get { return mComboScore; } }
 
-    private int mLimitHigh = 5;
-    public int LimitHigh { get { return mLimitHigh; } }
+    private int mLimitRow = 9;
+    public int LimitHigh { get { return mLimitRow; } }
 
+    // delegates
     public delegate void OnScoreChange(int aNewScore);
     public static OnScoreChange scoreChanging;
 
@@ -44,6 +45,7 @@ public class GameManager
     public delegate void OnComboOccures(int aComboCount, int aComboScore, string aComboText);
     public static OnComboOccures comboOccuring;
 
+    // variable
     private List<uint> mComboBaseScoreList = new List<uint>() { 50 };
 
     private int mNextLevelUpScore = 10;
@@ -52,6 +54,20 @@ public class GameManager
     private const int mSoftLandingScore = 1;
     private const float mDropRateDecreaseValue = .03f;
     private const float mMinimumDroprate = .1f;
+
+    private const int mMaxLimitRow = 18;
+    private const int mMinLimitRow = 9;
+    
+    /// <summary>
+    /// Use to set the high of the limit line in the game.
+    /// It's purpose is for future of adding in the setting to let player chose the challenge level
+    /// </summary>
+    /// <param name="aLimitLineRow">Requesting limit row</param>
+    /// <returns>Return the row number that had been clamp between the max and min row number</returns>
+    public int SetLimitLineLevel(int aLimitLineRow)
+    {
+        return mLimitRow = Mathf.Clamp(aLimitLineRow, mMinLimitRow, mMaxLimitRow);
+    }
 
     /// <summary>
     /// Add in point for level up to gain more score and increase the dropping speed
@@ -101,11 +117,6 @@ public class GameManager
 
         if (aCombo > 0)
             comboOccuring?.Invoke(aCombo, (int)mComboScore, "");
-    }
-
-    public void SetLimitHigh(int aRowNumber)
-    {
-        mLimitHigh = aRowNumber;
     }
 
     /// <summary>

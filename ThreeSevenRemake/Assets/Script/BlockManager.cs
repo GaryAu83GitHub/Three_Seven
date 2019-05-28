@@ -94,8 +94,11 @@ public class BlockManager
     public bool BlockPassedGameOverLine()
     {
         bool gameover = (mBlocks.FirstOrDefault(x => x.MaxGridPos.y > GameManager.Instance.LimitHigh) ? true : false);
-        if(gameover)
-            Debug.Log(gameover);
+        if (gameover)
+        {
+            TowerCollapse();
+        }
+
         return gameover;
     }
 
@@ -187,6 +190,12 @@ public class BlockManager
             }
         }
         return mFloatingBlocks.Any();
+    }
+    
+    private void TowerCollapse()
+    {
+        foreach (BlockDeveloping b in mBlocks)
+            b.GetComponent<Rigidbody>().useGravity = true;
     }
 
     private void SortTheBlocks()
