@@ -151,7 +151,7 @@ public class GridData
     /// </summary>
     /// <param name="aPos">The given position</param>
     /// <returns></returns>
-    public List<Vector2Int> ScoringMethodThreeSeven(List<Cube> someNewLandedCubes, int aComboCount)
+    public List<Vector2Int> ScoringMethodThreeSeven(List<Cube> someNewLandedCubes, ref int aComboCount)
     {
         List<Vector2Int> scoringPositions = new List<Vector2Int>();
 
