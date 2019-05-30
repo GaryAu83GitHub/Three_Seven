@@ -47,7 +47,15 @@ public class GameOverMenu : MonoBehaviour
     private void Update()
     {
         if (mShowResult)
+        {
             ShowResult();
+            if(Input.anyKeyDown)
+            {
+                mScoreCounter = GameManager.Instance.CurrentScore;
+                TotalScoreText.text = mScoreCounter.ToString();
+            }
+
+        }
     }
 
     public void Result()
@@ -57,6 +65,7 @@ public class GameOverMenu : MonoBehaviour
         LevelResultText.text = GameManager.Instance.CurrentLevel.ToString();
         TimeSpendText.text = GameManager.Instance.GameTimeString;
         BlockLandedText.text = GameManager.Instance.LandedBlockCount.ToString();
+        MaxComboText.text = GameManager.Instance.MaxCombo.ToString();
         PanelAnimation.Play("GameOverMenuIn");
         StartCoroutine(DisplayResult());
     }

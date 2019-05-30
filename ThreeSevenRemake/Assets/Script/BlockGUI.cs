@@ -18,13 +18,12 @@ public class BlockGUI : MonoBehaviour
     public int SubNumber { get { return mSubNumber; } }
 
     private List<int> mPreviousNumber = new List<int>();
-    private bool[] mUsedNumber = new bool[8];
-    private int mRandomCounter = 0;
+    private List<bool> mUsedNumber = new List<bool>();
 
     private void Start()
     {
-        for (int i = 0; i < mUsedNumber.Length; i++)
-            mUsedNumber[i] = false;
+        for (int i = 0; i < 8; i++)
+            mUsedNumber.Add(false);
 
         mRootNumber = RandomNewNumber();
         RootNumberText.text = RootNumber.ToString();
@@ -72,13 +71,10 @@ public class BlockGUI : MonoBehaviour
         }
 
         mUsedNumber[newNumber] = true;
-        mRandomCounter++;
-        if(mRandomCounter == 4)
+        if(!mUsedNumber.Contains(false))
         {
-            for (int i = 0; i < mUsedNumber.Length; i++)
+            for (int i = 0; i < mUsedNumber.Count; i++)
                 mUsedNumber[i] = false;
-
-            mRandomCounter = 0;
         }
 
         return newNumber;

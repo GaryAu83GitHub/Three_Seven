@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Fading : MonoBehaviour
 {
@@ -14,6 +15,16 @@ public class Fading : MonoBehaviour
     private void Start()
     {
         //FadeOutTexture.alphaIsTransparency = true;
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneFinishLoading;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneFinishLoading;
     }
 
     private void OnGUI()
@@ -32,7 +43,7 @@ public class Fading : MonoBehaviour
         return FadeSpeed;
     }
 
-    void OnLevelWasLoaded()
+    void OnSceneFinishLoading(Scene scene, LoadSceneMode mode)
     {
         BeginFade(-1);
     }

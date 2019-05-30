@@ -55,6 +55,7 @@ public class Cube : MonoBehaviour
         if(mIsFading)
         {
             mRenderer.material.color = Color.Lerp(mRenderer.material.color, mTransparentColor, mFadingTime);
+            mTextMesh.color = Color.Lerp(mTextMesh.color, mTransparentColor, mFadingTime);
             if (mFadingTime < 1)
                 mFadingTime += Time.deltaTime / mParticleSystem.main.duration;
             if (mRenderer.material.color.a <= 0f)
