@@ -147,13 +147,16 @@ public class BlockManager
         return false;
     }
 
+    /// <summary>
+    /// Remove blocks that don't have cube in them
+    /// </summary>
     public void ClearCubeLessBlocks()
     {
         if (!mBlocks.Any())
             return;
         
         mBlocks.RemoveAll((block) => {
-            return block.ChangeCubeArrangement();
+            return block.DestroyThisCube();
             });
     }
 

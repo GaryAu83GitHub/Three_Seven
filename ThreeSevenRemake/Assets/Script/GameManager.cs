@@ -121,7 +121,6 @@ public class GameManager
     public void SetComboScore(int aCombo)
     {
         mComboScore = 0;
-
         
         mComboScore = (uint)(GetComboBaseScore(aCombo) * (mCurrentLevel + 1));
 

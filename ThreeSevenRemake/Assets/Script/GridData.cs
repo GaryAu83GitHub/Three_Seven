@@ -14,7 +14,6 @@ public class GridData
             if (mInstance == null)
             {
                 mInstance = new GridData();
-                //mInstance.GenerateGrid();
             }
             return mInstance;
         }
@@ -107,6 +106,13 @@ public class GridData
         return true;
     }
 
+    /// <summary>
+    /// This is to check if the block is enable to rotate from it root position 
+    /// and the angle it'll rotate
+    /// </summary>
+    /// <param name="aPos"></param>
+    /// <param name="anAngle"></param>
+    /// <returns></returns>
     public bool IsRotateAvailable(Vector2Int aPos, float anAngle)
     {
         // the block is about to rotate from 0(360) to 90 degree

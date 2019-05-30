@@ -52,24 +52,19 @@ public class BlockDeveloping : MonoBehaviour
                 mCubes[i].Init(this, mCubeNumbers[i]);
         }
 
-        //mCurrentClockDirection = ClockDirection.CLOCK_12;
-
         Joint = transform.GetChild(2);
 
         mCubeGap = GridData.Instance.CubeGapDistance;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
+    /// <summary>
+    /// A shortcut method to check if the cell beneath the block (both cubes) is
+    /// vacant
+    /// </summary>
+    /// <returns>Return the result from the method</returns>
     public bool CheckIfCellIsVacantBeneath()
     {
-        if (CheckNeighborCellIsVacant(Vector2Int.down))
-            return true;
-        return false;
+        return CheckNeighborCellIsVacant(Vector2Int.down);
     }
 
     public bool IsAnimationPlaying()
@@ -93,7 +88,12 @@ public class BlockDeveloping : MonoBehaviour
             mCubeNumbers.Add(n);
     }
 
-    public bool ChangeCubeArrangement()
+    /// <summary>
+    /// The block will rearrange or destroy itself depending on the status of the cubes in it
+    /// If the block don't have any cube in it, it'll destroy itself.
+    /// </summary>
+    /// <returns>Return if the block is destroy or only rearranged itself</returns>
+    public bool DestroyThisCube()
     {
         if ((mCubes.Count == 1 && mCubes[0] == null) ||
             (mCubes.Count == 2 && mCubes[0] == null && mCubes[1] == null))
