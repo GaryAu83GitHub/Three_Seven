@@ -54,7 +54,7 @@ public class MainGUI : MonoBehaviour
         LevelText.text = aNewLevel.ToString();
     }
 
-    public void TransferNewBlock(Block aNewBlock)
+    public void TransferNewBlock(OldBlock aNewBlock)
     {
         aNewBlock.SetCubeNumbers(NextBlockGUI.NewNumber());
     }

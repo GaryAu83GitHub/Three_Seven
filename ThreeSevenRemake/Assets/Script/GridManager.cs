@@ -32,8 +32,8 @@ public class GridManager
     public Dictionary<int, List<Cube>> Grid { get { return mGrid; } }
     private Dictionary<int, List<Cube>> mGrid = new Dictionary<int, List<Cube>>();
 
-    public List<Block> LandedBlocks { get { return mLandedBlocks; } }
-    private List<Block> mLandedBlocks = new List<Block>();
+    public List<OldBlock> LandedBlocks { get { return mLandedBlocks; } }
+    private List<OldBlock> mLandedBlocks = new List<OldBlock>();
 
     public void GenerateGrid()
     {
@@ -74,7 +74,7 @@ public class GridManager
             mGrid[aGridpos.y][aGridpos.x] = null;
     }
 
-    public void NullifyGridWithBlock(Block aBlock)
+    public void NullifyGridWithBlock(OldBlock aBlock)
     {
         foreach (Cube c in aBlock.Cubes)
             NullifyGridWithCubeAt(c.GridPos);
@@ -94,7 +94,7 @@ public class GridManager
             NullifyGridWithCubeAt(pos);
     }
 
-    public bool AvailableMove(Vector2Int aDir, Block aBlock)
+    public bool AvailableMove(Vector2Int aDir, OldBlock aBlock)
     {
         if (aDir == Vector2Int.left)
         {
@@ -105,7 +105,7 @@ public class GridManager
         }
         else if (aDir == Vector2Int.right)
         {
-            if (aBlock.ClockDir == Block.ClockDirection.CLOCK_3 || aBlock.ClockDir == Block.ClockDirection.CLOCK_9)
+            if (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_3 || aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_9)
             {
                 Vector2Int rootPos = aBlock.RootCube.GridPos + aDir;
                 Vector2Int subPos = aBlock.SubCube.GridPos + aDir;
@@ -127,7 +127,7 @@ public class GridManager
         {
             if (aBlock.Cubes.Count == 2)
             {
-                if (aBlock.ClockDir == Block.ClockDirection.CLOCK_3 || aBlock.ClockDir == Block.ClockDirection.CLOCK_9)
+                if (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_3 || aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_9)
                 {
                     Vector2Int rootPos = aBlock.RootCube.GridPos + aDir;
                     Vector2Int subPos = aBlock.SubCube.GridPos + aDir;
@@ -160,42 +160,42 @@ public class GridManager
         return false;
     }
 
-    public bool AvailableRot(int aTurningIndex, Block aBlock)
+    public bool AvailableRot(int aTurningIndex, OldBlock aBlock)
     {
         Vector2Int pos = aBlock.GridPos;
 
         if (aTurningIndex == -1)
         {
             // obvious of the block will be out of range when rotating counter clock wise at the first and last column of the table
-            if ((aBlock.ClockDir == Block.ClockDirection.CLOCK_12 && pos.x == 0) ||
-                (aBlock.ClockDir == Block.ClockDirection.CLOCK_6 && pos.x == mGridMax.x) ||
-                (aBlock.ClockDir == Block.ClockDirection.CLOCK_9 && pos.y == 0))
+            if ((aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_12 && pos.x == 0) ||
+                (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_6 && pos.x == mGridMax.x) ||
+                (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_9 && pos.y == 0))
                 return false;
 
-            if (aBlock.ClockDir == Block.ClockDirection.CLOCK_12 && GetCubeFrom(pos + Vector2Int.left) == null)
+            if (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_12 && GetCubeFrom(pos + Vector2Int.left) == null)
                 return true;
-            if (aBlock.ClockDir == Block.ClockDirection.CLOCK_9 && GetCubeFrom(pos + Vector2Int.down) == null)
+            if (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_9 && GetCubeFrom(pos + Vector2Int.down) == null)
                 return true;
-            if (aBlock.ClockDir == Block.ClockDirection.CLOCK_6 && GetCubeFrom(pos + Vector2Int.right) == null)
+            if (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_6 && GetCubeFrom(pos + Vector2Int.right) == null)
                 return true;
-            if (aBlock.ClockDir == Block.ClockDirection.CLOCK_3 && GetCubeFrom(pos + Vector2Int.up) == null)
+            if (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_3 && GetCubeFrom(pos + Vector2Int.up) == null)
                 return true;
         }
         else
         {
             // obvious of the block will be out of range when rotating clock wise at the first and last column of the table
-            if ((aBlock.ClockDir == Block.ClockDirection.CLOCK_12 && pos.x == mGridMax.x) ||
-                (aBlock.ClockDir == Block.ClockDirection.CLOCK_6 && pos.x == 0) ||
-                (aBlock.ClockDir == Block.ClockDirection.CLOCK_3 && pos.y == 0))
+            if ((aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_12 && pos.x == mGridMax.x) ||
+                (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_6 && pos.x == 0) ||
+                (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_3 && pos.y == 0))
                 return false;
 
-            if (aBlock.ClockDir == Block.ClockDirection.CLOCK_12 && GetCubeFrom(pos + Vector2Int.right) == null)
+            if (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_12 && GetCubeFrom(pos + Vector2Int.right) == null)
                 return true;
-            if (aBlock.ClockDir == Block.ClockDirection.CLOCK_9 && GetCubeFrom(pos + Vector2Int.up) == null)
+            if (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_9 && GetCubeFrom(pos + Vector2Int.up) == null)
                 return true;
-            if (aBlock.ClockDir == Block.ClockDirection.CLOCK_6 && GetCubeFrom(pos + Vector2Int.left) == null)
+            if (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_6 && GetCubeFrom(pos + Vector2Int.left) == null)
                 return true;
-            if (aBlock.ClockDir == Block.ClockDirection.CLOCK_3 && GetCubeFrom(pos + Vector2Int.down) == null)
+            if (aBlock.ClockDir == OldBlock.ClockDirection.CLOCK_3 && GetCubeFrom(pos + Vector2Int.down) == null)
                 return true;
         }
         return false;

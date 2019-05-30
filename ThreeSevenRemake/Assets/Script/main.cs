@@ -19,13 +19,13 @@ public class main : MonoBehaviour
         CLOCK_WISE = 1,
     }
 
-    public delegate void OnCreateNewBlock(Block aNewBlock);
+    public delegate void OnCreateNewBlock(OldBlock aNewBlock);
     public static OnCreateNewBlock createNewBlock;
-    private Block mCurrentBlock;
+    private OldBlock mCurrentBlock;
 
     private Vector3 mBlockStartPosition;
 
-    private List<Block> mLandedBlock = new List<Block>();
+    private List<OldBlock> mLandedBlock = new List<OldBlock>();
 
     private int mBlockCount = 0;
 
@@ -177,10 +177,10 @@ public class main : MonoBehaviour
         mBlockCount++;
 
         if(createNewBlock != null)
-            createNewBlock(newBlock.GetComponent<Block>());
+            createNewBlock(newBlock.GetComponent<OldBlock>());
 
-        if (newBlock.GetComponent<Block>() != null)
-            mCurrentBlock = newBlock.GetComponent<Block>();
+        if (newBlock.GetComponent<OldBlock>() != null)
+            mCurrentBlock = newBlock.GetComponent<OldBlock>();
 
         mNextDropTime = Time.time + mDropRate;
 
@@ -310,7 +310,7 @@ public class main : MonoBehaviour
     /// </summary>
     private void NullifyGridFromScoringBlocks()
     {
-        foreach (Block b in mLandedBlock)
+        foreach (OldBlock b in mLandedBlock)
         {
             if(b.IsScoring)
                 GridManager.Instance.NullifyGridWithBlock(b);
@@ -319,7 +319,7 @@ public class main : MonoBehaviour
 
     private void TowerCollapse()
     {
-        foreach (Block b in mLandedBlock)
+        foreach (OldBlock b in mLandedBlock)
             b.GetComponent<Rigidbody>().useGravity = true;
     }
 

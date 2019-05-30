@@ -11,9 +11,6 @@ public class Cube : MonoBehaviour
     private MeshRenderer mRenderer;
     private Color mTransparentColor = new Color(0f, 0f, 0f, 0f);
 
-    //private Block mParentBlock;
-    //public Block ParentBlock { get { return mParentBlock; } }
-
     private BlockDeveloping mParentBlockDeveloping;
     public BlockDeveloping ParentBlockDeveloping { get { return mParentBlockDeveloping; } }
 
@@ -63,7 +60,7 @@ public class Cube : MonoBehaviour
         }
     }
 
-    public void Init(Block aParentBlock, int aNumber)
+    public void Init(OldBlock aParentBlock, int aNumber)
     {
         //mParentBlock = aParentBlock;
         SetCubeNumber(aNumber);
@@ -117,97 +114,6 @@ public class Cube : MonoBehaviour
             mIsFading = !mIsFading;
         }
     }
-
-    #region LinkedCube devision
-    /// <summary>
-    /// Get the cube from the given slot index of a vector
-    /// </summary>
-    /// <param name="aDir">Slot index</param>
-    /// <returns></returns>
-    public Cube GetCubeFrom(Vector2Int aDir)
-    {
-        if (mLinkedCubes[aDir] != null)
-            return mLinkedCubes[aDir];
-        return null;
-    }
-
-    /// <summary>
-    /// Put in the cube to the given slot index of a vector.
-    /// </summary>
-    /// <param name="aCube">Inserted cube</param>
-    /// <param name="aDir">Direction of the slot</param>
-    public void PutCubeTo(Cube aCube, Vector2Int aDir)
-    {
-        if (!mLinkedCubes.Values.Contains(aCube) && IsThisSlotVacant(aDir))
-            mLinkedCubes[aDir] = aCube;
-    }
-
-    /// <summary>
-    /// Link the inserting cube to the right slot of the dictionary unless this cube already containing the cube
-    /// In which slot the cube will put in is determined of this and inserted cube's grid position.
-    /// In the same time the inserted cube will link itself with this cube and put it into the slot of the inverted direction
-    /// </summary>
-    /// <param name="aCube">Inserted cube</param>
-    public void LinkNeighourCube(Cube aCube)
-    {
-        if (mLinkedCubes.Values.Contains(aCube))
-            return;
-
-        if (aCube.GridPos.y > this.GridPos.y)
-            PutCubeTo(aCube, Vector2Int.up);
-        if (aCube.GridPos.y < this.GridPos.y)
-            PutCubeTo(aCube, Vector2Int.down);
-        if (aCube.GridPos.x > this.GridPos.x)
-            PutCubeTo(aCube, Vector2Int.right);
-        if (aCube.GridPos.x < this.GridPos.x)
-            PutCubeTo(aCube, Vector2Int.left);
-
-        aCube.LinkNeighourCube(this);
-    }
-
-    /// <summary>
-    /// Dislink the given cube that don't belongs to the same parent block
-    /// </summary>
-    /// <param name="aCube">A given cube from another block</param>
-    public void DislinkNeighourCube(Cube aCube)
-    {
-        if (!mLinkedCubes.Values.Contains(aCube))
-            return;
-
-        Vector2Int key = mLinkedCubes.FirstOrDefault(x => x.Value == aCube).Key;
-        mLinkedCubes[key] = null;
-    }
-
-    /// <summary>
-    /// Dislink every single link to the other that this cube was linked to
-    /// </summary>
-    public void TerminateAllLinks()
-    {
-        foreach(Cube c in mLinkedCubes.Values)
-        {
-            // disconnect the linked cube from this main cube
-            c.DislinkNeighourCube(this);
-
-            // disconnect this cube  from the linked cube
-            DislinkNeighourCube(c);
-        }
-    }
-
-    public void NullifyThisCube(Vector2Int aDir)
-    {
-        if (mLinkedCubes[aDir] != null)
-            mLinkedCubes[aDir] = null;
-    }
-
-    public bool IsThisSlotVacant(Vector2Int aDir)
-    {
-        if (mLinkedCubes[aDir] == null)
-            return true;
-
-        return false;
-    }
-    #endregion
-
 
     private Color ColorConverter(float pRed, float pGreen, float pBlue)
     {

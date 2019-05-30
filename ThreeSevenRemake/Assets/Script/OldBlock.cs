@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Block : MonoBehaviour
+public class OldBlock : MonoBehaviour
 {
     public enum ClockDirection
     {
@@ -15,8 +15,8 @@ public class Block : MonoBehaviour
     [SerializeField]
     private List<Cube> mCubes = new List<Cube>();
     public List<Cube> Cubes { get { return mCubes; } }
-    public Cube RootCube { get { return (mCubes[0] != null ? mCubes[0] : null); } }
-    public Cube SubCube { get { return (mCubes[1] != null ? mCubes[1] : null); } }
+    public Cube RootCube { get { return (mCubes[0] ?? null); } }
+    public Cube SubCube { get { return (mCubes[1] ?? null); } }
 
     private Transform Joint;
     private Transform Limb;

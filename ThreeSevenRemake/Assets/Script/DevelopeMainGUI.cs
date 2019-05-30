@@ -84,7 +84,7 @@ public class DevelopeMainGUI : MonoBehaviour
 
     public void UpdateLevel(int aNewLevel)
     {
-        LevelText.text = "Lv: " + aNewLevel.ToString();
+        LevelText.text = aNewLevel.ToString();
     }
 
     public void ComboAppear(int aComboCount, int aComboScore, string aComboText)
@@ -120,7 +120,7 @@ public class DevelopeMainGUI : MonoBehaviour
         int hours = (int)((mGameTimer / 3600) % 60);
 
         GameManager.Instance.GameTimeString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
-        TimeText.text = "Time: " + GameManager.Instance.GameTimeString;
+        TimeText.text = GameManager.Instance.GameTimeString;
     }
 
     private void ComboTextFading()
