@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -54,6 +55,10 @@ public class GameManager
     public delegate void OnComboOccures(int aComboCount, int aComboScore, string aComboText);
     public static OnComboOccures comboOccuring;
 
+    public delegate void OnAchiveObjective(ObjectiveFrame.Objectives anObjective, int anObjectiveNumber);
+    public static OnAchiveObjective achiveObjective;
+
+
     // variable
     private List<uint> mComboBaseScoreList = new List<uint>() { 50 };
 
@@ -66,6 +71,10 @@ public class GameManager
 
     private const int mMaxLimitRow = 18;
     private const int mMinLimitRow = 9;
+
+    private Dictionary<ObjectiveFrame.Objectives, int> mObjectives = new Dictionary<ObjectiveFrame.Objectives, int>();
+    private Dictionary<ObjectiveFrame.Objectives, List<int>> mObjectiveNumbers = new Dictionary<ObjectiveFrame.Objectives, List<int>>();
+    private Dictionary<ObjectiveFrame.Objectives, bool> mObjectiveAchieveList = new Dictionary<ObjectiveFrame.Objectives, bool>();
     
     /// <summary>
     /// Use to set the high of the limit line in the game.
@@ -75,7 +84,25 @@ public class GameManager
     /// <returns>Return the row number that had been clamp between the max and min row number</returns>
     public int SetLimitLineLevel(int aLimitLineRow)
     {
+        SetupGameset();
         return mLimitRow = Mathf.Clamp(aLimitLineRow, mMinLimitRow, mMaxLimitRow);
+    }
+
+    public void SetupGameset()
+    {
+        mObjectiveNumbers.Add(ObjectiveFrame.Objectives.X1, new List<int>());
+        mObjectiveNumbers.Add(ObjectiveFrame.Objectives.X5, new List<int>() { 2, 3, 4, 5, 16, 17, 18, 19 });
+        mObjectiveNumbers.Add(ObjectiveFrame.Objectives.x10, new List<int>() { 0, 1, 20, 21 });
+        for (int i = 6; i < 16; i++)
+            mObjectiveNumbers[ObjectiveFrame.Objectives.X1].Add(i);
+
+        foreach (ObjectiveFrame.Objectives obj in mObjectiveNumbers.Keys)
+        {
+            mObjectiveAchieveList.Add(obj, false);
+            mObjectives.Add(obj, mObjectiveNumbers[obj][Random.Range(0, mObjectiveNumbers[obj].Count)]);
+            achiveObjective?.Invoke(obj, mObjectives[obj]);
+        }
+
     }
 
     /// <summary>
@@ -124,11 +151,38 @@ public class GameManager
         
         mComboScore = (uint)(GetComboBaseScore(aCombo) * (mCurrentLevel + 1));
 
-        mCurrentScore += (int)mComboScore;
+        mCurrentScore += (int)mComboScore * ObjectiveAchieveBonus();
         scoreChanging?.Invoke(mCurrentScore);
 
         if (aCombo > 0)
             comboOccuring?.Invoke(aCombo, (int)mComboScore, "");
+    }
+
+    public bool AchiveObjective(int aCheckingNumber)
+    {
+        if (!mObjectives.ContainsValue(aCheckingNumber))
+            return false;
+
+        ObjectiveFrame.Objectives obj = mObjectives.FirstOrDefault(x => x.Value == aCheckingNumber).Key;
+        mObjectiveAchieveList[obj] = true;
+        return true;
+    }
+
+    public void ChangeObjective()
+    {
+        if (!mObjectiveAchieveList.ContainsValue(true))
+            return;
+
+        foreach (ObjectiveFrame.Objectives obj in mObjectiveAchieveList.Keys)
+        {
+            if (mObjectiveAchieveList[obj])
+            {
+                mObjectiveAchieveList[obj] = false;
+                mObjectives[obj] = Random.Range(0, mObjectiveNumbers[obj].Count);
+                achiveObjective?.Invoke(obj, mObjectives[obj]);
+                
+            }
+        }
     }
 
     /// <summary>
@@ -146,6 +200,19 @@ public class GameManager
             droprate = mMinimumDroprate;
 
         return droprate;
+    }
+
+    private int ObjectiveAchieveBonus()
+    {
+        int bonus = 0;
+        if (mObjectiveAchieveList[ObjectiveFrame.Objectives.X1])
+            bonus++;
+        if (mObjectiveAchieveList[ObjectiveFrame.Objectives.X5])
+            bonus += 5;
+        if (mObjectiveAchieveList[ObjectiveFrame.Objectives.x10])
+            bonus += 10;
+
+        return bonus;
     }
 
     /// <summary>

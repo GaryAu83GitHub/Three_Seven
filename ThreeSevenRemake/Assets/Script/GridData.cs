@@ -146,6 +146,115 @@ public class GridData
     }
 
     /// <summary>
+    /// This scoring method is another challenge method to the player to score by make three cubes to a sum to
+    /// the current objective that is displaying on the scoring objective panel.
+    /// The objective is get from the GameManager and will each each time it scores
+    /// </summary>
+    /// <param name="someNewLandedCubes"></param>
+    /// <param name="aComboCount"></param>
+    /// <returns></returns>
+    public List<Vector2Int> ScoringMethodCompleteObjective(List<Cube> someNewLandedCubes, ref int aComboCount)
+    {
+        List<Vector2Int> scoringPositions = new List<Vector2Int>();
+
+        foreach (Cube c in someNewLandedCubes)
+        {
+            // horizontal
+            //  the horizont cross [N][G][N]
+            if (GameManager.Instance.AchiveObjective(TotalValueFromPositions(c.GridPos + Vector2Int.left, c.GridPos, c.GridPos + Vector2Int.right)))
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.left))
+                    scoringPositions.Add(c.GridPos + Vector2Int.left);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.right))
+                    scoringPositions.Add(c.GridPos + Vector2Int.right);
+
+                aComboCount++;
+            }
+
+            //  the right [G][N][N]
+            if (GameManager.Instance.AchiveObjective(TotalValueFromPositions(c.GridPos, c.GridPos + Vector2Int.right, c.GridPos + (Vector2Int.right * 2))))
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.right))
+                    scoringPositions.Add(c.GridPos + Vector2Int.right);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.right * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.right * 2));
+
+                aComboCount++;
+            }
+
+            //  the left [N][N][G]
+            if (GameManager.Instance.AchiveObjective(TotalValueFromPositions(c.GridPos + (Vector2Int.left * 2), c.GridPos + Vector2Int.left, c.GridPos)))
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.left))
+                    scoringPositions.Add(c.GridPos + Vector2Int.left);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.left * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.left * 2));
+
+                aComboCount++;
+            }
+
+            // vertical
+            //  the verticla cross
+            // [N]
+            // [G]
+            // [N]
+            if (GameManager.Instance.AchiveObjective(TotalValueFromPositions(c.GridPos + Vector2Int.up, c.GridPos, c.GridPos + Vector2Int.down)))
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.up))
+                    scoringPositions.Add(c.GridPos + Vector2Int.up);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.down))
+                    scoringPositions.Add(c.GridPos + Vector2Int.down);
+
+                aComboCount++;
+            }
+
+            //  the up
+            // [N]
+            // [N]
+            // [G]
+            if (GameManager.Instance.AchiveObjective(TotalValueFromPositions(c.GridPos + (Vector2Int.up * 2), c.GridPos + Vector2Int.up, c.GridPos)))
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.up))
+                    scoringPositions.Add(c.GridPos + Vector2Int.up);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.up * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.up * 2));
+
+                aComboCount++;
+            }
+
+            //  the down
+            // [G]
+            // [N]
+            // [N]
+            if (GameManager.Instance.AchiveObjective(TotalValueFromPositions(c.GridPos, c.GridPos + Vector2Int.down, c.GridPos + (Vector2Int.down * 2))))
+            {
+                if (!scoringPositions.Contains(c.GridPos))
+                    scoringPositions.Add(c.GridPos);
+                if (!scoringPositions.Contains(c.GridPos + Vector2Int.down))
+                    scoringPositions.Add(c.GridPos + Vector2Int.down);
+                if (!scoringPositions.Contains(c.GridPos + (Vector2Int.down * 2)))
+                    scoringPositions.Add(c.GridPos + (Vector2Int.down * 2));
+
+                aComboCount++;
+            }
+        }
+
+        GameManager.Instance.SetComboScore(aComboCount);
+
+        return scoringPositions;
+    }
+
+    /// <summary>
     /// Collecting the grid position of those cell that together with
     /// the cell of the given position would made a score
     /// Totally 6 times a given cube can maximalt score

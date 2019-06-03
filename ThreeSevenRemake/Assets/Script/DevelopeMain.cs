@@ -67,7 +67,7 @@ public class DevelopeMain : MonoBehaviour
         if (mCurrentBlock == null)
         {
             // the block was confirm nullified by the currentblock landed
-            if(mBlockLanded)
+            if (mBlockLanded)
             {
                 BlockManager.Instance.BlockPassedGameOverLine();
                 if (BlockManager.Instance.AnyBlockPlayingAnimation())
@@ -80,7 +80,10 @@ public class DevelopeMain : MonoBehaviour
                 else if (BlockManager.Instance.IsScoring())
                     BlockManager.Instance.PlayScoringAnimation();
                 else
+                {
+                    GameManager.Instance.ChangeObjective();
                     CreateNewBlock();
+                }
             }
             
             return; // don't proceed futher of this block
