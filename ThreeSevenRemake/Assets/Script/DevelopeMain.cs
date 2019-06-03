@@ -13,7 +13,7 @@ public class DevelopeMain : MonoBehaviour
     public delegate void GameActive(bool anActive);
     public static GameActive gameIsPlaying;
 
-    public delegate void OnCreateNewBlock(BlockDeveloping aNewBlock);
+    public delegate void OnCreateNewBlock(Block aNewBlock);
     public static OnCreateNewBlock createNewBlock;
     
     public delegate void InitlizeResult();
@@ -24,7 +24,7 @@ public class DevelopeMain : MonoBehaviour
 
     // variablers
     // objects
-    private BlockDeveloping mCurrentBlock;
+    private Block mCurrentBlock;
 
         // intergear
     private int mBlockCount = 0;
@@ -158,11 +158,11 @@ public class DevelopeMain : MonoBehaviour
         newBlock.name = "Block " + mBlockCount.ToString();
         mBlockCount++;
 
-        createNewBlock?.Invoke(newBlock.GetComponent<BlockDeveloping>());
+        createNewBlock?.Invoke(newBlock.GetComponent<Block>());
 
-        if (newBlock.GetComponent<BlockDeveloping>() != null)
+        if (newBlock.GetComponent<Block>() != null)
         {
-            mCurrentBlock = newBlock.GetComponent<BlockDeveloping>();
+            mCurrentBlock = newBlock.GetComponent<Block>();
         }
 
         // Get the block's droprate of the current level from GameManager

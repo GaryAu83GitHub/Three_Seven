@@ -11,8 +11,8 @@ public class Cube : MonoBehaviour
     private MeshRenderer mRenderer;
     private Color mTransparentColor = new Color(0f, 0f, 0f, 0f);
 
-    private BlockDeveloping mParentBlockDeveloping;
-    public BlockDeveloping ParentBlockDeveloping { get { return mParentBlockDeveloping; } }
+    private Block mParentBlockDeveloping;
+    public Block ParentBlockDeveloping { get { return mParentBlockDeveloping; } }
 
     private Dictionary<Vector2Int, Cube> mLinkedCubes = new Dictionary<Vector2Int, Cube>();
 
@@ -71,7 +71,7 @@ public class Cube : MonoBehaviour
         mLinkedCubes.Add(Vector2Int.right, null);
     }
 
-    public void Init(BlockDeveloping aParentBlock, int aNumber)
+    public void Init(Block aParentBlock, int aNumber)
     {
         mParentBlockDeveloping = aParentBlock;
         SetCubeNumber(aNumber);

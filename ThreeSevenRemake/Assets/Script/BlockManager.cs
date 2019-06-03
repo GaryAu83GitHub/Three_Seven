@@ -34,8 +34,8 @@ public class BlockManager
 
     public int BlockCount { get { return mBlocks.Count; } }
 
-    private List<BlockDeveloping> mBlocks = new List<BlockDeveloping>();
-    private List<BlockDeveloping> mFloatingBlocks = new List<BlockDeveloping>();
+    private List<Block> mBlocks = new List<Block>();
+    private List<Block> mFloatingBlocks = new List<Block>();
     private List<Cube> mScoringsCubes = new List<Cube>();
     private List<Cube> mNewLandedCubes = new List<Cube>();
 
@@ -47,7 +47,7 @@ public class BlockManager
     /// The order of the block list will be rearranged in their x then y position.
     /// </summary>
     /// <param name="aBlock">The new landed block</param>
-    public void AddBlock(BlockDeveloping aBlock)
+    public void AddBlock(Block aBlock)
     {
         mBlocks.Add(aBlock);
 
@@ -85,7 +85,7 @@ public class BlockManager
     public string BlockOrderInString()
     {
         string blockOrderString = "";
-        foreach (BlockDeveloping b in mBlocks)
+        foreach (Block b in mBlocks)
             blockOrderString += b.name + "\n";
 
         return blockOrderString;
@@ -198,13 +198,13 @@ public class BlockManager
     
     private void TowerCollapse()
     {
-        foreach (BlockDeveloping b in mBlocks)
+        foreach (Block b in mBlocks)
             b.GetComponent<Rigidbody>().useGravity = true;
     }
 
     private void SortTheBlocks()
     {
-        List<BlockDeveloping> SortedList = mBlocks.OrderBy(o => o.MinGridPos.x).ThenBy(o => o.MinGridPos.y).ToList();
+        List<Block> SortedList = mBlocks.OrderBy(o => o.MinGridPos.x).ThenBy(o => o.MinGridPos.y).ToList();
         mBlocks = SortedList;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockDeveloping : MonoBehaviour
+public class Block : MonoBehaviour
 {
     [SerializeField]
     private List<Cube> mCubes = new List<Cube>();

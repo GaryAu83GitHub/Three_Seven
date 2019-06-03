@@ -98,7 +98,7 @@ public class DevelopeMainGUI : MonoBehaviour
         mComboAppear = true;
     }
 
-    public void TransferNewBlock(BlockDeveloping aNewBlock)
+    public void TransferNewBlock(Block aNewBlock)
     {
         aNewBlock.SetCubeNumbers(NextBlockGUI.NewNumber());
     }
