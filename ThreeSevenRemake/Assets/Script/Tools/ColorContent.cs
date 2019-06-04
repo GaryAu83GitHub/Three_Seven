@@ -20,11 +20,23 @@ namespace Assets.Script.Tools
 
         private Dictionary<string, Color> mColorList = new Dictionary<string, Color>();
 
-        public Color GetColorByHex(string aHexCode)
+        public Color GetColorBy(string aHexCode)
         {
             if (mColorList.ContainsKey(aHexCode))
                 AddColorByHexCode(aHexCode);
             return mColorList[aHexCode];
+        }
+
+        public Color GetColorBy(Color aColor)
+        {
+            string red = FloatNormalizedToHex(aColor.r);
+            string green = FloatNormalizedToHex(aColor.g);
+            string blue = FloatNormalizedToHex(aColor.b);
+
+            string hexCode = red + green + blue;
+            if (mColorList.ContainsKey(hexCode))
+                AddColorByHexCode(hexCode);
+            return mColorList[hexCode];
         }
 
         private void AddColorByHexCode(string aHexCode)
