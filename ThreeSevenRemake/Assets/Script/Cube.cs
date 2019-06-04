@@ -90,12 +90,12 @@ public class Cube : MonoBehaviour
     public void SetCubeNumber(int aNumber)
     {
         mCubeNumber = aNumber;
-        Vector3 color = SupportTools.GetCubeColorVectorOf(mCubeNumber);
+        Color color = SupportTools.GetCubeHexColorOf(mCubeNumber);
 
         mTextMesh.text = mCubeNumber.ToString();
-        mRenderer.material.color = SupportTools.GetCubeColorOf(mCubeNumber);
+        mRenderer.material.color = color;
         ParticleSystem.MainModule _main = mParticleSystem.main;
-        _main.startColor = new Color(color.x, color.y, color.z);
+        _main.startColor = color;
     }
 
     public void RotateCube(int aDir)

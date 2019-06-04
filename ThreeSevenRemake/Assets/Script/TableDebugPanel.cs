@@ -85,12 +85,12 @@ public class TableDebugPanel : MonoBehaviour
 
                 if (aGrid[x][y] == null)
                 {
-                    tempColor = SupportTools.GetCubeColorOf(-1);
+                    tempColor = SupportTools.GetCubeHexColorOf(-1);
                     tempString = "n";
                 }
                 else
                 {
-                    tempColor = SupportTools.GetCubeColorOf(aGrid[x][y].Number);
+                    tempColor = SupportTools.GetCubeHexColorOf(aGrid[x][y].Number);
                     tempString = aGrid[x][y].ToString();
                 }
 

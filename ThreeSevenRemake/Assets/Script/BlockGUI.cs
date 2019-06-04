@@ -22,12 +22,12 @@ public class BlockGUI : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 10; i++)
             mUsedNumber.Add(false);
 
         mRootNumber = RandomNewNumber();
         RootNumberText.text = RootNumber.ToString();
-        RootCube.color = SupportTools.GetCubeColorOf(RootNumber);
+        RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);
 
         // add in the new number for the root cube
         //mPreviousNumber.Add(RootNumber);
@@ -35,7 +35,7 @@ public class BlockGUI : MonoBehaviour
         // randomize a new number for the sub cube
         mSubNumber = RandomNewNumber();
         SubNumberText.text = SubNumber.ToString();
-        SubCube.color = SupportTools.GetCubeColorOf(SubNumber);
+        SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
     }
 
     public List<int> NewNumber()
@@ -48,7 +48,7 @@ public class BlockGUI : MonoBehaviour
         // randomize a new number for the root cube
         mRootNumber = RandomNewNumber();
         RootNumberText.text = RootNumber.ToString();
-        RootCube.color = SupportTools.GetCubeColorOf(RootNumber);
+        RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);
 
         // add in the new number for the root cube
         //mPreviousNumber.Add(RootNumber);
@@ -56,7 +56,7 @@ public class BlockGUI : MonoBehaviour
         // randomize a new number for the sub cube
         mSubNumber = RandomNewNumber();
         SubNumberText.text = SubNumber.ToString();
-        SubCube.color = SupportTools.GetCubeColorOf(SubNumber);
+        SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
 
         // return the previous number for the new creating cube
         return mPreviousNumber;
@@ -64,10 +64,10 @@ public class BlockGUI : MonoBehaviour
 
     private int RandomNewNumber()
     {
-        int newNumber = SupportTools.RNG(0, 8);
+        int newNumber = SupportTools.RNG(0, 10);
         while (mUsedNumber[newNumber] == true)
         {
-            newNumber = SupportTools.RNG(0, 8);
+            newNumber = SupportTools.RNG(0, 10);
         }
 
         mUsedNumber[newNumber] = true;

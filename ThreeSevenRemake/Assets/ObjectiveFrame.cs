@@ -9,7 +9,7 @@ public class ObjectiveFrame : MonoBehaviour
     {
         X1,
         X5,
-        x10,
+        X10,
     }
 
     public Text MultiplyOneTimesObjectiveNumber;
@@ -39,7 +39,7 @@ public class ObjectiveFrame : MonoBehaviour
             MultiplyOneTimesObjectiveNumber.text = anObjectiveNumber.ToString();
         else if(anObjective == Objectives.X5)
             MultiplyFiveTimesObjectiveNumber.text = anObjectiveNumber.ToString();
-        else if(anObjective == Objectives.x10)
+        else if(anObjective == Objectives.X10)
             MultiplyTenTimesObjectiveNumber.text = anObjectiveNumber.ToString();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Script.Tools;
 
 public class SupportTools
 {
@@ -39,6 +40,49 @@ public class SupportTools
                 break;
         }
         return new Color(color.x / 255f, color.y / 255f, color.z / 255f);
+    }
+
+    public static Color GetCubeHexColorOf(int aCubeNumber)
+    {
+        Color color = new Color();
+
+        switch (aCubeNumber)
+        {
+            case -1:
+                color = ColorContent.Instance.GetColorBy("ffffff");
+                break;
+            case 9:
+                color = ColorContent.Instance.GetColorBy("cc2929");
+                break;
+            case 8:
+                color = ColorContent.Instance.GetColorBy("cca329");
+                break;
+            case 7:
+                color = ColorContent.Instance.GetColorBy("7acc29");
+                break;
+            case 6:
+                color = ColorContent.Instance.GetColorBy("29cc52");
+                break;
+            case 5:
+                color = ColorContent.Instance.GetColorBy("29cccc");
+                break;
+            case 4:
+                color = ColorContent.Instance.GetColorBy("2952cc");
+                break;
+            case 3:
+                color = ColorContent.Instance.GetColorBy("9130f2");
+                break;
+            case 2:
+                color = ColorContent.Instance.GetColorBy("cc29a3");
+                break;
+            case 1:
+                color = ColorContent.Instance.GetColorBy("6d736d");
+                break;
+            default:
+                color = ColorContent.Instance.GetColorBy("dae5db");
+                break;
+        }
+        return color;
     }
 
     public static Vector3 GetCubeColorVectorOf(int aCubeNumber)

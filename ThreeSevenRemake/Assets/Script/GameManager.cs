@@ -89,11 +89,9 @@ public class GameManager
 
     public void SetupGameset()
     {
-        mObjectiveNumbers.Add(ObjectiveFrame.Objectives.X1, new List<int>());
-        mObjectiveNumbers.Add(ObjectiveFrame.Objectives.X5, new List<int>() { 2, 3, 4, 5, 16, 17, 18, 19 });
-        mObjectiveNumbers.Add(ObjectiveFrame.Objectives.x10, new List<int>() { 0, 1, 20, 21 });
-        for (int i = 6; i < 16; i++)
-            mObjectiveNumbers[ObjectiveFrame.Objectives.X1].Add(i);
+        mObjectiveNumbers.Add(ObjectiveFrame.Objectives.X10, new List<int>() { 0, 1, 2, 3, 4, 5, 6, 21 });
+        mObjectiveNumbers.Add(ObjectiveFrame.Objectives.X5, new List<int>() { 7, 8, 9, 10, 18, 19, 20 });
+        mObjectiveNumbers.Add(ObjectiveFrame.Objectives.X1, new List<int>() { 11, 12, 13, 14, 15, 16, 17});
 
         foreach (ObjectiveFrame.Objectives obj in mObjectiveNumbers.Keys)
         {
@@ -208,7 +206,7 @@ public class GameManager
             bonus++;
         if (mObjectiveAchieveList[ObjectiveFrame.Objectives.X5])
             bonus += 5;
-        if (mObjectiveAchieveList[ObjectiveFrame.Objectives.x10])
+        if (mObjectiveAchieveList[ObjectiveFrame.Objectives.X10])
             bonus += 10;
 
         return bonus;

@@ -22,7 +22,7 @@ namespace Assets.Script.Tools
 
         public Color GetColorBy(string aHexCode)
         {
-            if (mColorList.ContainsKey(aHexCode))
+            if (!mColorList.ContainsKey(aHexCode))
                 AddColorByHexCode(aHexCode);
             return mColorList[aHexCode];
         }
@@ -34,7 +34,7 @@ namespace Assets.Script.Tools
             string blue = FloatNormalizedToHex(aColor.b);
 
             string hexCode = red + green + blue;
-            if (mColorList.ContainsKey(hexCode))
+            if (!mColorList.ContainsKey(hexCode))
                 AddColorByHexCode(hexCode);
             return mColorList[hexCode];
         }
