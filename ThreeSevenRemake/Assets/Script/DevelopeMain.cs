@@ -147,9 +147,9 @@ public class DevelopeMain : MonoBehaviour
     private IEnumerator GameStart()
     {
         yield return new WaitForSeconds(3f);
-        
-        
 
+
+        GameManager.Instance.SetupGameset();
         CreateNewBlock();
         mGameInProgress = true;
         gameIsPlaying?.Invoke(mGameInProgress);

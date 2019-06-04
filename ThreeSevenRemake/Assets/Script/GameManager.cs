@@ -84,7 +84,6 @@ public class GameManager
     /// <returns>Return the row number that had been clamp between the max and min row number</returns>
     public int SetLimitLineLevel(int aLimitLineRow)
     {
-        SetupGameset();
         return mLimitRow = Mathf.Clamp(aLimitLineRow, mMinLimitRow, mMaxLimitRow);
     }
 
@@ -173,12 +172,12 @@ public class GameManager
         if (!mObjectiveAchieveList.ContainsValue(true))
             return;
 
-        foreach (ObjectiveFrame.Objectives obj in mObjectiveAchieveList.Keys)
+        foreach (ObjectiveFrame.Objectives obj in mObjectiveAchieveList.Keys.ToList())
         {
             if (mObjectiveAchieveList[obj])
             {
                 mObjectiveAchieveList[obj] = false;
-                mObjectives[obj] = Random.Range(0, mObjectiveNumbers[obj].Count);
+                mObjectives[obj] = mObjectiveNumbers[obj][Random.Range(0, mObjectiveNumbers[obj].Count)];
                 achiveObjective?.Invoke(obj, mObjectives[obj]);
                 
             }
