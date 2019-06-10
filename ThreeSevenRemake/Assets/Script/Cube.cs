@@ -7,6 +7,8 @@ using UnityEngine;
 public class Cube : MonoBehaviour
 {
     public ParticleSystem mParticleSystem;
+    //public Material mMaterial;
+
     private TextMesh mTextMesh;
     private MeshRenderer mRenderer;
     private Color mTransparentColor = new Color(0f, 0f, 0f, 0f);
@@ -51,11 +53,15 @@ public class Cube : MonoBehaviour
     {
         if(mIsFading)
         {
-            mRenderer.material.color = Color.Lerp(mRenderer.material.color, mTransparentColor, mFadingTime);
+            //mRenderer.material.color = Color.Lerp(mRenderer.material.color, mTransparentColor, mFadingTime);
             mTextMesh.color = Color.Lerp(mTextMesh.color, mTransparentColor, mFadingTime);
             if (mFadingTime < 1)
-                mFadingTime += Time.deltaTime / mParticleSystem.main.duration;
-            if (mRenderer.material.color.a <= 0f)
+            {
+                mFadingTime += Time.deltaTime / 1f;//mParticleSystem.main.duration;
+                mRenderer.material.SetFloat("Vector1_8984A549", mFadingTime);
+            }
+            //if (mRenderer.material.color.a <= 0f)
+            if (mRenderer.material.GetFloat("Vector1_8984A549") > 1)
                 Destroy(this.gameObject);
         }
     }
@@ -93,7 +99,8 @@ public class Cube : MonoBehaviour
         Color color = SupportTools.GetCubeHexColorOf(mCubeNumber);
 
         mTextMesh.text = mCubeNumber.ToString();
-        mRenderer.material.color = color;
+        //mRenderer.material.color = color;
+        mRenderer.material.SetColor("Color_5774DDCC", color);
         ParticleSystem.MainModule _main = mParticleSystem.main;
         _main.startColor = color;
     }
@@ -113,10 +120,5 @@ public class Cube : MonoBehaviour
             mAnimationIsPlaying = !mAnimationIsPlaying;
             mIsFading = !mIsFading;
         }
-    }
-
-    private Color ColorConverter(float pRed, float pGreen, float pBlue)
-    {
-        return new Color(pRed / 255f, pGreen / 255f, pBlue / 255f);
     }
 }
