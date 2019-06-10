@@ -4,10 +4,12 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: WallMaterial
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: -6465566751694194690, guid: 09d079cca700fda45b1d67fd6d1839e9,
+    type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -72,5 +74,6 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
+    - Color_2A8C1D74: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0}
     - _Color: {r: 0.5735294, g: 0.5735294, b: 0.5735294, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
