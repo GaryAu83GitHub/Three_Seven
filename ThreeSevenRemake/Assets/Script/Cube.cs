@@ -115,7 +115,7 @@ public class Cube : MonoBehaviour
     {
         if (mIsFading == false)
         {
-            mParticleSystem.Play();
+            //mParticleSystem.Play();
             mParentBlockDeveloping.DestroyJoint();
             mAnimationIsPlaying = !mAnimationIsPlaying;
             mIsFading = !mIsFading;
