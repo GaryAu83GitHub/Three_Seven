@@ -13,10 +13,8 @@ public class Cube : MonoBehaviour
     private MeshRenderer mRenderer;
     private Color mTransparentColor = new Color(0f, 0f, 0f, 0f);
 
-    private Block mParentBlockDeveloping;
-    public Block ParentBlockDeveloping { get { return mParentBlockDeveloping; } }
-
-    private Dictionary<Vector2Int, Cube> mLinkedCubes = new Dictionary<Vector2Int, Cube>();
+    private Block mParentBlock;
+    public Block ParentBlock { get { return mParentBlock; } }
 
     [SerializeField]
     private Vector2Int mGridPosition;
@@ -65,27 +63,11 @@ public class Cube : MonoBehaviour
                 Destroy(this.gameObject);
         }
     }
-
-    public void Init(OldBlock aParentBlock, int aNumber)
-    {
-        //mParentBlock = aParentBlock;
-        SetCubeNumber(aNumber);
-
-        mLinkedCubes.Add(Vector2Int.up, null);
-        mLinkedCubes.Add(Vector2Int.left, null);
-        mLinkedCubes.Add(Vector2Int.down, null);
-        mLinkedCubes.Add(Vector2Int.right, null);
-    }
-
+    
     public void Init(Block aParentBlock, int aNumber)
     {
-        mParentBlockDeveloping = aParentBlock;
+        mParentBlock = aParentBlock;
         SetCubeNumber(aNumber);
-
-        mLinkedCubes.Add(Vector2Int.up, null);
-        mLinkedCubes.Add(Vector2Int.left, null);
-        mLinkedCubes.Add(Vector2Int.down, null);
-        mLinkedCubes.Add(Vector2Int.right, null);
     }
 
     /// <summary>
@@ -103,6 +85,9 @@ public class Cube : MonoBehaviour
         mRenderer.material.SetColor("Color_5774DDCC", color);
         ParticleSystem.MainModule _main = mParticleSystem.main;
         _main.startColor = color;
+
+        ParticleSystemRenderer renderer = mParticleSystem.GetComponent<ParticleSystemRenderer>();
+        //renderer.material.set
     }
 
     public void RotateCube(int aDir)
@@ -116,7 +101,7 @@ public class Cube : MonoBehaviour
         if (mIsFading == false)
         {
             //mParticleSystem.Play();
-            mParentBlockDeveloping.DestroyJoint();
+            mParentBlock.DestroyJoint();
             mAnimationIsPlaying = !mAnimationIsPlaying;
             mIsFading = !mIsFading;
         }
