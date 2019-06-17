@@ -76,12 +76,7 @@ public class Block : MonoBehaviour
         }
         return false;
     }
-
-    public void SetGridStartPosition(Vector2Int aPosition)
-    {
-
-    }
-
+    
     public void SetCubeNumbers(List<int> someNumbers)
     {
         foreach (int n in someNumbers)

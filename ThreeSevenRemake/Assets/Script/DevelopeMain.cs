@@ -6,6 +6,7 @@ public class DevelopeMain : MonoBehaviour
 {
     // Object sync with the unity
     public GameObject BlockObject;
+    public GameObject GuideBlockObject;
     public GameObject LimitLine;
     public Light DirectionalLight;
 
@@ -25,6 +26,7 @@ public class DevelopeMain : MonoBehaviour
     // variablers
     // objects
     private Block mCurrentBlock;
+    private GuideBlock mGuideBlock;
 
         // intergear
     private int mBlockCount = 0;
@@ -125,6 +127,8 @@ public class DevelopeMain : MonoBehaviour
             else
                 mCurrentBlock.DropDown();
 
+            //if (mCurrentBlock != null)
+            //    Debug.LogFormat("Current highest y: {0}, at x: {1}", GridData.Instance.TallestRowOnColumn(mCurrentBlock.MinGridPos.x), mCurrentBlock.MinGridPos.x);
             mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
             mNextDropTime = Time.time + mDropRate;
         }
@@ -141,6 +145,12 @@ public class DevelopeMain : MonoBehaviour
         {
             mCurrentBlock.Swap();
         }
+
+        if (mCurrentBlock != null)
+        {
+            mGuideBlock.SetupGuideBlock(mCurrentBlock);
+            mGuideBlock.SetPosition(mCurrentBlock);
+        }
         
     }
     
@@ -151,6 +161,7 @@ public class DevelopeMain : MonoBehaviour
 
         GameManager.Instance.SetupGameset();
         CreateNewBlock();
+        
         mGameInProgress = true;
         gameIsPlaying?.Invoke(mGameInProgress);
     }
@@ -167,6 +178,9 @@ public class DevelopeMain : MonoBehaviour
         {
             mCurrentBlock = newBlock.GetComponent<Block>();
         }
+
+        mGuideBlock = GuideBlockObject.GetComponent<GuideBlock>();
+        GuideBlockObject.SetActive(true);
 
         // Get the block's droprate of the current level from GameManager
         mDropRate = GameManager.Instance.GetCurrentDroppingRate();

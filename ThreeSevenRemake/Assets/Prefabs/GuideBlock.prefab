@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4575659910534188}
+  - component: {fileID: 6614878928130160755}
   m_Layer: 0
-  m_Name: HelpBlock
+  m_Name: GuideBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,6 +33,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6614878928130160755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1522182820706444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcc890840c4674147a4848828631bcc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mCubes:
+  - {fileID: 5690359849511446421}
+  - {fileID: 1725009703283542287}
 --- !u!1 &1755852757745308
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,6 +60,7 @@ GameObject:
   - component: {fileID: 33159225353320456}
   - component: {fileID: 65338676893576380}
   - component: {fileID: 23954759647901932}
+  - component: {fileID: 5690359849511446421}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -123,6 +140,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &5690359849511446421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1755852757745308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a268a5294ff872a449459921ba3a45af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mGridPosition: {x: 0, y: 0}
 --- !u!1 &1835885817769304
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,6 +165,7 @@ GameObject:
   - component: {fileID: 33449513711912238}
   - component: {fileID: 65709352239141198}
   - component: {fileID: 23825101655604734}
+  - component: {fileID: 1725009703283542287}
   m_Layer: 0
   m_Name: Sub
   m_TagString: Untagged
@@ -214,3 +245,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &1725009703283542287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835885817769304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a268a5294ff872a449459921ba3a45af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mGridPosition: {x: 0, y: 0}

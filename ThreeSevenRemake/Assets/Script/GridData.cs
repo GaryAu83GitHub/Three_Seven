@@ -51,6 +51,11 @@ public class GridData
     public Dictionary<int, List<Cube>> Grid { get { return mGrid; } }
 
     /// <summary>
+    /// Keep track of the tallest cell row on the board
+    /// </summary>
+    private int mCurrentTallestCellInGrid = 0;
+
+    /// <summary>
     ///  Generate the grid with default value along with the list of the
     ///  highest row to each column which is 0
     /// </summary>
@@ -75,6 +80,11 @@ public class GridData
     public void RegistrateCell(Cube aCube)
     {
         mGrid[aCube.GridPos.x][aCube.GridPos.y] = aCube;
+
+        //if (aCube.GridPos.y > mCurrentTallestCellInGrid)
+        //    mCurrentTallestCellInGrid = aCube.GridPos.y;
+
+        //Debug.LogFormat("Current tallest cell row: {0}", mCurrentTallestCellInGrid);
     }
 
     /// <summary>
@@ -84,6 +94,32 @@ public class GridData
     public void UnregistrateCell(Vector2Int aPos)
     {
         mGrid[aPos.x][aPos.y] = null;
+
+        //bool tallestCellHasChanged = true;
+        //for(int x = 0; x < mGridSize.x; x++)
+        //{
+        //    if (mGrid[x][mCurrentTallestCellInGrid] != null)
+        //    {
+        //        tallestCellHasChanged = false;
+        //        break;
+        //    }
+        //}
+
+        //if(tallestCellHasChanged)
+        //{
+        //    int tallestRow = 0;
+
+        //    for (int x = 0; x < mGridSize.x; x++)
+        //    {
+        //        int tallestRowOnThisColumn = TallestRowOnColumn(x);
+
+        //        if (tallestRowOnThisColumn > tallestRow)
+        //            tallestRow = tallestRowOnThisColumn;
+        //    }
+
+        //    mCurrentTallestCellInGrid = tallestRow;
+            //Debug.LogFormat("Current tallest cell row: {0}", mCurrentTallestCellInGrid);
+        //}
     }
 
     /// <summary>
@@ -510,6 +546,28 @@ public class GridData
 
         GameManager.Instance.SetComboScore(aComboCount);
         return scoringPositions;
+    }
+
+    /// <summary>
+    /// Check after the current tallest row on the requested cell (x pos)
+    /// It begin to check from the current tallest row on the whole table
+    /// </summary>
+    /// <param name="aXPosition">Requested x position</param>
+    /// <returns>The the tallest row of the requested x position</returns>
+    public int TallestRowOnColumn(int aXPosition)
+    {
+        //int row = mCurrentTallestCellInGrid;
+        int row = 0;
+
+        for (int y = mGridSize.y - 1/*mCurrentTallestCellInGrid*/; y > 0; y--)
+        {
+            if (mGrid[aXPosition][y] == null)
+                row = y;
+            else
+                break;
+        }
+
+        return row;
     }
 
     /// <summary>

@@ -1575,6 +1575,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BlockObject: {fileID: 6910912495299484449, guid: aa954b9eca0d7e54ba1ea209fa96fcb3,
     type: 3}
+  GuideBlockObject: {fileID: 1522182820706444, guid: d95a1fe0be9fbd542beeb0a4366a932e,
+    type: 3}
   LimitLine: {fileID: 1558435205}
   DirectionalLight: {fileID: 1406303461}
 --- !u!4 &434038362
