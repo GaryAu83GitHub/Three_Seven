@@ -21,12 +21,14 @@ public class Block : MonoBehaviour
 
     private List<int> mCubeNumbers = new List<int>();
     public List<int> CubeNumbers { get { return mCubeNumbers; } }
+
+    private int mCurrentRotation = 0;
+    public int BlockRotation { get { return mCurrentRotation; } }
     
     private Transform Joint;
 
     private float mCubeGap = 0f;
-    private int mCurrentRotation = 0;
-
+    
     // Start is called before the first frame update
     void Start()
     {

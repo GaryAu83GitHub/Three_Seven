@@ -559,7 +559,7 @@ public class GridData
         //int row = mCurrentTallestCellInGrid;
         int row = 0;
 
-        for (int y = mGridSize.y - 1/*mCurrentTallestCellInGrid*/; y > 0; y--)
+        for (int y = mGridSize.y - 1/*mCurrentTallestCellInGrid*/; y >= 0; y--)
         {
             if (mGrid[aXPosition][y] == null)
                 row = y;

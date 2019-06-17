@@ -123,6 +123,7 @@ public class DevelopeMain : MonoBehaviour
 
                 mCurrentBlock = null;
                 mBlockLanded = true;
+                GuideBlockObject.SetActive(false);
             }
             else
                 mCurrentBlock.DropDown();
