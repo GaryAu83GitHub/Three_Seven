@@ -33,14 +33,14 @@ public class GameOverMenu : MonoBehaviour
         AnimationClip[] clips = PanelAnimation.runtimeAnimatorController.animationClips;
         myAnimationDuration = clips[0].length;
         LeaveButton.onClick.AddListener(LeaveToMainMenu);
-        main.finalResult += Result;
+        Oldmain.finalResult += Result;
         DevelopeMain.finalResult += Result;
         LeavePanel.SetActive(false);
     }
 
     private void OnDisable()
     {
-        main.finalResult -= Result;
+        Oldmain.finalResult -= Result;
         DevelopeMain.finalResult -= Result;
     }
 

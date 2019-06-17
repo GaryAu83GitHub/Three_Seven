@@ -20,6 +20,9 @@ public class Cube : MonoBehaviour
     private Vector2Int mGridPosition;
     public Vector2Int GridPos { get { return mGridPosition; } set { mGridPosition = value; } }
 
+    private Color mColor;
+    public Color Color { get { return mColor; } }
+
     [SerializeField]
     private int mCubeNumber;
     public int Number { get { return mCubeNumber; } }
@@ -78,13 +81,13 @@ public class Cube : MonoBehaviour
     public void SetCubeNumber(int aNumber)
     {
         mCubeNumber = aNumber;
-        Color color = SupportTools.GetCubeHexColorOf(mCubeNumber);
+        mColor = SupportTools.GetCubeHexColorOf(mCubeNumber);
 
         mTextMesh.text = mCubeNumber.ToString();
         //mRenderer.material.color = color;
-        mRenderer.material.SetColor("Color_5774DDCC", color);
+        mRenderer.material.SetColor("Color_5774DDCC", mColor);
         ParticleSystem.MainModule _main = mParticleSystem.main;
-        _main.startColor = color;
+        _main.startColor = mColor;
 
         ParticleSystemRenderer renderer = mParticleSystem.GetComponent<ParticleSystemRenderer>();
         //renderer.material.set

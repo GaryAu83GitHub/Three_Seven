@@ -5,10 +5,10 @@ using UnityEngine;
 public class GuideBlock : MonoBehaviour
 {
     [SerializeField]
-    private List<Cube> mCubes = new List<Cube>();
-    public List<Cube> Cubes { get { return mCubes; } }
-    public Cube RootCube { get { return (mCubes[0] ?? null); } }
-    public Cube SubCube { get { return (mCubes[1] ?? null); } }
+    private List<GuideCube> mCubes = new List<GuideCube>();
+    public List<GuideCube> Cubes { get { return mCubes; } }
+    public GuideCube RootCube { get { return (mCubes[0] ?? null); } }
+    public GuideCube SubCube { get { return (mCubes[1] ?? null); } }
 
     [SerializeField]
     private Vector2Int mMinPosition;
@@ -18,16 +18,13 @@ public class GuideBlock : MonoBehaviour
     private Vector2Int mMaxPosition;
     public Vector2Int MaxGridPos { get { return mMaxPosition; } }
 
-    private List<int> mCubeNumbers = new List<int>();
-    public List<int> CubeNumbers { get { return mCubeNumbers; } }
-
     // Start is called before the first frame update
     void Start()
     {
-        mCubes.Add(transform.GetChild(0).GetComponent<Cube>());
+        mCubes.Add(transform.GetChild(0).GetComponent<GuideCube>());
         mCubes[0].name = "RootCube";
 
-        mCubes.Add(transform.GetChild(1).GetComponent<Cube>());
+        mCubes.Add(transform.GetChild(1).GetComponent<GuideCube>());
         mCubes[1].name = "SubCube";
 
         mMinPosition = mCubes[0].GridPos;
@@ -42,6 +39,16 @@ public class GuideBlock : MonoBehaviour
 
     public void SetupGuideBlock(Block anActiveBlock)
     {
+        RootCube.SetCubeColor(anActiveBlock.RootCube.Color);
+        SubCube.SetCubeColor(anActiveBlock.SubCube.Color);
+    }
+
+    public void SetPosition(Block anActiveBlock)
+    {
+        RootCube.GridPos = anActiveBlock.RootCube.GridPos;
+        SubCube.GridPos = anActiveBlock.SubCube.GridPos;
+
+
 
     }
 }

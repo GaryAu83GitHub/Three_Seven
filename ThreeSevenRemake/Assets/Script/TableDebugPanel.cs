@@ -14,13 +14,13 @@ public class TableDebugPanel : MonoBehaviour
     void Start()
     {
         GenerateGrid(10, 20);
-        //main.blockLandedDebug += GridUpdate;
+        //Oldmain.blockLandedDebug += GridUpdate;
         DevelopeMain.blockLandedDebug += GridUpdate;
     }
 
     private void OnDisable()
     {
-        //main.blockLandedDebug -= GridUpdate;
+        //Oldmain.blockLandedDebug -= GridUpdate;
         DevelopeMain.blockLandedDebug -= GridUpdate;
     }
 

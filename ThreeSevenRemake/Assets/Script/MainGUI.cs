@@ -23,20 +23,20 @@ public class MainGUI : MonoBehaviour
     private void Start()
     {
         mGameTimer = 0f;
-        main.scoreChanging += UpdateScore;
-        main.levelUpdate += UpdateLevel;
-        main.createNewBlock += TransferNewBlock;
-        main.gameIsPlaying += GameIsPlaying;
-        main.spendTime += SpendingTime;
+        Oldmain.scoreChanging += UpdateScore;
+        Oldmain.levelUpdate += UpdateLevel;
+        Oldmain.createNewBlock += TransferNewBlock;
+        Oldmain.gameIsPlaying += GameIsPlaying;
+        Oldmain.spendTime += SpendingTime;
     }
 
     private void OnDisable()
     {
-        main.scoreChanging -= UpdateScore;
-        main.levelUpdate -= UpdateLevel;
-        main.createNewBlock -= TransferNewBlock;
-        main.gameIsPlaying -= GameIsPlaying;
-        main.spendTime -= SpendingTime;
+        Oldmain.scoreChanging -= UpdateScore;
+        Oldmain.levelUpdate -= UpdateLevel;
+        Oldmain.createNewBlock -= TransferNewBlock;
+        Oldmain.gameIsPlaying -= GameIsPlaying;
+        Oldmain.spendTime -= SpendingTime;
     }
 
     private void Update()

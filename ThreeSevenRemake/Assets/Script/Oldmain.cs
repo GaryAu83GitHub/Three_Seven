@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Assets.Script.Tools;
 
-public class main : MonoBehaviour
+public class Oldmain : MonoBehaviour
 {
     /// <summary>
     /// Prefab for the dropping blocks
