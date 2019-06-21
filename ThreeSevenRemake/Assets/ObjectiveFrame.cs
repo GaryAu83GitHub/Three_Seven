@@ -5,12 +5,7 @@ using UnityEngine.UI;
 
 public class ObjectiveFrame : MonoBehaviour
 {
-    public enum Objectives
-    {
-        X1,
-        X5,
-        X10,
-    }
+    
 
     public Text MultiplyOneTimesObjectiveNumber;
     public Text MultiplyFiveTimesObjectiveNumber;
