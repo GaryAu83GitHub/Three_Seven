@@ -83,7 +83,8 @@ public class DevelopeMain : MonoBehaviour
                     BlockManager.Instance.PlayScoringAnimation();
                 else
                 {
-                    GameManager.Instance.ChangeObjective();
+                    //GameManager.Instance.ChangeObjective();
+                    Objective.Instance.ChangeObjective();
                     CreateNewBlock();
                 }
             }
@@ -160,7 +161,8 @@ public class DevelopeMain : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
 
-        GameManager.Instance.SetupGameset();
+        Objective.Instance.StartFirstSetOfObjective();
+        //GameManager.Instance.SetupGameset();
         CreateNewBlock();
         
         mGameInProgress = true;

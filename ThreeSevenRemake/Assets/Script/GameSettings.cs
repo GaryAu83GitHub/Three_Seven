@@ -23,7 +23,7 @@ public class GameSettings
     }
     private static GameSettings mInstance;
 
-    private Difficulties mDifficulties = Difficulties.NORMAL;
+    private Difficulties mDifficulties = Difficulties.EASY;
     public Difficulties Difficulty { get { return mDifficulties; } }
 
     private int mLimitRow = 17;

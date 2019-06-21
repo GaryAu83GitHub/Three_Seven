@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class ObjectiveFrame : MonoBehaviour
 {
-    
-
     public Text MultiplyOneTimesObjectiveNumber;
     public Text MultiplyFiveTimesObjectiveNumber;
     public Text MultiplyTenTimesObjectiveNumber;
@@ -14,12 +12,12 @@ public class ObjectiveFrame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.achiveObjective += SetObjectiveNumbersFor;
+        Objective.achiveObjective += SetObjectiveNumbersFor;
     }
 
     private void OnDestroy()
     {
-        GameManager.achiveObjective -= SetObjectiveNumbersFor;
+        Objective.achiveObjective -= SetObjectiveNumbersFor;
     }
 
     // Update is called once per frame

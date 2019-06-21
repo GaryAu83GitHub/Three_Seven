@@ -51,10 +51,7 @@ public class GameManager
 
     public delegate void OnComboOccures(int aComboCount, int aComboScore, string aComboText);
     public static OnComboOccures comboOccuring;
-
-    public delegate void OnAchiveObjective(Objectives anObjective, int anObjectiveNumber);
-    public static OnAchiveObjective achiveObjective;
-
+    
     // variable
     private List<uint> mComboBaseScoreList = new List<uint>() { 50 };
 
@@ -64,25 +61,6 @@ public class GameManager
     private const int mSoftLandingScore = 1;
     private const float mDropRateDecreaseValue = .03f;
     private const float mMinimumDroprate = .1f;
-
-    //private Dictionary<Objectives, int> mObjectives = new Dictionary<Objectives, int>();
-    //private Dictionary<Objectives, List<int>> mObjectiveNumbers = new Dictionary<Objectives, List<int>>();
-    //private Dictionary<Objectives, bool> mObjectiveAchieveList = new Dictionary<Objectives, bool>();
-   
-    //public void SetupGameset()
-    //{
-    //    mObjectiveNumbers.Add(Objectives.X10, new List<int>() { 0, 1, 2, 3, 4, 5, 6, 21 });
-    //    mObjectiveNumbers.Add(Objectives.X5, new List<int>() { 7, 8, 9, 10, 18, 19, 20 });
-    //    mObjectiveNumbers.Add(Objectives.X1, new List<int>() { 11, 12, 13, 14, 15, 16, 17});
-
-    //    foreach (Objectives obj in mObjectiveNumbers.Keys)
-    //    {
-    //        mObjectiveAchieveList.Add(obj, false);
-    //        mObjectives.Add(obj, mObjectiveNumbers[obj][Random.Range(0, mObjectiveNumbers[obj].Count)]);
-    //        achiveObjective?.Invoke(obj, mObjectives[obj]);
-    //    }
-
-    //}
 
     /// <summary>
     /// Add in point for level up to gain more score and increase the dropping speed
@@ -130,40 +108,13 @@ public class GameManager
         
         mComboScore = (uint)(GetComboBaseScore(aCombo) * (mCurrentLevel + 1));
 
-        mCurrentScore += (int)mComboScore * ObjectiveAchieveBonus();
+        mCurrentScore += (int)mComboScore * Objective.Instance.ObjectiveAchieveBonus();
         scoreChanging?.Invoke(mCurrentScore);
 
         if (aCombo > 0)
             comboOccuring?.Invoke(aCombo, (int)mComboScore, "");
     }
-
-    //public bool AchiveObjective(int aCheckingNumber)
-    //{
-    //    if (!mObjectives.ContainsValue(aCheckingNumber))
-    //        return false;
-
-    //    Objectives obj = mObjectives.FirstOrDefault(x => x.Value == aCheckingNumber).Key;
-    //    mObjectiveAchieveList[obj] = true;
-    //    return true;
-    //}
-
-    //public void ChangeObjective()
-    //{
-    //    if (!mObjectiveAchieveList.ContainsValue(true))
-    //        return;
-
-    //    foreach (Objectives obj in mObjectiveAchieveList.Keys.ToList())
-    //    {
-    //        if (mObjectiveAchieveList[obj])
-    //        {
-    //            mObjectiveAchieveList[obj] = false;
-    //            mObjectives[obj] = mObjectiveNumbers[obj][Random.Range(0, mObjectiveNumbers[obj].Count)];
-    //            achiveObjective?.Invoke(obj, mObjectives[obj]);
-                
-    //        }
-    //    }
-    //}
-
+    
     /// <summary>
     /// Get the droprate on the block base on the current level.
     /// The the decreasing droprate falls below the minimal speed, it'll remain on the minimal speed
@@ -180,19 +131,6 @@ public class GameManager
 
         return droprate;
     }
-
-    //private int ObjectiveAchieveBonus()
-    //{
-    //    int bonus = 0;
-    //    if (mObjectiveAchieveList[Objectives.X1])
-    //        bonus++;
-    //    if (mObjectiveAchieveList[Objectives.X5])
-    //        bonus += 5;
-    //    if (mObjectiveAchieveList[Objectives.X10])
-    //        bonus += 10;
-
-    //    return bonus;
-    //}
 
     /// <summary>
     /// This method is called when cubes scores throught aligning and met up the condition

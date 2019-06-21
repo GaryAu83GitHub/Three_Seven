@@ -105,6 +105,7 @@ public class BlockManager
     public bool IsScoring()
     {
         // scoring method to list
+        //List<Vector2Int> scoringPositions = GridData.Instance.CompleteObjectiveScoringMethodWithThreeCube(mNewLandedCubes, ref mComboCount);
         List<Vector2Int> scoringPositions = GridData.Instance.CompleteObjectiveScoringMethod(mNewLandedCubes, ref mComboCount);
 
         mScoringsCubes.Clear();

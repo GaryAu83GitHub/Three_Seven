@@ -49,6 +49,14 @@ public class Objective
         }
     }
 
+    public void StartFirstSetOfObjective()
+    {
+        foreach (Objectives obj in mObjectiveNumbersList.Keys)
+        {
+            achiveObjective?.Invoke(obj, mActiveObjectives[obj]);
+        }
+    }
+
     public bool AchiveObjective(int aCheckingNumber)
     {
         if (!mActiveObjectives.ContainsValue(aCheckingNumber))

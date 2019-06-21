@@ -183,12 +183,25 @@ public class GridData
         return true;
     }
 
+    public List<Vector2Int> CompleteObjectiveScoringMethod(List<Cube> someNewLandedCubes, ref int aComboCount)
+    {
+        List<Vector2Int> scoringPositions = new List<Vector2Int>();
+        foreach (Cube c in someNewLandedCubes)
+        {
+            Scorings(c, ref scoringPositions, ref aComboCount);
+        }
+
+        GameManager.Instance.SetComboScore(aComboCount);
+
+        return scoringPositions;
+    }
+
     /// <summary>
     /// </summary>
     /// <param name="someNewLandedCubes"></param>
     /// <param name="aComboCount"></param>
     /// <returns></returns>
-    public List<Vector2Int> CompleteObjectiveScoringMethod(List<Cube> someNewLandedCubes, ref int aComboCount)
+    public List<Vector2Int> CompleteObjectiveScoringMethodWithThreeCube(List<Cube> someNewLandedCubes, ref int aComboCount)
     {
         List<Vector2Int> scoringPositions = new List<Vector2Int>();
 
@@ -196,7 +209,7 @@ public class GridData
         {
             // horizontal
             //  the horizont cross [N][G][N]
-            if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos + Vector2Int.left, c.GridPos, c.GridPos + Vector2Int.right)))
+            if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos + Vector2Int.left, c.GridPos, c.GridPos + Vector2Int.right)))
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -209,7 +222,7 @@ public class GridData
             }
 
             //  the right [G][N][N]
-            if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos, c.GridPos + Vector2Int.right, c.GridPos + (Vector2Int.right * 2))))
+            if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos, c.GridPos + Vector2Int.right, c.GridPos + (Vector2Int.right * 2))))
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -222,7 +235,7 @@ public class GridData
             }
 
             //  the left [N][N][G]
-            if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos + (Vector2Int.left * 2), c.GridPos + Vector2Int.left, c.GridPos)))
+            if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos + (Vector2Int.left * 2), c.GridPos + Vector2Int.left, c.GridPos)))
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -239,7 +252,7 @@ public class GridData
             // [N]
             // [G]
             // [N]
-            if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos + Vector2Int.up, c.GridPos, c.GridPos + Vector2Int.down)))
+            if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos + Vector2Int.up, c.GridPos, c.GridPos + Vector2Int.down)))
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -255,7 +268,7 @@ public class GridData
             // [N]
             // [N]
             // [G]
-            if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos + (Vector2Int.up * 2), c.GridPos + Vector2Int.up, c.GridPos)))
+            if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos + (Vector2Int.up * 2), c.GridPos + Vector2Int.up, c.GridPos)))
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -271,7 +284,7 @@ public class GridData
             // [G]
             // [N]
             // [N]
-            if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos, c.GridPos + Vector2Int.down, c.GridPos + (Vector2Int.down * 2))))
+            if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(c.GridPos, c.GridPos + Vector2Int.down, c.GridPos + (Vector2Int.down * 2))))
             {
                 if (!scoringPositions.Contains(c.GridPos))
                     scoringPositions.Add(c.GridPos);
@@ -601,73 +614,84 @@ public class GridData
         return mGrid[aPos.x][aPos.y];
     }
 
-    private void Scorings(Cube aCube, ref List<Vector2Int> scorePositionCollector)
+    private void Scorings(Cube aCube, ref List<Vector2Int> scorePositionCollector, ref int aComboScore)
     {
         if(GameSettings.Instance.Difficulty == GameSettings.Difficulties.EASY)
         {
-            ScoreWithTwoCubes(aCube, ref scorePositionCollector);
-            ScoreWithThreeCubes(aCube, ref scorePositionCollector);
-            ScoreWithFourCubes(aCube, ref scorePositionCollector);
+            ScoreWithTwoCubes(aCube, ref scorePositionCollector, ref aComboScore);
+            ScoreWithThreeCubes(aCube, ref scorePositionCollector, ref aComboScore);
+            ScoreWithFourCubes(aCube, ref scorePositionCollector, ref aComboScore);
+            ScoreWithFiveCubes(aCube, ref scorePositionCollector, ref aComboScore);
         }
         else if(GameSettings.Instance.Difficulty == GameSettings.Difficulties.NORMAL)
         {
-            ScoreWithThreeCubes(aCube, ref scorePositionCollector);
-            ScoreWithFourCubes(aCube, ref scorePositionCollector);
+            ScoreWithThreeCubes(aCube, ref scorePositionCollector, ref aComboScore);
+            ScoreWithFourCubes(aCube, ref scorePositionCollector, ref aComboScore);
+            ScoreWithFiveCubes(aCube, ref scorePositionCollector, ref aComboScore);
         }
         else if (GameSettings.Instance.Difficulty == GameSettings.Difficulties.HARD)
         {
-            ScoreWithFourCubes(aCube, ref scorePositionCollector);
+            ScoreWithFourCubes(aCube, ref scorePositionCollector, ref aComboScore);
+            ScoreWithFiveCubes(aCube, ref scorePositionCollector, ref aComboScore);
         }
     }
 
-    private void ScoreWithTwoCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector)
+    private void ScoreWithTwoCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
     {
         //  to the right [G][N]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.right)))
+        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.right)))
         {
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
             if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+
+            aComboScore++;
         }
 
         //  to the left [N][G]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos + Vector2Int.left, aCube.GridPos)))
+        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos + Vector2Int.left, aCube.GridPos)))
         {
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
             if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
+
+            aComboScore++;
         }
 
         //  with above
         // [N]
         // [G]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.up)))
+        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.up)))
         {
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
             if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
+
+            aComboScore++;
         }
 
         //  with beneath
         // [G]
         // [N]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.down)))
+        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.down)))
         {
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
             if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+
+            aComboScore++;
         }
     }
 
-    private void ScoreWithThreeCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector)
+    private void ScoreWithThreeCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
     {
         // horizontal
         //  the horizont cross [N][G][N]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + Vector2Int.left, aCube.GridPos, aCube.GridPos + Vector2Int.right)))
+        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + Vector2Int.left, aCube.GridPos, aCube.GridPos + Vector2Int.right)))
         {
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
@@ -675,10 +699,12 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
             if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+
+            aComboScore++;
         }
 
         //  the right [G][N][N]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2))))
+        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2))))
         {
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
@@ -686,10 +712,12 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
+
+            aComboScore++;
         }
 
         //  the left [N][N][G]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos)))
+        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos)))
         {
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
@@ -697,6 +725,8 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
+
+            aComboScore++;
         }
 
         // vertical
@@ -704,7 +734,7 @@ public class GridData
         // [N]
         // [G]
         // [N]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + Vector2Int.up, aCube.GridPos, aCube.GridPos + Vector2Int.down)))
+        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + Vector2Int.up, aCube.GridPos, aCube.GridPos + Vector2Int.down)))
         {
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
@@ -712,13 +742,15 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
             if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+
+            aComboScore++;
         }
 
         //  the up
         // [N]
         // [N]
         // [G]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos)))
+        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos)))
         {
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
@@ -726,13 +758,15 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 2)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 2));
+
+            aComboScore++;
         }
 
         //  the down
         // [G]
         // [N]
         // [N]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2))))
+        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2))))
         {
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
@@ -740,14 +774,16 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
+
+            aComboScore++;
         }
     }
 
-    private void ScoreWithFourCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector)
+    private void ScoreWithFourCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
     {
         // horizontal
         // [G][R][2R][3R]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
             aCube.GridPos, 
             aCube.GridPos + Vector2Int.right, 
             aCube.GridPos + (Vector2Int.right * 2), 
@@ -761,10 +797,12 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 3));
+
+            aComboScore++;
         }
 
         // [L][G][R][2R]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
             aCube.GridPos + Vector2Int.left, 
             aCube.GridPos, 
             aCube.GridPos + Vector2Int.right,
@@ -778,10 +816,12 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
+
+            aComboScore++;
         }
 
         // [2L][L][G][R]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
             aCube.GridPos + (Vector2Int.left * 2), 
             aCube.GridPos + Vector2Int.left, 
             aCube.GridPos,
@@ -798,7 +838,7 @@ public class GridData
         }
 
         // [3L][2L][L][G]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
             aCube.GridPos + (Vector2Int.left * 3),
             aCube.GridPos + (Vector2Int.left * 2),
             aCube.GridPos + Vector2Int.left,
@@ -812,13 +852,15 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 3));
+
+            aComboScore++;
         }
 
         // [3U]
         // [2U]
         // [U]
         // [G]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
             aCube.GridPos + (Vector2Int.up * 3), 
             aCube.GridPos + (Vector2Int.up * 2), 
             aCube.GridPos + Vector2Int.up, 
@@ -832,13 +874,15 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
+
+            aComboScore++;
         }
 
         // [2U]
         // [U]
         // [G]
         // [D]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
             aCube.GridPos + (Vector2Int.up * 2), 
             aCube.GridPos + Vector2Int.up, 
             aCube.GridPos, 
@@ -852,13 +896,15 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos);
             if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+
+            aComboScore++;
         }
 
         // [U]
         // [G]
         // [D]
         // [2D]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
             aCube.GridPos + Vector2Int.up, 
             aCube.GridPos, 
             aCube.GridPos + Vector2Int.down, 
@@ -872,13 +918,15 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
+
+            aComboScore++;
         }
 
         // [G]
         // [D]
         // [2D]
         // [3D]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
             aCube.GridPos,
             aCube.GridPos + Vector2Int.down,
             aCube.GridPos + (Vector2Int.down * 2),
@@ -892,13 +940,15 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 3)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 3));
+
+            aComboScore++;
         }
     }
 
-    private void ScoreWithFiveCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector)
+    private void ScoreWithFiveCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
     {
         // [G][R][2R][3R][4R]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFivePositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
             aCube.GridPos,
             aCube.GridPos + Vector2Int.right,
             aCube.GridPos + (Vector2Int.right * 2),
@@ -915,10 +965,12 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 3));
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 4)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 4));
+
+            aComboScore++;
         }
 
         // [L][G][R][2R][3R]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFivePositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
             aCube.GridPos + Vector2Int.left,
             aCube.GridPos,
             aCube.GridPos + Vector2Int.right,
@@ -935,10 +987,12 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 3));
+
+            aComboScore++;
         }
 
         // [2L][L][G][R][2R]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFivePositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
             aCube.GridPos + (Vector2Int.left * 2),
             aCube.GridPos + Vector2Int.left,
             aCube.GridPos,
@@ -955,10 +1009,12 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
+
+            aComboScore++;
         }
 
         // [3L][2L][L][G][R]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFivePositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
             aCube.GridPos + (Vector2Int.left * 3),
             aCube.GridPos + (Vector2Int.left * 2),
             aCube.GridPos + Vector2Int.left,
@@ -975,10 +1031,12 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos);
             if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+
+            aComboScore++;
         }
 
         // [4L][3L][2L][L][G]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFivePositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
             aCube.GridPos + (Vector2Int.left * 4), 
             aCube.GridPos + (Vector2Int.left * 3),
             aCube.GridPos + (Vector2Int.left * 2),
@@ -995,6 +1053,8 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 3));
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 4)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 4));
+
+            aComboScore++;
         }
 
         // [4U]
@@ -1002,7 +1062,7 @@ public class GridData
         // [2U]
         // [U]
         // [G]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFivePositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
             aCube.GridPos + (Vector2Int.up * 4), 
             aCube.GridPos + (Vector2Int.up * 3),
             aCube.GridPos + (Vector2Int.up * 2),
@@ -1019,6 +1079,8 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
             if (!aScorePositionCollector.Contains(aCube.GridPos))
                 aScorePositionCollector.Add(aCube.GridPos);
+
+            aComboScore++;
         }
 
         // [3U]
@@ -1026,7 +1088,7 @@ public class GridData
         // [U]
         // [G]
         // [D]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFivePositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
             aCube.GridPos + (Vector2Int.up * 3), 
             aCube.GridPos + (Vector2Int.up * 2),
             aCube.GridPos + Vector2Int.up,
@@ -1043,6 +1105,8 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos);
             if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+
+            aComboScore++;
         }
 
         // [2U]
@@ -1050,7 +1114,7 @@ public class GridData
         // [G]
         // [D]
         // [2D]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFivePositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
             aCube.GridPos + (Vector2Int.up * 2), 
             aCube.GridPos + Vector2Int.up,
             aCube.GridPos,
@@ -1067,6 +1131,8 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
+
+            aComboScore++;
         }
 
         // [U]
@@ -1074,7 +1140,7 @@ public class GridData
         // [D]
         // [2D]
         // [3D]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFivePositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
             aCube.GridPos + Vector2Int.up, 
             aCube.GridPos,
             aCube.GridPos + Vector2Int.down,
@@ -1091,6 +1157,8 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 3)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 3));
+
+            aComboScore++;
         }
 
         // [G]
@@ -1098,7 +1166,7 @@ public class GridData
         // [2D]
         // [3D]
         // [4D]
-        if (GameManager.Instance.AchiveObjective(TotalValueFromFivePositions(
+        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
             aCube.GridPos,
             aCube.GridPos + Vector2Int.down,
             aCube.GridPos + (Vector2Int.down * 2),
@@ -1115,6 +1183,8 @@ public class GridData
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 3));
             if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 4)))
                 aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 4));
+
+            aComboScore++;
         }
     }
 
