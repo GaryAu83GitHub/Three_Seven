@@ -124,7 +124,7 @@ public class GameManager
     {
         float droprate = 1f;
 
-        droprate -= (mCurrentLevel * mDropRateDecreaseValue);
+        droprate -= ((mCurrentLevel + GameSettings.Instance.StartSpeedMultiply) * mDropRateDecreaseValue);
 
         if (droprate <= mMinimumDroprate)
             droprate = mMinimumDroprate;

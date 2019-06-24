@@ -616,20 +616,20 @@ public class GridData
 
     private void Scorings(Cube aCube, ref List<Vector2Int> scorePositionCollector, ref int aComboScore)
     {
-        if(GameSettings.Instance.Difficulty == GameSettings.Difficulties.EASY)
+        if(GameSettings.Instance.Difficulty == Difficulties.EASY)
         {
             ScoreWithTwoCubes(aCube, ref scorePositionCollector, ref aComboScore);
             ScoreWithThreeCubes(aCube, ref scorePositionCollector, ref aComboScore);
             ScoreWithFourCubes(aCube, ref scorePositionCollector, ref aComboScore);
             ScoreWithFiveCubes(aCube, ref scorePositionCollector, ref aComboScore);
         }
-        else if(GameSettings.Instance.Difficulty == GameSettings.Difficulties.NORMAL)
+        else if(GameSettings.Instance.Difficulty == Difficulties.NORMAL)
         {
             ScoreWithThreeCubes(aCube, ref scorePositionCollector, ref aComboScore);
             ScoreWithFourCubes(aCube, ref scorePositionCollector, ref aComboScore);
             ScoreWithFiveCubes(aCube, ref scorePositionCollector, ref aComboScore);
         }
-        else if (GameSettings.Instance.Difficulty == GameSettings.Difficulties.HARD)
+        else if (GameSettings.Instance.Difficulty == Difficulties.HARD)
         {
             ScoreWithFourCubes(aCube, ref scorePositionCollector, ref aComboScore);
             ScoreWithFiveCubes(aCube, ref scorePositionCollector, ref aComboScore);

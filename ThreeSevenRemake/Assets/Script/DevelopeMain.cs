@@ -8,6 +8,7 @@ public class DevelopeMain : MonoBehaviour
     public GameObject BlockObject;
     public GameObject GuideBlockObject;
     public GameObject LimitLine;
+    public GameObject TableCover;
     public Light DirectionalLight;
 
     // delegates
@@ -56,7 +57,7 @@ public class DevelopeMain : MonoBehaviour
 
     private void Update()
     {
-        
+        TableCover.SetActive(PauseMenu.GameIsPause);
         // If mGameOver is equal to true, don't proceed futher of this 
         if (BlockManager.Instance.BlockPassedGameOverLine())
         {

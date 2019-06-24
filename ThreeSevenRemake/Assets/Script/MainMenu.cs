@@ -14,12 +14,16 @@ public class MainMenu : MonoBehaviour
     public Button QuitButton;
 
     public GameObject InstructionPanel;
+    public GameObject GameSettingPanel;
 
     private void Start()
     {
         PlayButton.onClick.AddListener(PlayGame);
         InstructionButton.onClick.AddListener(InstructingGame);
         QuitButton.onClick.AddListener(QuitGame);
+
+        InstructionPanel.SetActive(false);
+        GameSettingPanel.SetActive(false);
     }
 
     public void PlayGame()
@@ -27,7 +31,8 @@ public class MainMenu : MonoBehaviour
         //SceneManager.LoadScene("Main");
         //FadingScript.gameObject.SetActive(true);
         //StartCoroutine(GoToGame());
-        ScreenTransistor.Instance.FadeToSceneWithIndex(1);
+        //ScreenTransistor.Instance.FadeToSceneWithIndex(1);
+        GameSettingPanel.SetActive(true);
     }
 
     public void InstructingGame()

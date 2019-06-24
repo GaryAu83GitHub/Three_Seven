@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 
+public enum Difficulties
+{
+    EASY,
+    NORMAL,
+    HARD
+}
 /// <summary>
 /// This class is for storing the gameplay setting that can be change when the player chose to start a new game.
 /// </summary>
 public class GameSettings
 {
-    public enum Difficulties
-    {
-        EASY = 1,
-        NORMAL = 2,
-        HARD = 3
-    }
+    
 
     public static GameSettings Instance
     {
@@ -29,12 +30,21 @@ public class GameSettings
     private int mLimitRow = 17;
     public int LimitHigh { get { return mLimitRow; } }
 
+    private int mDropSpeedMultiply = 0;
+    public int StartSpeedMultiply { get { return mDropSpeedMultiply; } }
+
     private const int mMaxLimitRow = 18;
     private const int mMinLimitRow = 9;
 
     public void SetDifficulty(Difficulties aDifficulty)
     {
         mDifficulties = aDifficulty;
+    }
+
+    public void SetStartDropSpeed(int aSpeed)
+    {
+        mDropSpeedMultiply = aSpeed;
+        Debug.Log(mDropSpeedMultiply);
     }
 
     /// <summary>
