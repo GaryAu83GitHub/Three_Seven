@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public enum Difficulties
 {
@@ -6,13 +7,20 @@ public enum Difficulties
     NORMAL,
     HARD
 }
+
+public enum ScoreCubeCount
+{
+    TWO_CUBES,
+    THREE_CUBES,
+    FOUR_CUBES,
+    FIVE_CUBES,
+    MAX
+}
 /// <summary>
 /// This class is for storing the gameplay setting that can be change when the player chose to start a new game.
 /// </summary>
 public class GameSettings
 {
-    
-
     public static GameSettings Instance
     {
         get
@@ -33,18 +41,63 @@ public class GameSettings
     private int mDropSpeedMultiply = 0;
     public int StartSpeedMultiply { get { return mDropSpeedMultiply; } }
 
+    private int mAdditionLimit = 0;
+    public int AdditionLimit { get { return mAdditionBaseValue + mAdditionLimit; } }
+
+    private List<bool> mActiveScoringCubeEnables = new List<bool>();
+    public List<bool> ActiveScoringCubeCount { get { return mActiveScoringCubeEnables; } }
+
     private const int mMaxLimitRow = 18;
     private const int mMinLimitRow = 9;
+    private const int mAdditionBaseValue = 18;
+
+    public GameSettings()
+    {
+        for(ScoreCubeCount i = 0; i < (ScoreCubeCount.MAX); i++)
+        {
+            mActiveScoringCubeEnables.Add(true);
+        }
+    }
 
     public void SetDifficulty(Difficulties aDifficulty)
     {
         mDifficulties = aDifficulty;
     }
 
+    public void SetScoringCubesCount(ScoreCubeCount anIndex, bool isActive)
+    {
+        mActiveScoringCubeEnables[(int)anIndex] = isActive;
+    }
+
+    public void SwapScoringCubeCountOn(ScoreCubeCount anIndex)
+    {
+        bool isThereAnotherOptionEnable = false;
+
+        for(ScoreCubeCount i = ScoreCubeCount.TWO_CUBES; i < ScoreCubeCount.MAX; i++)
+        {
+            if (i == anIndex)
+                continue;
+            if (isThereAnotherOptionEnable == false && mActiveScoringCubeEnables[(int)i] == true)
+                isThereAnotherOptionEnable = mActiveScoringCubeEnables[(int)i];
+
+        }
+        if(isThereAnotherOptionEnable)
+            mActiveScoringCubeEnables[(int)anIndex] = !mActiveScoringCubeEnables[(int)anIndex];
+    }
+
+    public bool IsTheseScoringSettingEquals(bool isTwoCubeEnable, bool isThreeCubeEnable, bool isFourCubeEnable, bool isFiveCubeEnable)
+    {
+        if (mActiveScoringCubeEnables[0] == isTwoCubeEnable &&
+            mActiveScoringCubeEnables[1] == isThreeCubeEnable &&
+            mActiveScoringCubeEnables[2] == isFourCubeEnable &&
+            mActiveScoringCubeEnables[3] == isFiveCubeEnable)
+            return true;
+        return false;
+    }
+
     public void SetStartDropSpeed(int aSpeed)
     {
         mDropSpeedMultiply = aSpeed;
-        Debug.Log(mDropSpeedMultiply);
     }
 
     /// <summary>
@@ -56,5 +109,10 @@ public class GameSettings
     public void SetLimitLineLevel(int aLimitLineRow)
     {
         mLimitRow = Mathf.Clamp(aLimitLineRow, mMinLimitRow, mMaxLimitRow);
+    }
+
+    public void SetAdditionLimit(int aLimit)
+    {
+        mAdditionLimit = aLimit;
     }
 }
