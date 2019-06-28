@@ -44,8 +44,8 @@ public class GameSettings
     private int mAdditionLimit = 0;
     public int AdditionLimit { get { return mAdditionBaseValue + mAdditionLimit; } }
 
-    private List<bool> mActiveScoringCubeEnables = new List<bool>();
-    public List<bool> ActiveScoringCubeCount { get { return mActiveScoringCubeEnables; } }
+    private List<bool> mEnableScoringMethods = new List<bool>();
+    public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } }
 
     private const int mMaxLimitRow = 18;
     private const int mMinLimitRow = 9;
@@ -55,7 +55,7 @@ public class GameSettings
     {
         for(ScoreCubeCount i = 0; i < (ScoreCubeCount.MAX); i++)
         {
-            mActiveScoringCubeEnables.Add(true);
+            mEnableScoringMethods.Add(true);
         }
     }
 
@@ -66,7 +66,12 @@ public class GameSettings
 
     public void SetScoringCubesCount(ScoreCubeCount anIndex, bool isActive)
     {
-        mActiveScoringCubeEnables[(int)anIndex] = isActive;
+        mEnableScoringMethods[(int)anIndex] = isActive;
+    }
+
+    public bool IsScoringMethodActiveTo(ScoreCubeCount anIndex)
+    {
+        return mEnableScoringMethods[(int)anIndex];
     }
 
     public void SwapScoringCubeCountOn(ScoreCubeCount anIndex)
@@ -77,20 +82,20 @@ public class GameSettings
         {
             if (i == anIndex)
                 continue;
-            if (isThereAnotherOptionEnable == false && mActiveScoringCubeEnables[(int)i] == true)
-                isThereAnotherOptionEnable = mActiveScoringCubeEnables[(int)i];
+            if (isThereAnotherOptionEnable == false && mEnableScoringMethods[(int)i] == true)
+                isThereAnotherOptionEnable = mEnableScoringMethods[(int)i];
 
         }
         if(isThereAnotherOptionEnable)
-            mActiveScoringCubeEnables[(int)anIndex] = !mActiveScoringCubeEnables[(int)anIndex];
+            mEnableScoringMethods[(int)anIndex] = !mEnableScoringMethods[(int)anIndex];
     }
 
     public bool IsTheseScoringSettingEquals(bool isTwoCubeEnable, bool isThreeCubeEnable, bool isFourCubeEnable, bool isFiveCubeEnable)
     {
-        if (mActiveScoringCubeEnables[0] == isTwoCubeEnable &&
-            mActiveScoringCubeEnables[1] == isThreeCubeEnable &&
-            mActiveScoringCubeEnables[2] == isFourCubeEnable &&
-            mActiveScoringCubeEnables[3] == isFiveCubeEnable)
+        if (mEnableScoringMethods[0] == isTwoCubeEnable &&
+            mEnableScoringMethods[1] == isThreeCubeEnable &&
+            mEnableScoringMethods[2] == isFourCubeEnable &&
+            mEnableScoringMethods[3] == isFiveCubeEnable)
             return true;
         return false;
     }

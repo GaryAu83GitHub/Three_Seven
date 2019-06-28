@@ -635,13 +635,13 @@ public class GridData
         //    ScoreWithFiveCubes(aCube, ref scorePositionCollector, ref aComboScore);
         //}
 
-        if(GameSettings.Instance.ActiveScoringCubeCount[(int)ScoreCubeCount.TWO_CUBES])
+        if(GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.TWO_CUBES])
             ScoreWithTwoCubes(aCube, ref scorePositionCollector, ref aComboScore);
-        if(GameSettings.Instance.ActiveScoringCubeCount[(int)ScoreCubeCount.THREE_CUBES])
+        if(GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.THREE_CUBES])
             ScoreWithThreeCubes(aCube, ref scorePositionCollector, ref aComboScore);
-        if (GameSettings.Instance.ActiveScoringCubeCount[(int)ScoreCubeCount.FOUR_CUBES])
+        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FOUR_CUBES])
             ScoreWithFourCubes(aCube, ref scorePositionCollector, ref aComboScore);
-        if (GameSettings.Instance.ActiveScoringCubeCount[(int)ScoreCubeCount.FIVE_CUBES])
+        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FIVE_CUBES])
             ScoreWithFiveCubes(aCube, ref scorePositionCollector, ref aComboScore);
 
     }

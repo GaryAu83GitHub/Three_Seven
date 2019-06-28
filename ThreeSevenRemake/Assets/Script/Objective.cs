@@ -26,27 +26,24 @@ public class Objective
     public static OnAchiveObjective achiveObjective;
 
     private List<bool> mUsedObjectiveNumbers = new List<bool>();
-    private List<int> mCurrentMaxObjectiveCount = new List<int>();
     private Dictionary<Objectives, int> mActiveObjectives = new Dictionary<Objectives, int>();
     private Dictionary<Objectives, List<int>> mObjectiveNumbersList = new Dictionary<Objectives, List<int>>();
     private Dictionary<Objectives, bool> mObjectiveAchieveList = new Dictionary<Objectives, bool>();
+
+    private int mMaxLimitObjectiveValue = 18;
+    private int mCurrentLimitObjectiveValue = 0;
+    public int CurrentLimetObjectiveValue { get { return mCurrentLimitObjectiveValue; } }
     
     public Objective()
     {
-        mObjectiveNumbersList.Add(Objectives.X1, new List<int>() { 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 }); // count 27
-        mObjectiveNumbersList.Add(Objectives.X5, new List<int>() { 4, 5, 6, 7, 8, 36, 37, 38, 39, 40 }); // count 10
-        mObjectiveNumbersList.Add(Objectives.X10, new List<int>() { 0, 1, 2, 3, 41, 42, 43, 44, 45 }); // count 9
+        mObjectiveNumbersList.Add(Objectives.X1, new List<int>());
+        mObjectiveNumbersList.Add(Objectives.X5, new List<int>());
+        mObjectiveNumbersList.Add(Objectives.X10, new List<int>());
         
-        for(int i = 0; i < 46; i++)
-        {
-            mUsedObjectiveNumbers.Add(false);
-        }
-
         foreach (Objectives obj in mObjectiveNumbersList.Keys)
         {
             mObjectiveAchieveList.Add(obj, false);
-            mActiveObjectives.Add(obj, mObjectiveNumbersList[obj][Random.Range(0, mObjectiveNumbersList[obj].Count)]);
-            achiveObjective?.Invoke(obj, mActiveObjectives[obj]);
+            mActiveObjectives.Add(obj, 0);
         }
     }
 
@@ -80,8 +77,7 @@ public class Objective
             if (mObjectiveAchieveList[obj])
             {
                 mObjectiveAchieveList[obj] = false;
-                CheckForNeedToResetNumberFor(obj);
-                mActiveObjectives[obj] = GetNewAchieveNumber(obj, mActiveObjectives[obj]);
+                mActiveObjectives[obj] = GetObjectiveFrom(obj);
                 achiveObjective?.Invoke(obj, mActiveObjectives[obj]);
 
             }
@@ -101,53 +97,36 @@ public class Objective
         return bonus;
     }
 
-    private int GetNewAchieveNumber(Objectives anObjective, int aPreviousNumber)
+    public void SetMaxLimitObjectiveValue(int aMaxValue)
     {
-        int newAchieveNumber = aPreviousNumber;
-        
-        while(mUsedObjectiveNumbers[newAchieveNumber])
-        {
-            newAchieveNumber = mObjectiveNumbersList[anObjective][Random.Range(0, mObjectiveNumbersList[anObjective].Count)];
-        }
-
-        return newAchieveNumber;
+        mMaxLimitObjectiveValue = aMaxValue;
     }
 
-    private void CheckForNeedToResetNumberFor(Objectives anObjective)
+    public void SetStartObjectiveValue(int aStartValue)
     {
-        foreach(int a in mObjectiveNumbersList[anObjective])
-        {
-            if (!mUsedObjectiveNumbers[a])
-                return;
-        }
-
-        ResetObjectiveNumberFor(anObjective);
+        mCurrentLimitObjectiveValue = aStartValue;
     }
 
-    private void ResetObjectiveNumberFor(Objectives anObjective)
+    public void IncreaseObjectiveValue()
     {
-        for (int i = 0; i < mObjectiveNumbersList[anObjective].Count; i++)
-            mUsedObjectiveNumbers[mObjectiveNumbersList[anObjective][i]] = false;
+        if ((mCurrentLimitObjectiveValue + 1) > mMaxLimitObjectiveValue)
+            return;
+
+        mCurrentLimitObjectiveValue++;
+        mUsedObjectiveNumbers.Add(true);
     }
 
     public void PrepareObjectives()
     {
-        Dictionary<int, int> combinationCount = new Dictionary<int, int>();
-
-        for(int i = 0; i < 10; i++)
-        {
-            IterateTwoCubesCombination(i, ref combinationCount);
-        }
-
-        for (int i = 0; i < combinationCount.Count; i++)
-        {
+        Dictionary<int, int> combinationCount = IterateCombination();
+        
+        for (int i = 0; i <= mCurrentLimitObjectiveValue; i++)
             mUsedObjectiveNumbers.Add(false);
-        }
 
         int mostCombination = combinationCount.Values.Max();
-        foreach(int key in combinationCount.Keys)
+        foreach (int key in combinationCount.Keys)
         {
-            if(mostCombination.ToString().Length == 4)
+            if (mostCombination.ToString().Length == 4)
             {
                 if (combinationCount[key].ToString().Length == 1 || combinationCount[key].ToString().Length == 2)
                     mObjectiveNumbersList[Objectives.X10].Add(key);
@@ -158,69 +137,173 @@ public class Objective
             }
             else if (mostCombination.ToString().Length == 3)
             {
-                if (combinationCount[key].ToString().Length == 1 || combinationCount[key].ToString().Length == 2)
+                if (combinationCount[key].ToString().Length == 1)
+                    mObjectiveNumbersList[Objectives.X10].Add(key);
+                if (combinationCount[key].ToString().Length == 2)
                     mObjectiveNumbersList[Objectives.X5].Add(key);
                 if (combinationCount[key].ToString().Length == 3)
                     mObjectiveNumbersList[Objectives.X1].Add(key);
             }
             else
-                mObjectiveNumbersList[Objectives.X1].Add(key);
+            {
+               if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreCubeCount.THREE_CUBES))
+                {
+                    if (key <= 3 || key >= 24) // 1 to 3 combination
+                        mObjectiveNumbersList[Objectives.X10].Add(key);
+                    if ((key >= 4 && key <= 9) || (key >= 18 && key <= 23)) // 4 to 7 combination
+                        mObjectiveNumbersList[Objectives.X5].Add(key);
+                    if (key >= 10 && key <= 17)   // 
+                        mObjectiveNumbersList[Objectives.X1].Add(key);
+                }
+               else
+                {
+                    if (key <= 2 || key >= 16) // 1 to 3 combination
+                        mObjectiveNumbersList[Objectives.X10].Add(key);
+                    if ((key >= 3 && key <= 6) || (key >= 12 && key <= 15)) // 4 to 7 combination
+                        mObjectiveNumbersList[Objectives.X5].Add(key);
+                    if (key >= 7 && key <= 11)   // 
+                        mObjectiveNumbersList[Objectives.X1].Add(key);
+                }
+            }
+        }
 
+        foreach (Objectives obj in mObjectiveNumbersList.Keys)
+        {
+            mObjectiveAchieveList[obj] = false;
+            mActiveObjectives[obj] = GetObjectiveFrom(obj);
+            achiveObjective?.Invoke(obj, mActiveObjectives[obj]);
         }
         return;
     }
 
-    private void IterateTwoCubesCombination(int aFirstValue, ref Dictionary<int, int> someObjectives)
+    private List<int> ResetObjectiveNumberFor(Objectives anObjective)
     {
-        for (int i = 0; i < 10; i++)
+        List<int> availableObjective = new List<int>();
+        foreach (int i in mObjectiveNumbersList[anObjective])
         {
-            int sum = aFirstValue + i;
-            if (!someObjectives.ContainsKey(sum))
-                someObjectives.Add(sum, 0);
+            if (i > mCurrentLimitObjectiveValue)
+                break;
+            mUsedObjectiveNumbers[i] = false;
+            availableObjective.Add(i);
+        }
 
-            someObjectives[sum]++;
-            if(!GameSettings.Instance.IsTheseScoringSettingEquals(true, false, false, false))
-                IterateThreeCubesCombination(aFirstValue, i, ref someObjectives);
+        return availableObjective;
+    }
+
+    private int GetObjectiveFrom(Objectives anObjective)
+    {
+        List<int> avaiableObjective = new List<int>();
+        
+        for(int i = 0; i < mUsedObjectiveNumbers.Count; i++)
+        {
+            if (mObjectiveNumbersList[anObjective].Contains(i) && !mUsedObjectiveNumbers[i])
+                avaiableObjective.Add(i);
+        }
+
+        if (!avaiableObjective.Any())
+            avaiableObjective = ResetObjectiveNumberFor(anObjective);
+
+        int availableCount = avaiableObjective.Count;
+        int selectedIndex = Random.Range(0, availableCount);
+        int selectedValue = avaiableObjective[selectedIndex];
+
+        return selectedValue;
+    }
+
+    private Dictionary<int, int> IterateCombination()
+    {
+        Dictionary<int, int> combinationList = new Dictionary<int, int>();
+        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreCubeCount.TWO_CUBES))
+            IterateTwoCubesCombination(ref combinationList);
+        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreCubeCount.THREE_CUBES))
+            IterateThreeCubesCombination(ref combinationList);
+        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreCubeCount.FOUR_CUBES))
+            IterateFourCubesCombination(ref combinationList);
+        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreCubeCount.FIVE_CUBES))
+            IterateFiveCubesCombination(ref combinationList);
+
+        return combinationList;
+    }
+
+    private void IterateTwoCubesCombination(ref Dictionary<int, int> someObjectives)
+    {
+        int sum = 0;
+        for (int a = 0; a < 10; a++)
+        {
+            for (int b = 0; b < 10; b++)
+            {
+                sum = a + b;
+                if (!someObjectives.ContainsKey(sum))
+                    someObjectives.Add(sum, 0);
+
+                someObjectives[sum]++;
+            }
         }
     }
 
-    private void IterateThreeCubesCombination(int aFirstValue, int aSecondValue, ref Dictionary<int, int> someObjectives)
+    private void IterateThreeCubesCombination(ref Dictionary<int, int> someObjectives)
     {
-        for (int i = 0; i < 10; i++)
+        int sum = 0;
+        for (int a = 0; a < 10; a++)
         {
-            int sum = aFirstValue + aSecondValue + i;
-            if (!someObjectives.ContainsKey(sum))
-                someObjectives.Add(sum, 0);
+            for (int b = 0; b < 10; b++)
+            {
+                for (int c = 0; c < 10; c++)
+                {
+                    sum = a + b + c;
+                    if (!someObjectives.ContainsKey(sum))
+                        someObjectives.Add(sum, 0);
 
-            someObjectives[sum]++;
-            if (!GameSettings.Instance.IsTheseScoringSettingEquals(true, true, false, false))
-                IterateFourCubesCombination(aFirstValue, aSecondValue, i, ref someObjectives);
+                    someObjectives[sum]++;
+                }
+            }
         }
     }
 
-    private void IterateFourCubesCombination(int aFirstValue, int aSecondValue, int aThirdValue, ref Dictionary<int, int> someObjectives)
+    private void IterateFourCubesCombination(ref Dictionary<int, int> someObjectives)
     {
-        for (int i = 0; i < 10; i++)
+        int sum = 0;
+        for (int a = 0; a < 10; a++)
         {
-            int sum = aFirstValue + aSecondValue + aThirdValue + i;
-            if (!someObjectives.ContainsKey(sum))
-                someObjectives.Add(sum, 0);
+            for (int b = 0; b < 10; b++)
+            {
+                for (int c = 0; c < 10; c++)
+                {
+                    for (int d = 0; d < 10; d++)
+                    {
+                        sum = a + b + c + d;
+                        if (!someObjectives.ContainsKey(sum))
+                            someObjectives.Add(sum, 0);
 
-            someObjectives[sum]++;
-            if (!GameSettings.Instance.IsTheseScoringSettingEquals(true, true, true, false))
-                IterateFiveCubesCombination(aFirstValue, aSecondValue, aThirdValue, i, ref someObjectives);
+                        someObjectives[sum]++;
+                    }
+                }
+            }
         }
     }
 
-    private void IterateFiveCubesCombination(int aFirstValue, int aSecondValue, int aThirdValue, int aFourthValue, ref Dictionary<int, int> someObjectives)
+    private void IterateFiveCubesCombination(ref Dictionary<int, int> someObjectives)
     {
-        for (int i = 0; i < 10; i++)
+        int sum = 0;
+        for (int a = 0; a < 10; a++)
         {
-            int sum = aFirstValue + aSecondValue + aThirdValue + aFourthValue + i;
-            if (!someObjectives.ContainsKey(sum))
-                someObjectives.Add(sum, 0);
+            for (int b = 0; b < 10; b++)
+            {
+                for (int c = 0; c < 10; c++)
+                {
+                    for (int d = 0; d < 10; d++)
+                    {
+                        for (int e = 0; e < 10; e++)
+                        {
+                            sum = a + b + c + d + e;
+                            if (!someObjectives.ContainsKey(sum))
+                                someObjectives.Add(sum, 0);
 
-            someObjectives[sum]++;
+                            someObjectives[sum]++;
+                        }
+                    }
+                }
+            }
         }
     }
 }
