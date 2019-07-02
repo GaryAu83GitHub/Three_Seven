@@ -9,7 +9,7 @@ public class DevelopeMainGUI : MonoBehaviour
     public Text ScoreText;
     public Text TimeText;
     public Text LevelText;
-    //public Image TestImage;
+    public Image LevelUpFillingImage;
 
     public Text ComboCountText;
     public Text ComboTitleText;
@@ -34,7 +34,7 @@ public class DevelopeMainGUI : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        UpdateLevel(GameManager.Instance.CurrentLevel);
+        UpdateLevel(GameManager.Instance.CurrentLevel, 0, 1);
 
         GameManager.comboOccuring += ComboAppear;
         GameManager.levelChanging += UpdateLevel;
@@ -82,8 +82,10 @@ public class DevelopeMainGUI : MonoBehaviour
         ScoreText.text = aNewScore.ToString();
     }
 
-    public void UpdateLevel(int aNewLevel)
+    public void UpdateLevel(int aNewLevel, int aCurrentLevelScore, int aNextLevelUpScore)
     {
+        float filling = (float)aCurrentLevelScore / (float)aNextLevelUpScore;
+        LevelUpFillingImage.fillAmount = filling;
         LevelText.text = aNewLevel.ToString();
     }
 

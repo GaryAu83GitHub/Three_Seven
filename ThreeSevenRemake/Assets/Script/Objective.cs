@@ -31,8 +31,8 @@ public class Objective
     private Dictionary<Objectives, bool> mObjectiveAchieveList = new Dictionary<Objectives, bool>();
 
     private int mMaxLimitObjectiveValue = 18;
-    private int mCurrentLimitObjectiveValue = 0;
-    public int CurrentLimetObjectiveValue { get { return mCurrentLimitObjectiveValue; } }
+    private int mCurrentObjectiveValueLimit = 0;
+    public int CurrentLimetObjectiveValue { get { return mCurrentObjectiveValueLimit; } }
     
     public Objective()
     {
@@ -102,17 +102,18 @@ public class Objective
         mMaxLimitObjectiveValue = aMaxValue;
     }
 
-    public void SetStartObjectiveValue(int aStartValue)
+    public void SetInitialObjectiveValue(int aStartValue)
     {
-        mCurrentLimitObjectiveValue = aStartValue;
+        mCurrentObjectiveValueLimit = aStartValue;
+        GameSettings.Instance.SetInitialValue(mCurrentObjectiveValueLimit);
     }
 
     public void IncreaseObjectiveValue()
     {
-        if ((mCurrentLimitObjectiveValue + 1) > mMaxLimitObjectiveValue)
+        if ((mCurrentObjectiveValueLimit + 1) > mMaxLimitObjectiveValue)
             return;
 
-        mCurrentLimitObjectiveValue++;
+        mCurrentObjectiveValueLimit++;
         mUsedObjectiveNumbers.Add(true);
     }
 
@@ -120,7 +121,7 @@ public class Objective
     {
         Dictionary<int, int> combinationCount = IterateCombination();
         
-        for (int i = 0; i <= mCurrentLimitObjectiveValue; i++)
+        for (int i = 0; i <= mCurrentObjectiveValueLimit; i++)
             mUsedObjectiveNumbers.Add(false);
 
         int mostCombination = combinationCount.Values.Max();
@@ -181,7 +182,7 @@ public class Objective
         List<int> availableObjective = new List<int>();
         foreach (int i in mObjectiveNumbersList[anObjective])
         {
-            if (i > mCurrentLimitObjectiveValue)
+            if (i > mCurrentObjectiveValueLimit)
                 break;
             mUsedObjectiveNumbers[i] = false;
             availableObjective.Add(i);

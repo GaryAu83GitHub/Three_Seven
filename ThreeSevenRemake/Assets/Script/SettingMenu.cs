@@ -50,7 +50,7 @@ public class SettingMenu : MonoBehaviour
     public void MaxSumSliderValueChange()
     {
         mCurrentStartValue = MINIMAL_MAX_SUM + (int)MaxSumSlider.value;
-        Objective.Instance.SetStartObjectiveValue(mCurrentStartValue);
+        Objective.Instance.SetInitialObjectiveValue(mCurrentStartValue);
         StartMaxValueText.text = mCurrentStartValue.ToString();
     }
 
@@ -120,8 +120,6 @@ public class SettingMenu : MonoBehaviour
         if (maxSum < mCurrentStartValue)
         {
             mCurrentStartValue = maxSum;
-            Objective.Instance.SetStartObjectiveValue(mCurrentStartValue);
-
             MaxSumSlider.value = mCurrentStartValue;
         }
 
@@ -130,6 +128,8 @@ public class SettingMenu : MonoBehaviour
 
         MaxSumSlider.maxValue = maxSum - MINIMAL_MAX_SUM;
         MaxSumSlider.interactable = !(maxSum == MINIMAL_MAX_SUM);
+
+        Objective.Instance.SetInitialObjectiveValue(mCurrentStartValue);
         Objective.Instance.SetMaxLimitObjectiveValue(maxSum);
 
     }

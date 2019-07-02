@@ -46,7 +46,7 @@ public class GameManager
     public delegate void OnScoreChange(int aNewScore);
     public static OnScoreChange scoreChanging;
 
-    public delegate void OnLevelChange(int aNewLevel);
+    public delegate void OnLevelChange(int aNewLevel, int aCurrentLevelScore, int aNextLevelUpScore);
     public static OnLevelChange levelChanging;
 
     public delegate void OnComboOccures(int aComboCount, int aComboScore, string aComboText);
@@ -83,9 +83,9 @@ public class GameManager
             mCurrentLevelPoint = restScore;
             mCurrentLevel++;
             mNextLevelUpScore = 10 * (mCurrentLevel + 1);    
-
-            levelChanging?.Invoke(mCurrentLevel);
         }
+
+        levelChanging?.Invoke(mCurrentLevel, mCurrentLevelPoint, mNextLevelUpScore);
     }
 
     /// <summary>

@@ -31,18 +31,18 @@ public class GameSettings
         }
     }
     private static GameSettings mInstance;
-
-    private Difficulties mDifficulties = Difficulties.EASY;
-    public Difficulties Difficulty { get { return mDifficulties; } }
+    
+    private string mPlayerName = "";
+    public string PlayerName { get { return mPlayerName; } }
 
     private int mLimitRow = 17;
     public int LimitHigh { get { return mLimitRow; } }
 
     private int mDropSpeedMultiply = 0;
     public int StartSpeedMultiply { get { return mDropSpeedMultiply; } }
-
-    private int mAdditionLimit = 0;
-    public int AdditionLimit { get { return mAdditionBaseValue + mAdditionLimit; } }
+    
+    private int mInitialValue = 0;
+    public int InitialValue { get { return mInitialValue; } }
 
     private List<bool> mEnableScoringMethods = new List<bool>();
     public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } }
@@ -58,10 +58,10 @@ public class GameSettings
             mEnableScoringMethods.Add(true);
         }
     }
-
-    public void SetDifficulty(Difficulties aDifficulty)
+    
+    public void SetPlayerName(string aName)
     {
-        mDifficulties = aDifficulty;
+        mPlayerName = aName;
     }
 
     public void SetScoringCubesCount(ScoreCubeCount anIndex, bool isActive)
@@ -90,16 +90,6 @@ public class GameSettings
             mEnableScoringMethods[(int)anIndex] = !mEnableScoringMethods[(int)anIndex];
     }
 
-    public bool IsTheseScoringSettingEquals(bool isTwoCubeEnable, bool isThreeCubeEnable, bool isFourCubeEnable, bool isFiveCubeEnable)
-    {
-        if (mEnableScoringMethods[0] == isTwoCubeEnable &&
-            mEnableScoringMethods[1] == isThreeCubeEnable &&
-            mEnableScoringMethods[2] == isFourCubeEnable &&
-            mEnableScoringMethods[3] == isFiveCubeEnable)
-            return true;
-        return false;
-    }
-
     public void SetStartDropSpeed(int aSpeed)
     {
         mDropSpeedMultiply = aSpeed;
@@ -115,9 +105,9 @@ public class GameSettings
     {
         mLimitRow = Mathf.Clamp(aLimitLineRow, mMinLimitRow, mMaxLimitRow);
     }
-
-    public void SetAdditionLimit(int aLimit)
+    
+    public void SetInitialValue(int anInitialValue)
     {
-        mAdditionLimit = aLimit;
+        mInitialValue = anInitialValue;
     }
 }
