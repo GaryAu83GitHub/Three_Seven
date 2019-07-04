@@ -38,6 +38,7 @@ public class BlockManager
     private List<Block> mFloatingBlocks = new List<Block>();
     private List<Cube> mScoringsCubes = new List<Cube>();
     private List<Cube> mNewLandedCubes = new List<Cube>();
+    private List<List<Vector2Int>> mScoringPositionGroups = new List<List<Vector2Int>>();
 
     private int mComboCount = 0;
 
@@ -82,6 +83,11 @@ public class BlockManager
         mNewLandedCubes.Clear();
     }
 
+    public void ScoreCalculationProgression()
+    {
+
+    }
+
     public string BlockOrderInString()
     {
         string blockOrderString = "";
@@ -101,11 +107,17 @@ public class BlockManager
 
         return gameover;
     }
+    
+    public bool IsScoringNew()
+    {
+        return (mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mNewLandedCubes)).Any();
+    }
 
     public bool IsScoring()
     {
         // scoring method to list
         List<Vector2Int> scoringPositions = GridData.Instance.CompleteObjectiveScoringMethod(mNewLandedCubes, ref mComboCount);
+        
 
         mScoringsCubes.Clear();
         mNewLandedCubes.Clear();

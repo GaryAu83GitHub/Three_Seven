@@ -84,7 +84,6 @@ public class DevelopeMain : MonoBehaviour
                     BlockManager.Instance.PlayScoringAnimation();
                 else
                 {
-                    //GameManager.Instance.ChangeObjective();
                     Objective.Instance.ChangeObjective();
                     CreateNewBlock();
                 }

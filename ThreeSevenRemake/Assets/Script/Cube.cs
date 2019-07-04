@@ -109,4 +109,10 @@ public class Cube : MonoBehaviour
             mIsFading = !mIsFading;
         }
     }
+
+    public void PlayParticlar()
+    {
+        mParticleSystem.Play();
+        mParticleSystem.main.duration;
+    }
 }
