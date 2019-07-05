@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
-    public ParticleSystem mParticleSystem;
+    public ParticleSystem mActiveParticle;
+    public ParticleSystem mPassiveParticle;
     //public Material mMaterial;
 
     private TextMesh mTextMesh;
@@ -86,11 +87,8 @@ public class Cube : MonoBehaviour
         mTextMesh.text = mCubeNumber.ToString();
         //mRenderer.material.color = color;
         mRenderer.material.SetColor("Color_5774DDCC", mColor);
-        ParticleSystem.MainModule _main = mParticleSystem.main;
-        _main.startColor = mColor;
-
-        ParticleSystemRenderer renderer = mParticleSystem.GetComponent<ParticleSystemRenderer>();
-        //renderer.material.set
+        //ParticleSystem.MainModule _main = mActiveParticleSystem.main;
+        //_main.startColor = mColor;
     }
 
     public void RotateCube(int aDir)
@@ -110,9 +108,13 @@ public class Cube : MonoBehaviour
         }
     }
 
-    public void PlayParticlar()
+    public void PlayActiveParticlar()
     {
-        mParticleSystem.Play();
-        mParticleSystem.main.duration;
+        mActiveParticle.Play();
+    }
+
+    public void PlayPassiveParticlar()
+    {
+        mPassiveParticle.Play();
     }
 }

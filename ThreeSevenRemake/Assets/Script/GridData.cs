@@ -186,7 +186,6 @@ public class GridData
     public List<Vector2Int> CompleteObjectiveScoringMethod(List<Cube> someNewLandedCubes, ref int aComboCount)
     {
         List<Vector2Int> scoringPositions = new List<Vector2Int>();
-        List<List<Vector2Int>> someGroupOfPosition = new List<List<Vector2Int>>();
 
         foreach (Cube c in someNewLandedCubes)
         {
@@ -198,9 +197,9 @@ public class GridData
         return scoringPositions;
     }
 
-    public List<List<Vector2Int>> GetListOfScoringPositionGroups(List<Cube> someNewLandedCubes)
+    public List<ScoringGroupAchieveInfo> GetListOfScoringPositionGroups(List<Cube> someNewLandedCubes)
     {
-        List<List<Vector2Int>> someGroupOfPosition = new List<List<Vector2Int>>();
+        List<ScoringGroupAchieveInfo> someGroupOfPosition = new List<ScoringGroupAchieveInfo>();
 
         foreach (Cube c in someNewLandedCubes)
         {
@@ -630,7 +629,7 @@ public class GridData
         return mGrid[aPos.x][aPos.y];
     }
 
-    private void Scoring(Cube aCube, ref List<List<Vector2Int>> someGroupOfPositions)
+    private void Scoring(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
         if (GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.TWO_CUBES])
             ScoreWithTwoCubes(aCube, ref someGroupOfPositions);
@@ -642,74 +641,67 @@ public class GridData
             ScoreWithFiveCubes(aCube, ref someGroupOfPositions);
     }
 
-    private void ScoreWithTwoCubes(Cube aCube, ref List<List<Vector2Int>> someGroupOfPositions)
+    private void ScoreWithTwoCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
+        Objectives getObjectiveRank = Objectives.X1;
+        ScoringGroupAchieveInfo newInfo;
         //  to the right [G][N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.right)))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.right)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.right });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.right });
+            someGroupOfPositions.Add(newInfo);
         }
 
         //  to the left [N][G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos + Vector2Int.left, aCube.GridPos)))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos + Vector2Int.left, aCube.GridPos)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + Vector2Int.left,
-                aCube.GridPos });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.left });
+            someGroupOfPositions.Add(newInfo);
         }
 
         //  with above
         // [N]
         // [G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.up)))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.up)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + Vector2Int.up,
-                aCube.GridPos });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.up });
+            someGroupOfPositions.Add(newInfo);
         }
 
         //  with beneath
         // [G]
         // [N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.down)))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.down)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.down });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.down });
+            someGroupOfPositions.Add(newInfo);
         }
     }
 
-    private void ScoreWithThreeCubes(Cube aCube, ref List<List<Vector2Int>> someGroupOfPositions)
+    private void ScoreWithThreeCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
+        Objectives getObjectiveRank = Objectives.X1;
+        ScoringGroupAchieveInfo newInfo;
         // horizontal
         //  the horizont cross [N][G][N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + Vector2Int.left, aCube.GridPos, aCube.GridPos + Vector2Int.right)))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(aCube.GridPos + Vector2Int.left, aCube.GridPos, aCube.GridPos + Vector2Int.right)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + Vector2Int.left,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.right });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right });
+            someGroupOfPositions.Add(newInfo);
         }
 
         //  the right [G][N][N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2))))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(aCube.GridPos, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.right,
-                aCube.GridPos + Vector2Int.right * 2 });
-
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.right, aCube.GridPos + Vector2Int.right * 2 });
+            someGroupOfPositions.Add(newInfo);
         }
 
         //  the left [N][N][G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos)))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + Vector2Int.left * 2,
-                aCube.GridPos + Vector2Int.left,
-                aCube.GridPos });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.left * 2, aCube.GridPos + Vector2Int.left });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // vertical
@@ -717,175 +709,149 @@ public class GridData
         // [N]
         // [G]
         // [N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + Vector2Int.up, aCube.GridPos, aCube.GridPos + Vector2Int.down)))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(aCube.GridPos + Vector2Int.up, aCube.GridPos, aCube.GridPos + Vector2Int.down)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + Vector2Int.up,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.down });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down });
+            someGroupOfPositions.Add(newInfo);
         }
 
         //  the up
         // [N]
         // [N]
         // [G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(
             aCube.GridPos + (Vector2Int.up * 2), 
             aCube.GridPos + Vector2Int.up, 
             aCube.GridPos)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + (Vector2Int.up * 2),
-                aCube.GridPos + Vector2Int.up,
-                aCube.GridPos });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up });
+            someGroupOfPositions.Add(newInfo);
         }
 
         //  the down
         // [G]
         // [N]
         // [N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(
             aCube.GridPos, 
             aCube.GridPos + Vector2Int.down, 
             aCube.GridPos + (Vector2Int.down * 2))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.down,
-                aCube.GridPos + Vector2Int.down * 2 });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.down, aCube.GridPos + Vector2Int.down * 2 });
+            someGroupOfPositions.Add(newInfo);
         }
     }
 
-    private void ScoreWithFourCubes(Cube aCube, ref List<List<Vector2Int>> someGroupOfPositions)
+    private void ScoreWithFourCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
+        Objectives getObjectiveRank = Objectives.X1;
+        ScoringGroupAchieveInfo newInfo;
         // horizontal
         // [G][R][2R][3R]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromFourPositions(
             aCube.GridPos,
             aCube.GridPos + Vector2Int.right,
             aCube.GridPos + (Vector2Int.right * 2),
             aCube.GridPos + (Vector2Int.right * 3))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.right,
-                aCube.GridPos + (Vector2Int.right * 2),
-                aCube.GridPos + (Vector2Int.right * 3) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2), aCube.GridPos + (Vector2Int.right * 3) });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [L][G][R][2R]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromFourPositions(
             aCube.GridPos + Vector2Int.left,
             aCube.GridPos,
             aCube.GridPos + Vector2Int.right,
             aCube.GridPos + (Vector2Int.right * 2))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + Vector2Int.left,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.right,
-                aCube.GridPos + (Vector2Int.right * 2) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2) });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [2L][L][G][R]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromFourPositions(
             aCube.GridPos + (Vector2Int.left * 2),
             aCube.GridPos + Vector2Int.left,
             aCube.GridPos,
             aCube.GridPos + Vector2Int.right)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + (Vector2Int.left * 2),
-                aCube.GridPos + Vector2Int.left,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.right });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [3L][2L][L][G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromFourPositions(
             aCube.GridPos + (Vector2Int.left * 3),
             aCube.GridPos + (Vector2Int.left * 2),
             aCube.GridPos + Vector2Int.left,
             aCube.GridPos)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + (Vector2Int.left * 3),
-                aCube.GridPos + (Vector2Int.left * 2),
-                aCube.GridPos + Vector2Int.left,
-                aCube.GridPos });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.left * 3), aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [3U]
         // [2U]
         // [U]
         // [G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromFourPositions(
             aCube.GridPos + (Vector2Int.up * 3),
             aCube.GridPos + (Vector2Int.up * 2),
             aCube.GridPos + Vector2Int.up,
             aCube.GridPos)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + (Vector2Int.up * 3),
-                aCube.GridPos + (Vector2Int.up * 2),
-                aCube.GridPos + Vector2Int.up,
-                aCube.GridPos });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 3), aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [2U]
         // [U]
         // [G]
         // [D]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromFourPositions(
             aCube.GridPos + (Vector2Int.up * 2),
             aCube.GridPos + Vector2Int.up,
             aCube.GridPos,
             aCube.GridPos + Vector2Int.down)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + (Vector2Int.up * 2),
-                aCube.GridPos + Vector2Int.up,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.down });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [U]
         // [G]
         // [D]
         // [2D]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromFourPositions(
             aCube.GridPos + Vector2Int.up,
             aCube.GridPos,
             aCube.GridPos + Vector2Int.down,
             aCube.GridPos + (Vector2Int.down * 2))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + Vector2Int.up,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.down,
-                aCube.GridPos + (Vector2Int.down * 2) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2) });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [G]
         // [D]
         // [2D]
         // [3D]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromFourPositions(
             aCube.GridPos,
             aCube.GridPos + Vector2Int.down,
             aCube.GridPos + (Vector2Int.down * 2),
             aCube.GridPos + (Vector2Int.down * 3))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.down,
-                aCube.GridPos + (Vector2Int.down * 2),
-                aCube.GridPos + (Vector2Int.down * 3) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2), aCube.GridPos + (Vector2Int.down * 3) });
+            someGroupOfPositions.Add(newInfo);
         }
     }
 
-    private void ScoreWithFiveCubes(Cube aCube, ref List<List<Vector2Int>> someGroupOfPositions)
+    private void ScoreWithFiveCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
+        Objectives getObjectiveRank = Objectives.X1;
+        ScoringGroupAchieveInfo newInfo;
         // [G][R][2R][3R][4R]
         if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
             aCube.GridPos,
@@ -894,12 +860,8 @@ public class GridData
             aCube.GridPos + (Vector2Int.right * 3),
             aCube.GridPos + (Vector2Int.right * 4))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.right,
-                aCube.GridPos + (Vector2Int.right * 2),
-                aCube.GridPos + (Vector2Int.right * 3),
-                aCube.GridPos + (Vector2Int.right * 4) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2), aCube.GridPos + (Vector2Int.right * 3), aCube.GridPos + (Vector2Int.right * 4) });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [L][G][R][2R][3R]
@@ -910,12 +872,8 @@ public class GridData
             aCube.GridPos + (Vector2Int.right * 2),
             aCube.GridPos + (Vector2Int.right * 3))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + Vector2Int.left,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.right,
-                aCube.GridPos + (Vector2Int.right * 2),
-                aCube.GridPos + (Vector2Int.right * 3) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2), aCube.GridPos + (Vector2Int.right * 3) });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [2L][L][G][R][2R]
@@ -926,12 +884,8 @@ public class GridData
             aCube.GridPos + Vector2Int.right,
             aCube.GridPos + (Vector2Int.right * 2))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + (Vector2Int.left * 2),
-                aCube.GridPos + Vector2Int.left,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.right,
-                aCube.GridPos + (Vector2Int.right * 2)});
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2) });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [3L][2L][L][G][R]
@@ -942,12 +896,8 @@ public class GridData
             aCube.GridPos,
             aCube.GridPos + Vector2Int.right)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + (Vector2Int.left * 3),
-                aCube.GridPos + (Vector2Int.left * 2),
-                aCube.GridPos + Vector2Int.left,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.right});
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.left * 3), aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [4L][3L][2L][L][G]
@@ -958,12 +908,8 @@ public class GridData
             aCube.GridPos + Vector2Int.left,
             aCube.GridPos)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + (Vector2Int.left * 4),
-                aCube.GridPos + (Vector2Int.left * 3),
-                aCube.GridPos + (Vector2Int.left * 2),
-                aCube.GridPos + Vector2Int.left,
-                aCube.GridPos});
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.left * 4), aCube.GridPos + (Vector2Int.left * 3), aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [4U]
@@ -978,12 +924,8 @@ public class GridData
             aCube.GridPos + Vector2Int.up,
             aCube.GridPos)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + (Vector2Int.up * 4),
-                aCube.GridPos + (Vector2Int.up * 3),
-                aCube.GridPos + (Vector2Int.up * 2),
-                aCube.GridPos + Vector2Int.up,
-                aCube.GridPos});
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 4), aCube.GridPos + (Vector2Int.up * 3), aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [3U]
@@ -998,12 +940,8 @@ public class GridData
             aCube.GridPos,
             aCube.GridPos + Vector2Int.down)))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + (Vector2Int.up * 3),
-                aCube.GridPos + (Vector2Int.up * 2),
-                aCube.GridPos + Vector2Int.up,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.down});
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 3), aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [2U]
@@ -1018,12 +956,8 @@ public class GridData
             aCube.GridPos + Vector2Int.down,
             aCube.GridPos + (Vector2Int.down * 2))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + (Vector2Int.up * 2),
-                aCube.GridPos + Vector2Int.up,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.down,
-                aCube.GridPos + (Vector2Int.down * 2)});
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2) });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [U]
@@ -1038,12 +972,8 @@ public class GridData
             aCube.GridPos + (Vector2Int.down * 2),
             aCube.GridPos + (Vector2Int.down * 3))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos + Vector2Int.up,
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.down,
-                aCube.GridPos + (Vector2Int.down * 2),
-                aCube.GridPos + (Vector2Int.down * 3)});
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2), aCube.GridPos + (Vector2Int.down * 3) });
+            someGroupOfPositions.Add(newInfo);
         }
 
         // [G]
@@ -1058,12 +988,8 @@ public class GridData
             aCube.GridPos + (Vector2Int.down * 3),
             aCube.GridPos + (Vector2Int.down * 4))))
         {
-            someGroupOfPositions.Add(new List<Vector2Int> {
-                aCube.GridPos,
-                aCube.GridPos + Vector2Int.down,
-                aCube.GridPos + (Vector2Int.down * 2),
-                aCube.GridPos + (Vector2Int.down * 3),
-                aCube.GridPos + (Vector2Int.down * 4)});
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2), aCube.GridPos + (Vector2Int.down * 3), aCube.GridPos + (Vector2Int.down * 4) });
+            someGroupOfPositions.Add(newInfo);
         }
     }
 

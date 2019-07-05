@@ -4,6 +4,24 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+public class ScoringGroupAchieveInfo
+{
+    private readonly Objectives mObjectiveRank = Objectives.X1;
+    public Objectives ObjectiveRank { get { return mObjectiveRank; } }
+
+    private readonly Vector2Int mActivePosition = new Vector2Int();
+    public Vector2Int ActivePosition { get { return mActivePosition; } }
+
+    private readonly List<Vector2Int> mPassivePositions = new List<Vector2Int>();
+    public List<Vector2Int> PassivePosition { get { return mPassivePositions; } }
+        
+    public ScoringGroupAchieveInfo(Objectives anObjectiveRank, Vector2Int anActivePosition, List<Vector2Int> somePassivePositions)
+    {
+        mObjectiveRank = anObjectiveRank;
+        mActivePosition = anActivePosition;
+        mPassivePositions = somePassivePositions;
+    }
+}
 /// <summary>
 /// This class is use to managing the all blocks that had been created
 /// It'll store all blocks that had landed into it collection and remove
@@ -32,15 +50,22 @@ public class BlockManager
     }
     private static BlockManager mInstance;
 
+    public delegate void OnAchieveScoring(Objectives anObjective, List<Cube> thisGroupsCubes);
+    public static OnAchieveScoring achieveScoring;
+
     public int BlockCount { get { return mBlocks.Count; } }
 
     private List<Block> mBlocks = new List<Block>();
     private List<Block> mFloatingBlocks = new List<Block>();
     private List<Cube> mScoringsCubes = new List<Cube>();
     private List<Cube> mNewLandedCubes = new List<Cube>();
-    private List<List<Vector2Int>> mScoringPositionGroups = new List<List<Vector2Int>>();
+    private List<ScoringGroupAchieveInfo> mScoringPositionGroups = new List<ScoringGroupAchieveInfo>();
 
     private int mComboCount = 0;
+
+    private int mCurrentScoringGroupIndex = 0;
+    private float mScoringCalculationTimer = 0f;
+    private bool mCurrentGroupScoreCalcInProgress = false;
 
     /// <summary>
     /// Add in the new landed and registrate it's cubes into the GridData.
@@ -83,10 +108,6 @@ public class BlockManager
         mNewLandedCubes.Clear();
     }
 
-    public void ScoreCalculationProgression()
-    {
-
-    }
 
     public string BlockOrderInString()
     {
@@ -110,7 +131,67 @@ public class BlockManager
     
     public bool IsScoringNew()
     {
-        return (mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mNewLandedCubes)).Any();
+        mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mNewLandedCubes);
+        if (mScoringPositionGroups.Any())
+            return true;
+
+        mScoringsCubes.Clear();
+        mNewLandedCubes.Clear();
+        return false;
+    }
+
+    /// <summary>
+    /// The progression of the scoring moment
+    /// </summary>
+    public void ScoreCalculationProgression()
+    {
+        // if the calculation isn't in progress it'll search through the list of landed block and compare their gridposition
+        // with the list of position in the list of scoring group position, add them into the list of scoring cubes and make
+        // the cube play it particlar effect
+        if(!mCurrentGroupScoreCalcInProgress)
+        {
+            List<Cube> thisGroupScoringCubes = new List<Cube>();
+            for (int i = 0; i < mBlocks.Count; i++)
+            {
+                foreach (Cube c in mBlocks[i].Cubes)
+                {
+                    if(mScoringPositionGroups[mCurrentScoringGroupIndex].PassivePosition.Contains(c.GridPos))
+                    {
+                        AddScoringCubes(c);
+                        c.PlayPassiveParticlar();
+                        thisGroupScoringCubes.Add(c);
+                    }
+                    else if(mScoringPositionGroups[mCurrentScoringGroupIndex].ActivePosition == c.GridPos)
+                    {
+                        AddScoringCubes(c);
+                        c.PlayActiveParticlar();
+                        thisGroupScoringCubes.Add(c);
+                    }
+                }
+            }
+            achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes);
+            mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
+        }
+        else
+        {
+            mScoringCalculationTimer += Time.deltaTime;
+            if(mScoringCalculationTimer >= 2f)
+            {
+                mCurrentScoringGroupIndex++;
+                mScoringCalculationTimer = mScoringCalculationTimer - 2f;
+                mComboCount++;
+                if(mCurrentScoringGroupIndex >= mScoringPositionGroups.Count)
+                {
+                    PlayScoringAnimation();
+                    mScoringPositionGroups.Clear();
+                    GameManager.Instance.AddLevelPoint(mComboCount);
+                    mComboCount = 0;
+                    mCurrentScoringGroupIndex = 0;
+                }
+                mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
+            }
+        }
+
     }
 
     public bool IsScoring()
