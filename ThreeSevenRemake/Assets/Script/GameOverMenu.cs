@@ -22,6 +22,9 @@ public class GameOverMenu : MonoBehaviour
 
     public GameObject GameOverMenuUI;
 
+    public delegate void OnLeaveTheGame();
+    public static OnLeaveTheGame leaveTheGame;
+
     private Animator PanelAnimation;
     private float myAnimationDuration = 5f;
     private int mScoreCounter = 0;
@@ -84,6 +87,7 @@ public class GameOverMenu : MonoBehaviour
 
     public void LeaveToMainMenu()
     {
+        leaveTheGame?.Invoke();
         GameIsOver = false;
         LeavePanel.SetActive(false);
         ScreenTransistor.Instance.FadeToSceneWithIndex(0);

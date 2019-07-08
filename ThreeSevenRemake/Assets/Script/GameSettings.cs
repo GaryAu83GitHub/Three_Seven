@@ -44,6 +44,9 @@ public class GameSettings
     private int mInitialValue = 0;
     public int InitialValue { get { return mInitialValue; } }
 
+    private bool mDisplayingLongScoring = true;
+    public bool ActiveLongScoringDisplay { get { return mDisplayingLongScoring; } }
+
     private List<bool> mEnableScoringMethods = new List<bool>();
     public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } }
 
@@ -109,5 +112,10 @@ public class GameSettings
     public void SetInitialValue(int anInitialValue)
     {
         mInitialValue = anInitialValue;
+    }
+
+    public bool ToggleScoringDisplayMethod()
+    {
+        return mDisplayingLongScoring = !mDisplayingLongScoring;
     }
 }

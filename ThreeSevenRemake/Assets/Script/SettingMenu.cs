@@ -17,6 +17,8 @@ public class SettingMenu : MonoBehaviour
     public TextMeshProUGUI MaxSliderValueText;
     public TextMeshProUGUI MinSliderValueText;
 
+    public Toggle DisplayScoringToggle;
+
     public Button StartButton;
     public Button LeaveButton;
 
@@ -52,6 +54,12 @@ public class SettingMenu : MonoBehaviour
         mCurrentStartValue = MINIMAL_MAX_SUM + (int)MaxSumSlider.value;
         Objective.Instance.SetInitialObjectiveValue(mCurrentStartValue);
         StartMaxValueText.text = mCurrentStartValue.ToString();
+    }
+
+    public void ToggleScoringDisplayMode()
+    {
+        DisplayScoringToggle.isOn = GameSettings.Instance.ToggleScoringDisplayMethod();
+        DisplayScoringToggle.GetComponentInChildren<TextMeshProUGUI>().text = (GameSettings.Instance.ActiveLongScoringDisplay ? "ON" : "OFF");
     }
 
     private void StartButtonOnClick()

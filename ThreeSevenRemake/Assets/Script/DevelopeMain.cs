@@ -50,9 +50,16 @@ public class DevelopeMain : MonoBehaviour
 
     private void Start()
     {
+        GameOverMenu.leaveTheGame += ResetGame;
+
         LimitLine.transform.position += new Vector3(0f, .25f + (.5f * GameSettings.Instance.LimitHigh), 0f);
         // When the game start, begin delay for the first block to be created
         StartCoroutine(GameStart());
+    }
+
+    private void OnDestroy()
+    {
+        GameOverMenu.leaveTheGame -= ResetGame;
     }
 
     private void Update()
@@ -83,7 +90,7 @@ public class DevelopeMain : MonoBehaviour
                 //else if (BlockManager.Instance.IsScoring())
                 //    BlockManager.Instance.PlayScoringAnimation();
                 else if (BlockManager.Instance.IsScoringNew())
-                    BlockManager.Instance.ScoreCalculationProgression();
+                    BlockManager.Instance.LongScoreCalculationProgression();
                 else
                 {
                     Objective.Instance.ChangeObjective();
@@ -202,5 +209,11 @@ public class DevelopeMain : MonoBehaviour
     private void UpdateDebugBoard()
     {
         blockLandedDebug?.Invoke(GridData.Instance.Grid);
+    }
+
+    private void ResetGame()
+    {
+        BlockManager.Instance.Reset();
+        GameManager.Instance.Reset();
     }
 }

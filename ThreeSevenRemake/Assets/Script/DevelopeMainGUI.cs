@@ -43,6 +43,8 @@ public class DevelopeMainGUI : MonoBehaviour
         DevelopeMain.createNewBlock += TransferNewBlock;
         DevelopeMain.gameIsPlaying += GameIsPlaying;
 
+        GameOverMenu.leaveTheGame += ResetGameTime;
+
         //TestImage.color = Color.green;
     }
 
@@ -54,6 +56,8 @@ public class DevelopeMainGUI : MonoBehaviour
 
         DevelopeMain.createNewBlock -= TransferNewBlock;
         DevelopeMain.gameIsPlaying -= GameIsPlaying;
+
+        GameOverMenu.leaveTheGame -= ResetGameTime;
     }
 
     // Update is called once per frame
@@ -136,5 +140,10 @@ public class DevelopeMainGUI : MonoBehaviour
             mComboTextFadingTime += Time.deltaTime / 50f;
         else
             mComboAppear = false;
+    }
+
+    private void ResetGameTime()
+    {
+        mGameTimer = 0f;
     }
 }

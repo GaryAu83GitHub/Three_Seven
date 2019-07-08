@@ -67,6 +67,19 @@ public class BlockManager
     private float mScoringCalculationTimer = 0f;
     private bool mCurrentGroupScoreCalcInProgress = false;
 
+    public void Reset()
+    {
+        mBlocks.Clear();
+        mFloatingBlocks.Clear();
+        mScoringsCubes.Clear();
+        mNewLandedCubes.Clear();
+
+        mComboCount = 0;
+        mCurrentScoringGroupIndex = 0;
+        mScoringCalculationTimer = 0f;
+        mCurrentGroupScoreCalcInProgress = false;
+    }
+
     /// <summary>
     /// Add in the new landed and registrate it's cubes into the GridData.
     /// At the same time the cubes of the new block will be added into a seperate list 
@@ -143,7 +156,7 @@ public class BlockManager
     /// <summary>
     /// The progression of the scoring moment
     /// </summary>
-    public void ScoreCalculationProgression()
+    public void LongScoreCalculationProgression()
     {
         // if the calculation isn't in progress it'll search through the list of landed block and compare their gridposition
         // with the list of position in the list of scoring group position, add them into the list of scoring cubes and make
@@ -175,10 +188,10 @@ public class BlockManager
         else
         {
             mScoringCalculationTimer += Time.deltaTime;
-            if(mScoringCalculationTimer >= 2f)
+            if(mScoringCalculationTimer >= 1f)
             {
                 mCurrentScoringGroupIndex++;
-                mScoringCalculationTimer = mScoringCalculationTimer - 2f;
+                mScoringCalculationTimer = mScoringCalculationTimer - 1f;
                 mComboCount++;
                 if(mCurrentScoringGroupIndex >= mScoringPositionGroups.Count)
                 {
@@ -192,6 +205,53 @@ public class BlockManager
             }
         }
 
+    }
+
+    public void ShortScoreCalculationProgression()
+    {
+        List<Cube> thisGroupScoringCubes = new List<Cube>();
+
+        for (int i = 0; i < mScoringPositionGroups.Count; i++)
+        {
+            for (int b = 0; b < mBlocks.Count; b++)
+            {
+                foreach (Cube c in mBlocks[b].Cubes)
+                {
+                    if (mScoringPositionGroups[mCurrentScoringGroupIndex].PassivePosition.Contains(c.GridPos) ||
+                        mScoringPositionGroups[mCurrentScoringGroupIndex].ActivePosition == c.GridPos)
+                    {
+                        AddScoringCubes(c);
+                        thisGroupScoringCubes.Add(c);
+                    }
+                }
+            }
+            achieveScoring?.Invoke(mScoringPositionGroups[i].ObjectiveRank, thisGroupScoringCubes);
+        }
+
+        PlayScoringAnimation();
+        GameManager.Instance.AddLevelPoint(mComboCount);
+        mComboCount = 0;
+
+        //List<Cube> thisGroupScoringCubes = new List<Cube>();
+        //for (int i = 0; i < mBlocks.Count; i++)
+        //{
+        //    foreach (Cube c in mBlocks[i].Cubes)
+        //    {
+        //        if (mScoringPositionGroups[mCurrentScoringGroupIndex].PassivePosition.Contains(c.GridPos))
+        //        {
+        //            AddScoringCubes(c);
+        //            c.PlayPassiveParticlar();
+        //            thisGroupScoringCubes.Add(c);
+        //        }
+        //        else if (mScoringPositionGroups[mCurrentScoringGroupIndex].ActivePosition == c.GridPos)
+        //        {
+        //            AddScoringCubes(c);
+        //            c.PlayActiveParticlar();
+        //            thisGroupScoringCubes.Add(c);
+        //        }
+        //    }
+        //}
+        //achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes);
     }
 
     public bool IsScoring()

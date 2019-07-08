@@ -22,6 +22,18 @@ public class Objective
     }
     private static Objective mInstance;
 
+    public static int GetObjectiveBonusOf(Objectives anObjective)
+    {
+        int bonus = 1;
+
+        if (anObjective == Objectives.X10)
+            bonus = 10;
+        else if (anObjective == Objectives.X5)
+            bonus = 5;
+
+        return bonus;
+    }
+
     public delegate void OnAchiveObjective(Objectives anObjective, int anObjectiveNumber);
     public static OnAchiveObjective achiveObjective;
 

@@ -127,4 +127,9 @@ public class SupportTools
         
         return Random.Range(aMinValue, aMaxValue);
     }
+
+    public static int CalculateScoringWith(int aCurrentLevelValue, int aCountOfScoringNumbers, int aObjectiveMultiValue)
+    {
+        return 0;
+    }
 }

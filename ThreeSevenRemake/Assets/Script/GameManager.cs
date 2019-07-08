@@ -62,6 +62,18 @@ public class GameManager
     private const float mDropRateDecreaseValue = .03f;
     private const float mMinimumDroprate = .1f;
 
+    public void Reset()
+    {
+        mCurrentLevel = 0;
+        mCurrentScore = 0;
+        mComboScore = 0;
+        mCurrentMaxCombo = 0;
+        mLandedBlockCount = 0;
+        mComboBaseScoreList = new List<uint>() { 50 };
+        mNextLevelUpScore = 10;
+        mCurrentLevelPoint = 0;
+    }
+
     /// <summary>
     /// Add in point for level up to gain more score and increase the dropping speed
     /// When a certain amount of points are aquired, the current level increase and
