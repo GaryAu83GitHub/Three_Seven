@@ -90,7 +90,13 @@ public class DevelopeMain : MonoBehaviour
                 //else if (BlockManager.Instance.IsScoring())
                 //    BlockManager.Instance.PlayScoringAnimation();
                 else if (BlockManager.Instance.IsScoringNew())
-                    BlockManager.Instance.LongScoreCalculationProgression();
+                {
+                    if(GameSettings.Instance.ActiveLongScoringDisplay)
+                        BlockManager.Instance.LongScoreCalculationProgression();
+                    else
+                        BlockManager.Instance.ShortScoreCalculationProgression();
+                }
+
                 else
                 {
                     Objective.Instance.ChangeObjective();
