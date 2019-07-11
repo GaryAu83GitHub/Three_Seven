@@ -34,6 +34,13 @@ public class SetLinkNumberPanel : SettingPanelBase
         ThreeDigitButton.onClick.AddListener(ThreeCubesButtonClicked);
         FourDigitButton.onClick.AddListener(FourCubesButtonClicked);
         FiveDigitButton.onClick.AddListener(FiveCubesButtonClicked);
+
+        TwoDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT];
+        ThreeDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT];
+        FourDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT];
+        FiveDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT];
+
+        DescriptionText.text = "";
     }
 
     public override void NextButtonOnClick()
@@ -50,40 +57,44 @@ public class SetLinkNumberPanel : SettingPanelBase
 
     private void TwoCubesButtonClicked()
     {
-        GameSettings.Instance.SwapScoringCubeCountOn(ScoreCubeCount.TWO_CUBES);
-        TwoDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.TWO_CUBES];
+        GameSettings.Instance.SwapScoringCubeCountOn(ScoreingLinks.LINK_2_DIGIT);
+        TwoDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT];
 
-        Debug.Log("2 digit addition: " + GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.TWO_CUBES].ToString());
+        //Debug.Log("2 digit addition: " + GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT].ToString());
+        DescriptionText.text = "2 digit addition are " + GetEnableText(ScoreingLinks.LINK_2_DIGIT);
 
         SetMasSum();
     }
 
     private void ThreeCubesButtonClicked()
     {
-        GameSettings.Instance.SwapScoringCubeCountOn(ScoreCubeCount.THREE_CUBES);
-        ThreeDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.THREE_CUBES];
+        GameSettings.Instance.SwapScoringCubeCountOn(ScoreingLinks.LINK_3_DIGIT);
+        ThreeDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT];
 
-        Debug.Log("3 digit addition: " + GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.THREE_CUBES].ToString());
+        //Debug.Log("3 digit addition: " + GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT].ToString());
+        DescriptionText.text = "3 digit addition are " + GetEnableText(ScoreingLinks.LINK_3_DIGIT);
 
         SetMasSum();
     }
 
     private void FourCubesButtonClicked()
     {
-        GameSettings.Instance.SwapScoringCubeCountOn(ScoreCubeCount.FOUR_CUBES);
-        FourDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FOUR_CUBES];
+        GameSettings.Instance.SwapScoringCubeCountOn(ScoreingLinks.LINK_4_DIGIT);
+        FourDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT];
 
-        Debug.Log("4 digit addition: " + GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FOUR_CUBES].ToString());
+        //Debug.Log("4 digit addition: " + GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT].ToString());
+        DescriptionText.text = "4 digit addition are " + GetEnableText(ScoreingLinks.LINK_4_DIGIT);
 
         SetMasSum();
     }
 
     private void FiveCubesButtonClicked()
     {
-        GameSettings.Instance.SwapScoringCubeCountOn(ScoreCubeCount.FIVE_CUBES);
-        FiveDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FIVE_CUBES];
+        GameSettings.Instance.SwapScoringCubeCountOn(ScoreingLinks.LINK_5_DIGIT);
+        FiveDigitButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT];
 
-        Debug.Log("5 digit addition: " + GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FIVE_CUBES].ToString());
+        //Debug.Log("5 digit addition: " + GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT].ToString());
+        DescriptionText.text = "5 digit addition are " + GetEnableText(ScoreingLinks.LINK_5_DIGIT);
 
         SetMasSum();
     }
@@ -109,8 +120,10 @@ public class SetLinkNumberPanel : SettingPanelBase
         }
 
         changeTaskMaskValue?.Invoke(maxSum);
+    }
 
-        
-
+    private string GetEnableText(ScoreingLinks aLink)
+    {
+        return (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT] ? "enable" : "disable");
     }
 }

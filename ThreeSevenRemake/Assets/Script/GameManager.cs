@@ -59,8 +59,9 @@ public class GameManager
     private int mCurrentLevelPoint = 0;
 
     private const int mSoftLandingScore = 1;
-    private const float mDropRateDecreaseValue = .03f;
-    private const float mMinimumDroprate = .1f;
+    private const float DROPPING_VALUE = .03f;
+    private const float MINIMAL_DROPRATE = .1f;
+    private const float MAXIMAL_DROPRATE = 1f;
 
     public void Reset()
     {
@@ -134,12 +135,12 @@ public class GameManager
     /// <returns>Return the new droprate</returns>
     public float GetCurrentDroppingRate()
     {
-        float droprate = 1f;
+        float droprate = MAXIMAL_DROPRATE;
 
-        droprate -= ((mCurrentLevel + GameSettings.Instance.StartSpeedMultiply) * mDropRateDecreaseValue);
+        droprate -= ((mCurrentLevel + GameSettings.Instance.StartSpeedMultiply) * DROPPING_VALUE);
 
-        if (droprate <= mMinimumDroprate)
-            droprate = mMinimumDroprate;
+        if (droprate <= MINIMAL_DROPRATE)
+            droprate = MINIMAL_DROPRATE;
 
         return droprate;
     }

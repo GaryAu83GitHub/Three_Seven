@@ -631,13 +631,13 @@ public class GridData
 
     private void Scoring(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.TWO_CUBES])
+        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT])
             ScoreWithTwoCubes(aCube, ref someGroupOfPositions);
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.THREE_CUBES])
+        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT])
             ScoreWithThreeCubes(aCube, ref someGroupOfPositions);
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FOUR_CUBES])
+        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT])
             ScoreWithFourCubes(aCube, ref someGroupOfPositions);
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FIVE_CUBES])
+        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT])
             ScoreWithFiveCubes(aCube, ref someGroupOfPositions);
     }
 
@@ -996,13 +996,13 @@ public class GridData
 
     private void Scorings(Cube aCube, ref List<Vector2Int> scorePositionCollector, ref int aComboScore)
     {
-        if(GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.TWO_CUBES])
+        if(GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT])
             ScoreWithTwoCubes(aCube, ref scorePositionCollector, ref aComboScore);
-        if(GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.THREE_CUBES])
+        if(GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT])
             ScoreWithThreeCubes(aCube, ref scorePositionCollector, ref aComboScore);
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FOUR_CUBES])
+        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT])
             ScoreWithFourCubes(aCube, ref scorePositionCollector, ref aComboScore);
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FIVE_CUBES])
+        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT])
             ScoreWithFiveCubes(aCube, ref scorePositionCollector, ref aComboScore);
 
     }

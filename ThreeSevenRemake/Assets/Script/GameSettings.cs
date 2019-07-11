@@ -8,12 +8,12 @@ public enum Difficulties
     HARD
 }
 
-public enum ScoreCubeCount
+public enum ScoreingLinks
 {
-    TWO_CUBES,
-    THREE_CUBES,
-    FOUR_CUBES,
-    FIVE_CUBES,
+    LINK_2_DIGIT,
+    LINK_3_DIGIT,
+    LINK_4_DIGIT,
+    LINK_5_DIGIT,
     MAX
 }
 /// <summary>
@@ -56,7 +56,7 @@ public class GameSettings
 
     public GameSettings()
     {
-        for(ScoreCubeCount i = 0; i < (ScoreCubeCount.MAX); i++)
+        for(ScoreingLinks i = 0; i < (ScoreingLinks.MAX); i++)
         {
             mEnableScoringMethods.Add(true);
         }
@@ -67,21 +67,21 @@ public class GameSettings
         mPlayerName = aName;
     }
 
-    public void SetScoringCubesCount(ScoreCubeCount anIndex, bool isActive)
+    public void SetScoringCubesCount(ScoreingLinks anIndex, bool isActive)
     {
         mEnableScoringMethods[(int)anIndex] = isActive;
     }
 
-    public bool IsScoringMethodActiveTo(ScoreCubeCount anIndex)
+    public bool IsScoringMethodActiveTo(ScoreingLinks anIndex)
     {
         return mEnableScoringMethods[(int)anIndex];
     }
 
-    public void SwapScoringCubeCountOn(ScoreCubeCount anIndex)
+    public void SwapScoringCubeCountOn(ScoreingLinks anIndex)
     {
         bool isThereAnotherOptionEnable = false;
 
-        for(ScoreCubeCount i = ScoreCubeCount.TWO_CUBES; i < ScoreCubeCount.MAX; i++)
+        for(ScoreingLinks i = ScoreingLinks.LINK_2_DIGIT; i < ScoreingLinks.MAX; i++)
         {
             if (i == anIndex)
                 continue;

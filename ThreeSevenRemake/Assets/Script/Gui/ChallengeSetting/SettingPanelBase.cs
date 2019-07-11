@@ -7,8 +7,8 @@ public enum Setting_Issue
     SET_NAME,
     SET_LINK,
     SET_START_OBJECTIVE,
-    SET_DROPPING_RATE,
     SET_HIGH_LIMIT,
+    SET_DROPPING_RATE,
     MAX
 }
 public class SettingPanelBase : MonoBehaviour

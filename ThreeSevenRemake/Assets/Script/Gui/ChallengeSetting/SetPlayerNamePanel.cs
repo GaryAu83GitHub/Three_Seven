@@ -8,6 +8,7 @@ public class SetPlayerNamePanel : SettingPanelBase
 {
     public TMP_InputField PlayerNameInputField;
 
+    private string mPlayerName = "";
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +25,8 @@ public class SetPlayerNamePanel : SettingPanelBase
     {
         base.Initialize();
         PlayerNameInputField.onValueChanged.AddListener(delegate { PlayerNameInputFieldOnValueChange(PlayerNameInputField); });
+
+        ActivateNextButton();
     }
 
     public override void NextButtonOnClick()
@@ -40,6 +43,13 @@ public class SetPlayerNamePanel : SettingPanelBase
 
     private void PlayerNameInputFieldOnValueChange(TMP_InputField anInput)
     {
-        Debug.Log(anInput.text);
+        mPlayerName = anInput.text;
+        //Debug.Log(anInput.text);
+        ActivateNextButton();
+    }
+
+    private void ActivateNextButton()
+    {
+        NextButton.interactable = (mPlayerName.Length > 0);
     }
 }

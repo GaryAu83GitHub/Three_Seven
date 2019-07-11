@@ -27,7 +27,7 @@ public class PlayThroughcs
         Score = GameManager.Instance.CurrentScore;
         InitialValue = GameSettings.Instance.InitialValue;
 
-        for (int i = 0; i < (int)ScoreCubeCount.MAX; i++)
+        for (int i = 0; i < (int)ScoreingLinks.MAX; i++)
             mScoringMethod.Add(GameSettings.Instance.EnableScoringMethods[i]);
     }
 

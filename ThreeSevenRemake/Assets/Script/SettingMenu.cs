@@ -114,32 +114,32 @@ public class SettingMenu : MonoBehaviour
 
     private void TwoCubesButtonClicked()
     {
-        GameSettings.Instance.SwapScoringCubeCountOn(ScoreCubeCount.TWO_CUBES);
-        TwoCubesButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.TWO_CUBES];
+        GameSettings.Instance.SwapScoringCubeCountOn(ScoreingLinks.LINK_2_DIGIT);
+        TwoCubesButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT];
 
         SetMasSum();
     }
 
     private void ThreeCubesButtonClicked()
     {
-        GameSettings.Instance.SwapScoringCubeCountOn(ScoreCubeCount.THREE_CUBES);
-        ThreeCubesButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.THREE_CUBES];
+        GameSettings.Instance.SwapScoringCubeCountOn(ScoreingLinks.LINK_3_DIGIT);
+        ThreeCubesButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT];
 
         SetMasSum();
     }
 
     private void FourCubesButtonClicked()
     {
-        GameSettings.Instance.SwapScoringCubeCountOn(ScoreCubeCount.FOUR_CUBES);
-        FourCubesButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FOUR_CUBES];
+        GameSettings.Instance.SwapScoringCubeCountOn(ScoreingLinks.LINK_4_DIGIT);
+        FourCubesButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT];
 
         SetMasSum();
     }
 
     private void FiveCubesButtonClicked()
     {
-        GameSettings.Instance.SwapScoringCubeCountOn(ScoreCubeCount.FIVE_CUBES);
-        FiveCubesButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreCubeCount.FIVE_CUBES];
+        GameSettings.Instance.SwapScoringCubeCountOn(ScoreingLinks.LINK_5_DIGIT);
+        FiveCubesButton.GetComponent<Image>().enabled = GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT];
 
         SetMasSum();
     }

@@ -171,7 +171,7 @@ public class Objective
             }
             else
             {
-               if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreCubeCount.THREE_CUBES))
+               if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_3_DIGIT))
                 {
                     if (key <= 3 || key >= 24) // 1 to 3 combination
                         mObjectiveNumbersList[Objectives.X10].Add(key);
@@ -238,13 +238,13 @@ public class Objective
     private Dictionary<int, int> IterateCombination()
     {
         Dictionary<int, int> combinationList = new Dictionary<int, int>();
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreCubeCount.TWO_CUBES))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_2_DIGIT))
             IterateTwoCubesCombination(ref combinationList);
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreCubeCount.THREE_CUBES))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_3_DIGIT))
             IterateThreeCubesCombination(ref combinationList);
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreCubeCount.FOUR_CUBES))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_4_DIGIT))
             IterateFourCubesCombination(ref combinationList);
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreCubeCount.FIVE_CUBES))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_5_DIGIT))
             IterateFiveCubesCombination(ref combinationList);
 
         return combinationList;
