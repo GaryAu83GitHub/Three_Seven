@@ -7,6 +7,8 @@ using TMPro;
 
 public class SettingMenu : MonoBehaviour
 {
+    public List<SettingPanelBase> SettingPanels;
+
     public Button TwoCubesButton;
     public Button ThreeCubesButton;
     public Button FourCubesButton;
@@ -22,13 +24,20 @@ public class SettingMenu : MonoBehaviour
     public Button StartButton;
     public Button LeaveButton;
 
+    
+
     private int mCurrentStartValue = 0;
+
+    private int mCurrentDisplaySettingPanelIndex = -1;
 
     private readonly int MINIMAL_MAX_SUM = 18;
     
     // Start is called before the first frame update
     void Start()
     {
+        MainMenu.displaySettingPanel += DisplayPanel;
+        SettingPanelBase.displaySettingPanel += DisplayPanel;
+
         TwoCubesButton.onClick.AddListener(TwoCubesButtonClicked);
         ThreeCubesButton.onClick.AddListener(ThreeCubesButtonClicked);
         FourCubesButton.onClick.AddListener(FourCubesButtonClicked);
@@ -43,12 +52,42 @@ public class SettingMenu : MonoBehaviour
         SetMasSum();
     }
 
+    private void OnDestroy()
+    {
+        MainMenu.displaySettingPanel -= DisplayPanel;
+        SettingPanelBase.displaySettingPanel -= DisplayPanel;
+    }
+
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void DisplayPanel(Setting_Issue anIndex)
+    {
+        if ((int)anIndex > mCurrentDisplaySettingPanelIndex)
+        {
+            if(mCurrentDisplaySettingPanelIndex > -1)
+                SettingPanels[(int)mCurrentDisplaySettingPanelIndex].SlideOutToLeft();
+            else
+                this.gameObject.SetActive(true);
+
+            SettingPanels[(int)anIndex].SlideInFromRight();
+            mCurrentDisplaySettingPanelIndex = (int)anIndex;
+        }
+        else if ((int)anIndex < mCurrentDisplaySettingPanelIndex)
+        {
+            SettingPanels[(int)mCurrentDisplaySettingPanelIndex].SlideOutToRight();
+            mCurrentDisplaySettingPanelIndex = (int)anIndex;
+
+            if ((int)anIndex >= 0)
+                SettingPanels[(int)anIndex].SlideInFromLeft();
+            else
+                StartCoroutine(ReturnToTitle());
+        }
         
     }
-    
+
     public void MaxSumSliderValueChange()
     {
         mCurrentStartValue = MINIMAL_MAX_SUM + (int)MaxSumSlider.value;
@@ -140,5 +179,11 @@ public class SettingMenu : MonoBehaviour
         Objective.Instance.SetInitialObjectiveValue(mCurrentStartValue);
         Objective.Instance.SetMaxLimitObjectiveValue(maxSum);
 
+    }
+
+    private IEnumerator ReturnToTitle()
+    {
+        yield return new WaitForSeconds(1f);
+        this.gameObject.SetActive(false);
     }
 }

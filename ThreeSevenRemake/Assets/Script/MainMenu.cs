@@ -16,6 +16,9 @@ public class MainMenu : MonoBehaviour
     public GameObject InstructionPanel;
     public GameObject GameSettingPanel;
 
+    public delegate void OnDisplaySettingPanel(Setting_Issue aPanelIndex);
+    public static OnDisplaySettingPanel displaySettingPanel;
+
     private void Start()
     {
         PlayButton.onClick.AddListener(PlayGame);
@@ -32,7 +35,8 @@ public class MainMenu : MonoBehaviour
         //FadingScript.gameObject.SetActive(true);
         //StartCoroutine(GoToGame());
         //ScreenTransistor.Instance.FadeToSceneWithIndex(1);
-        GameSettingPanel.SetActive(true);
+        //GameSettingPanel.SetActive(true);
+        displaySettingPanel?.Invoke(Setting_Issue.SET_NAME);
     }
 
     public void InstructingGame()
