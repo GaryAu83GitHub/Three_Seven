@@ -1,13 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum Difficulties
-{
-    EASY,
-    NORMAL,
-    HARD
-}
-
 public enum ScoreingLinks
 {
     LINK_2_DIGIT,

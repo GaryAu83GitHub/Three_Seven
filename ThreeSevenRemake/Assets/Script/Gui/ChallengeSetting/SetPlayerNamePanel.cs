@@ -7,8 +7,7 @@ using TMPro;
 public class SetPlayerNamePanel : SettingPanelBase
 {
     public TMP_InputField PlayerNameInputField;
-
-    private string mPlayerName = "";
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -24,32 +23,39 @@ public class SetPlayerNamePanel : SettingPanelBase
     protected override void Initialize()
     {
         base.Initialize();
+        
         PlayerNameInputField.onValueChanged.AddListener(delegate { PlayerNameInputFieldOnValueChange(PlayerNameInputField); });
+    }
 
+    public override void InitBaseValue()
+    {
+        base.InitBaseValue();
+
+        PlayerNameInputField.ActivateInputField();
         ActivateNextButton();
     }
 
     public override void NextButtonOnClick()
     {
         base.NextButtonOnClick();
-        displaySettingPanel?.Invoke(Setting_Issue.SET_NAME + 1);
+        displaySettingPanel?.Invoke(Setting_Index.SET_LINK);
     }
 
     public override void PreviousButtonOnClick()
     {
         base.PreviousButtonOnClick();
-        displaySettingPanel?.Invoke(Setting_Issue.SET_NAME - 1);
+        displaySettingPanel?.Invoke(Setting_Index.LEAVE_TO_TITLE);
     }
 
     private void PlayerNameInputFieldOnValueChange(TMP_InputField anInput)
     {
-        mPlayerName = anInput.text;
+        GameRoundManager.Instance.Data.PlayerName = anInput.text;
         //Debug.Log(anInput.text);
         ActivateNextButton();
     }
 
     private void ActivateNextButton()
     {
-        NextButton.interactable = (mPlayerName.Length > 0);
+        NextButton.interactable = (GameRoundManager.Instance.Data.PlayerName.Length > 0);
     }
 }

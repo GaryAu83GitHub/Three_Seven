@@ -12,6 +12,7 @@ public class SetTableHighPanel : SettingPanelBase
     public TextMeshProUGUI MinSliderValueText;
 
     private int mCurrentRoofHeight = 0;
+    private bool mRoofValueHasChanged = false;
 
     private const int MAX_CEILING_HIGH = 18;
     private const int MIN_CEILING_HIGH = 9;
@@ -37,22 +38,35 @@ public class SetTableHighPanel : SettingPanelBase
         MinSliderValueText.text = MIN_CEILING_HIGH.ToString();
         MaxSliderValueText.text = MAX_CEILING_HIGH.ToString();
 
-        mCurrentRoofHeight = MAX_CEILING_HIGH - GameSettings.Instance.LimitHigh;
         CeilingHieghtValueSlider.maxValue = MAX_CEILING_HIGH - MIN_CEILING_HIGH;
         CeilingHieghtValueSlider.minValue = 0;
         CeilingHieghtValueSlider.value = mCurrentRoofHeight;
     }
 
+    public override void InitBaseValue()
+    {
+        base.InitBaseValue();
+        if (!mRoofValueHasChanged)
+        {
+            GameRoundManager.Instance.Data.RoofHeightValue = Constants.DEFAULT_ROOF_HEIGHT;
+            CeilingHieghtValueSlider.value = MAX_CEILING_HIGH - Constants.DEFAULT_ROOF_HEIGHT;
+        }
+        CurrentValueText.text = GameRoundManager.Instance.Data.RoofHeightValue.ToString();
+    }
+
     public override void NextButtonOnClick()
     {
         base.NextButtonOnClick();
-        //displaySettingPanel?.Invoke(Setting_Issue.SET_HIGH_LIMIT + 1);
+        displaySettingPanel?.Invoke(Setting_Index.SET_DROPPING_RATE);
     }
 
     public override void PreviousButtonOnClick()
     {
         base.PreviousButtonOnClick();
-        displaySettingPanel?.Invoke(Setting_Issue.SET_HIGH_LIMIT - 1);
+        if(OnlyTwoDigitLinkIsEnable())
+            displaySettingPanel?.Invoke(Setting_Index.SET_LINK);
+        else
+            displaySettingPanel?.Invoke(Setting_Index.SET_START_TASK_VALUE);
     }
 
     public void CeilingHieghtValueChange()
@@ -61,5 +75,9 @@ public class SetTableHighPanel : SettingPanelBase
         CurrentValueText.text = mCurrentRoofHeight.ToString();
 
         DescriptionText.text = "The ceiling is at the row " + mCurrentRoofHeight.ToString();
+
+        GameRoundManager.Instance.Data.RoofHeightValue = mCurrentRoofHeight;
+
+        mRoofValueHasChanged = true;
     }
 }

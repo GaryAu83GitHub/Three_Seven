@@ -24,11 +24,11 @@ public class SettingMenu : MonoBehaviour
     public Button StartButton;
     public Button LeaveButton;
 
-    
+    private Dictionary<Setting_Index, SettingPanelBase> mPanelList = new Dictionary<Setting_Index, SettingPanelBase>();
 
     private int mCurrentStartValue = 0;
 
-    private int mCurrentDisplaySettingPanelIndex = -1;
+    private Setting_Index mCurrentDisplaySettingPanelIndex = Setting_Index.NONE;
 
     private readonly int MINIMAL_MAX_SUM = 18;
     
@@ -50,6 +50,11 @@ public class SettingMenu : MonoBehaviour
 
         MinSliderValueText.text = MINIMAL_MAX_SUM.ToString();
         SetMasSum();
+
+        for(int i = 0; i < SettingPanels.Count; i++)
+        {
+            mPanelList.Add(SettingPanels[i].PanelIndex, SettingPanels[i]);
+        }
     }
 
     private void OnDestroy()
@@ -63,29 +68,65 @@ public class SettingMenu : MonoBehaviour
     {
     }
 
-    public void DisplayPanel(Setting_Issue anIndex)
+    public void DisplayPanel(Setting_Index anIndex)
     {
-        if ((int)anIndex > mCurrentDisplaySettingPanelIndex)
+        if (anIndex == Setting_Index.FINISH_SETTING)
         {
-            if(mCurrentDisplaySettingPanelIndex > -1)
-                SettingPanels[(int)mCurrentDisplaySettingPanelIndex].SlideOutToLeft();
-            else
+            StartCoroutine(StartGameRound());
+        }
+        else if(anIndex == Setting_Index.LEAVE_TO_TITLE)
+        {
+            mPanelList[mCurrentDisplaySettingPanelIndex].SlideOutToRight();
+            mCurrentDisplaySettingPanelIndex = Setting_Index.NONE;
+
+            StartCoroutine(ReturnToTitle());
+        }
+        else
+        { 
+            if(mCurrentDisplaySettingPanelIndex == Setting_Index.NONE)
+            {
                 this.gameObject.SetActive(true);
+                mPanelList[anIndex].InitBaseValue();
+                mPanelList[anIndex].SlideInFromRight();
+                mCurrentDisplaySettingPanelIndex = anIndex;
+            }
+            else if(anIndex > mCurrentDisplaySettingPanelIndex)
+            {
+                mPanelList[mCurrentDisplaySettingPanelIndex].SlideOutToLeft();
+                mPanelList[anIndex].InitBaseValue();
+                mPanelList[anIndex].SlideInFromRight();
+                mCurrentDisplaySettingPanelIndex = anIndex;
+            }
+            else if(anIndex < mCurrentDisplaySettingPanelIndex)
+            {
+                mPanelList[mCurrentDisplaySettingPanelIndex].SlideOutToRight();
+                mPanelList[anIndex].SlideInFromLeft();
+                mCurrentDisplaySettingPanelIndex = anIndex;
+            }
+            //if ((int)anIndex > mCurrentDisplaySettingPanelIndex)
+            //{
+            
+            //    if (mCurrentDisplaySettingPanelIndex > -1)
+            //        SettingPanels[(int)mCurrentDisplaySettingPanelIndex].SlideOutToLeft();
+            //    else
+            //    {
+            //        mCurrentDisplaySettingPanelIndex = -1;
+            //        this.gameObject.SetActive(true);
+            //    }
+            //    SettingPanels[(int)anIndex].InitBaseValue();
+            //    SettingPanels[(int)anIndex].SlideInFromRight();
+            //    mCurrentDisplaySettingPanelIndex = (int)anIndex;
+            //}
+            //else if ((int)anIndex < mCurrentDisplaySettingPanelIndex)
+            //{
+            //    SettingPanels[(int)mCurrentDisplaySettingPanelIndex].SlideOutToRight();
+            //    mCurrentDisplaySettingPanelIndex = (int)anIndex;
 
-            SettingPanels[(int)anIndex].SlideInFromRight();
-            mCurrentDisplaySettingPanelIndex = (int)anIndex;
-        }
-        else if ((int)anIndex < mCurrentDisplaySettingPanelIndex)
-        {
-            SettingPanels[(int)mCurrentDisplaySettingPanelIndex].SlideOutToRight();
-            mCurrentDisplaySettingPanelIndex = (int)anIndex;
+            //    if ((int)anIndex >= 0)
+            //        SettingPanels[(int)anIndex].SlideInFromLeft();
 
-            if ((int)anIndex >= 0)
-                SettingPanels[(int)anIndex].SlideInFromLeft();
-            else
-                StartCoroutine(ReturnToTitle());
+            //}
         }
-        
     }
 
     public void MaxSumSliderValueChange()
@@ -185,5 +226,13 @@ public class SettingMenu : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         this.gameObject.SetActive(false);
+    }
+
+    private IEnumerator StartGameRound()
+    {
+        yield return new WaitForSeconds(.5f);
+        //Objective.Instance.PrepareObjectives();
+        GameRoundManager.Instance.SetUpGameRound();
+        ScreenTransistor.Instance.FadeToSceneWithIndex(1);
     }
 }

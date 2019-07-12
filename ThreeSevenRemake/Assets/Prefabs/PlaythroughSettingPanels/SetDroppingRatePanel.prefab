@@ -242,6 +242,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9025298750296166983}
   - component: {fileID: 5472871921008957469}
+  - component: {fileID: 1735633284165861905}
   m_Layer: 5
   m_Name: SetDroppingRatePanel
   m_TagString: Untagged
@@ -288,6 +289,26 @@ Animation:
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &1735633284165861905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825392413386322324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b81f36083ef91604d8605e3d2694468e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PanelIndex: 5
+  DescriptionText: {fileID: 9087191762095673724}
+  NextButton: {fileID: 8476663873761908425}
+  PreviousButton: {fileID: 1905678779294874807}
+  DroppingSpeedValueSlider: {fileID: 1456489734629241594}
+  CurrentValueText: {fileID: 3482070602142624370}
+  MaxSliderValueText: {fileID: 4185724457532643617}
+  MinSliderValueText: {fileID: 8466465658739162943}
 --- !u!1 &1009456709749198191
 GameObject:
   m_ObjectHideFlags: 0
@@ -604,7 +625,7 @@ GameObject:
   - component: {fileID: 4437190136325131194}
   - component: {fileID: 8466465658739162943}
   m_Layer: 5
-  m_Name: MaxValueText
+  m_Name: MinValueText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1337,7 +1358,7 @@ GameObject:
   - component: {fileID: 6023572128135291978}
   - component: {fileID: 1456489734629241594}
   m_Layer: 5
-  m_Name: CeilingHieghtValueSlider
+  m_Name: DroppingSpeedValueSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1640,7 +1661,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: The lower the number is, the faster the block drop
+  m_text: Multiply the dropping speed
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1709,10 +1730,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 6079735221234626959}
-    characterCount: 50
+    characterCount: 27
     spriteCount: 0
-    spaceCount: 9
-    wordCount: 10
+    spaceCount: 3
+    wordCount: 4
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -1744,7 +1765,7 @@ GameObject:
   - component: {fileID: 5854989544494046486}
   - component: {fileID: 4185724457532643617}
   m_Layer: 5
-  m_Name: MinValueText
+  m_Name: MaxValueText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

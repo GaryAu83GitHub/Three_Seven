@@ -16,7 +16,7 @@ public class MainMenu : MonoBehaviour
     public GameObject InstructionPanel;
     public GameObject GameSettingPanel;
 
-    public delegate void OnDisplaySettingPanel(Setting_Issue aPanelIndex);
+    public delegate void OnDisplaySettingPanel(Setting_Index aPanelIndex);
     public static OnDisplaySettingPanel displaySettingPanel;
 
     private void Start()
@@ -36,7 +36,8 @@ public class MainMenu : MonoBehaviour
         //StartCoroutine(GoToGame());
         //ScreenTransistor.Instance.FadeToSceneWithIndex(1);
         //GameSettingPanel.SetActive(true);
-        displaySettingPanel?.Invoke(Setting_Issue.SET_NAME);
+        GameRoundManager.Instance.CreateNewData();
+        displaySettingPanel?.Invoke(Setting_Index.SET_NAME);
     }
 
     public void InstructingGame()

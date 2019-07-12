@@ -12,6 +12,7 @@ public class SetStartTaskValuePanel : SettingPanelBase
     public TextMeshProUGUI MinSliderValueText;
 
     private int mCurrentStartValue = 0;
+    private int mLastSelectedValue = -1;
 
     private readonly int MINIMAL_MAX_SUM = 18;
 
@@ -39,27 +40,48 @@ public class SetStartTaskValuePanel : SettingPanelBase
         SetLinkNumberPanel.changeTaskMaskValue += SetMaxValue;
 
         TaskValueSlider.onValueChanged.AddListener(delegate { TaskSliderValueChange(); });
+        MinSliderValueText.text = MINIMAL_MAX_SUM.ToString();
+    }
 
+    public override void InitBaseValue()
+    {
+        base.InitBaseValue();
+
+        if (mLastSelectedValue == -1)
+            mCurrentStartValue = Constants.MINIMAL_TASK_SUM;
+        else
+            mCurrentStartValue = MINIMAL_MAX_SUM + mLastSelectedValue;
+
+        CurrentValueText.text = mCurrentStartValue.ToString();
+        GameRoundManager.Instance.Data.InitialTaskValue = mCurrentStartValue;
+
+        DescriptionText.text = "The available task value is between 0 to " + mCurrentStartValue.ToString();
+        //TaskSliderValueChange();
     }
 
     public override void NextButtonOnClick()
     {
         base.NextButtonOnClick();
-        displaySettingPanel?.Invoke(Setting_Issue.SET_START_OBJECTIVE + 1);
+        displaySettingPanel?.Invoke(Setting_Index.SET_ROOF_HEIGH);
     }
 
     public override void PreviousButtonOnClick()
     {
         base.PreviousButtonOnClick();
-        displaySettingPanel?.Invoke(Setting_Issue.SET_START_OBJECTIVE - 1);
+        displaySettingPanel?.Invoke(Setting_Index.SET_LINK);
     }
 
     public void TaskSliderValueChange()
     {
+        mLastSelectedValue = (int)TaskValueSlider.value;
+
         mCurrentStartValue = MINIMAL_MAX_SUM + (int)TaskValueSlider.value;
         CurrentValueText.text = mCurrentStartValue.ToString();
 
-        DescriptionText.text = "The available task value is between " + MINIMAL_MAX_SUM.ToString() + " to " + mCurrentStartValue.ToString();
+        DescriptionText.text = "The available task value is between 0 to " + mCurrentStartValue.ToString();
+
+        GameRoundManager.Instance.Data.InitialTaskValue = mCurrentStartValue;
+        
     }
 
     private void SetMaxValue(int aMaxValue)
