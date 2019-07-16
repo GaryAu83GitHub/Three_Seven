@@ -32,8 +32,8 @@ public class GameRoundManager
 
         Objective.Instance.SetInitialObjectiveValue(mGameRoundData.InitialTaskValue);
         
-        GameSettings.Instance.SetLimitLineLevel(mGameRoundData.RoofHeightValue);
-        GameSettings.Instance.SetStartDropSpeed(mGameRoundData.DroppingSpeedMultiplyValue);
+        //GameSettings.Instance.SetLimitLineLevel(mGameRoundData.RoofHeightValue);
+        //GameSettings.Instance.SetStartDropSpeed(mGameRoundData.DroppingSpeedMultiplyValue);
         Objective.Instance.PrepareObjectives();
     }
 }

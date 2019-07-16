@@ -115,7 +115,7 @@ public class GameManager
     /// Add scores based on the current level that was achieved fullfilling the scoring condition.
     /// </summary>
     /// <param name="aCombo"></param>
-    public void SetComboScore(int aCombo)
+    public void AddComboScore(int aCombo)
     {
         mComboScore = 0;
         
@@ -126,6 +126,21 @@ public class GameManager
 
         if (aCombo > 0)
             comboOccuring?.Invoke(aCombo, (int)mComboScore, "");
+    }
+
+    public void AddLinkingScore(Objectives anObjective, int aNumberCount)
+    {
+        int objectiveMultiply = 1;
+        if (anObjective == Objectives.X10)
+            objectiveMultiply = 10;
+        else if (anObjective == Objectives.X5)
+            objectiveMultiply = 5;
+        else
+            objectiveMultiply = 1;
+
+        int linkedScore = (mCurrentLevel + 1) + (aNumberCount * objectiveMultiply);
+        mCurrentScore += linkedScore;
+        scoreChanging?.Invoke(mCurrentScore);
     }
     
     /// <summary>

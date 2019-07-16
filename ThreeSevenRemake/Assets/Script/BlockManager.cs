@@ -52,8 +52,11 @@ public class BlockManager
 
     public delegate void OnAchieveScoring(Objectives anObjective, List<Cube> thisGroupsCubes);
     public static OnAchieveScoring achieveScoring;
-
+    
     public int BlockCount { get { return mBlocks.Count; } }
+
+    private Block mNewLandedOriginalBlock = null;
+    public Block NewLandedOriginalBlock { get { return mNewLandedOriginalBlock; } }
 
     private List<Block> mBlocks = new List<Block>();
     private List<Block> mFloatingBlocks = new List<Block>();
@@ -78,6 +81,8 @@ public class BlockManager
         mCurrentScoringGroupIndex = 0;
         mScoringCalculationTimer = 0f;
         mCurrentGroupScoreCalcInProgress = false;
+
+        mNewLandedOriginalBlock = null;
     }
 
     /// <summary>
@@ -86,15 +91,18 @@ public class BlockManager
     /// The order of the block list will be rearranged in their x then y position.
     /// </summary>
     /// <param name="aBlock">The new landed block</param>
-    public void AddBlock(Block aBlock)
+    public void AddBlock(Block aBlock, bool isTheOriginal = true)
     {
         mBlocks.Add(aBlock);
-
-        if(!aBlock.CheckIfCellIsVacantBeneath())
+        
+        if (!aBlock.CheckIfCellIsVacantBeneath())
             GameManager.Instance.AddSoftScore();
 
         foreach (Cube c in aBlock.Cubes)
         {
+            if (isTheOriginal)
+                GridData.Instance.AddOriginalBlockPosition(c.GridPos);
+
             GridData.Instance.RegistrateCell(c);
 
             mNewLandedCubes.Add(c);
@@ -107,7 +115,7 @@ public class BlockManager
     {
         mScoringsCubes.Add(aCube);
     }
-
+    
     // All scoring cube play their scoring animation
     public void PlayScoringAnimation()
     {
@@ -183,6 +191,7 @@ public class BlockManager
                 }
             }
             achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes);
+            GameManager.Instance.AddLinkingScore(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes.Count);
             mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
         }
         else
@@ -226,32 +235,12 @@ public class BlockManager
                 }
             }
             achieveScoring?.Invoke(mScoringPositionGroups[i].ObjectiveRank, thisGroupScoringCubes);
+            GameManager.Instance.AddLinkingScore(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes.Count);
         }
 
         PlayScoringAnimation();
         GameManager.Instance.AddLevelPoint(mComboCount);
         mComboCount = 0;
-
-        //List<Cube> thisGroupScoringCubes = new List<Cube>();
-        //for (int i = 0; i < mBlocks.Count; i++)
-        //{
-        //    foreach (Cube c in mBlocks[i].Cubes)
-        //    {
-        //        if (mScoringPositionGroups[mCurrentScoringGroupIndex].PassivePosition.Contains(c.GridPos))
-        //        {
-        //            AddScoringCubes(c);
-        //            c.PlayPassiveParticlar();
-        //            thisGroupScoringCubes.Add(c);
-        //        }
-        //        else if (mScoringPositionGroups[mCurrentScoringGroupIndex].ActivePosition == c.GridPos)
-        //        {
-        //            AddScoringCubes(c);
-        //            c.PlayActiveParticlar();
-        //            thisGroupScoringCubes.Add(c);
-        //        }
-        //    }
-        //}
-        //achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes);
     }
 
     public bool IsScoring()
@@ -280,7 +269,7 @@ public class BlockManager
         mComboCount = 0;
         return false;
     }
-
+    
     /// <summary>
     /// Checking if any block have any of it's cube playing scoring animation
     /// </summary>
@@ -318,7 +307,7 @@ public class BlockManager
         {
             while(mFloatingBlocks[i].CheckIfCellIsVacantBeneath())
                 mFloatingBlocks[i].DropDown();
-            AddBlock(mFloatingBlocks[i]);
+            AddBlock(mFloatingBlocks[i], false);
         }
     }
 

@@ -44,6 +44,11 @@ public class GridData
     public float CubeGapDistance { get { return mCubeGapDistance; } }
 
     /// <summary>
+    /// Use as a temporary storing for the new original landed block
+    /// </summary>
+    private List<Vector2Int> mOriginalLandedBlockPositions = new List<Vector2Int>();
+
+    /// <summary>
     /// The Griddata storage constructed with a dictionary holding a list on each item
     /// The Key to the Dictionary stands of the column (x) value
     /// The Index in the list stand for the row (y) value
@@ -183,6 +188,13 @@ public class GridData
         return true;
     }
 
+    public void AddOriginalBlockPosition(Vector2Int aBlockCubeGridPos)
+    {
+        if (mOriginalLandedBlockPositions.Count == 2)
+            return;
+        mOriginalLandedBlockPositions.Add(aBlockCubeGridPos);
+    }
+
     public List<Vector2Int> CompleteObjectiveScoringMethod(List<Cube> someNewLandedCubes, ref int aComboCount)
     {
         List<Vector2Int> scoringPositions = new List<Vector2Int>();
@@ -192,7 +204,7 @@ public class GridData
             Scorings(c, ref scoringPositions, ref aComboCount);
         }
 
-        GameManager.Instance.SetComboScore(aComboCount);
+        GameManager.Instance.AddComboScore(aComboCount);
 
         return scoringPositions;
     }
@@ -206,6 +218,7 @@ public class GridData
             Scoring(c, ref someGroupOfPosition);
         }
 
+        mOriginalLandedBlockPositions.Clear();
         //GameManager.Instance.SetComboScore(aComboCount);
 
         return someGroupOfPosition;
@@ -312,7 +325,7 @@ public class GridData
             }
         }
 
-        GameManager.Instance.SetComboScore(aComboCount);
+        GameManager.Instance.AddComboScore(aComboCount);
 
         return scoringPositions;
     }
@@ -431,7 +444,7 @@ public class GridData
             }
         }
 
-        GameManager.Instance.SetComboScore(aComboCount);
+        GameManager.Instance.AddComboScore(aComboCount);
 
         return scoringPositions;
     }
@@ -571,7 +584,7 @@ public class GridData
             }
         }
 
-        GameManager.Instance.SetComboScore(aComboCount);
+        GameManager.Instance.AddComboScore(aComboCount);
         return scoringPositions;
     }
 
@@ -646,14 +659,16 @@ public class GridData
         Objectives getObjectiveRank = Objectives.X1;
         ScoringGroupAchieveInfo newInfo;
         //  to the right [G][N]
-        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.right)))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.right)) &&
+            IsNotOnlyTheOriginal(aCube.GridPos, aCube.GridPos + Vector2Int.right))
         {
             newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.right });
             someGroupOfPositions.Add(newInfo);
         }
 
         //  to the left [N][G]
-        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos + Vector2Int.left, aCube.GridPos)))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos + Vector2Int.left, aCube.GridPos)) &&
+            IsNotOnlyTheOriginal(aCube.GridPos + Vector2Int.left, aCube.GridPos))
         {
             newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.left });
             someGroupOfPositions.Add(newInfo);
@@ -662,7 +677,8 @@ public class GridData
         //  with above
         // [N]
         // [G]
-        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.up)))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos + Vector2Int.up, aCube.GridPos)) &&
+            IsNotOnlyTheOriginal(aCube.GridPos + Vector2Int.up, aCube.GridPos))
         {
             newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.up });
             someGroupOfPositions.Add(newInfo);
@@ -671,7 +687,8 @@ public class GridData
         //  with beneath
         // [G]
         // [N]
-        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.down)))
+        if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.down)) &&
+            IsNotOnlyTheOriginal(aCube.GridPos, aCube.GridPos + Vector2Int.down))
         {
             newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.down });
             someGroupOfPositions.Add(newInfo);
@@ -993,6 +1010,12 @@ public class GridData
         }
     }
 
+    private bool IsNotOnlyTheOriginal(Vector2Int aPos1, Vector2Int aPos2)
+    {
+        if (mOriginalLandedBlockPositions.Contains(aPos1) && mOriginalLandedBlockPositions.Contains(aPos2))
+            return false;
+        return true;
+    }
 
     private void Scorings(Cube aCube, ref List<Vector2Int> scorePositionCollector, ref int aComboScore)
     {

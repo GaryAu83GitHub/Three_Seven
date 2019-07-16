@@ -15,5 +15,5 @@ public static class Constants
     public const int MAX_CEILING_HIGH = 18;
     public const int MIN_CEILING_HIGH = 9;
 
-    public const int DEFAULT_ROOF_HEIGHT = 17;
+    public const int DEFAULT_ROOF_HEIGHT = 14;
 }

@@ -28,7 +28,7 @@ public class GameSettings
     private string mPlayerName = "";
     public string PlayerName { get { return mPlayerName; } }
 
-    private int mLimitRow = 17;
+    private int mLimitRow = Constants.DEFAULT_ROOF_HEIGHT;
     public int LimitHigh { get { return mLimitRow; } }
 
     private int mDropSpeedMultiply = 0;
@@ -39,6 +39,9 @@ public class GameSettings
 
     private bool mDisplayingLongScoring = true;
     public bool ActiveLongScoringDisplay { get { return mDisplayingLongScoring; } }
+
+    private bool mActiveGuideBlock = true;
+    public bool ActiveGuideBlock { get { return mActiveGuideBlock; } }
 
     private List<bool> mEnableScoringMethods = new List<bool>();
     public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } }
@@ -110,5 +113,10 @@ public class GameSettings
     public bool ToggleScoringDisplayMethod()
     {
         return mDisplayingLongScoring = !mDisplayingLongScoring;
+    }
+
+    public void ActiveteGuideBlock(bool aChangeValue)
+    {
+        mActiveGuideBlock = aChangeValue;
     }
 }

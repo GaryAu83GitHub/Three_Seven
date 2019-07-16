@@ -57,6 +57,8 @@ public class Objective
             mObjectiveAchieveList.Add(obj, false);
             mActiveObjectives.Add(obj, 0);
         }
+
+        mCurrentObjectiveValueLimit = 0;
     }
 
     public void StartFirstSetOfObjective()
@@ -143,7 +145,14 @@ public class Objective
 
     public void PrepareObjectives()
     {
+        
         Dictionary<int, int> combinationCount = IterateCombination();
+
+        foreach(Objectives k in mObjectiveNumbersList.Keys)
+        {
+            mObjectiveNumbersList[k].Clear();
+        }
+        mUsedObjectiveNumbers.Clear();
         
         for (int i = 0; i <= mCurrentObjectiveValueLimit; i++)
             mUsedObjectiveNumbers.Add(false);

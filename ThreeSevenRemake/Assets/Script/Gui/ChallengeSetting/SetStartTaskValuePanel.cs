@@ -62,7 +62,7 @@ public class SetStartTaskValuePanel : SettingPanelBase
     public override void NextButtonOnClick()
     {
         base.NextButtonOnClick();
-        displaySettingPanel?.Invoke(Setting_Index.SET_ROOF_HEIGH);
+        displaySettingPanel?.Invoke(Setting_Index.FINISH_SETTING);
     }
 
     public override void PreviousButtonOnClick()

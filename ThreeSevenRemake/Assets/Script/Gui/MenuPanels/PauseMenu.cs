@@ -15,7 +15,10 @@ public class PauseMenu : MonoBehaviour
     public Button MenuButton;
 
     public GameObject PauseMenuUI;
-    
+
+    public delegate void OnLeaveTheGame();
+    public static OnLeaveTheGame leaveTheGame;
+
 
     private void Start()
     {
@@ -57,6 +60,7 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 1;
         GameIsPause = false;
+        leaveTheGame?.Invoke();
         //SceneManager.LoadScene("Menu");
         //StartCoroutine(GoToStart());
         ScreenTransistor.Instance.FadeToSceneWithIndex(0);

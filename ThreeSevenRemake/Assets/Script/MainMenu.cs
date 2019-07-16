@@ -10,22 +10,29 @@ public class MainMenu : MonoBehaviour
     public Fading FadingScript;
 
     public Button PlayButton;
+    public Button OptionButton;
     public Button InstructionButton;
     public Button QuitButton;
 
+    public GameObject OptionPanel;
     public GameObject InstructionPanel;
     public GameObject GameSettingPanel;
 
     public delegate void OnDisplaySettingPanel(Setting_Index aPanelIndex);
     public static OnDisplaySettingPanel displaySettingPanel;
 
+    public delegate void OnOpenOptionPanel();
+    public static OnOpenOptionPanel openOptionPanel;
+
     private void Start()
     {
         PlayButton.onClick.AddListener(PlayGame);
         InstructionButton.onClick.AddListener(InstructingGame);
+        OptionButton.onClick.AddListener(OptionSetting);
         QuitButton.onClick.AddListener(QuitGame);
 
         InstructionPanel.SetActive(false);
+        OptionPanel.SetActive(false);
         GameSettingPanel.SetActive(false);
     }
 
@@ -37,7 +44,13 @@ public class MainMenu : MonoBehaviour
         //ScreenTransistor.Instance.FadeToSceneWithIndex(1);
         //GameSettingPanel.SetActive(true);
         GameRoundManager.Instance.CreateNewData();
-        displaySettingPanel?.Invoke(Setting_Index.SET_NAME);
+        displaySettingPanel?.Invoke(Setting_Index.SET_LINK);
+    }
+
+    public void OptionSetting()
+    {
+        OptionPanel.SetActive(true);
+        openOptionPanel?.Invoke();
     }
 
     public void InstructingGame()

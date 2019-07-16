@@ -51,6 +51,7 @@ public class DevelopeMain : MonoBehaviour
     private void Start()
     {
         GameOverMenu.leaveTheGame += ResetGame;
+        PauseMenu.leaveTheGame += ResetGame;
 
         LimitLine.transform.position += new Vector3(0f, .25f + (.5f * GameSettings.Instance.LimitHigh), 0f);
         // When the game start, begin delay for the first block to be created
@@ -60,6 +61,7 @@ public class DevelopeMain : MonoBehaviour
     private void OnDestroy()
     {
         GameOverMenu.leaveTheGame -= ResetGame;
+        PauseMenu.leaveTheGame -= ResetGame;
     }
 
     private void Update()
@@ -198,6 +200,7 @@ public class DevelopeMain : MonoBehaviour
         }
 
         mGuideBlock = GuideBlockObject.GetComponent<GuideBlock>();
+        //mGuideBlock.SetupGuideBlock(mCurrentBlock);
         GuideBlockObject.SetActive(true);
 
         // Get the block's droprate of the current level from GameManager

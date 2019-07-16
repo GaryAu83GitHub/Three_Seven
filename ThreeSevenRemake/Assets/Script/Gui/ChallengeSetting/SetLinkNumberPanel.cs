@@ -54,7 +54,7 @@ public class SetLinkNumberPanel : SettingPanelBase
         base.NextButtonOnClick();
         SetMasSum();
         if(OnlyTwoDigitLinkIsEnable())
-            displaySettingPanel?.Invoke(Setting_Index.SET_ROOF_HEIGH);
+            displaySettingPanel?.Invoke(Setting_Index.FINISH_SETTING);
         else
             displaySettingPanel?.Invoke(Setting_Index.SET_START_TASK_VALUE);
     }
