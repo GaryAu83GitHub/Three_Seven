@@ -20,6 +20,7 @@ public class GridData
     }
     private static GridData mInstance;
 
+    
     /// <summary>
     /// Dictionary of list to the both axis on the grid
     /// The keys ID to the dictionary stands for the columns "X"
@@ -195,19 +196,19 @@ public class GridData
         mOriginalLandedBlockPositions.Add(aBlockCubeGridPos);
     }
 
-    public List<Vector2Int> CompleteObjectiveScoringMethod(List<Cube> someNewLandedCubes, ref int aComboCount)
-    {
-        List<Vector2Int> scoringPositions = new List<Vector2Int>();
+    //public List<Vector2Int> CompleteObjectiveScoringMethod(List<Cube> someNewLandedCubes, ref int aComboCount)
+    //{
+    //    List<Vector2Int> scoringPositions = new List<Vector2Int>();
 
-        foreach (Cube c in someNewLandedCubes)
-        {
-            Scorings(c, ref scoringPositions, ref aComboCount);
-        }
+    //    foreach (Cube c in someNewLandedCubes)
+    //    {
+    //        Scorings(c, ref scoringPositions, ref aComboCount);
+    //    }
 
-        GameManager.Instance.AddComboScore(aComboCount);
+    //    GameManager.Instance.AddComboScore(aComboCount);
 
-        return scoringPositions;
-    }
+    //    return scoringPositions;
+    //}
 
     public List<ScoringGroupAchieveInfo> GetListOfScoringPositionGroups(List<Cube> someNewLandedCubes)
     {
@@ -652,45 +653,66 @@ public class GridData
             ScoreWithFourCubes(aCube, ref someGroupOfPositions);
         if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT])
             ScoreWithFiveCubes(aCube, ref someGroupOfPositions);
+
+        List<ScoringGroupAchieveInfo> testingList = new List<ScoringGroupAchieveInfo>();
+        ScoreWithAvailableCubes(aCube, ref testingList);
+
+        return;
+    }
+
+    private void ScoreWithAvailableCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
+    {
+        List<List<Vector2Int>> scoreCombinationPositions = GenerateScoreCombinationPositions.Instance.GetScorePositionListFrom(aCube.GridPos);
+
+        Objectives getObjectiveRank = Objectives.X1;
+        ScoringGroupAchieveInfo newInfo;
+        foreach(List<Vector2Int> pos in scoreCombinationPositions)
+        {
+            if(Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValue(pos)) && IsNotOnlyTheOriginal(pos))
+            {
+                newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, pos);
+                someGroupOfPositions.Add(newInfo);
+            }
+        }
     }
 
     private void ScoreWithTwoCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
         Objectives getObjectiveRank = Objectives.X1;
         ScoringGroupAchieveInfo newInfo;
-        //  to the right [G][N]
+        //  to the right [G][R] 
         if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.right)) &&
             IsNotOnlyTheOriginal(aCube.GridPos, aCube.GridPos + Vector2Int.right))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.right });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.right });
             someGroupOfPositions.Add(newInfo);
         }
 
-        //  to the left [N][G]
+        //  to the left [L][G]
         if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos + Vector2Int.left, aCube.GridPos)) &&
             IsNotOnlyTheOriginal(aCube.GridPos + Vector2Int.left, aCube.GridPos))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.left });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.left });
             someGroupOfPositions.Add(newInfo);
         }
 
         //  with above
-        // [N]
+        // [U]
         // [G]
         if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos + Vector2Int.up, aCube.GridPos)) &&
             IsNotOnlyTheOriginal(aCube.GridPos + Vector2Int.up, aCube.GridPos))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.up });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.up });
             someGroupOfPositions.Add(newInfo);
         }
 
         //  with beneath
         // [G]
-        // [N]
+        // [D]
         if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.down)) &&
             IsNotOnlyTheOriginal(aCube.GridPos, aCube.GridPos + Vector2Int.down))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.down });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.down });
             someGroupOfPositions.Add(newInfo);
         }
     }
@@ -700,61 +722,61 @@ public class GridData
         Objectives getObjectiveRank = Objectives.X1;
         ScoringGroupAchieveInfo newInfo;
         // horizontal
-        //  the horizont cross [N][G][N]
+        //  the horizont cross [L][G][R]
         if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(aCube.GridPos + Vector2Int.left, aCube.GridPos, aCube.GridPos + Vector2Int.right)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right });
             someGroupOfPositions.Add(newInfo);
         }
 
-        //  the right [G][N][N]
+        //  the right [G][R][2R]
         if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(aCube.GridPos, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.right, aCube.GridPos + Vector2Int.right * 2 });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.right, aCube.GridPos + Vector2Int.right * 2 });
             someGroupOfPositions.Add(newInfo);
         }
 
-        //  the left [N][N][G]
+        //  the left [2L][L][G]
         if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.left * 2, aCube.GridPos + Vector2Int.left });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.left * 2, aCube.GridPos + Vector2Int.left });
             someGroupOfPositions.Add(newInfo);
         }
 
         // vertical
         //  the verticla cross
-        // [N]
+        // [U]
         // [G]
-        // [N]
+        // [D]
         if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(aCube.GridPos + Vector2Int.up, aCube.GridPos, aCube.GridPos + Vector2Int.down)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down });
             someGroupOfPositions.Add(newInfo);
         }
 
         //  the up
-        // [N]
-        // [N]
+        // [2U]
+        // [U]
         // [G]
         if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(
             aCube.GridPos + (Vector2Int.up * 2), 
             aCube.GridPos + Vector2Int.up, 
             aCube.GridPos)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up });
             someGroupOfPositions.Add(newInfo);
         }
 
         //  the down
         // [G]
-        // [N]
-        // [N]
+        // [D]
+        // [2D]
         if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromThreePositions(
             aCube.GridPos, 
             aCube.GridPos + Vector2Int.down, 
             aCube.GridPos + (Vector2Int.down * 2))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.down, aCube.GridPos + Vector2Int.down * 2 });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.down, aCube.GridPos + Vector2Int.down * 2 });
             someGroupOfPositions.Add(newInfo);
         }
     }
@@ -771,7 +793,7 @@ public class GridData
             aCube.GridPos + (Vector2Int.right * 2),
             aCube.GridPos + (Vector2Int.right * 3))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2), aCube.GridPos + (Vector2Int.right * 3) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2), aCube.GridPos + (Vector2Int.right * 3) });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -782,7 +804,7 @@ public class GridData
             aCube.GridPos + Vector2Int.right,
             aCube.GridPos + (Vector2Int.right * 2))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2) });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -793,7 +815,7 @@ public class GridData
             aCube.GridPos,
             aCube.GridPos + Vector2Int.right)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -804,7 +826,7 @@ public class GridData
             aCube.GridPos + Vector2Int.left,
             aCube.GridPos)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.left * 3), aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + (Vector2Int.left * 3), aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -818,7 +840,7 @@ public class GridData
             aCube.GridPos + Vector2Int.up,
             aCube.GridPos)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 3), aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + (Vector2Int.up * 3), aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -832,7 +854,7 @@ public class GridData
             aCube.GridPos,
             aCube.GridPos + Vector2Int.down)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -846,7 +868,7 @@ public class GridData
             aCube.GridPos + Vector2Int.down,
             aCube.GridPos + (Vector2Int.down * 2))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2) });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -860,7 +882,7 @@ public class GridData
             aCube.GridPos + (Vector2Int.down * 2),
             aCube.GridPos + (Vector2Int.down * 3))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2), aCube.GridPos + (Vector2Int.down * 3) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2), aCube.GridPos + (Vector2Int.down * 3) });
             someGroupOfPositions.Add(newInfo);
         }
     }
@@ -877,7 +899,7 @@ public class GridData
             aCube.GridPos + (Vector2Int.right * 3),
             aCube.GridPos + (Vector2Int.right * 4))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2), aCube.GridPos + (Vector2Int.right * 3), aCube.GridPos + (Vector2Int.right * 4) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2), aCube.GridPos + (Vector2Int.right * 3), aCube.GridPos + (Vector2Int.right * 4) });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -889,7 +911,7 @@ public class GridData
             aCube.GridPos + (Vector2Int.right * 2),
             aCube.GridPos + (Vector2Int.right * 3))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2), aCube.GridPos + (Vector2Int.right * 3) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2), aCube.GridPos + (Vector2Int.right * 3) });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -901,7 +923,7 @@ public class GridData
             aCube.GridPos + Vector2Int.right,
             aCube.GridPos + (Vector2Int.right * 2))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2) });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -913,7 +935,7 @@ public class GridData
             aCube.GridPos,
             aCube.GridPos + Vector2Int.right)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.left * 3), aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + (Vector2Int.left * 3), aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos + Vector2Int.right });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -925,7 +947,7 @@ public class GridData
             aCube.GridPos + Vector2Int.left,
             aCube.GridPos)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.left * 4), aCube.GridPos + (Vector2Int.left * 3), aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + (Vector2Int.left * 4), aCube.GridPos + (Vector2Int.left * 3), aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -941,7 +963,7 @@ public class GridData
             aCube.GridPos + Vector2Int.up,
             aCube.GridPos)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 4), aCube.GridPos + (Vector2Int.up * 3), aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + (Vector2Int.up * 4), aCube.GridPos + (Vector2Int.up * 3), aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -957,7 +979,7 @@ public class GridData
             aCube.GridPos,
             aCube.GridPos + Vector2Int.down)))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 3), aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + (Vector2Int.up * 3), aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -973,7 +995,7 @@ public class GridData
             aCube.GridPos + Vector2Int.down,
             aCube.GridPos + (Vector2Int.down * 2))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2) });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -989,7 +1011,7 @@ public class GridData
             aCube.GridPos + (Vector2Int.down * 2),
             aCube.GridPos + (Vector2Int.down * 3))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2), aCube.GridPos + (Vector2Int.down * 3) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.up, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2), aCube.GridPos + (Vector2Int.down * 3) });
             someGroupOfPositions.Add(newInfo);
         }
 
@@ -1005,7 +1027,7 @@ public class GridData
             aCube.GridPos + (Vector2Int.down * 3),
             aCube.GridPos + (Vector2Int.down * 4))))
         {
-            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube.GridPos, new List<Vector2Int> { aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2), aCube.GridPos + (Vector2Int.down * 3), aCube.GridPos + (Vector2Int.down * 4) });
+            newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, new List<Vector2Int> { aCube.GridPos, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2), aCube.GridPos + (Vector2Int.down * 3), aCube.GridPos + (Vector2Int.down * 4) });
             someGroupOfPositions.Add(newInfo);
         }
     }
@@ -1017,570 +1039,590 @@ public class GridData
         return true;
     }
 
-    private void Scorings(Cube aCube, ref List<Vector2Int> scorePositionCollector, ref int aComboScore)
+    private bool IsNotOnlyTheOriginal(List<Vector2Int> somePos)
     {
-        if(GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT])
-            ScoreWithTwoCubes(aCube, ref scorePositionCollector, ref aComboScore);
-        if(GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT])
-            ScoreWithThreeCubes(aCube, ref scorePositionCollector, ref aComboScore);
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT])
-            ScoreWithFourCubes(aCube, ref scorePositionCollector, ref aComboScore);
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT])
-            ScoreWithFiveCubes(aCube, ref scorePositionCollector, ref aComboScore);
+        if (somePos.Count > 2)
+            return true;
 
+        if (mOriginalLandedBlockPositions.Contains(somePos[0]) && mOriginalLandedBlockPositions.Contains(somePos[1]))
+            return false;
+        return true;
     }
 
-    private void ScoreWithTwoCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
+    private bool ThisGroupIsAlreadyRegistrated(ref List<ScoringGroupAchieveInfo> someGroupOfPosition, List<Vector2Int> someScoringPositions)
     {
-        //  to the right [G][N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.right)))
+        foreach(ScoringGroupAchieveInfo info in someGroupOfPosition)
         {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
-
-            aComboScore++;
+            if (info.GroupPosition.SequenceEqual(someScoringPositions))
+                return true;
         }
-
-        //  to the left [N][G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos + Vector2Int.left, aCube.GridPos)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
-
-            aComboScore++;
-        }
-
-        //  with above
-        // [N]
-        // [G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.up)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
-
-            aComboScore++;
-        }
-
-        //  with beneath
-        // [G]
-        // [N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.down)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
-
-            aComboScore++;
-        }
+        return false;
     }
 
-    private void ScoreWithThreeCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
-    {
-        // horizontal
-        //  the horizont cross [N][G][N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + Vector2Int.left, aCube.GridPos, aCube.GridPos + Vector2Int.right)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+    //private void Scorings(Cube aCube, ref List<Vector2Int> scorePositionCollector, ref int aComboScore)
+    //{
+    //    if(GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT])
+    //        ScoreWithTwoCubes(aCube, ref scorePositionCollector, ref aComboScore);
+    //    if(GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT])
+    //        ScoreWithThreeCubes(aCube, ref scorePositionCollector, ref aComboScore);
+    //    if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT])
+    //        ScoreWithFourCubes(aCube, ref scorePositionCollector, ref aComboScore);
+    //    if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT])
+    //        ScoreWithFiveCubes(aCube, ref scorePositionCollector, ref aComboScore);
 
-            aComboScore++;
-        }
+    //}
 
-        //  the right [G][N][N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2))))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
+    //private void ScoreWithTwoCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
+    //{
+    //    //  to the right [G][N]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.right)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        //  the left [N][N][G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
+    //    //  to the left [N][G]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos + Vector2Int.left, aCube.GridPos)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        // vertical
-        //  the verticla cross
-        // [N]
-        // [G]
-        // [N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + Vector2Int.up, aCube.GridPos, aCube.GridPos + Vector2Int.down)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+    //    //  with above
+    //    // [N]
+    //    // [G]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.up)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        //  the up
-        // [N]
-        // [N]
-        // [G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 2));
+    //    //  with beneath
+    //    // [G]
+    //    // [N]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.down)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
+    //}
 
-        //  the down
-        // [G]
-        // [N]
-        // [N]
-        if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2))))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
+    //private void ScoreWithThreeCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
+    //{
+    //    // horizontal
+    //    //  the horizont cross [N][G][N]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + Vector2Int.left, aCube.GridPos, aCube.GridPos + Vector2Int.right)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
 
-            aComboScore++;
-        }
-    }
+    //        aComboScore++;
+    //    }
 
-    private void ScoreWithFourCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
-    {
-        // horizontal
-        // [G][R][2R][3R]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
-            aCube.GridPos, 
-            aCube.GridPos + Vector2Int.right, 
-            aCube.GridPos + (Vector2Int.right * 2), 
-            aCube.GridPos + (Vector2Int.right * 3))))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 3));
+    //    //  the right [G][N][N]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos, aCube.GridPos + Vector2Int.right, aCube.GridPos + (Vector2Int.right * 2))))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        // [L][G][R][2R]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
-            aCube.GridPos + Vector2Int.left, 
-            aCube.GridPos, 
-            aCube.GridPos + Vector2Int.right,
-            aCube.GridPos + (Vector2Int.right * 2))))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
+    //    //  the left [N][N][G]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + (Vector2Int.left * 2), aCube.GridPos + Vector2Int.left, aCube.GridPos)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        // [2L][L][G][R]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
-            aCube.GridPos + (Vector2Int.left * 2), 
-            aCube.GridPos + Vector2Int.left, 
-            aCube.GridPos,
-            aCube.GridPos + Vector2Int.right)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
-        }
+    //    // vertical
+    //    //  the verticla cross
+    //    // [N]
+    //    // [G]
+    //    // [N]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + Vector2Int.up, aCube.GridPos, aCube.GridPos + Vector2Int.down)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
 
-        // [3L][2L][L][G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
-            aCube.GridPos + (Vector2Int.left * 3),
-            aCube.GridPos + (Vector2Int.left * 2),
-            aCube.GridPos + Vector2Int.left,
-            aCube.GridPos)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 3));
+    //        aComboScore++;
+    //    }
 
-            aComboScore++;
-        }
+    //    //  the up
+    //    // [N]
+    //    // [N]
+    //    // [G]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos + (Vector2Int.up * 2), aCube.GridPos + Vector2Int.up, aCube.GridPos)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 2));
 
-        // [3U]
-        // [2U]
-        // [U]
-        // [G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
-            aCube.GridPos + (Vector2Int.up * 3), 
-            aCube.GridPos + (Vector2Int.up * 2), 
-            aCube.GridPos + Vector2Int.up, 
-            aCube.GridPos)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 3));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
+    //        aComboScore++;
+    //    }
 
-            aComboScore++;
-        }
+    //    //  the down
+    //    // [G]
+    //    // [N]
+    //    // [N]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromThreePositions(aCube.GridPos, aCube.GridPos + Vector2Int.down, aCube.GridPos + (Vector2Int.down * 2))))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
 
-        // [2U]
-        // [U]
-        // [G]
-        // [D]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
-            aCube.GridPos + (Vector2Int.up * 2), 
-            aCube.GridPos + Vector2Int.up, 
-            aCube.GridPos, 
-            aCube.GridPos + Vector2Int.down)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+    //        aComboScore++;
+    //    }
+    //}
 
-            aComboScore++;
-        }
+    //private void ScoreWithFourCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
+    //{
+    //    // horizontal
+    //    // [G][R][2R][3R]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+    //        aCube.GridPos, 
+    //        aCube.GridPos + Vector2Int.right, 
+    //        aCube.GridPos + (Vector2Int.right * 2), 
+    //        aCube.GridPos + (Vector2Int.right * 3))))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 3));
 
-        // [U]
-        // [G]
-        // [D]
-        // [2D]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
-            aCube.GridPos + Vector2Int.up, 
-            aCube.GridPos, 
-            aCube.GridPos + Vector2Int.down, 
-            aCube.GridPos + (Vector2Int.down * 2))))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
+    //        aComboScore++;
+    //    }
 
-            aComboScore++;
-        }
+    //    // [L][G][R][2R]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+    //        aCube.GridPos + Vector2Int.left, 
+    //        aCube.GridPos, 
+    //        aCube.GridPos + Vector2Int.right,
+    //        aCube.GridPos + (Vector2Int.right * 2))))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
 
-        // [G]
-        // [D]
-        // [2D]
-        // [3D]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
-            aCube.GridPos,
-            aCube.GridPos + Vector2Int.down,
-            aCube.GridPos + (Vector2Int.down * 2),
-            aCube.GridPos + (Vector2Int.down * 3))))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 3));
+    //        aComboScore++;
+    //    }
 
-            aComboScore++;
-        }
-    }
+    //    // [2L][L][G][R]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+    //        aCube.GridPos + (Vector2Int.left * 2), 
+    //        aCube.GridPos + Vector2Int.left, 
+    //        aCube.GridPos,
+    //        aCube.GridPos + Vector2Int.right)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+    //    }
 
-    private void ScoreWithFiveCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
-    {
-        // [G][R][2R][3R][4R]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
-            aCube.GridPos,
-            aCube.GridPos + Vector2Int.right,
-            aCube.GridPos + (Vector2Int.right * 2),
-            aCube.GridPos + (Vector2Int.right * 3),
-            aCube.GridPos + (Vector2Int.right * 4))))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 3));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 4)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 4));
+    //    // [3L][2L][L][G]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+    //        aCube.GridPos + (Vector2Int.left * 3),
+    //        aCube.GridPos + (Vector2Int.left * 2),
+    //        aCube.GridPos + Vector2Int.left,
+    //        aCube.GridPos)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 3));
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        // [L][G][R][2R][3R]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
-            aCube.GridPos + Vector2Int.left,
-            aCube.GridPos,
-            aCube.GridPos + Vector2Int.right,
-            aCube.GridPos + (Vector2Int.right * 2),
-            aCube.GridPos + (Vector2Int.right * 3))))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 3));
+    //    // [3U]
+    //    // [2U]
+    //    // [U]
+    //    // [G]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+    //        aCube.GridPos + (Vector2Int.up * 3), 
+    //        aCube.GridPos + (Vector2Int.up * 2), 
+    //        aCube.GridPos + Vector2Int.up, 
+    //        aCube.GridPos)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 3));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        // [2L][L][G][R][2R]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
-            aCube.GridPos + (Vector2Int.left * 2),
-            aCube.GridPos + Vector2Int.left,
-            aCube.GridPos,
-            aCube.GridPos + Vector2Int.right,
-            aCube.GridPos + (Vector2Int.right * 2))))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
+    //    // [2U]
+    //    // [U]
+    //    // [G]
+    //    // [D]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+    //        aCube.GridPos + (Vector2Int.up * 2), 
+    //        aCube.GridPos + Vector2Int.up, 
+    //        aCube.GridPos, 
+    //        aCube.GridPos + Vector2Int.down)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        // [3L][2L][L][G][R]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
-            aCube.GridPos + (Vector2Int.left * 3),
-            aCube.GridPos + (Vector2Int.left * 2),
-            aCube.GridPos + Vector2Int.left,
-            aCube.GridPos,
-            aCube.GridPos + Vector2Int.right)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 3));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+    //    // [U]
+    //    // [G]
+    //    // [D]
+    //    // [2D]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+    //        aCube.GridPos + Vector2Int.up, 
+    //        aCube.GridPos, 
+    //        aCube.GridPos + Vector2Int.down, 
+    //        aCube.GridPos + (Vector2Int.down * 2))))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        // [4L][3L][2L][L][G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
-            aCube.GridPos + (Vector2Int.left * 4), 
-            aCube.GridPos + (Vector2Int.left * 3),
-            aCube.GridPos + (Vector2Int.left * 2),
-            aCube.GridPos + Vector2Int.left,
-            aCube.GridPos)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 3));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 4)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 4));
+    //    // [G]
+    //    // [D]
+    //    // [2D]
+    //    // [3D]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFourPositions(
+    //        aCube.GridPos,
+    //        aCube.GridPos + Vector2Int.down,
+    //        aCube.GridPos + (Vector2Int.down * 2),
+    //        aCube.GridPos + (Vector2Int.down * 3))))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 3));
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
+    //}
 
-        // [4U]
-        // [3U]
-        // [2U]
-        // [U]
-        // [G]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
-            aCube.GridPos + (Vector2Int.up * 4), 
-            aCube.GridPos + (Vector2Int.up * 3),
-            aCube.GridPos + (Vector2Int.up * 2),
-            aCube.GridPos + Vector2Int.up,
-            aCube.GridPos)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 4)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 4));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 3));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
+    //private void ScoreWithFiveCubes(Cube aCube, ref List<Vector2Int> aScorePositionCollector, ref int aComboScore)
+    //{
+    //    // [G][R][2R][3R][4R]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
+    //        aCube.GridPos,
+    //        aCube.GridPos + Vector2Int.right,
+    //        aCube.GridPos + (Vector2Int.right * 2),
+    //        aCube.GridPos + (Vector2Int.right * 3),
+    //        aCube.GridPos + (Vector2Int.right * 4))))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 3));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 4)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 4));
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        // [3U]
-        // [2U]
-        // [U]
-        // [G]
-        // [D]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
-            aCube.GridPos + (Vector2Int.up * 3), 
-            aCube.GridPos + (Vector2Int.up * 2),
-            aCube.GridPos + Vector2Int.up,
-            aCube.GridPos,
-            aCube.GridPos + Vector2Int.down)))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 3));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+    //    // [L][G][R][2R][3R]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
+    //        aCube.GridPos + Vector2Int.left,
+    //        aCube.GridPos,
+    //        aCube.GridPos + Vector2Int.right,
+    //        aCube.GridPos + (Vector2Int.right * 2),
+    //        aCube.GridPos + (Vector2Int.right * 3))))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 3));
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        // [2U]
-        // [U]
-        // [G]
-        // [D]
-        // [2D]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
-            aCube.GridPos + (Vector2Int.up * 2), 
-            aCube.GridPos + Vector2Int.up,
-            aCube.GridPos,
-            aCube.GridPos + Vector2Int.down,
-            aCube.GridPos + (Vector2Int.down * 2))))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up * 2))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up * 2);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
+    //    // [2L][L][G][R][2R]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
+    //        aCube.GridPos + (Vector2Int.left * 2),
+    //        aCube.GridPos + Vector2Int.left,
+    //        aCube.GridPos,
+    //        aCube.GridPos + Vector2Int.right,
+    //        aCube.GridPos + (Vector2Int.right * 2))))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.right * 2));
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        // [U]
-        // [G]
-        // [D]
-        // [2D]
-        // [3D]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
-            aCube.GridPos + Vector2Int.up, 
-            aCube.GridPos,
-            aCube.GridPos + Vector2Int.down,
-            aCube.GridPos + (Vector2Int.down * 2),
-            aCube.GridPos + (Vector2Int.down * 3))))
-        {
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 3));
+    //    // [3L][2L][L][G][R]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
+    //        aCube.GridPos + (Vector2Int.left * 3),
+    //        aCube.GridPos + (Vector2Int.left * 2),
+    //        aCube.GridPos + Vector2Int.left,
+    //        aCube.GridPos,
+    //        aCube.GridPos + Vector2Int.right)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 3));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.right))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.right);
 
-            aComboScore++;
-        }
+    //        aComboScore++;
+    //    }
 
-        // [G]
-        // [D]
-        // [2D]
-        // [3D]
-        // [4D]
-        if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
-            aCube.GridPos,
-            aCube.GridPos + Vector2Int.down,
-            aCube.GridPos + (Vector2Int.down * 2),
-            aCube.GridPos + (Vector2Int.down * 3),
-            aCube.GridPos + (Vector2Int.down * 4))))
-        {   
-            if (!aScorePositionCollector.Contains(aCube.GridPos))
-                aScorePositionCollector.Add(aCube.GridPos);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
-                aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 3)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 3));
-            if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 4)))
-                aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 4));
+    //    // [4L][3L][2L][L][G]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
+    //        aCube.GridPos + (Vector2Int.left * 4), 
+    //        aCube.GridPos + (Vector2Int.left * 3),
+    //        aCube.GridPos + (Vector2Int.left * 2),
+    //        aCube.GridPos + Vector2Int.left,
+    //        aCube.GridPos)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.left))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.left);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.left * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 3));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.right * 4)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.left * 4));
 
-            aComboScore++;
-        }
-    }
+    //        aComboScore++;
+    //    }
+
+    //    // [4U]
+    //    // [3U]
+    //    // [2U]
+    //    // [U]
+    //    // [G]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
+    //        aCube.GridPos + (Vector2Int.up * 4), 
+    //        aCube.GridPos + (Vector2Int.up * 3),
+    //        aCube.GridPos + (Vector2Int.up * 2),
+    //        aCube.GridPos + Vector2Int.up,
+    //        aCube.GridPos)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 4)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 4));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 3));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+
+    //        aComboScore++;
+    //    }
+
+    //    // [3U]
+    //    // [2U]
+    //    // [U]
+    //    // [G]
+    //    // [D]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
+    //        aCube.GridPos + (Vector2Int.up * 3), 
+    //        aCube.GridPos + (Vector2Int.up * 2),
+    //        aCube.GridPos + Vector2Int.up,
+    //        aCube.GridPos,
+    //        aCube.GridPos + Vector2Int.down)))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 3));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.up * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.up * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+
+    //        aComboScore++;
+    //    }
+
+    //    // [2U]
+    //    // [U]
+    //    // [G]
+    //    // [D]
+    //    // [2D]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
+    //        aCube.GridPos + (Vector2Int.up * 2), 
+    //        aCube.GridPos + Vector2Int.up,
+    //        aCube.GridPos,
+    //        aCube.GridPos + Vector2Int.down,
+    //        aCube.GridPos + (Vector2Int.down * 2))))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up * 2))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up * 2);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
+
+    //        aComboScore++;
+    //    }
+
+    //    // [U]
+    //    // [G]
+    //    // [D]
+    //    // [2D]
+    //    // [3D]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
+    //        aCube.GridPos + Vector2Int.up, 
+    //        aCube.GridPos,
+    //        aCube.GridPos + Vector2Int.down,
+    //        aCube.GridPos + (Vector2Int.down * 2),
+    //        aCube.GridPos + (Vector2Int.down * 3))))
+    //    {
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.up))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.up);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 3));
+
+    //        aComboScore++;
+    //    }
+
+    //    // [G]
+    //    // [D]
+    //    // [2D]
+    //    // [3D]
+    //    // [4D]
+    //    if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
+    //        aCube.GridPos,
+    //        aCube.GridPos + Vector2Int.down,
+    //        aCube.GridPos + (Vector2Int.down * 2),
+    //        aCube.GridPos + (Vector2Int.down * 3),
+    //        aCube.GridPos + (Vector2Int.down * 4))))
+    //    {   
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos))
+    //            aScorePositionCollector.Add(aCube.GridPos);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + Vector2Int.down))
+    //            aScorePositionCollector.Add(aCube.GridPos + Vector2Int.down);
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 2)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 2));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 3)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 3));
+    //        if (!aScorePositionCollector.Contains(aCube.GridPos + (Vector2Int.down * 4)))
+    //            aScorePositionCollector.Add(aCube.GridPos + (Vector2Int.down * 4));
+
+    //        aComboScore++;
+    //    }
+    //}
 
     /// <summary>
     /// Return the sum value of the two requesting position
@@ -1649,6 +1691,19 @@ public class GridData
 
         int value = GetCubeOn(aPos1).Number + GetCubeOn(aPos2).Number + GetCubeOn(aPos3).Number + GetCubeOn(aPos4).Number + GetCubeOn(aPos5).Number;
 
+        return value;
+    }
+
+    private int TotalValue(List<Vector2Int> someScoringPositions)
+    {
+        int value = 0;
+        for (int i = 0; i < someScoringPositions.Count; i++)
+        {
+            if (GetCubeOn(someScoringPositions[i]) == null)
+                return -1;
+            else
+                value += GetCubeOn(someScoringPositions[i]).Number;
+        }
         return value;
     }
 }

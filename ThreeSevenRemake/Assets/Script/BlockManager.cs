@@ -9,17 +9,17 @@ public class ScoringGroupAchieveInfo
     private readonly Objectives mObjectiveRank = Objectives.X1;
     public Objectives ObjectiveRank { get { return mObjectiveRank; } }
 
-    private readonly Vector2Int mActivePosition = new Vector2Int();
-    public Vector2Int ActivePosition { get { return mActivePosition; } }
+    //private readonly Vector2Int mActivePosition = new Vector2Int();
+    //public Vector2Int ActivePosition { get { return mActivePosition; } }
 
-    private readonly List<Vector2Int> mPassivePositions = new List<Vector2Int>();
-    public List<Vector2Int> PassivePosition { get { return mPassivePositions; } }
+    private readonly List<Vector2Int> mGroupPositions = new List<Vector2Int>();
+    public List<Vector2Int> GroupPosition { get { return mGroupPositions; } }
         
-    public ScoringGroupAchieveInfo(Objectives anObjectiveRank, Vector2Int anActivePosition, List<Vector2Int> somePassivePositions)
+    public ScoringGroupAchieveInfo(Objectives anObjectiveRank, /*Vector2Int anActivePosition,*/ List<Vector2Int> someGroupPositions)
     {
         mObjectiveRank = anObjectiveRank;
-        mActivePosition = anActivePosition;
-        mPassivePositions = somePassivePositions;
+        //mActivePosition = anActivePosition;
+        mGroupPositions = someGroupPositions;
     }
 }
 /// <summary>
@@ -176,18 +176,18 @@ public class BlockManager
             {
                 foreach (Cube c in mBlocks[i].Cubes)
                 {
-                    if(mScoringPositionGroups[mCurrentScoringGroupIndex].PassivePosition.Contains(c.GridPos))
-                    {
-                        AddScoringCubes(c);
-                        c.PlayPassiveParticlar();
-                        thisGroupScoringCubes.Add(c);
-                    }
-                    else if(mScoringPositionGroups[mCurrentScoringGroupIndex].ActivePosition == c.GridPos)
+                    if(mScoringPositionGroups[mCurrentScoringGroupIndex].GroupPosition.Contains(c.GridPos))
                     {
                         AddScoringCubes(c);
                         c.PlayActiveParticlar();
                         thisGroupScoringCubes.Add(c);
                     }
+                    //else if(mScoringPositionGroups[mCurrentScoringGroupIndex].ActivePosition == c.GridPos)
+                    //{
+                    //    AddScoringCubes(c);
+                    //    c.PlayActiveParticlar();
+                    //    thisGroupScoringCubes.Add(c);
+                    //}
                 }
             }
             achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes);
@@ -226,8 +226,8 @@ public class BlockManager
             {
                 foreach (Cube c in mBlocks[b].Cubes)
                 {
-                    if (mScoringPositionGroups[mCurrentScoringGroupIndex].PassivePosition.Contains(c.GridPos) ||
-                        mScoringPositionGroups[mCurrentScoringGroupIndex].ActivePosition == c.GridPos)
+                    if (mScoringPositionGroups[mCurrentScoringGroupIndex].GroupPosition.Contains(c.GridPos)
+                        /*|| mScoringPositionGroups[mCurrentScoringGroupIndex].ActivePosition == c.GridPos*/)
                     {
                         AddScoringCubes(c);
                         thisGroupScoringCubes.Add(c);
@@ -243,32 +243,32 @@ public class BlockManager
         mComboCount = 0;
     }
 
-    public bool IsScoring()
-    {
-        // scoring method to list
-        List<Vector2Int> scoringPositions = GridData.Instance.CompleteObjectiveScoringMethod(mNewLandedCubes, ref mComboCount);
+    //public bool IsScoring()
+    //{
+    //    // scoring method to list
+    //    List<Vector2Int> scoringPositions = GridData.Instance.CompleteObjectiveScoringMethod(mNewLandedCubes, ref mComboCount);
         
 
-        mScoringsCubes.Clear();
-        mNewLandedCubes.Clear();
+    //    mScoringsCubes.Clear();
+    //    mNewLandedCubes.Clear();
 
-        if (scoringPositions.Any())
-        {
-            for(int i = 0; i < mBlocks.Count; i++)
-            {
-                foreach (Cube c in mBlocks[i].Cubes)
-                {
-                    if (scoringPositions.Contains(c.GridPos))
-                        AddScoringCubes(c);
-                }
-            }
-            return true;
-        }
+    //    if (scoringPositions.Any())
+    //    {
+    //        for(int i = 0; i < mBlocks.Count; i++)
+    //        {
+    //            foreach (Cube c in mBlocks[i].Cubes)
+    //            {
+    //                if (scoringPositions.Contains(c.GridPos))
+    //                    AddScoringCubes(c);
+    //            }
+    //        }
+    //        return true;
+    //    }
 
-        GameManager.Instance.AddLevelPoint(mComboCount);
-        mComboCount = 0;
-        return false;
-    }
+    //    GameManager.Instance.AddLevelPoint(mComboCount);
+    //    mComboCount = 0;
+    //    return false;
+    //}
     
     /// <summary>
     /// Checking if any block have any of it's cube playing scoring animation
