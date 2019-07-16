@@ -645,17 +645,17 @@ public class GridData
 
     private void Scoring(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT])
-            ScoreWithTwoCubes(aCube, ref someGroupOfPositions);
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT])
-            ScoreWithThreeCubes(aCube, ref someGroupOfPositions);
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT])
-            ScoreWithFourCubes(aCube, ref someGroupOfPositions);
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT])
-            ScoreWithFiveCubes(aCube, ref someGroupOfPositions);
+        //if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT])
+        //    ScoreWithTwoCubes(aCube, ref someGroupOfPositions);
+        //if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT])
+        //    ScoreWithThreeCubes(aCube, ref someGroupOfPositions);
+        //if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT])
+        //    ScoreWithFourCubes(aCube, ref someGroupOfPositions);
+        //if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT])
+        //    ScoreWithFiveCubes(aCube, ref someGroupOfPositions);
 
-        List<ScoringGroupAchieveInfo> testingList = new List<ScoringGroupAchieveInfo>();
-        ScoreWithAvailableCubes(aCube, ref testingList);
+        //List<ScoringGroupAchieveInfo> testingList = new List<ScoringGroupAchieveInfo>();
+        ScoreWithAvailableCubes(aCube, ref someGroupOfPositions);
 
         return;
     }
