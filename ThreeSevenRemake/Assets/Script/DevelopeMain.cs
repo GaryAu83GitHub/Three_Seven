@@ -89,16 +89,8 @@ public class DevelopeMain : MonoBehaviour
                 // if the block manager detect any scoring from the last landing block, the animation will be played
                 if (BlockManager.Instance.CheckIfAnyBlocksIsFloating())
                     BlockManager.Instance.RearrangeBlocks();
-                //else if (BlockManager.Instance.IsScoring())
-                //    BlockManager.Instance.PlayScoringAnimation();
                 else if (BlockManager.Instance.IsScoringNew())
-                {
-                    if(GameSettings.Instance.ActiveLongScoringDisplay)
-                        BlockManager.Instance.LongScoreCalculationProgression();
-                    else
-                        BlockManager.Instance.ShortScoreCalculationProgression();
-                }
-
+                    BlockManager.Instance.LongScoreCalculationProgression();
                 else
                 {
                     Objective.Instance.ChangeObjective();

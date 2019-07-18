@@ -59,27 +59,27 @@ public class ObjectiveFrame : MonoBehaviour
     {
     }
 
-    public void SetObjectiveNumbersFor(Objectives anObjective, int anObjectiveNumber)
+    public void SetObjectiveNumbersFor(TaskRank anObjective, int anObjectiveNumber)
     {
-        if(anObjective == Objectives.X1)
+        if(anObjective == TaskRank.X1)
             GreenFrameText.text = anObjectiveNumber.ToString();
-        else if(anObjective == Objectives.X5)
+        else if(anObjective == TaskRank.X5)
             BlueFrameText.text = anObjectiveNumber.ToString();
-        else if(anObjective == Objectives.X10)
+        else if(anObjective == TaskRank.X10)
             RedFrameText.text = anObjectiveNumber.ToString();
     }
 
-    public void PlayAnimationOn(Objectives anObjective)
+    public void PlayAnimationOn(TaskRank anObjective)
     {
-        if (anObjective == Objectives.X1)
+        if (anObjective == TaskRank.X1)
             GreenAnimation.Play();
-        else if (anObjective == Objectives.X5)
+        else if (anObjective == TaskRank.X5)
             BlueAnimation.Play();
-        else if (anObjective == Objectives.X10)
+        else if (anObjective == TaskRank.X10)
             RedAnimation.Play();
     }
 
-    private void DisplayScoring(Objectives anObjective, List<Cube> someScoringCube)
+    private void DisplayScoring(TaskRank anObjective, List<Cube> someScoringCube)
     {
         int totalScore = ScoreCalculatorcs.LinkingScoreCalculation(anObjective, someScoringCube.Count);
         string formula = "";
@@ -89,23 +89,23 @@ public class ObjectiveFrame : MonoBehaviour
             
             formula += someScoringCube[i].Number.ToString();
 
-            if (i < someScoringCube.Count)
+            if (i < someScoringCube.Count - 1)
                 formula += "+";
         }
 
-        if (anObjective == Objectives.X1)
+        if (anObjective == TaskRank.X1)
         {
             GreenScoreText.text = totalScore.ToString();
             GreenFormulaText.text = formula;
             GreenAnimation.Play();
         }
-        else if (anObjective == Objectives.X5)
+        else if (anObjective == TaskRank.X5)
         {
             BlueScoreText.text = totalScore.ToString();
             BlueFormulaText.text = formula;
             BlueAnimation.Play();
         }
-        else if (anObjective == Objectives.X10)
+        else if (anObjective == TaskRank.X10)
         {
             RedScoreText.text = totalScore.ToString();
             RedFormulaText.text = formula;

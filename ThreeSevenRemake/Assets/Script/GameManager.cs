@@ -101,6 +101,30 @@ public class GameManager
         levelChanging?.Invoke(mCurrentLevel, mCurrentLevelPoint, mNextLevelUpScore);
     }
 
+    public void AddScore(ScoreType anObtainScoreType, int anValue = 0, TaskRank anObjective = TaskRank.X1)
+    {
+        int addOn = 0;
+
+        switch(anObtainScoreType)
+        {
+            case ScoreType.LINKING:
+                addOn = ScoreCalculatorcs.LinkingScoreCalculation(anObjective, anValue);
+                break;
+            case ScoreType.COMBO:
+                addOn = ScoreCalculatorcs.ComboScoreCalculation(anValue);
+                break;
+            default:
+                addOn = ScoreCalculatorcs.OriginalBlockLandingScoreCalculation();
+                break;
+        }
+
+        if (addOn > 0)
+        {
+            mCurrentScore += addOn;
+            scoreChanging?.Invoke(mCurrentScore, addOn);
+        }
+    }
+
     /// <summary>
     /// Add score based on the current level that is scored by have the current block landed.
     /// </summary>
@@ -129,12 +153,12 @@ public class GameManager
             comboOccuring?.Invoke(aCombo, (int)mComboScore, "");
     }
 
-    public void AddLinkingScore(Objectives anObjective, int aNumberCount)
+    public void AddLinkingScore(TaskRank anObjective, int aNumberCount)
     {
         //int objectiveMultiply = 1;
-        //if (anObjective == Objectives.X10)
+        //if (anObjective == TaskRank.X10)
         //    objectiveMultiply = 10;
-        //else if (anObjective == Objectives.X5)
+        //else if (anObjective == TaskRank.X5)
         //    objectiveMultiply = 5;
         //else
         //    objectiveMultiply = 1;

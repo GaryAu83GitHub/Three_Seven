@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-public enum Objectives
+public enum TaskRank
 {
     X1,
     X5,
@@ -22,25 +22,25 @@ public class Objective
     }
     private static Objective mInstance;
 
-    public static int GetObjectiveBonusOf(Objectives anObjective)
+    public static int GetObjectiveBonusOf(TaskRank anObjective)
     {
         int bonus = 1;
 
-        if (anObjective == Objectives.X10)
+        if (anObjective == TaskRank.X10)
             bonus = 10;
-        else if (anObjective == Objectives.X5)
+        else if (anObjective == TaskRank.X5)
             bonus = 5;
 
         return bonus;
     }
 
-    public delegate void OnAchiveObjective(Objectives anObjective, int anObjectiveNumber);
+    public delegate void OnAchiveObjective(TaskRank anObjective, int anObjectiveNumber);
     public static OnAchiveObjective achiveObjective;
 
     private List<bool> mUsedObjectiveNumbers = new List<bool>();
-    private Dictionary<Objectives, int> mActiveObjectives = new Dictionary<Objectives, int>();
-    private Dictionary<Objectives, List<int>> mObjectiveNumbersList = new Dictionary<Objectives, List<int>>();
-    private Dictionary<Objectives, bool> mObjectiveAchieveList = new Dictionary<Objectives, bool>();
+    private Dictionary<TaskRank, int> mActiveObjectives = new Dictionary<TaskRank, int>();
+    private Dictionary<TaskRank, List<int>> mObjectiveNumbersList = new Dictionary<TaskRank, List<int>>();
+    private Dictionary<TaskRank, bool> mObjectiveAchieveList = new Dictionary<TaskRank, bool>();
 
     private int mMaxLimitObjectiveValue = 18;
     private int mCurrentObjectiveValueLimit = 0;
@@ -48,11 +48,11 @@ public class Objective
     
     public Objective()
     {
-        mObjectiveNumbersList.Add(Objectives.X1, new List<int>());
-        mObjectiveNumbersList.Add(Objectives.X5, new List<int>());
-        mObjectiveNumbersList.Add(Objectives.X10, new List<int>());
+        mObjectiveNumbersList.Add(TaskRank.X1, new List<int>());
+        mObjectiveNumbersList.Add(TaskRank.X5, new List<int>());
+        mObjectiveNumbersList.Add(TaskRank.X10, new List<int>());
         
-        foreach (Objectives obj in mObjectiveNumbersList.Keys)
+        foreach (TaskRank obj in mObjectiveNumbersList.Keys)
         {
             mObjectiveAchieveList.Add(obj, false);
             mActiveObjectives.Add(obj, 0);
@@ -63,7 +63,7 @@ public class Objective
 
     public void StartFirstSetOfObjective()
     {
-        foreach (Objectives obj in mObjectiveNumbersList.Keys)
+        foreach (TaskRank obj in mObjectiveNumbersList.Keys)
         {
             achiveObjective?.Invoke(obj, mActiveObjectives[obj]);
         }
@@ -76,12 +76,12 @@ public class Objective
 
         mUsedObjectiveNumbers[aCheckingNumber] = true;
 
-        Objectives obj = mActiveObjectives.FirstOrDefault(x => x.Value == aCheckingNumber).Key;
+        TaskRank obj = mActiveObjectives.FirstOrDefault(x => x.Value == aCheckingNumber).Key;
         mObjectiveAchieveList[obj] = true;
         return true;
     }
 
-    public bool AchiveObjective(ref Objectives getObjectiveRank, int aCheckingNumber)
+    public bool AchiveObjective(ref TaskRank getObjectiveRank, int aCheckingNumber)
     {
         if (!mActiveObjectives.ContainsValue(aCheckingNumber))
             return false;
@@ -98,7 +98,7 @@ public class Objective
         if (!mObjectiveAchieveList.ContainsValue(true))
             return;
 
-        foreach (Objectives obj in mObjectiveAchieveList.Keys.ToList())
+        foreach (TaskRank obj in mObjectiveAchieveList.Keys.ToList())
         {
             if (mObjectiveAchieveList[obj])
             {
@@ -113,11 +113,11 @@ public class Objective
     public int ObjectiveAchieveBonus()
     {
         int bonus = 0;
-        if (mObjectiveAchieveList[Objectives.X1])
+        if (mObjectiveAchieveList[TaskRank.X1])
             bonus++;
-        if (mObjectiveAchieveList[Objectives.X5])
+        if (mObjectiveAchieveList[TaskRank.X5])
             bonus += 5;
-        if (mObjectiveAchieveList[Objectives.X10])
+        if (mObjectiveAchieveList[TaskRank.X10])
             bonus += 10;
 
         return bonus;
@@ -148,7 +148,7 @@ public class Objective
         
         Dictionary<int, int> combinationCount = IterateCombination();
 
-        foreach(Objectives k in mObjectiveNumbersList.Keys)
+        foreach(TaskRank k in mObjectiveNumbersList.Keys)
         {
             mObjectiveNumbersList[k].Clear();
         }
@@ -163,45 +163,45 @@ public class Objective
             if (mostCombination.ToString().Length == 4)
             {
                 if (combinationCount[key].ToString().Length == 1 || combinationCount[key].ToString().Length == 2)
-                    mObjectiveNumbersList[Objectives.X10].Add(key);
+                    mObjectiveNumbersList[TaskRank.X10].Add(key);
                 if (combinationCount[key].ToString().Length == 3)
-                    mObjectiveNumbersList[Objectives.X5].Add(key);
+                    mObjectiveNumbersList[TaskRank.X5].Add(key);
                 if (combinationCount[key].ToString().Length == 4)
-                    mObjectiveNumbersList[Objectives.X1].Add(key);
+                    mObjectiveNumbersList[TaskRank.X1].Add(key);
             }
             else if (mostCombination.ToString().Length == 3)
             {
                 if (combinationCount[key].ToString().Length == 1)
-                    mObjectiveNumbersList[Objectives.X10].Add(key);
+                    mObjectiveNumbersList[TaskRank.X10].Add(key);
                 if (combinationCount[key].ToString().Length == 2)
-                    mObjectiveNumbersList[Objectives.X5].Add(key);
+                    mObjectiveNumbersList[TaskRank.X5].Add(key);
                 if (combinationCount[key].ToString().Length == 3)
-                    mObjectiveNumbersList[Objectives.X1].Add(key);
+                    mObjectiveNumbersList[TaskRank.X1].Add(key);
             }
             else
             {
                if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_3_DIGIT))
                 {
                     if (key <= 3 || key >= 24) // 1 to 3 combination
-                        mObjectiveNumbersList[Objectives.X10].Add(key);
+                        mObjectiveNumbersList[TaskRank.X10].Add(key);
                     if ((key >= 4 && key <= 9) || (key >= 18 && key <= 23)) // 4 to 7 combination
-                        mObjectiveNumbersList[Objectives.X5].Add(key);
+                        mObjectiveNumbersList[TaskRank.X5].Add(key);
                     if (key >= 10 && key <= 17)   // 
-                        mObjectiveNumbersList[Objectives.X1].Add(key);
+                        mObjectiveNumbersList[TaskRank.X1].Add(key);
                 }
                else
                 {
                     if (key <= 2 || key >= 16) // 1 to 3 combination
-                        mObjectiveNumbersList[Objectives.X10].Add(key);
+                        mObjectiveNumbersList[TaskRank.X10].Add(key);
                     if ((key >= 3 && key <= 6) || (key >= 12 && key <= 15)) // 4 to 7 combination
-                        mObjectiveNumbersList[Objectives.X5].Add(key);
+                        mObjectiveNumbersList[TaskRank.X5].Add(key);
                     if (key >= 7 && key <= 11)   // 
-                        mObjectiveNumbersList[Objectives.X1].Add(key);
+                        mObjectiveNumbersList[TaskRank.X1].Add(key);
                 }
             }
         }
 
-        foreach (Objectives obj in mObjectiveNumbersList.Keys)
+        foreach (TaskRank obj in mObjectiveNumbersList.Keys)
         {
             mObjectiveAchieveList[obj] = false;
             mActiveObjectives[obj] = GetObjectiveFrom(obj);
@@ -210,7 +210,7 @@ public class Objective
         return;
     }
 
-    private List<int> ResetObjectiveNumberFor(Objectives anObjective)
+    private List<int> ResetObjectiveNumberFor(TaskRank anObjective)
     {
         List<int> availableObjective = new List<int>();
         foreach (int i in mObjectiveNumbersList[anObjective])
@@ -224,7 +224,7 @@ public class Objective
         return availableObjective;
     }
 
-    private int GetObjectiveFrom(Objectives anObjective)
+    private int GetObjectiveFrom(TaskRank anObjective)
     {
         List<int> avaiableObjective = new List<int>();
         

@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class ScoringGroupAchieveInfo
 {
-    private readonly Objectives mObjectiveRank = Objectives.X1;
-    public Objectives ObjectiveRank { get { return mObjectiveRank; } }
+    private readonly TaskRank mObjectiveRank = TaskRank.X1;
+    public TaskRank ObjectiveRank { get { return mObjectiveRank; } }
 
     //private readonly Vector2Int mActivePosition = new Vector2Int();
     //public Vector2Int ActivePosition { get { return mActivePosition; } }
@@ -15,7 +15,7 @@ public class ScoringGroupAchieveInfo
     private readonly List<Vector2Int> mGroupPositions = new List<Vector2Int>();
     public List<Vector2Int> GroupPosition { get { return mGroupPositions; } }
         
-    public ScoringGroupAchieveInfo(Objectives anObjectiveRank, /*Vector2Int anActivePosition,*/ List<Vector2Int> someGroupPositions)
+    public ScoringGroupAchieveInfo(TaskRank anObjectiveRank, /*Vector2Int anActivePosition,*/ List<Vector2Int> someGroupPositions)
     {
         mObjectiveRank = anObjectiveRank;
         //mActivePosition = anActivePosition;
@@ -50,7 +50,7 @@ public class BlockManager
     }
     private static BlockManager mInstance;
 
-    public delegate void OnAchieveScoring(Objectives anObjective, List<Cube> thisGroupsCubes);
+    public delegate void OnAchieveScoring(TaskRank anObjective, List<Cube> thisGroupsCubes);
     public static OnAchieveScoring achieveScoring;
     
     public int BlockCount { get { return mBlocks.Count; } }
@@ -94,10 +94,12 @@ public class BlockManager
     public void AddBlock(Block aBlock, bool isTheOriginal = true)
     {
         mBlocks.Add(aBlock);
-        
-        if (isTheOriginal/*!aBlock.CheckIfCellIsVacantBeneath()*/)
-            GameManager.Instance.AddSoftScore();
 
+        if (isTheOriginal/*!aBlock.CheckIfCellIsVacantBeneath()*/)
+        {
+            GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
+            //GameManager.Instance.AddSoftScore();
+        }
         foreach (Cube c in aBlock.Cubes)
         {
             if (isTheOriginal)
@@ -171,6 +173,7 @@ public class BlockManager
         // the cube play it particlar effect
         if(!mCurrentGroupScoreCalcInProgress)
         {
+            TaskRank thisGroupTaskTank = mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank;
             List<Cube> thisGroupScoringCubes = new List<Cube>();
             for (int i = 0; i < mBlocks.Count; i++)
             {
@@ -191,7 +194,8 @@ public class BlockManager
                 }
             }
             achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes);
-            GameManager.Instance.AddLinkingScore(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes.Count);
+            //GameManager.Instance.AddLinkingScore(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes.Count);
+            GameManager.Instance.AddScore(ScoreType.LINKING, thisGroupScoringCubes.Count, thisGroupTaskTank);
             mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
         }
         else
@@ -204,7 +208,8 @@ public class BlockManager
                 //mComboCount++;
                 if(mCurrentScoringGroupIndex >= mScoringPositionGroups.Count)
                 {
-                    GameManager.Instance.AddComboScore(mScoringPositionGroups.Count);
+                    //GameManager.Instance.AddComboScore(mScoringPositionGroups.Count);
+                    GameManager.Instance.AddScore(ScoreType.COMBO, mScoringPositionGroups.Count - 1);
                     GameManager.Instance.AddLevelPoint(mScoringPositionGroups.Count);
                     PlayScoringAnimation();
                     mScoringPositionGroups.Clear();
@@ -217,33 +222,34 @@ public class BlockManager
 
     }
 
-    public void ShortScoreCalculationProgression()
-    {
-        List<Cube> thisGroupScoringCubes = new List<Cube>();
+    //public void ShortScoreCalculationProgression()
+    //{
+    //    List<Cube> thisGroupScoringCubes = new List<Cube>();
 
-        for (int i = 0; i < mScoringPositionGroups.Count; i++)
-        {
-            for (int b = 0; b < mBlocks.Count; b++)
-            {
-                foreach (Cube c in mBlocks[b].Cubes)
-                {
-                    if (mScoringPositionGroups[mCurrentScoringGroupIndex].GroupPosition.Contains(c.GridPos)
-                        /*|| mScoringPositionGroups[mCurrentScoringGroupIndex].ActivePosition == c.GridPos*/)
-                    {
-                        AddScoringCubes(c);
-                        thisGroupScoringCubes.Add(c);
-                    }
-                }
-            }
-            achieveScoring?.Invoke(mScoringPositionGroups[i].ObjectiveRank, thisGroupScoringCubes);
-            GameManager.Instance.AddLinkingScore(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes.Count);
-        }
+    //    for (int i = 0; i < mScoringPositionGroups.Count; i++)
+    //    {
+    //        for (int b = 0; b < mBlocks.Count; b++)
+    //        {
+    //            foreach (Cube c in mBlocks[b].Cubes)
+    //            {
+    //                if (mScoringPositionGroups[mCurrentScoringGroupIndex].GroupPosition.Contains(c.GridPos)
+    //                    /*|| mScoringPositionGroups[mCurrentScoringGroupIndex].ActivePosition == c.GridPos*/)
+    //                {
+    //                    AddScoringCubes(c);
+    //                    thisGroupScoringCubes.Add(c);
+    //                }
+    //            }
+    //        }
+    //        achieveScoring?.Invoke(mScoringPositionGroups[i].ObjectiveRank, thisGroupScoringCubes);
+    //        GameManager.Instance.AddLinkingScore(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes.Count);
+    //    }
 
-        PlayScoringAnimation();
-        GameManager.Instance.AddComboScore(mScoringPositionGroups.Count);
-        GameManager.Instance.AddLevelPoint(mScoringPositionGroups.Count);
-        //mComboCount = 0;
-    }
+    //    PlayScoringAnimation();
+    //    //GameManager.Instance.AddComboScore(mScoringPositionGroups.Count);
+    //    GameManager.Instance.AddScore(ScoreType.COMBO, mScoringPositionGroups.Count - 1);
+    //    GameManager.Instance.AddLevelPoint(mScoringPositionGroups.Count);
+    //    //mComboCount = 0;
+    //}
 
     //public bool IsScoring()
     //{

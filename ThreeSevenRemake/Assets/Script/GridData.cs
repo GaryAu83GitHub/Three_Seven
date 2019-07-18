@@ -326,7 +326,7 @@ public class GridData
             }
         }
 
-        GameManager.Instance.AddComboScore(aComboCount);
+        //GameManager.Instance.AddComboScore(aComboCount);
 
         return scoringPositions;
     }
@@ -445,7 +445,7 @@ public class GridData
             }
         }
 
-        GameManager.Instance.AddComboScore(aComboCount);
+        //GameManager.Instance.AddComboScore(aComboCount);
 
         return scoringPositions;
     }
@@ -585,7 +585,7 @@ public class GridData
             }
         }
 
-        GameManager.Instance.AddComboScore(aComboCount);
+        //GameManager.Instance.AddComboScore(aComboCount);
         return scoringPositions;
     }
 
@@ -664,7 +664,7 @@ public class GridData
     {
         List<List<Vector2Int>> scoreCombinationPositions = GenerateScoreCombinationPositions.Instance.GetScorePositionListFrom(aCube.GridPos);
 
-        Objectives getObjectiveRank = Objectives.X1;
+        TaskRank getObjectiveRank = TaskRank.X1;
         ScoringGroupAchieveInfo newInfo;
         foreach(List<Vector2Int> pos in scoreCombinationPositions)
         {
@@ -680,7 +680,7 @@ public class GridData
 
     private void ScoreWithTwoCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
-        Objectives getObjectiveRank = Objectives.X1;
+        TaskRank getObjectiveRank = TaskRank.X1;
         ScoringGroupAchieveInfo newInfo;
         //  to the right [G][R] 
         if (Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValueFromTwoPositions(aCube.GridPos, aCube.GridPos + Vector2Int.right)) &&
@@ -721,7 +721,7 @@ public class GridData
 
     private void ScoreWithThreeCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
-        Objectives getObjectiveRank = Objectives.X1;
+        TaskRank getObjectiveRank = TaskRank.X1;
         ScoringGroupAchieveInfo newInfo;
         // horizontal
         //  the horizont cross [L][G][R]
@@ -785,7 +785,7 @@ public class GridData
 
     private void ScoreWithFourCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
-        Objectives getObjectiveRank = Objectives.X1;
+        TaskRank getObjectiveRank = TaskRank.X1;
         ScoringGroupAchieveInfo newInfo;
         // horizontal
         // [G][R][2R][3R]
@@ -891,7 +891,7 @@ public class GridData
 
     private void ScoreWithFiveCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
-        Objectives getObjectiveRank = Objectives.X1;
+        TaskRank getObjectiveRank = TaskRank.X1;
         ScoringGroupAchieveInfo newInfo;
         // [G][R][2R][3R][4R]
         if (Objective.Instance.AchiveObjective(TotalValueFromFivePositions(
