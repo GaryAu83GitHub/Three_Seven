@@ -195,21 +195,7 @@ public class GridData
             return;
         mOriginalLandedBlockPositions.Add(aBlockCubeGridPos);
     }
-
-    //public List<Vector2Int> CompleteObjectiveScoringMethod(List<Cube> someNewLandedCubes, ref int aComboCount)
-    //{
-    //    List<Vector2Int> scoringPositions = new List<Vector2Int>();
-
-    //    foreach (Cube c in someNewLandedCubes)
-    //    {
-    //        Scorings(c, ref scoringPositions, ref aComboCount);
-    //    }
-
-    //    GameManager.Instance.AddComboScore(aComboCount);
-
-    //    return scoringPositions;
-    //}
-
+    
     public List<ScoringGroupAchieveInfo> GetListOfScoringPositionGroups(List<Cube> someNewLandedCubes)
     {
         List<ScoringGroupAchieveInfo> someGroupOfPosition = new List<ScoringGroupAchieveInfo>();

@@ -69,18 +69,6 @@ public class Objective
         }
     }
 
-    public bool AchiveObjective(int aCheckingNumber)
-    {
-        if (!mActiveObjectives.ContainsValue(aCheckingNumber))
-            return false;
-
-        mUsedObjectiveNumbers[aCheckingNumber] = true;
-
-        TaskRank obj = mActiveObjectives.FirstOrDefault(x => x.Value == aCheckingNumber).Key;
-        mObjectiveAchieveList[obj] = true;
-        return true;
-    }
-
     public bool AchiveObjective(ref TaskRank getObjectiveRank, int aCheckingNumber)
     {
         if (!mActiveObjectives.ContainsValue(aCheckingNumber))
