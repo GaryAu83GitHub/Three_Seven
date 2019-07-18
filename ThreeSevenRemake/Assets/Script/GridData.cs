@@ -668,7 +668,9 @@ public class GridData
         ScoringGroupAchieveInfo newInfo;
         foreach(List<Vector2Int> pos in scoreCombinationPositions)
         {
-            if(Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValue(pos)) && IsNotOnlyTheOriginal(pos))
+            if(Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValue(pos)) && 
+                IsNotOnlyTheOriginal(pos) &&
+                !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
             {
                 newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, pos);
                 someGroupOfPositions.Add(newInfo);
@@ -1051,7 +1053,8 @@ public class GridData
 
     private bool ThisGroupIsAlreadyRegistrated(ref List<ScoringGroupAchieveInfo> someGroupOfPosition, List<Vector2Int> someScoringPositions)
     {
-        foreach(ScoringGroupAchieveInfo info in someGroupOfPosition)
+        //var a = ints1.All(ints2.Contains) && ints1.Count == ints2.Count;
+        foreach (ScoringGroupAchieveInfo info in someGroupOfPosition)
         {
             if (info.GroupPosition.SequenceEqual(someScoringPositions))
                 return true;

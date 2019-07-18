@@ -9,6 +9,14 @@ public class ObjectiveFrame : MonoBehaviour
     public GameObject BlueObjective;
     public GameObject RedObjective;
 
+    private Text GreenScoreText;
+    private Text BlueScoreText;
+    private Text RedScoreText;
+
+    private Text GreenFormulaText;
+    private Text BlueFormulaText;
+    private Text RedFormulaText;
+
     private Text GreenFrameText;
     private Text BlueFrameText;
     private Text RedFrameText;
@@ -23,9 +31,17 @@ public class ObjectiveFrame : MonoBehaviour
         BlockManager.achieveScoring += DisplayScoring;
         Objective.achiveObjective += SetObjectiveNumbersFor;
 
-        GreenFrameText = GreenObjective.transform.GetChild(1).GetComponent<Text>();
-        BlueFrameText = BlueObjective.transform.GetChild(1).GetComponent<Text>();
-        RedFrameText = RedObjective.transform.GetChild(1).GetComponent<Text>();
+        GreenScoreText = GreenObjective.transform.GetChild(0).GetComponent<Text>();
+        BlueScoreText = BlueObjective.transform.GetChild(0).GetComponent<Text>();
+        RedScoreText = RedObjective.transform.GetChild(0).GetComponent<Text>();
+
+        GreenFormulaText = GreenObjective.transform.GetChild(1).GetComponent<Text>();
+        BlueFormulaText = BlueObjective.transform.GetChild(1).GetComponent<Text>();
+        RedFormulaText = RedObjective.transform.GetChild(1).GetComponent<Text>();
+
+        GreenFrameText = GreenObjective.transform.GetChild(3).GetComponent<Text>();
+        BlueFrameText = BlueObjective.transform.GetChild(3).GetComponent<Text>();
+        RedFrameText = RedObjective.transform.GetChild(3).GetComponent<Text>();
 
         GreenAnimation = GreenObjective.GetComponent<Animation>();
         BlueAnimation = BlueObjective.GetComponent<Animation>();
@@ -65,6 +81,36 @@ public class ObjectiveFrame : MonoBehaviour
 
     private void DisplayScoring(Objectives anObjective, List<Cube> someScoringCube)
     {
-        PlayAnimationOn(anObjective);
+        int totalScore = ScoreCalculatorcs.LinkingScoreCalculation(anObjective, someScoringCube.Count);
+        string formula = "";
+        
+        for(int i = 0; i < someScoringCube.Count; i++)
+        {
+            
+            formula += someScoringCube[i].Number.ToString();
+
+            if (i < someScoringCube.Count)
+                formula += "+";
+        }
+
+        if (anObjective == Objectives.X1)
+        {
+            GreenScoreText.text = totalScore.ToString();
+            GreenFormulaText.text = formula;
+            GreenAnimation.Play();
+        }
+        else if (anObjective == Objectives.X5)
+        {
+            BlueScoreText.text = totalScore.ToString();
+            BlueFormulaText.text = formula;
+            BlueAnimation.Play();
+        }
+        else if (anObjective == Objectives.X10)
+        {
+            RedScoreText.text = totalScore.ToString();
+            RedFormulaText.text = formula;
+            RedAnimation.Play();
+        }
+        //PlayAnimationOn(anObjective);
     }
 }

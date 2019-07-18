@@ -64,7 +64,7 @@ public class BlockManager
     private List<Cube> mNewLandedCubes = new List<Cube>();
     private List<ScoringGroupAchieveInfo> mScoringPositionGroups = new List<ScoringGroupAchieveInfo>();
 
-    private int mComboCount = 0;
+    //private int mComboCount = 0;
 
     private int mCurrentScoringGroupIndex = 0;
     private float mScoringCalculationTimer = 0f;
@@ -77,7 +77,7 @@ public class BlockManager
         mScoringsCubes.Clear();
         mNewLandedCubes.Clear();
 
-        mComboCount = 0;
+        //mComboCount = 0;
         mCurrentScoringGroupIndex = 0;
         mScoringCalculationTimer = 0f;
         mCurrentGroupScoreCalcInProgress = false;
@@ -95,7 +95,7 @@ public class BlockManager
     {
         mBlocks.Add(aBlock);
         
-        if (!aBlock.CheckIfCellIsVacantBeneath())
+        if (isTheOriginal/*!aBlock.CheckIfCellIsVacantBeneath()*/)
             GameManager.Instance.AddSoftScore();
 
         foreach (Cube c in aBlock.Cubes)
@@ -201,13 +201,14 @@ public class BlockManager
             {
                 mCurrentScoringGroupIndex++;
                 mScoringCalculationTimer = mScoringCalculationTimer - 1f;
-                mComboCount++;
+                //mComboCount++;
                 if(mCurrentScoringGroupIndex >= mScoringPositionGroups.Count)
                 {
+                    GameManager.Instance.AddComboScore(mScoringPositionGroups.Count);
+                    GameManager.Instance.AddLevelPoint(mScoringPositionGroups.Count);
                     PlayScoringAnimation();
                     mScoringPositionGroups.Clear();
-                    GameManager.Instance.AddLevelPoint(mComboCount);
-                    mComboCount = 0;
+                    //mComboCount = 0;
                     mCurrentScoringGroupIndex = 0;
                 }
                 mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
@@ -239,8 +240,9 @@ public class BlockManager
         }
 
         PlayScoringAnimation();
-        GameManager.Instance.AddLevelPoint(mComboCount);
-        mComboCount = 0;
+        GameManager.Instance.AddComboScore(mScoringPositionGroups.Count);
+        GameManager.Instance.AddLevelPoint(mScoringPositionGroups.Count);
+        //mComboCount = 0;
     }
 
     //public bool IsScoring()

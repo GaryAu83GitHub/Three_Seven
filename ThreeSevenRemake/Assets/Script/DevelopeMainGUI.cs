@@ -11,6 +11,8 @@ public class DevelopeMainGUI : MonoBehaviour
     public Text LevelText;
     public Image LevelUpFillingImage;
 
+    public GameObject ScoreAddOn;
+
     public Text ComboCountText;
     public Text ComboTitleText;
     public Text ComboScoreText;
@@ -24,7 +26,11 @@ public class DevelopeMainGUI : MonoBehaviour
     private Color mTransparentColor = new Color(0f, 0f, 0f, 0f);
     private bool mComboAppear = false;
     private float mComboTextFadingTime = 0f;
-    //private float mLerpValue = 0f;
+
+    private bool mUpdateDisplayScore = false;
+   
+    private int mCurrentDisplayScore = 0;
+    private int mCurrentTotalScore = 0;
 
     private void Awake()
     {
@@ -68,22 +74,32 @@ public class DevelopeMainGUI : MonoBehaviour
         if(mComboAppear)
             ComboTextFading();
 
-        if(Input.GetKeyDown(KeyCode.Insert))
+        //if(Input.GetKeyDown(KeyCode.Insert))
+        //{
+        //    if (DebugPanel.GetComponent<CanvasGroup>().alpha >= 1f)
+        //        DebugPanel.GetComponent<CanvasGroup>().alpha = 0f;
+        //    else
+        //        DebugPanel.GetComponent<CanvasGroup>().alpha = 1f;
+        //    //mLerpValue += .125f;
+        //    //if (mLerpValue > 1)
+        //    //    mLerpValue = 0f;
+        //    //TestImage.color = Color.Lerp(Color.green, Color.red, mLerpValue);
+        //}
+        if(mUpdateDisplayScore)
         {
-            if (DebugPanel.GetComponent<CanvasGroup>().alpha >= 1f)
-                DebugPanel.GetComponent<CanvasGroup>().alpha = 0f;
-            else
-                DebugPanel.GetComponent<CanvasGroup>().alpha = 1f;
-            //mLerpValue += .125f;
-            //if (mLerpValue > 1)
-            //    mLerpValue = 0f;
-            //TestImage.color = Color.Lerp(Color.green, Color.red, mLerpValue);
+            UpdateDisplayScore();
         }
     }
 
-    public void UpdateScore(int aNewScore)
+    public void UpdateScore(int aNewTotalScore, int anAddOnScore)
     {
-        ScoreText.text = aNewScore.ToString();
+        mCurrentTotalScore = aNewTotalScore;
+
+        
+        ScoreAddOn.GetComponent<Text>().text = "+" + anAddOnScore.ToString();
+        ScoreAddOn.GetComponent<Animation>().Play();
+
+        mUpdateDisplayScore = true;
     }
 
     public void UpdateLevel(int aNewLevel, int aCurrentLevelScore, int aNextLevelUpScore)
@@ -112,6 +128,20 @@ public class DevelopeMainGUI : MonoBehaviour
     public void GameIsPlaying(bool anIsPlaying)
     {
         mGameIsPlaying = anIsPlaying;
+    }
+
+    private void UpdateDisplayScore()
+    {
+        if(mCurrentDisplayScore < mCurrentTotalScore)
+        {
+            mCurrentDisplayScore++;
+            if(mCurrentDisplayScore >= mCurrentTotalScore)
+            {
+                mUpdateDisplayScore = false;
+                mCurrentDisplayScore = mCurrentTotalScore;
+            }
+        }
+        ScoreText.text = mCurrentDisplayScore.ToString();
     }
 
     private void Clock()

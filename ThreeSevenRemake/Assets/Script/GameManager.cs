@@ -43,7 +43,7 @@ public class GameManager
     public int LandedBlockCount { get { return mLandedBlockCount; } set { mLandedBlockCount = value;} }
 
     // delegates
-    public delegate void OnScoreChange(int aNewScore);
+    public delegate void OnScoreChange(int aNewScore, int anAddOnScore);
     public static OnScoreChange scoreChanging;
 
     public delegate void OnLevelChange(int aNewLevel, int aCurrentLevelScore, int aNextLevelUpScore);
@@ -58,10 +58,10 @@ public class GameManager
     private int mNextLevelUpScore = 10;
     private int mCurrentLevelPoint = 0;
 
-    private const int mSoftLandingScore = 1;
-    private const float DROPPING_VALUE = .03f;
-    private const float MINIMAL_DROPRATE = .1f;
-    private const float MAXIMAL_DROPRATE = 1f;
+    //private const int mSoftLandingScore = 1;
+    //private const float DROPPING_VALUE = .03f;
+    //private const float MINIMAL_DROPRATE = .1f;
+    //private const float MAXIMAL_DROPRATE = 1f;
 
     public void Reset()
     {
@@ -106,9 +106,10 @@ public class GameManager
     /// </summary>
     public void AddSoftScore()
     {
-        mCurrentScore += mSoftLandingScore + mCurrentLevel;
+        int addOn = Constants.ORIGINAL_BLOCK_LANDING_SCORE + mCurrentLevel;
+        mCurrentScore += addOn;
 
-        scoreChanging?.Invoke(mCurrentScore);
+        scoreChanging?.Invoke(mCurrentScore, addOn);
     }
 
     /// <summary>
@@ -118,11 +119,11 @@ public class GameManager
     public void AddComboScore(int aCombo)
     {
         mComboScore = 0;
-        
-        mComboScore = (uint)(GetComboBaseScore(aCombo) * (mCurrentLevel + 1));
 
-        mCurrentScore += (int)mComboScore * Objective.Instance.ObjectiveAchieveBonus();
-        scoreChanging?.Invoke(mCurrentScore);
+        //mComboScore = //(uint)(GetComboBaseScore(aCombo) * (mCurrentLevel + 1));
+        int comboScore = ScoreCalculatorcs.ComboScoreCalculation(aCombo);
+        mCurrentScore += comboScore;//(int)mComboScore; // * Objective.Instance.ObjectiveAchieveBonus();
+        scoreChanging?.Invoke(mCurrentScore, comboScore/*(int)mComboScore*/);
 
         if (aCombo > 0)
             comboOccuring?.Invoke(aCombo, (int)mComboScore, "");
@@ -130,17 +131,19 @@ public class GameManager
 
     public void AddLinkingScore(Objectives anObjective, int aNumberCount)
     {
-        int objectiveMultiply = 1;
-        if (anObjective == Objectives.X10)
-            objectiveMultiply = 10;
-        else if (anObjective == Objectives.X5)
-            objectiveMultiply = 5;
-        else
-            objectiveMultiply = 1;
+        //int objectiveMultiply = 1;
+        //if (anObjective == Objectives.X10)
+        //    objectiveMultiply = 10;
+        //else if (anObjective == Objectives.X5)
+        //    objectiveMultiply = 5;
+        //else
+        //    objectiveMultiply = 1;
 
-        int linkedScore = (mCurrentLevel + 1) + (aNumberCount * objectiveMultiply);
-        mCurrentScore += linkedScore;
-        scoreChanging?.Invoke(mCurrentScore);
+        //int linkedScore = (mCurrentLevel + 1) + (aNumberCount * objectiveMultiply);
+        //mCurrentScore += linkedScore;
+        int addOn = ScoreCalculatorcs.LinkingScoreCalculation(anObjective, aNumberCount);
+        mCurrentScore += addOn;
+        scoreChanging?.Invoke(mCurrentScore, addOn);
     }
     
     /// <summary>
@@ -150,12 +153,12 @@ public class GameManager
     /// <returns>Return the new droprate</returns>
     public float GetCurrentDroppingRate()
     {
-        float droprate = MAXIMAL_DROPRATE;
+        float droprate = Constants.MAXIMAL_DROPRATE;
 
-        droprate -= ((mCurrentLevel + GameSettings.Instance.StartSpeedMultiply) * DROPPING_VALUE);
+        droprate -= ((mCurrentLevel + GameSettings.Instance.StartSpeedMultiply) * Constants.DROPPING_VALUE);
 
-        if (droprate <= MINIMAL_DROPRATE)
-            droprate = MINIMAL_DROPRATE;
+        if (droprate <= Constants.MINIMAL_DROPRATE)
+            droprate = Constants.MINIMAL_DROPRATE;
 
         return droprate;
     }
