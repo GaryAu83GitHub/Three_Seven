@@ -41,7 +41,7 @@ public class GameSettings
     public bool ActiveLongScoringDisplay { get { return mDisplayingLongScoring; } }
 
     private bool mActiveGuideBlock = true;
-    public bool ActiveGuideBlock { get { return mActiveGuideBlock; } }
+    //public bool ActiveGuideBlock { get { return mActiveGuideBlock; } }
 
     private List<bool> mEnableScoringMethods = new List<bool>();
     public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } }
@@ -118,5 +118,13 @@ public class GameSettings
     public void ActiveteGuideBlock(bool aChangeValue)
     {
         mActiveGuideBlock = aChangeValue;
+    }
+
+    public bool GetGuideBlockVisible(bool aSetOn)
+    {
+        if (!mActiveGuideBlock)
+            return false;
+
+        return aSetOn;
     }
 }

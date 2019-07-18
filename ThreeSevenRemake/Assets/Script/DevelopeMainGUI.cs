@@ -12,20 +12,23 @@ public class DevelopeMainGUI : MonoBehaviour
     public Image LevelUpFillingImage;
 
     public GameObject ScoreAddOn;
-
+    public GameObject ComboFrame;
+    
     public Text ComboCountText;
-    public Text ComboTitleText;
-    public Text ComboScoreText;
+    //public Text ComboTitleText;
+    //public Text ComboScoreText;
 
     public GameObject DebugPanel;
+
+    private Animation mComboAnimation;
 
     private float mGameTimer = 0f;
     private bool mGameIsPlaying;
 
     private Color mComboTextColor = Color.black;
     private Color mTransparentColor = new Color(0f, 0f, 0f, 0f);
-    private bool mComboAppear = false;
-    private float mComboTextFadingTime = 0f;
+    //private bool mComboAppear = false;
+    //private float mComboTextFadingTime = 0f;
 
     private bool mUpdateDisplayScore = false;
    
@@ -41,8 +44,8 @@ public class DevelopeMainGUI : MonoBehaviour
     private void Start()
     {
         UpdateLevel(GameManager.Instance.CurrentLevel, 0, 1);
-
-        GameManager.comboOccuring += ComboAppear;
+        
+        //GameManager.comboOccuring += ComboAppear;
         GameManager.levelChanging += UpdateLevel;
         GameManager.scoreChanging += UpdateScore;
 
@@ -51,12 +54,16 @@ public class DevelopeMainGUI : MonoBehaviour
 
         GameOverMenu.leaveTheGame += ResetGameTime;
 
+        BlockManager.comboOccuring += UpdateCombo;
+
+        mComboAnimation = ComboFrame.GetComponent<Animation>();
+
         //TestImage.color = Color.green;
     }
 
     private void OnDisable()
     {
-        GameManager.comboOccuring -= ComboAppear;
+        //GameManager.comboOccuring -= ComboAppear;
         GameManager.levelChanging -= UpdateLevel;
         GameManager.scoreChanging -= UpdateScore;
 
@@ -64,6 +71,8 @@ public class DevelopeMainGUI : MonoBehaviour
         DevelopeMain.gameIsPlaying -= GameIsPlaying;
 
         GameOverMenu.leaveTheGame -= ResetGameTime;
+
+        BlockManager.comboOccuring -= UpdateCombo;
     }
 
     // Update is called once per frame
@@ -71,8 +80,8 @@ public class DevelopeMainGUI : MonoBehaviour
     {
         Clock();
 
-        if(mComboAppear)
-            ComboTextFading();
+        //if(mComboAppear)
+        //    ComboTextFading();
 
         //if(Input.GetKeyDown(KeyCode.Insert))
         //{
@@ -109,16 +118,24 @@ public class DevelopeMainGUI : MonoBehaviour
         LevelText.text = aNewLevel.ToString();
     }
 
-    public void ComboAppear(int aComboCount, int aComboScore, string aComboText)
+    public void UpdateCombo(int aComboCount)
     {
+        if (aComboCount < 1)
+            return;
         ComboCountText.text = aComboCount.ToString();
-        ComboTitleText.text = aComboText;
-        ComboScoreText.text = aComboScore.ToString();
-
-        mComboTextFadingTime = 0f;
-        mComboTextColor.a = 1f;
-        mComboAppear = true;
+        mComboAnimation.Play();
     }
+
+    //public void ComboAppear(int aComboCount, int aComboScore, string aComboText)
+    //{
+    //    ComboCountText.text = aComboCount.ToString();
+    //    ComboTitleText.text = aComboText;
+    //    ComboScoreText.text = aComboScore.ToString();
+
+    //    mComboTextFadingTime = 0f;
+    //    mComboTextColor.a = 1f;
+    //    mComboAppear = true;
+    //}
 
     public void TransferNewBlock(Block aNewBlock)
     {
@@ -159,18 +176,18 @@ public class DevelopeMainGUI : MonoBehaviour
         TimeText.text = GameManager.Instance.GameTimeString;
     }
 
-    private void ComboTextFading()
-    {  
-        ComboCountText.color = mComboTextColor;
-        ComboTitleText.color = mComboTextColor;
-        ComboScoreText.color = mComboTextColor;
+    //private void ComboTextFading()
+    //{  
+    //    ComboCountText.color = mComboTextColor;
+    //    ComboTitleText.color = mComboTextColor;
+    //    ComboScoreText.color = mComboTextColor;
 
-        mComboTextColor = Color.Lerp(mComboTextColor, mTransparentColor, mComboTextFadingTime);
-        if (mComboTextFadingTime < 1f)
-            mComboTextFadingTime += Time.deltaTime / 50f;
-        else
-            mComboAppear = false;
-    }
+    //    mComboTextColor = Color.Lerp(mComboTextColor, mTransparentColor, mComboTextFadingTime);
+    //    if (mComboTextFadingTime < 1f)
+    //        mComboTextFadingTime += Time.deltaTime / 50f;
+    //    else
+    //        mComboAppear = false;
+    //}
 
     private void ResetGameTime()
     {

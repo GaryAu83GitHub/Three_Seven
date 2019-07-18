@@ -25,7 +25,7 @@ public class BlockGUI : MonoBehaviour
         for (int i = 0; i < 10; i++)
             mUsedNumber.Add(false);
 
-        mRootNumber = RandomNewNumber();
+        mRootNumber = CubeNumberGenerator.Instance.GetNewRootNumber;    //RandomNewRootCubeNumber();
         RootNumberText.text = RootNumber.ToString();
         RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);
 
@@ -33,7 +33,7 @@ public class BlockGUI : MonoBehaviour
         //mPreviousNumber.Add(RootNumber);
 
         // randomize a new number for the sub cube
-        mSubNumber = RandomNewNumber();
+        mSubNumber = CubeNumberGenerator.Instance.GetNewSubNumber;      //RandomNewRootCubeNumber();
         SubNumberText.text = SubNumber.ToString();
         SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
     }
@@ -46,7 +46,7 @@ public class BlockGUI : MonoBehaviour
         mPreviousNumber.Add(SubNumber);
 
         // randomize a new number for the root cube
-        mRootNumber = RandomNewNumber();
+        mRootNumber = CubeNumberGenerator.Instance.GetNewRootNumber;    //RandomNewRootCubeNumber();
         RootNumberText.text = RootNumber.ToString();
         RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);
 
@@ -54,7 +54,7 @@ public class BlockGUI : MonoBehaviour
         //mPreviousNumber.Add(RootNumber);
 
         // randomize a new number for the sub cube
-        mSubNumber = RandomNewNumber();
+        mSubNumber = CubeNumberGenerator.Instance.GetNewSubNumber;      //RandomNewRootCubeNumber();
         SubNumberText.text = SubNumber.ToString();
         SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
 
@@ -62,7 +62,7 @@ public class BlockGUI : MonoBehaviour
         return mPreviousNumber;
     }
 
-    private int RandomNewNumber()
+    private int RandomNewRootCubeNumber()
     {
         int newNumber = SupportTools.RNG(0, 10);
         while (mUsedNumber[newNumber] == true)

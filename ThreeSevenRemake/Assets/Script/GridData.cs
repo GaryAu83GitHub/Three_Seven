@@ -668,8 +668,8 @@ public class GridData
         ScoringGroupAchieveInfo newInfo;
         foreach(List<Vector2Int> pos in scoreCombinationPositions)
         {
-            if(Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValue(pos)) && 
-                IsNotOnlyTheOriginal(pos) &&
+            if(IsNotOnlyTheOriginal(pos) && 
+                Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValue(pos)) && 
                 !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
             {
                 newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, pos);
@@ -1045,6 +1045,10 @@ public class GridData
     {
         if (somePos.Count > 2)
             return true;
+
+        // check it later if this can be use to replace the "if" below this
+        //if (mOriginalLandedBlockPositions.SequenceEqual(somePos))
+        //    return false;
 
         if (mOriginalLandedBlockPositions.Contains(somePos[0]) && mOriginalLandedBlockPositions.Contains(somePos[1]))
             return false;

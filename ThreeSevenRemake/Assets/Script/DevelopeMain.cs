@@ -89,8 +89,8 @@ public class DevelopeMain : MonoBehaviour
                 // if the block manager detect any scoring from the last landing block, the animation will be played
                 if (BlockManager.Instance.CheckIfAnyBlocksIsFloating())
                     BlockManager.Instance.RearrangeBlocks();
-                else if (BlockManager.Instance.IsScoringNew())
-                    BlockManager.Instance.LongScoreCalculationProgression();
+                else if (BlockManager.Instance.IsScoring())
+                    BlockManager.Instance.ScoreCalculationProgression();
                 else
                 {
                     Objective.Instance.ChangeObjective();
@@ -109,6 +109,9 @@ public class DevelopeMain : MonoBehaviour
     /// </summary>
     private void CheckInput()
     {
+        if (PauseMenu.GameIsPause)
+            return;
+
         // input for move the block left if the left column is vacant
         if(Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -133,13 +136,11 @@ public class DevelopeMain : MonoBehaviour
 
                 mCurrentBlock = null;
                 mBlockLanded = true;
-                GuideBlockObject.SetActive(false);
+                GuideBlockObject.SetActive(GameSettings.Instance.GetGuideBlockVisible(false));
             }
             else
                 mCurrentBlock.DropDown();
 
-            //if (mCurrentBlock != null)
-            //    Debug.LogFormat("Current highest y: {0}, at x: {1}", GridData.Instance.TallestRowOnColumn(mCurrentBlock.MinGridPos.x), mCurrentBlock.MinGridPos.x);
             mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
             mNextDropTime = Time.time + mDropRate;
         }
@@ -193,7 +194,7 @@ public class DevelopeMain : MonoBehaviour
 
         mGuideBlock = GuideBlockObject.GetComponent<GuideBlock>();
         //mGuideBlock.SetupGuideBlock(mCurrentBlock);
-        GuideBlockObject.SetActive(true);
+        GuideBlockObject.SetActive(GameSettings.Instance.GetGuideBlockVisible(true));
 
         // Get the block's droprate of the current level from GameManager
         mDropRate = GameManager.Instance.GetCurrentDroppingRate();
@@ -202,6 +203,8 @@ public class DevelopeMain : MonoBehaviour
         mNextDropTime = Time.time + mDropRate;
 
         mBlockLanded = false;
+
+        BlockManager.Instance.ResetCombo();
     }
 
     /// <summary>
