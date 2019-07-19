@@ -78,6 +78,22 @@ public class Block : MonoBehaviour
         }
         return false;
     }
+
+    public bool IsThisBlockScoringAlone(List<Vector2Int> somePos)
+    {
+        if (somePos.Count != 2)
+            return false;
+
+        if(somePos.Contains(mMinPosition) && somePos.Contains(mMaxPosition))
+        {
+            if ((GridData.Instance.GetCubeValueOn(somePos[0]) == RootCube.Number && GridData.Instance.GetCubeValueOn(somePos[1]) == SubCube.Number))
+                return true;
+            else if ((GridData.Instance.GetCubeValueOn(somePos[0]) == SubCube.Number && GridData.Instance.GetCubeValueOn(somePos[1]) == RootCube.Number))
+                return true;
+        }
+
+        return false;
+    }
     
     public void SetCubeNumbers(List<int> someNumbers)
     {

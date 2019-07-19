@@ -234,6 +234,11 @@ public class GridData
         return row;
     }
 
+    public int GetCubeValueOn(Vector2Int aPos)
+    {
+        return GetCubeOn(aPos).Number;
+    }
+
     /// <summary>
     /// Get the value from the cell on the given position on the grid,
     /// but if the given position is out of boundary it'll return a
@@ -269,7 +274,7 @@ public class GridData
             if(Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValue(pos)) && 
                 !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
             {
-                if (pos.Count == 2 && !IsTheOriginal(pos))
+                if(BlockManager.Instance.IsNewOriginalBlockScoring(pos))//if (pos.Count == 2 && !IsTheOriginal(pos))
                     continue;
 
                 newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, pos);

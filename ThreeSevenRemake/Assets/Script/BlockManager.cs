@@ -55,7 +55,7 @@ public class BlockManager
     public int BlockCount { get { return mBlocks.Count; } }
 
     private Block mNewLandedOriginalBlock = null;
-    public Block NewLandedOriginalBlock { get { return mNewLandedOriginalBlock; } }
+    public Block NewLandedOriginalBlock { get { return (mNewLandedOriginalBlock ?? null); } }
 
     private List<Block> mBlocks = new List<Block>();
     private List<Block> mFloatingBlocks = new List<Block>();
@@ -98,7 +98,13 @@ public class BlockManager
         if (isTheOriginal)
         {
             GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
+            mNewLandedOriginalBlock = aBlock;
         }
+        else
+        {
+            mNewLandedOriginalBlock = null;
+        }
+
         foreach (Cube c in aBlock.Cubes)
         {
             if (isTheOriginal)
@@ -163,6 +169,14 @@ public class BlockManager
         mScoringsCubes.Clear();
         mNewLandedCubes.Clear();
         return false;
+    }
+
+    public bool IsNewOriginalBlockScoring(List<Vector2Int> somePos)
+    {
+        if (mNewLandedOriginalBlock == null)
+            return false;
+
+        return mNewLandedOriginalBlock.IsThisBlockScoringAlone(somePos);
     }
 
     /// <summary>

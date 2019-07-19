@@ -40,14 +40,16 @@ public class BlockGUI : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
-            NewNumber();
-        if (Input.GetKeyDown(KeyCode.A))
-            Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X1);
-        if (Input.GetKeyDown(KeyCode.S))
-            Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X5);
-        if (Input.GetKeyDown(KeyCode.D))
-            Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X10);
+        //if (Input.GetKeyDown(KeyCode.C))
+        //    NewNumber();
+        //if (Input.GetKeyDown(KeyCode.B))
+        //    NewNumberTemp();
+        //if (Input.GetKeyDown(KeyCode.A))
+        //    Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X1);
+        //if (Input.GetKeyDown(KeyCode.S))
+        //    Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X5);
+        //if (Input.GetKeyDown(KeyCode.D))
+        //    Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X10);
     }
 
     public List<int> NewNumber()
@@ -67,6 +69,30 @@ public class BlockGUI : MonoBehaviour
 
         // randomize a new number for the sub cube
         mSubNumber = CubeNumberGenerator.Instance.GetNewSubNumber;
+        SubNumberText.text = SubNumber.ToString();
+        SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
+
+        // return the previous number for the new creating cube
+        return mPreviousNumber;
+    }
+
+    public List<int> NewNumberTemp()
+    {
+        // clear the previous cubenumber and store the current number
+        mPreviousNumber.Clear();
+        mPreviousNumber.Add(RootNumber);
+        mPreviousNumber.Add(SubNumber);
+
+        // randomize a new number for the root cube
+        mRootNumber = 4;
+        RootNumberText.text = RootNumber.ToString();
+        RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);
+
+        // add in the new number for the root cube
+        //mPreviousNumber.Add(RootNumber);
+
+        // randomize a new number for the sub cube
+        mSubNumber = 0;
         SubNumberText.text = SubNumber.ToString();
         SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
 
