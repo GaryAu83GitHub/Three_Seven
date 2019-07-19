@@ -62,7 +62,7 @@ public class SetLinkNumberPanel : SettingPanelBase
     public override void PreviousButtonOnClick()
     {
         base.PreviousButtonOnClick();
-        displaySettingPanel?.Invoke(Setting_Index.SET_NAME);
+        displaySettingPanel?.Invoke(Setting_Index.LEAVE_TO_TITLE);
     }
 
     private void TwoCubesButtonClicked()

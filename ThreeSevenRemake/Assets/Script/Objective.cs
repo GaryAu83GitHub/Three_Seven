@@ -21,21 +21,9 @@ public class Objective
         }
     }
     private static Objective mInstance;
-
-    public static int GetObjectiveBonusOf(TaskRank anObjective)
-    {
-        int bonus = 1;
-
-        if (anObjective == TaskRank.X10)
-            bonus = 10;
-        else if (anObjective == TaskRank.X5)
-            bonus = 5;
-
-        return bonus;
-    }
-
-    public delegate void OnAchiveObjective(TaskRank anObjective, int anObjectiveNumber);
-    public static OnAchiveObjective achiveObjective;
+    
+    public delegate void OnAchieveObjective(TaskRank anObjective, int anObjectiveNumber);
+    public static OnAchieveObjective achieveObjective;
 
     private List<bool> mUsedObjectiveNumbers = new List<bool>();
     private Dictionary<TaskRank, int> mActiveObjectives = new Dictionary<TaskRank, int>();
@@ -65,7 +53,7 @@ public class Objective
     {
         foreach (TaskRank obj in mObjectiveNumbersList.Keys)
         {
-            achiveObjective?.Invoke(obj, mActiveObjectives[obj]);
+            achieveObjective?.Invoke(obj, mActiveObjectives[obj]);
         }
     }
 
@@ -92,25 +80,19 @@ public class Objective
             {
                 mObjectiveAchieveList[obj] = false;
                 mActiveObjectives[obj] = GetObjectiveFrom(obj);
-                achiveObjective?.Invoke(obj, mActiveObjectives[obj]);
+                achieveObjective?.Invoke(obj, mActiveObjectives[obj]);
 
             }
         }
     }
 
-    public int ObjectiveAchieveBonus()
+    public void ForceFullyChangeTaskValueOn(TaskRank aRank)
     {
-        int bonus = 0;
-        if (mObjectiveAchieveList[TaskRank.X1])
-            bonus++;
-        if (mObjectiveAchieveList[TaskRank.X5])
-            bonus += 5;
-        if (mObjectiveAchieveList[TaskRank.X10])
-            bonus += 10;
-
-        return bonus;
+        mObjectiveAchieveList[aRank] = false;
+        mActiveObjectives[aRank] = GetObjectiveFrom(aRank);
+        achieveObjective?.Invoke(aRank, mActiveObjectives[aRank]);
     }
-
+    
     public void SetMaxLimitObjectiveValue(int aMaxValue)
     {
         mMaxLimitObjectiveValue = aMaxValue;
@@ -128,7 +110,7 @@ public class Objective
             return;
 
         mCurrentObjectiveValueLimit++;
-        mUsedObjectiveNumbers.Add(true);
+        mUsedObjectiveNumbers.Add(false);
     }
 
     public void PrepareObjectives()
@@ -152,18 +134,18 @@ public class Objective
             {
                 if (combinationCount[key].ToString().Length == 1 || combinationCount[key].ToString().Length == 2)
                     mObjectiveNumbersList[TaskRank.X10].Add(key);
-                if (combinationCount[key].ToString().Length == 3)
+                else if (combinationCount[key].ToString().Length == 3)
                     mObjectiveNumbersList[TaskRank.X5].Add(key);
-                if (combinationCount[key].ToString().Length == 4)
+                else if (combinationCount[key].ToString().Length == 4)
                     mObjectiveNumbersList[TaskRank.X1].Add(key);
             }
             else if (mostCombination.ToString().Length == 3)
             {
                 if (combinationCount[key].ToString().Length == 1)
                     mObjectiveNumbersList[TaskRank.X10].Add(key);
-                if (combinationCount[key].ToString().Length == 2)
+                else if (combinationCount[key].ToString().Length == 2)
                     mObjectiveNumbersList[TaskRank.X5].Add(key);
-                if (combinationCount[key].ToString().Length == 3)
+                else if (combinationCount[key].ToString().Length == 3)
                     mObjectiveNumbersList[TaskRank.X1].Add(key);
             }
             else
@@ -172,18 +154,18 @@ public class Objective
                 {
                     if (key <= 3 || key >= 24) // 1 to 3 combination
                         mObjectiveNumbersList[TaskRank.X10].Add(key);
-                    if ((key >= 4 && key <= 9) || (key >= 18 && key <= 23)) // 4 to 7 combination
+                    else if ((key >= 4 && key <= 9) || (key >= 18 && key <= 23)) // 4 to 7 combination
                         mObjectiveNumbersList[TaskRank.X5].Add(key);
-                    if (key >= 10 && key <= 17)   // 
+                    else if (key >= 10 && key <= 17)   // 
                         mObjectiveNumbersList[TaskRank.X1].Add(key);
                 }
                else
                 {
                     if (key <= 2 || key >= 16) // 1 to 3 combination
                         mObjectiveNumbersList[TaskRank.X10].Add(key);
-                    if ((key >= 3 && key <= 6) || (key >= 12 && key <= 15)) // 4 to 7 combination
+                    else if ((key >= 3 && key <= 6) || (key >= 12 && key <= 15)) // 4 to 7 combination
                         mObjectiveNumbersList[TaskRank.X5].Add(key);
-                    if (key >= 7 && key <= 11)   // 
+                    else if (key >= 7 && key <= 11)   // 
                         mObjectiveNumbersList[TaskRank.X1].Add(key);
                 }
             }
@@ -193,7 +175,7 @@ public class Objective
         {
             mObjectiveAchieveList[obj] = false;
             mActiveObjectives[obj] = GetObjectiveFrom(obj);
-            achiveObjective?.Invoke(obj, mActiveObjectives[obj]);
+            achieveObjective?.Invoke(obj, mActiveObjectives[obj]);
         }
         return;
     }
@@ -228,7 +210,7 @@ public class Objective
         int availableCount = avaiableObjective.Count;
         int selectedIndex = Random.Range(0, availableCount);
         int selectedValue = avaiableObjective[selectedIndex];
-
+        
         return selectedValue;
     }
 

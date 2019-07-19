@@ -6,19 +6,21 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Assets.Script.Tools
 {
-    public static class FileManager
+    public class FileManager
     {
-        public static void SaveHighScoreToFile(PlayThroughcs aPlay)
+        public static FileManager Instance
         {
-            
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream stream = new FileStream(Application.persistentDataPath + "/highscore.sav", FileMode.Append);
-
-            HighScoreData data = new HighScoreData(aPlay);
-
-            bf.Serialize(stream, data);
-            stream.Close();
+            get
+            {
+                if (mInstance == null)
+                {
+                    mInstance = new FileManager();
+                }
+                return mInstance;
+            }
         }
-        
+        private static FileManager mInstance;
+
+
     }
 }

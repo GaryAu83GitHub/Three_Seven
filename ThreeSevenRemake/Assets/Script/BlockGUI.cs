@@ -38,6 +38,18 @@ public class BlockGUI : MonoBehaviour
         SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+            NewNumber();
+        if (Input.GetKeyDown(KeyCode.A))
+            Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X1);
+        if (Input.GetKeyDown(KeyCode.S))
+            Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X5);
+        if (Input.GetKeyDown(KeyCode.D))
+            Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X10);
+    }
+
     public List<int> NewNumber()
     {
         // clear the previous cubenumber and store the current number
@@ -46,7 +58,7 @@ public class BlockGUI : MonoBehaviour
         mPreviousNumber.Add(SubNumber);
 
         // randomize a new number for the root cube
-        mRootNumber = CubeNumberGenerator.Instance.GetNewRootNumber;    //RandomNewRootCubeNumber();
+        mRootNumber = CubeNumberGenerator.Instance.GetNewRootNumber;
         RootNumberText.text = RootNumber.ToString();
         RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);
 
@@ -54,7 +66,7 @@ public class BlockGUI : MonoBehaviour
         //mPreviousNumber.Add(RootNumber);
 
         // randomize a new number for the sub cube
-        mSubNumber = CubeNumberGenerator.Instance.GetNewSubNumber;      //RandomNewRootCubeNumber();
+        mSubNumber = CubeNumberGenerator.Instance.GetNewSubNumber;
         SubNumberText.text = SubNumber.ToString();
         SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
 

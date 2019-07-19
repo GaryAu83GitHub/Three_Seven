@@ -206,7 +206,7 @@ public class GridData
             ScoreWithAvailableCubes(c, ref someGroupOfPosition);
         }
 
-        mOriginalLandedBlockPositions.Clear();
+        //mOriginalLandedBlockPositions.Clear();
 
         return someGroupOfPosition;
     }
@@ -253,10 +253,10 @@ public class GridData
         return mGrid[aPos.x][aPos.y];
     }
 
-    private void Scoring(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
-    {
-        ScoreWithAvailableCubes(aCube, ref someGroupOfPositions);
-    }
+    //private void Scoring(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
+    //{
+    //    ScoreWithAvailableCubes(aCube, ref someGroupOfPositions);
+    //}
 
     private void ScoreWithAvailableCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
@@ -266,27 +266,27 @@ public class GridData
         ScoringGroupAchieveInfo newInfo;
         foreach(List<Vector2Int> pos in scoreCombinationPositions)
         {
-            if(IsNotOnlyTheOriginal(pos) && 
-                Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValue(pos)) && 
+            if(Objective.Instance.AchiveObjective(ref getObjectiveRank, TotalValue(pos)) && 
                 !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
             {
+                if (pos.Count == 2 && !IsTheOriginal(pos))
+                    continue;
+
                 newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, pos);
                 someGroupOfPositions.Add(newInfo);
             }
         }
     }
     
-    private bool IsNotOnlyTheOriginal(List<Vector2Int> somePos)
+    private bool IsTheOriginal(List<Vector2Int> somePos)
     {
-        if (somePos.Count > 2)
-            return true;
-
         // check it later if this can be use to replace the "if" below this
         //if (mOriginalLandedBlockPositions.SequenceEqual(somePos))
         //    return false;
 
         if (mOriginalLandedBlockPositions.Contains(somePos[0]) && mOriginalLandedBlockPositions.Contains(somePos[1]))
             return false;
+
         return true;
     }
 

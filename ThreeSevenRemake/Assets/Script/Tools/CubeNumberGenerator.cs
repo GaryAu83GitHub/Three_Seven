@@ -34,11 +34,7 @@ public class CubeNumberGenerator
 
     private int GetNewCubeNumberFor(ref List<bool> someUsedNumber)
     {
-        int newNumber = GetRandomUnusedNumberFrom(ref someUsedNumber);//SupportTools.RNG(0, 10);
-        //while (someUsedNumber[newNumber] == true)
-        //{
-        //    newNumber = SupportTools.RNG(0, 10);
-        //}
+        int newNumber = GetRandomUnusedNumberFrom(ref someUsedNumber);
 
         someUsedNumber[newNumber] = true;
         if (!someUsedNumber.Contains(false))

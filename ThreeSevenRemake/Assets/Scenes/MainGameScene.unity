@@ -1904,6 +1904,7 @@ GameObject:
   m_Component:
   - component: {fileID: 434038362}
   - component: {fileID: 434038361}
+  - component: {fileID: 434038363}
   m_Layer: 0
   m_Name: mainScript
   m_TagString: Untagged
@@ -1943,6 +1944,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &434038363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434038360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82b383c53f2cd514db2bc155a5aec858, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActiveDebug: 0
+  RootCubeNumber: -1
+  SubCubeNumber: -1
+  TaskValue: 
 --- !u!1 &444483494
 GameObject:
   m_ObjectHideFlags: 0

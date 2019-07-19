@@ -29,7 +29,7 @@ public class ObjectiveFrame : MonoBehaviour
     void Start()
     {
         BlockManager.achieveScoring += DisplayScoring;
-        Objective.achiveObjective += SetObjectiveNumbersFor;
+        Objective.achieveObjective += SetObjectiveNumbersFor;
 
         GreenScoreText = GreenObjective.transform.GetChild(0).GetComponent<Text>();
         BlueScoreText = BlueObjective.transform.GetChild(0).GetComponent<Text>();
@@ -51,7 +51,7 @@ public class ObjectiveFrame : MonoBehaviour
     private void OnDestroy()
     {
         BlockManager.achieveScoring -= DisplayScoring;
-        Objective.achiveObjective -= SetObjectiveNumbersFor;
+        Objective.achieveObjective -= SetObjectiveNumbersFor;
     }
 
     // Update is called once per frame
