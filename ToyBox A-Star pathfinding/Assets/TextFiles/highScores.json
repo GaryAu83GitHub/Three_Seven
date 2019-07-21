@@ -1,0 +1,24 @@
+{
+    "ScoreList": [
+        {
+            "Name": "Carl",
+            "Score": 15
+        },
+        {
+            "Name": "Xena",
+            "Score": 11
+        },
+        {
+            "Name": "Albert",
+            "Score": 10
+        },
+        {
+            "Name": "Becky",
+            "Score": 5
+        },
+        {
+            "Name": "David",
+            "Score": 4
+        }
+    ]
+}
