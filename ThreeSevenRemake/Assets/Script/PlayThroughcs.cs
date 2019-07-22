@@ -9,7 +9,6 @@ public class PlayThroughcs
     public string Name { get; } = "";
     public string GameTime { get; } = "";
 
-    private DateTime mPlayDate = new DateTime();
 
     public int Level { get; } = 0;
     public int Score { get; } = 0;

@@ -94,11 +94,13 @@ public class DevelopeMainGUI : MonoBehaviour
         //    //    mLerpValue = 0f;
         //    //TestImage.color = Color.Lerp(Color.green, Color.red, mLerpValue);
         //}
-        if(mUpdateDisplayScore)
+
+        if (mUpdateDisplayScore)
         {
             UpdateDisplayScore();
         }
     }
+
 
     public void UpdateScore(int aNewTotalScore, int anAddOnScore)
     {

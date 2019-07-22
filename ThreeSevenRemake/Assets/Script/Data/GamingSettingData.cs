@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 public class GameRoundData
 {
     // this
@@ -33,9 +34,10 @@ public class GameRoundData
     private int mCurrentMaxCombo = 0;
     public int MaxCombo { get { return mCurrentMaxCombo; } set { mCurrentMaxCombo = value; } }
 
-    private string mGameTimeString = "";
-    public string GameTimeString { get { return mGameTimeString; } set { mGameTimeString = value; } }
+    private float mGameTime = 0f;
+    public float GameTime { get { return mGameTime; } set { mGameTime = value; } }
 
     private int mLandedBlockCount = 0;
     public int LandedBlockCount { get { return mLandedBlockCount; } set { mLandedBlockCount = value; } }
 }
+

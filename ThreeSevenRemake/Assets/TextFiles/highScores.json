@@ -1,0 +1,32 @@
+{
+    "ScoreList": [
+        {
+            "PlayerName": "Benjamin",
+            "TotalLevel": 12,
+            "TotalScore": 5500,
+            "TotalMaxCombo": 10,
+            "TotalTime": 450,
+            "TotalUsedBlock": 40,
+            "EnableScoringMethods": [
+                false,
+                true,
+                false,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Anita",
+            "TotalLevel": 15,
+            "TotalScore": 7500,
+            "TotalMaxCombo": 6,
+            "TotalTime": 600,
+            "TotalUsedBlock": 40,
+            "EnableScoringMethods": [
+                false,
+                false,
+                true,
+                true
+            ]
+        }
+    ]
+}
