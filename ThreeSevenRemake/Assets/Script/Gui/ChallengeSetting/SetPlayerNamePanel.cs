@@ -32,26 +32,29 @@ public class SetPlayerNamePanel : SettingPanelBase
         base.InitBaseValue();
 
         PlayerNameInputField.ActivateInputField();
-        ActivateNextButton();
+        //ActivateNextButton();
     }
 
     public override void NextButtonOnClick()
     {
         base.NextButtonOnClick();
-        displaySettingPanel?.Invoke(Setting_Index.SET_LINK);
+        displaySettingPanel?.Invoke(Setting_Index.FINISH_SETTING);
     }
 
     public override void PreviousButtonOnClick()
     {
         base.PreviousButtonOnClick();
-        displaySettingPanel?.Invoke(Setting_Index.LEAVE_TO_TITLE);
+        if (OnlyTwoDigitLinkIsEnable())
+            displaySettingPanel?.Invoke(Setting_Index.SET_LINK);
+        else
+            displaySettingPanel?.Invoke(Setting_Index.SET_START_TASK_VALUE);
     }
 
     private void PlayerNameInputFieldOnValueChange(TMP_InputField anInput)
     {
         GameRoundManager.Instance.Data.PlayerName = anInput.text;
         //Debug.Log(anInput.text);
-        ActivateNextButton();
+        //ActivateNextButton();
     }
 
     private void ActivateNextButton()

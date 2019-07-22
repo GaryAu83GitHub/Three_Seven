@@ -39,6 +39,9 @@ public class HighScoreManager
     public void Add(string aPlayerName, GameRoundData aRoundData)
     {
         RoundResultData newData = new RoundResultData(aPlayerName, aRoundData);
+        if (mHighScoreList.Contains(newData))
+            return;
+
         mHighScoreList.Add(newData);
 
         SaveToList();

@@ -5,9 +5,9 @@ using UnityEngine.UI;
 public enum Setting_Index
 {
     NONE,
-    SET_NAME,
     SET_LINK,
     SET_START_TASK_VALUE,
+    SET_NAME,
     SET_ROOF_HEIGH,
     SET_DROPPING_RATE,
     SET_PRESET,

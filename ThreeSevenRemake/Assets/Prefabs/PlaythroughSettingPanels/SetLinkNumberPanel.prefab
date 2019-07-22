@@ -577,7 +577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81eff5eb53939504baf4d724e4dc832c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PanelIndex: 2
+  PanelIndex: 1
   DescriptionText: {fileID: 8024944683728819561}
   NextButton: {fileID: 1274570822425043536}
   PreviousButton: {fileID: 1666093986206472696}

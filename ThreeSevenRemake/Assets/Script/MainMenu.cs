@@ -69,14 +69,14 @@ public class MainMenu : MonoBehaviour
         //FadingScript.gameObject.SetActive(true);
         //StartCoroutine(GoToGame());
         //ScreenTransistor.Instance.FadeToSceneWithIndex(1);
-        //GameSettingPanel.SetActive(true);
+        GameSettingPanel.SetActive(true);
         GameRoundManager.Instance.CreateNewData();
         displaySettingPanel?.Invoke(Setting_Index.SET_LINK);
     }
 
     public void DisplayHighscore()
     {
-        OptionPanel.SetActive(true);
+        HighScorePanel.SetActive(true);
     }
 
     public void OptionSetting()

@@ -11,6 +11,7 @@ public class HighscorePanel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ExitButton.onClick.AddListener(ExitButtonOnClick);
         List<RoundResultData> highscores = HighScoreManager.Instance.GetListSortBy(TableCategory.SCORE);
         for(int i = 0; i < ((highscores.Count < 10) ? highscores.Count : 10); i++)
         {
