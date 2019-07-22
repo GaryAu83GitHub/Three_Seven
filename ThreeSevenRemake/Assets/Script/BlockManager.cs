@@ -52,6 +52,9 @@ public class BlockManager
     public delegate void OnComboOccures(int aComboCount);
     public static OnComboOccures comboOccuring;
 
+    public delegate void OnAddLevelScore();
+    public static OnAddLevelScore addLevelScore;
+
     public int BlockCount { get { return mBlocks.Count; } }
 
     private Block mNewLandedOriginalBlock = null;
@@ -203,6 +206,7 @@ public class BlockManager
                     }
                 }
             }
+            addLevelScore?.Invoke();
             comboOccuring?.Invoke(mComboCount++);
             achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes);
             GameManager.Instance.AddScore(ScoreType.LINKING, thisGroupScoringCubes.Count, thisGroupTaskTank);
