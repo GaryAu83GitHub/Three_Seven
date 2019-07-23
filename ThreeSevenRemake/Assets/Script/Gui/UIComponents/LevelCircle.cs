@@ -8,7 +8,7 @@ public class LevelCircle : MonoBehaviour
 {
     public Image LevelPreviewValueFillingImage;
     public Image LevelValueFillingImage;
-    public TextMeshPro LevelText;
+    public TextMeshProUGUI LevelText;
     public Animation LevelUpAnimation;
 
     //public Text LevelText;
@@ -52,6 +52,9 @@ public class LevelCircle : MonoBehaviour
     {
         PreviewFilling();
         MainFilling();
+
+        if(Input.GetKeyDown(KeyCode.Y))
+            LevelUpAnimation.Play();
     }
 
     private void PreviewFilling()
@@ -93,7 +96,8 @@ public class LevelCircle : MonoBehaviour
             else
                 mFillupMainCircle = false;
 
-
+            LevelText.text = (GameManager.Instance.CurrentLevel + 1).ToString();
+            LevelUpAnimation.Play();
         }
         else if(mMainCurrentValue >= mMainFillingValue)
         {

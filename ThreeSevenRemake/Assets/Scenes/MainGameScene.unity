@@ -6933,8 +6933,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelPreviewValueFillingImage: {fileID: 106476408}
   LevelValueFillingImage: {fileID: 1481762650}
-  LevelText: {fileID: 0}
-  LevelUpAnimation: {fileID: 0}
+  LevelText: {fileID: 349406279}
+  LevelUpAnimation: {fileID: 1275895194}
 --- !u!1 &1612572492
 GameObject:
   m_ObjectHideFlags: 0
