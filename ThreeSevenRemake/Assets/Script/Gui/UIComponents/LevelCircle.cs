@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class LevelCircle : MonoBehaviour
 {
     public Image LevelPreviewValueFillingImage;
     public Image LevelValueFillingImage;
+    public TextMeshPro LevelText;
+    public Animation LevelUpAnimation;
+
     //public Text LevelText;
     private float PreviewFillupAmount { get { return mPreviewSectionFillingValue * mPreviewDividedCount; } }
 
@@ -19,9 +23,9 @@ public class LevelCircle : MonoBehaviour
     private float mMainFillingValueRest = 0f;
 
     private int mPreviewDividedCount = 1;
-    private int mMainDividedCount = 1;
+    //private int mMainDividedCount = 1;
 
-    private int mDividing = 10;
+    private const int mBaseDividValue = 10;
 
     private bool mFillupPreviewCircle = false;
     private bool mFillupMainCircle = false;
@@ -31,8 +35,10 @@ public class LevelCircle : MonoBehaviour
     {
         BlockManager.addLevelScore += FillPreviewCircle;
         GameManager.levelChangingNew += FillMainCircle;
-        mPreviewSectionFillingValue = 1f / (float)(mDividing * (GameManager.Instance.CurrentLevel + 1));
-        mMainSectionFillingValue = 1f / (float)(mDividing * (GameManager.Instance.CurrentLevel + 1));
+        mPreviewSectionFillingValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 1));
+        mMainSectionFillingValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 1));
+
+        LevelText.text = GameManager.Instance.CurrentLevel.ToString();
     }
 
     private void OnDestroy()
@@ -58,7 +64,7 @@ public class LevelCircle : MonoBehaviour
         {
             mPreviewCurrentValue = 0f;
             //mDividing += 10;
-            mPreviewSectionFillingValue = 1f / (float)(mDividing * (GameManager.Instance.CurrentLevel + 2));
+            mPreviewSectionFillingValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 2));
             mPreviewDividedCount = 1;
             mFillupPreviewCircle = false;
         }
@@ -80,12 +86,14 @@ public class LevelCircle : MonoBehaviour
         if(mMainCurrentValue >= 1f)
         {
             mMainCurrentValue = 0f;
-            mMainSectionFillingValue = 1f / (float)(mDividing * (GameManager.Instance.CurrentLevel + 2));
+            mMainSectionFillingValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 2));
 
             if(mMainFillingValueRest > 0)
                 mMainFillingValue = mMainFillingValueRest;
             else
                 mFillupMainCircle = false;
+
+
         }
         else if(mMainCurrentValue >= mMainFillingValue)
         {

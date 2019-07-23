@@ -62,11 +62,17 @@ public class Objective
         if (!mActiveObjectives.ContainsValue(aCheckingNumber))
             return false;
 
-        mUsedObjectiveNumbers[aCheckingNumber] = true;
-
         getObjectiveRank = mActiveObjectives.FirstOrDefault(x => x.Value == aCheckingNumber).Key;
-        mObjectiveAchieveList[getObjectiveRank] = true;
+
+        //mUsedObjectiveNumbers[aCheckingNumber] = true;
+        //mObjectiveAchieveList[getObjectiveRank] = true;
         return true;
+    }
+
+    public void ConfirmAchiveTaskOn(TaskRank aRank, int aTaskValue)
+    {
+        mObjectiveAchieveList[aRank] = true;
+        mUsedObjectiveNumbers[aTaskValue] = true;
     }
 
     public void ChangeObjective()

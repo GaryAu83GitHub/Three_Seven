@@ -34,7 +34,9 @@ public class GameManager
     public uint ComboScore { get { return mComboScore; } }
 
     private int mCurrentMaxCombo = 0;
-    public int MaxCombo { get { return mCurrentMaxCombo; } }
+    public int MaxCombo { get { return mCurrentMaxCombo; } set { mCurrentMaxCombo = value; } }
+
+    public float GameTime { get; set; }
 
     private string mGameTimeString = "";
     public string GameTimeString { get { return mGameTimeString; } set { mGameTimeString = value; } }
@@ -88,8 +90,8 @@ public class GameManager
     /// <param name="aPoint">Points that to add to level up</param>
     public void AddLevelPoint(int aPoint)
     {
-        if (aPoint > mCurrentMaxCombo)
-            mCurrentMaxCombo = aPoint;
+        //if (aPoint > mCurrentMaxCombo)
+        //    mCurrentMaxCombo = aPoint;
 
         mCurrentLevelPoint += aPoint;
 
@@ -127,6 +129,22 @@ public class GameManager
             mCurrentScore += addOn;
             scoreChanging?.Invoke(mCurrentScore, addOn);
         }
+    }
+
+    public GameRoundData GetRoundData()
+    {
+        GameRoundData data = new GameRoundData
+        {
+            PlayerName = GameSettings.Instance.PlayerName,
+            CurrentLevel = CurrentLevel,
+            CurrentScore = CurrentScore,
+            MaxCombo = MaxCombo,
+            GameTime = GameTime,
+            LandedBlockCount = LandedBlockCount,
+            EnableScoringMethods = GameSettings.Instance.EnableScoringMethods,
+        };
+
+        return data;
     }
 
     /// <summary>

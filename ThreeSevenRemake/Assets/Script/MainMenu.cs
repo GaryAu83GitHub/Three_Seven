@@ -26,6 +26,9 @@ public class MainMenu : MonoBehaviour
     public delegate void OnOpenOptionPanel();
     public static OnOpenOptionPanel openOptionPanel;
 
+    public delegate void OnOpenHighscorePanel();
+    public static OnOpenHighscorePanel openHighscorePanel;
+
     private void Start()
     {
         PlayButton.onClick.AddListener(PlayGame);
@@ -76,6 +79,7 @@ public class MainMenu : MonoBehaviour
 
     public void DisplayHighscore()
     {
+        openHighscorePanel?.Invoke();
         HighScorePanel.SetActive(true);
     }
 

@@ -8,8 +8,8 @@ public class DevelopeMainGUI : MonoBehaviour
     public BlockGUI NextBlockGUI;
     public Text ScoreText;
     public Text TimeText;
-    public Text LevelText;
-    public Image LevelUpFillingImage;
+    //public Text LevelText;
+    //public Image LevelUpFillingImage;
 
     public GameObject ScoreAddOn;
     public GameObject ComboFrame;
@@ -22,7 +22,7 @@ public class DevelopeMainGUI : MonoBehaviour
 
     private Animation mComboAnimation;
 
-    private float mGameTimer = 0f;
+    //private float mGameTimer = 0f;
     private bool mGameIsPlaying;
 
     private Color mComboTextColor = Color.black;
@@ -46,7 +46,7 @@ public class DevelopeMainGUI : MonoBehaviour
         UpdateLevel(GameManager.Instance.CurrentLevel, 0, 1);
         
         //GameManager.comboOccuring += ComboAppear;
-        GameManager.levelChanging += UpdateLevel;
+        //GameManager.levelChanging += UpdateLevel;
         GameManager.scoreChanging += UpdateScore;
 
         DevelopeMain.createNewBlock += TransferNewBlock;
@@ -64,7 +64,7 @@ public class DevelopeMainGUI : MonoBehaviour
     private void OnDisable()
     {
         //GameManager.comboOccuring -= ComboAppear;
-        GameManager.levelChanging -= UpdateLevel;
+        //GameManager.levelChanging -= UpdateLevel;
         GameManager.scoreChanging -= UpdateScore;
 
         DevelopeMain.createNewBlock -= TransferNewBlock;
@@ -116,14 +116,18 @@ public class DevelopeMainGUI : MonoBehaviour
     public void UpdateLevel(int aNewLevel, int aCurrentLevelScore, int aNextLevelUpScore)
     {
         float filling = (float)aCurrentLevelScore / (float)aNextLevelUpScore;
-        LevelUpFillingImage.fillAmount = filling;
-        LevelText.text = aNewLevel.ToString();
+        //LevelUpFillingImage.fillAmount = filling;
+        //LevelText.text = aNewLevel.ToString();
     }
 
     public void UpdateCombo(int aComboCount)
     {
         if (aComboCount < 1)
             return;
+
+        if (aComboCount > GameManager.Instance.MaxCombo)
+            GameManager.Instance.MaxCombo = aComboCount;
+
         ComboCountText.text = aComboCount.ToString();
         mComboAnimation.Play();
     }
@@ -168,11 +172,12 @@ public class DevelopeMainGUI : MonoBehaviour
         if (!mGameIsPlaying || BlockManager.Instance.BlockPassedGameOverLine())
             return;
 
-        mGameTimer += Time.deltaTime;
+        //mGameTimer += Time.deltaTime;
+        GameManager.Instance.GameTime += Time.deltaTime;
 
-        int seconds = (int)(mGameTimer % 60);
-        int minutes = (int)((mGameTimer / 60) % 60);
-        int hours = (int)((mGameTimer / 3600) % 60);
+        int seconds = (int)(GameManager.Instance.GameTime % 60);
+        int minutes = (int)((GameManager.Instance.GameTime / 60) % 60);
+        int hours = (int)((GameManager.Instance.GameTime / 3600) % 60);
 
         GameManager.Instance.GameTimeString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
         TimeText.text = GameManager.Instance.GameTimeString;
@@ -193,6 +198,6 @@ public class DevelopeMainGUI : MonoBehaviour
 
     private void ResetGameTime()
     {
-        mGameTimer = 0f;
+        GameManager.Instance.GameTime = 0f;
     }
 }

@@ -36,6 +36,17 @@ public class HighScoreManager
         }
     }
 
+    public void Add(GameRoundData aRoundData)
+    {
+        RoundResultData newData = new RoundResultData(aRoundData);
+        if (mHighScoreList.Contains(newData))
+            return;
+
+        mHighScoreList.Add(newData);
+
+        SaveToList();
+    }
+
     public void Add(string aPlayerName, GameRoundData aRoundData)
     {
         RoundResultData newData = new RoundResultData(aPlayerName, aRoundData);
@@ -105,6 +116,17 @@ public class RoundResultData
     public RoundResultData()
     {
 
+    }
+
+    public RoundResultData(GameRoundData aRoundData)
+    {
+        this.PlayerName = aRoundData.PlayerName;
+        this.TotalLevel = aRoundData.CurrentLevel;
+        this.TotalScore = aRoundData.CurrentScore;
+        this.TotalMaxCombo = aRoundData.MaxCombo;
+        this.TotalTime = Mathf.RoundToInt(aRoundData.GameTime);
+        this.TotalUsedBlock = aRoundData.LandedBlockCount;
+        this.EnableScoringMethods = aRoundData.EnableScoringMethods;
     }
 
     public RoundResultData(string aPlayerName, GameRoundData aRoundData)

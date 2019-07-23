@@ -72,6 +72,8 @@ public class BlockManager
 
     private int mComboCount = 0;
 
+    
+
     public void Reset()
     {
         mBlocks.Clear();
@@ -165,9 +167,13 @@ public class BlockManager
     
     public bool IsScoring()
     {
-        mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mNewLandedCubes);
         if (mScoringPositionGroups.Any())
             return true;
+
+        if ((mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mNewLandedCubes)).Any())
+            return true;
+        //if (mScoringPositionGroups.Any())
+        //    return true;
 
         mScoringsCubes.Clear();
         mNewLandedCubes.Clear();
@@ -226,6 +232,7 @@ public class BlockManager
                     PlayScoringAnimation();
                     mScoringPositionGroups.Clear();
                     mCurrentScoringGroupIndex = 0;
+                    
                     //mComboCount = 0;
                 }
                 mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;

@@ -27,6 +27,20 @@
                 true,
                 true
             ]
+        },
+        {
+            "PlayerName": "Tester",
+            "TotalLevel": 1,
+            "TotalScore": 657,
+            "TotalMaxCombo": 2,
+            "TotalTime": 190,
+            "TotalUsedBlock": 36,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
         }
     ]
 }

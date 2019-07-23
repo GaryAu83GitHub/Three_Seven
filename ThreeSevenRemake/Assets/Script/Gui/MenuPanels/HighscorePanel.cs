@@ -12,6 +12,9 @@ public class HighscorePanel : MonoBehaviour
     void Start()
     {
         ExitButton.onClick.AddListener(ExitButtonOnClick);
+
+        MainMenu.openHighscorePanel += DisplayList;
+
         List<RoundResultData> highscores = HighScoreManager.Instance.GetListSortBy(TableCategory.SCORE);
         for(int i = 0; i < ((highscores.Count < 10) ? highscores.Count : 10); i++)
         {
@@ -20,10 +23,25 @@ public class HighscorePanel : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        MainMenu.openHighscorePanel -= DisplayList;
+    }
+
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void DisplayList()
+    {
+        List<RoundResultData> highscores = HighScoreManager.Instance.GetListSortBy(TableCategory.SCORE);
+        for (int i = 0; i < ((highscores.Count < 10) ? highscores.Count : 10); i++)
+        {
+            ListComponents[i].gameObject.SetActive(true);
+            ListComponents[i].SetData(i + 1, highscores[i]);
+        }
     }
 
     private void ExitButtonOnClick()

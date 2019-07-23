@@ -71,6 +71,8 @@ public class GameOverMenu : MonoBehaviour
         MaxComboText.text = GameManager.Instance.MaxCombo.ToString();
         PanelAnimation.Play("GameOverMenuIn");
         StartCoroutine(DisplayResult());
+
+        
     }
 
     public void Result(int aReachedLevel, string aSpendTimeString, int aBlockCount, int aTotalScore)
@@ -87,6 +89,10 @@ public class GameOverMenu : MonoBehaviour
 
     public void LeaveToMainMenu()
     {
+        if (GameSettings.Instance.PlayerName.Length > 0)
+        {
+            HighScoreManager.Instance.Add(GameManager.Instance.GetRoundData());
+        }
         leaveTheGame?.Invoke();
         GameIsOver = false;
         LeavePanel.SetActive(false);

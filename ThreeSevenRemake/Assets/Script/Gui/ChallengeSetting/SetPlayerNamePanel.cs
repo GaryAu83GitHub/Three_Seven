@@ -52,7 +52,8 @@ public class SetPlayerNamePanel : SettingPanelBase
 
     private void PlayerNameInputFieldOnValueChange(TMP_InputField anInput)
     {
-        GameRoundManager.Instance.Data.PlayerName = anInput.text;
+        GameSettings.Instance.SetPlayerName(anInput.text);
+        //GameRoundManager.Instance.Data.PlayerName = anInput.text;
         //Debug.Log(anInput.text);
         //ActivateNextButton();
     }
