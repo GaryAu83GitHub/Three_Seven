@@ -75,6 +75,22 @@ public class MainMenu : MonoBehaviour
         GameSettingPanel.SetActive(true);
         GameRoundManager.Instance.CreateNewData();
         displaySettingPanel?.Invoke(Setting_Index.SET_LINK);
+
+        //for(int i = 0; i < 10; i++)
+        //{
+        //    GameRoundData data = new GameRoundData
+        //    {
+        //        PlayerName = "Test table " + (i + 1),
+        //        CurrentLevel = Random.Range(0, 50),
+        //        CurrentScore = Random.Range(5000, 10000),
+        //        MaxCombo = Random.Range(2, 10),
+        //        GameTime = Random.Range(200, 1500),
+        //        LandedBlockCount = Random.Range(50, 100),
+        //        EnableScoringMethods = new List<bool>() { true, true, true, true }
+        //    };
+        //    HighScoreManager.Instance.Add(data);
+        //}
+
     }
 
     public void DisplayHighscore()

@@ -41,6 +41,160 @@
                 true,
                 true
             ]
+        },
+        {
+            "PlayerName": "Samuel",
+            "TotalLevel": 4,
+            "TotalScore": 7438,
+            "TotalMaxCombo": 9,
+            "TotalTime": 785,
+            "TotalUsedBlock": 166,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Test table 1",
+            "TotalLevel": 40,
+            "TotalScore": 5055,
+            "TotalMaxCombo": 3,
+            "TotalTime": 419,
+            "TotalUsedBlock": 92,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Test table 2",
+            "TotalLevel": 11,
+            "TotalScore": 8328,
+            "TotalMaxCombo": 5,
+            "TotalTime": 533,
+            "TotalUsedBlock": 92,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Test table 3",
+            "TotalLevel": 17,
+            "TotalScore": 9434,
+            "TotalMaxCombo": 6,
+            "TotalTime": 571,
+            "TotalUsedBlock": 73,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Test table 4",
+            "TotalLevel": 31,
+            "TotalScore": 6887,
+            "TotalMaxCombo": 9,
+            "TotalTime": 482,
+            "TotalUsedBlock": 74,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Test table 5",
+            "TotalLevel": 0,
+            "TotalScore": 5404,
+            "TotalMaxCombo": 3,
+            "TotalTime": 435,
+            "TotalUsedBlock": 76,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Test table 6",
+            "TotalLevel": 20,
+            "TotalScore": 8201,
+            "TotalMaxCombo": 2,
+            "TotalTime": 1362,
+            "TotalUsedBlock": 82,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Test table 7",
+            "TotalLevel": 1,
+            "TotalScore": 5117,
+            "TotalMaxCombo": 7,
+            "TotalTime": 681,
+            "TotalUsedBlock": 76,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Test table 8",
+            "TotalLevel": 49,
+            "TotalScore": 6077,
+            "TotalMaxCombo": 7,
+            "TotalTime": 992,
+            "TotalUsedBlock": 78,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Test table 9",
+            "TotalLevel": 40,
+            "TotalScore": 9083,
+            "TotalMaxCombo": 8,
+            "TotalTime": 689,
+            "TotalUsedBlock": 59,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Test table 10",
+            "TotalLevel": 39,
+            "TotalScore": 6745,
+            "TotalMaxCombo": 5,
+            "TotalTime": 413,
+            "TotalUsedBlock": 80,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
         }
     ]
 }
