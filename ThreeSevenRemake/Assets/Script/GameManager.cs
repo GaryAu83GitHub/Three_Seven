@@ -60,6 +60,7 @@ public class GameManager
     // variable
     private List<uint> mComboBaseScoreList = new List<uint>() { 50 };
 
+    public int NextLevelUpScore { get { return mNextLevelUpScore; } }
     private int mNextLevelUpScore = 10;
     private int mCurrentLevelPoint = 0;
 
@@ -100,7 +101,7 @@ public class GameManager
             int restScore = mCurrentLevelPoint - mNextLevelUpScore;
             mCurrentLevelPoint = restScore;
             mCurrentLevel++;
-            mNextLevelUpScore = 10 * (mCurrentLevel + 1);
+            mNextLevelUpScore = 10 + (mCurrentLevel);
             Objective.Instance.IncreaseObjectiveValue();
         }
         levelChangingNew?.Invoke(aPoint);

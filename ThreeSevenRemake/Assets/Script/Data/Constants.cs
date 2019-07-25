@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 public static class Constants
 {
-    public const float DROPPING_VALUE = .03f;
+    public const float DROPPING_VALUE = .05f;//.03f;
     public const float MINIMAL_DROPRATE = .1f;
     public const float MAXIMAL_DROPRATE = 1f;
 

@@ -30,6 +30,10 @@ public class LevelCircle : MonoBehaviour
     private bool mFillupPreviewCircle = false;
     private bool mFillupMainCircle = false;
 
+    private float mCurrentLevelSectionValue = 0f;
+    private float mNextLevelSectionValue = 0f;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +41,9 @@ public class LevelCircle : MonoBehaviour
         GameManager.levelChangingNew += FillMainCircle;
         mPreviewSectionFillingValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 1));
         mMainSectionFillingValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 1));
+
+        mCurrentLevelSectionValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 1));
+        mNextLevelSectionValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 2));
 
         LevelText.text = GameManager.Instance.CurrentLevel.ToString();
     }
