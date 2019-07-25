@@ -219,5 +219,6 @@ public class DevelopeMain : MonoBehaviour
     {
         BlockManager.Instance.Reset();
         GameManager.Instance.Reset();
+        GameSettings.Instance.Reset();
     }
 }

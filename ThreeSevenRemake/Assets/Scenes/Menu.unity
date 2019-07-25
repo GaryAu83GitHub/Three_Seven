@@ -15599,11 +15599,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SetLinkNumberPanel
       objectReference: {fileID: 0}
-    - target: {fileID: 1888704171405800833, guid: 0baba092a826fe14fb8b9943d4bf8f85,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7782828238462473810, guid: 0baba092a826fe14fb8b9943d4bf8f85,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15787,6 +15782,26 @@ PrefabInstance:
     - target: {fileID: 550085709891124238, guid: 0baba092a826fe14fb8b9943d4bf8f85,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2820752679160446779, guid: 0baba092a826fe14fb8b9943d4bf8f85,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 89757874254778235, guid: 0baba092a826fe14fb8b9943d4bf8f85,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7500088764366377850, guid: 0baba092a826fe14fb8b9943d4bf8f85,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2289150037121896047, guid: 0baba092a826fe14fb8b9943d4bf8f85,
+        type: 3}
+      propertyPath: m_Color.a
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -16118,6 +16133,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SetPlayerNamePanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478328993674962682, guid: d8064868b52b2a146ab15758d282e144,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4193625663294899497, guid: d8064868b52b2a146ab15758d282e144,
         type: 3}

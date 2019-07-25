@@ -60,6 +60,13 @@ public class GenerateScoreCombinationPositions
 
     public GenerateScoreCombinationPositions()
     {
+        
+    }
+
+    public void GenerateCompinationPositions()
+    {
+        mScoreCombinationPositionAddons.Clear();
+
         if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT])
         {
             mScoreCombinationPositionAddons.Add(ScorePosIndex.L_Z, new List<Vector2Int> { Vector2Int.left, Vector2Int.zero });

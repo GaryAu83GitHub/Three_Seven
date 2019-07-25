@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class SetLinkNumberPanel : SettingPanelBase
 {
@@ -68,7 +69,11 @@ public class SetLinkNumberPanel : SettingPanelBase
     private void TwoCubesButtonClicked()
     {
         SwapScoringCubeCountOn(ScoreingLinks.LINK_2_DIGIT);
-        TwoDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT];
+        //TwoDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT];
+
+        bool onOff = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT];
+        TwoDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (onOff ? "ON" : "OFF");
+        TwoDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = (onOff ? Color.green : Color.red);
 
         DescriptionText.text = "2 digit addition are " + GetEnableText(ScoreingLinks.LINK_2_DIGIT);
 
@@ -78,7 +83,11 @@ public class SetLinkNumberPanel : SettingPanelBase
     private void ThreeCubesButtonClicked()
     {
         SwapScoringCubeCountOn(ScoreingLinks.LINK_3_DIGIT);
-        ThreeDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT];
+        //ThreeDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT];
+
+        bool onOff = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT];
+        ThreeDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (onOff ? "ON" : "OFF");
+        ThreeDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = (onOff ? Color.green : Color.red);
 
         DescriptionText.text = "3 digit addition are " + GetEnableText(ScoreingLinks.LINK_3_DIGIT);
 
@@ -88,7 +97,11 @@ public class SetLinkNumberPanel : SettingPanelBase
     private void FourCubesButtonClicked()
     {
         SwapScoringCubeCountOn(ScoreingLinks.LINK_4_DIGIT);
-        FourDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT];
+        //FourDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT];
+
+        bool onOff = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT];
+        FourDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (onOff ? "ON" : "OFF");
+        FourDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = (onOff ? Color.green : Color.red);
 
         DescriptionText.text = "4 digit addition are " + GetEnableText(ScoreingLinks.LINK_4_DIGIT);
 
@@ -98,7 +111,11 @@ public class SetLinkNumberPanel : SettingPanelBase
     private void FiveCubesButtonClicked()
     {
         SwapScoringCubeCountOn(ScoreingLinks.LINK_5_DIGIT);
-        FiveDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT];
+        //FiveDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT];
+
+        bool onOff = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT];
+        FiveDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (onOff ? "ON" : "OFF");
+        FiveDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = (onOff ? Color.green : Color.red);
 
         DescriptionText.text = "5 digit addition are " + GetEnableText(ScoreingLinks.LINK_5_DIGIT);
 

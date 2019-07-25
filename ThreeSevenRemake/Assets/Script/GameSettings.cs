@@ -127,4 +127,9 @@ public class GameSettings
 
         return aSetOn;
     }
+
+    public void Reset()
+    {
+        mEnableScoringMethods = new List<bool>() { true, true, true, true };
+    }
 }

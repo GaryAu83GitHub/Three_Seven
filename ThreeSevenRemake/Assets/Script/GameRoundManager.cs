@@ -31,6 +31,7 @@ public class GameRoundManager
             GameSettings.Instance.EnableScoringMethods[i] = mGameRoundData.EnableScoringMethods[i];
 
         Objective.Instance.SetInitialObjectiveValue(mGameRoundData.InitialTaskValue);
+        GenerateScoreCombinationPositions.Instance.GenerateCompinationPositions();
         
         //GameSettings.Instance.SetLimitLineLevel(mGameRoundData.RoofHeightValue);
         //GameSettings.Instance.SetStartDropSpeed(mGameRoundData.DroppingSpeedMultiplyValue);

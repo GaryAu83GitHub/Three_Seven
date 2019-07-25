@@ -1,48 +1,6 @@
 {
     "ScoreList": [
         {
-            "PlayerName": "Benjamin",
-            "TotalLevel": 12,
-            "TotalScore": 5500,
-            "TotalMaxCombo": 10,
-            "TotalTime": 450,
-            "TotalUsedBlock": 40,
-            "EnableScoringMethods": [
-                false,
-                true,
-                false,
-                true
-            ]
-        },
-        {
-            "PlayerName": "Anita",
-            "TotalLevel": 15,
-            "TotalScore": 7500,
-            "TotalMaxCombo": 6,
-            "TotalTime": 600,
-            "TotalUsedBlock": 40,
-            "EnableScoringMethods": [
-                false,
-                false,
-                true,
-                true
-            ]
-        },
-        {
-            "PlayerName": "Tester",
-            "TotalLevel": 1,
-            "TotalScore": 657,
-            "TotalMaxCombo": 2,
-            "TotalTime": 190,
-            "TotalUsedBlock": 36,
-            "EnableScoringMethods": [
-                true,
-                true,
-                true,
-                true
-            ]
-        },
-        {
             "PlayerName": "Samuel",
             "TotalLevel": 4,
             "TotalScore": 7438,
@@ -57,82 +15,26 @@
             ]
         },
         {
-            "PlayerName": "Test table 1",
-            "TotalLevel": 40,
-            "TotalScore": 5055,
-            "TotalMaxCombo": 3,
-            "TotalTime": 419,
-            "TotalUsedBlock": 92,
+            "PlayerName": "Atomas",
+            "TotalLevel": 3,
+            "TotalScore": 1749,
+            "TotalMaxCombo": 1,
+            "TotalTime": 1147,
+            "TotalUsedBlock": 86,
             "EnableScoringMethods": [
                 true,
-                true,
-                true,
-                true
+                false,
+                false,
+                false
             ]
         },
         {
-            "PlayerName": "Test table 2",
-            "TotalLevel": 11,
-            "TotalScore": 8328,
-            "TotalMaxCombo": 5,
-            "TotalTime": 533,
-            "TotalUsedBlock": 92,
-            "EnableScoringMethods": [
-                true,
-                true,
-                true,
-                true
-            ]
-        },
-        {
-            "PlayerName": "Test table 3",
-            "TotalLevel": 17,
-            "TotalScore": 9434,
-            "TotalMaxCombo": 6,
-            "TotalTime": 571,
-            "TotalUsedBlock": 73,
-            "EnableScoringMethods": [
-                true,
-                true,
-                true,
-                true
-            ]
-        },
-        {
-            "PlayerName": "Test table 4",
-            "TotalLevel": 31,
-            "TotalScore": 6887,
-            "TotalMaxCombo": 9,
-            "TotalTime": 482,
-            "TotalUsedBlock": 74,
-            "EnableScoringMethods": [
-                true,
-                true,
-                true,
-                true
-            ]
-        },
-        {
-            "PlayerName": "Test table 5",
-            "TotalLevel": 0,
-            "TotalScore": 5404,
-            "TotalMaxCombo": 3,
-            "TotalTime": 435,
-            "TotalUsedBlock": 76,
-            "EnableScoringMethods": [
-                true,
-                true,
-                true,
-                true
-            ]
-        },
-        {
-            "PlayerName": "Test table 6",
-            "TotalLevel": 20,
-            "TotalScore": 8201,
+            "PlayerName": "Gary",
+            "TotalLevel": 3,
+            "TotalScore": 3274,
             "TotalMaxCombo": 2,
-            "TotalTime": 1362,
-            "TotalUsedBlock": 82,
+            "TotalTime": 1101,
+            "TotalUsedBlock": 105,
             "EnableScoringMethods": [
                 true,
                 true,
@@ -141,54 +43,40 @@
             ]
         },
         {
-            "PlayerName": "Test table 7",
-            "TotalLevel": 1,
-            "TotalScore": 5117,
-            "TotalMaxCombo": 7,
-            "TotalTime": 681,
-            "TotalUsedBlock": 76,
-            "EnableScoringMethods": [
-                true,
-                true,
-                true,
-                true
-            ]
-        },
-        {
-            "PlayerName": "Test table 8",
-            "TotalLevel": 49,
-            "TotalScore": 6077,
-            "TotalMaxCombo": 7,
-            "TotalTime": 992,
-            "TotalUsedBlock": 78,
-            "EnableScoringMethods": [
-                true,
-                true,
-                true,
-                true
-            ]
-        },
-        {
-            "PlayerName": "Test table 9",
-            "TotalLevel": 40,
-            "TotalScore": 9083,
-            "TotalMaxCombo": 8,
-            "TotalTime": 689,
-            "TotalUsedBlock": 59,
-            "EnableScoringMethods": [
-                true,
-                true,
-                true,
-                true
-            ]
-        },
-        {
-            "PlayerName": "Test table 10",
-            "TotalLevel": 39,
-            "TotalScore": 6745,
+            "PlayerName": "Albin",
+            "TotalLevel": 3,
+            "TotalScore": 3678,
             "TotalMaxCombo": 5,
-            "TotalTime": 413,
-            "TotalUsedBlock": 80,
+            "TotalTime": 1168,
+            "TotalUsedBlock": 127,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "jdh",
+            "TotalLevel": 5,
+            "TotalScore": 13018,
+            "TotalMaxCombo": 4,
+            "TotalTime": 2145,
+            "TotalUsedBlock": 230,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Ann",
+            "TotalLevel": 7,
+            "TotalScore": 22412,
+            "TotalMaxCombo": 9,
+            "TotalTime": 5721,
+            "TotalUsedBlock": 421,
             "EnableScoringMethods": [
                 true,
                 true,
