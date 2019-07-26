@@ -218,7 +218,7 @@ public class BlockManager
             GameManager.Instance.AddScore(ScoreType.LINKING, thisGroupScoringCubes.Count, thisGroupTaskTank);
             mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
 
-            LevelManager.Instance.AddLevelScore(1);
+            //LevelManager.Instance.AddLevelScore(1);
         }
         else
         {

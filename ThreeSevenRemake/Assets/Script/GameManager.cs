@@ -79,6 +79,7 @@ public class GameManager
         mComboBaseScoreList = new List<uint>() { 50 };
         mNextLevelUpScore = 10;
         mCurrentLevelPoint = 0;
+        LevelManager.Instance.Reset();
     }
 
     /// <summary>

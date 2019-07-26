@@ -33,10 +33,16 @@ public class LevelCircle : MonoBehaviour
     private float mCurrentLevelSectionValue = 0f;
     private float mNextLevelSectionValue = 0f;
 
+    private bool mLevelUp = false;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        LevelManager.levelUp += LevelUp;
+        LevelManager.addLevelScore += AddLevelScore;
+        LevelManager.fillUpTheMain += FillupMainBar;
+
         BlockManager.addLevelScore += FillPreviewCircle;
         GameManager.levelChangingNew += FillMainCircle;
         mPreviewSectionFillingValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 1));
@@ -46,10 +52,16 @@ public class LevelCircle : MonoBehaviour
         mNextLevelSectionValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 2));
 
         LevelText.text = GameManager.Instance.CurrentLevel.ToString();
+
+        mCurrentLevelSectionValue = LevelManager.Instance.GetCurrentLevelData.UIBarFillingSectionValue;
     }
 
     private void OnDestroy()
     {
+        LevelManager.levelUp -= LevelUp;
+        LevelManager.addLevelScore -= AddLevelScore;
+        LevelManager.fillUpTheMain -= FillupMainBar;
+
         BlockManager.addLevelScore -= FillPreviewCircle;
         GameManager.levelChangingNew -= FillMainCircle;
     }
@@ -60,6 +72,13 @@ public class LevelCircle : MonoBehaviour
         PreviewFilling();
         MainFilling();
 
+        //if (Input.GetKeyDown(KeyCode.V))
+        //    LevelManager.Instance.AddLevelScore(1);
+        //if(Input.GetKeyDown(KeyCode.B))
+        //    LevelManager.Instance.FillUpTheMainBar();
+
+        //PreviewCircleFilling();
+        //MainCircleFilling();
         //if(Input.GetKeyDown(KeyCode.Y))
         //    LevelUpAnimation.Play();
     }
@@ -94,9 +113,41 @@ public class LevelCircle : MonoBehaviour
 
         mPreviewCurrentValue += Time.deltaTime;
 
-
-
+        if(mPreviewCurrentValue > 1f)
+        {
+            mPreviewCurrentValue = 0;
+            mFillupPreviewCircle = false;
+        }
+        else if(mPreviewCurrentValue >= LevelManager.Instance.CurrentFillupAmount)
+        {
+            mPreviewCurrentValue = LevelManager.Instance.CurrentFillupAmount;
+            mFillupPreviewCircle = false;
+        }
+        
         LevelPreviewValueFillingImage.fillAmount = mPreviewCurrentValue;
+    }
+    private void MainCircleFilling()
+    {
+        if (!mFillupMainCircle)
+            return;
+
+        mMainCurrentValue += Time.deltaTime;
+        if(mMainCurrentValue >= 1f)
+        {
+            LevelText.text = (LevelManager.Instance.CurrentLevel).ToString();
+            LevelUpAnimation.Play();
+
+            mMainCurrentValue = 0f;
+            mFillupMainCircle = false;
+            mLevelUp = false;
+        }
+        else if (!mLevelUp && mMainCurrentValue >= LevelManager.Instance.CurrentFillupAmount)
+        {
+            mMainCurrentValue = LevelManager.Instance.CurrentFillupAmount;
+            mFillupMainCircle = false;
+        }
+
+        LevelValueFillingImage.fillAmount = mMainCurrentValue;
     }
 
     private void MainFilling()
@@ -144,6 +195,24 @@ public class LevelCircle : MonoBehaviour
         {
             mMainFillingValue += mMainCurrentValue;
         }
+        mFillupMainCircle = true;
+    }
+
+    private void LevelUp()
+    {
+        mFillupMainCircle = true;
+        mLevelUp = true;
+        //LevelText.text = (LevelManager.Instance.CurrentLevel).ToString();
+        //LevelUpAnimation.Play();
+    }
+
+    private void AddLevelScore()
+    {
+        mFillupPreviewCircle = true;
+    }
+
+    private void FillupMainBar()
+    {
         mFillupMainCircle = true;
     }
 }
