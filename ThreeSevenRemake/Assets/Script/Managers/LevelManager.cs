@@ -15,47 +15,58 @@ public class LevelManager
     }
     private static LevelManager mInstance;
 
-    public int CurrentLevel { get { return LevelInfos.Count - 1; } }
+    public int CurrentLevel { get { return mCurrentLevel; } }
+    private int mCurrentLevel = 0;
 
 
-    public List<LevelData> LevelInfos = new List<LevelData>()
-    {
-        new LevelData(10, 1f/10f)
-    };
+    private List<LevelData> mLevelInfos = new List<LevelData>();
 
     private int mCurrentLevelScore = 0;
+
+    public LevelManager()
+    {
+        Reset();
+    }
+
+    public void Reset()
+    {
+        mCurrentLevel = 0;
+        mCurrentLevelScore = 0;
+        mLevelInfos.Clear();
+
+        mLevelInfos.Add(new LevelData(10, 1f / 10f));
+    }
 
     public void AddLevelScore(int aScore)
     {
         mCurrentLevelScore += aScore;
-    }
+        if(mCurrentLevelScore >= mLevelInfos[mCurrentLevel].BreakLevelScore)
+        {
+            mCurrentLevelScore = 0;
+            mCurrentLevel++;
+            AddLevelData(mCurrentLevel);
 
-    public int GetNextLevel()
-    {
-        return LevelInfos.Count - 1;
+        }
     }
-
-    private int NextLevelScoreCalc()
+    
+    private void AddLevelData(int aNewLevelValue)
     {
-        return 10 + LevelInfos.Count;
-    }
-
-    private float NextLevelSectionValue()
-    {
-        return 1f / NextLevelScoreCalc();
+        int newBreakScore = 10 + aNewLevelValue;
+        LevelData data = new LevelData(newBreakScore, 1f / (float)newBreakScore);
+        mLevelInfos.Add(data);
     }
 }
 
 public class LevelData
 {
-    public readonly int NextLevelScore = 0;
+    public readonly int BreakLevelScore = 0;
     public readonly float UIBarFillingSectionValue = 0;
 
     public LevelData() { }
 
-    public LevelData(int aNextLevelScore, float aSectionValue)
+    public LevelData(int aBreakLevelScore, float aSectionValue)
     {
-        NextLevelScore = aNextLevelScore;
+        BreakLevelScore = aBreakLevelScore;
         UIBarFillingSectionValue = aSectionValue;
     }
 

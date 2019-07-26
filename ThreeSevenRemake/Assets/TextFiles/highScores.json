@@ -83,6 +83,104 @@
                 true,
                 true
             ]
+        },
+        {
+            "PlayerName": "JDH",
+            "TotalLevel": 6,
+            "TotalScore": 5788,
+            "TotalMaxCombo": 4,
+            "TotalTime": 1071,
+            "TotalUsedBlock": 123,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                false
+            ]
+        },
+        {
+            "PlayerName": "Rider",
+            "TotalLevel": 4,
+            "TotalScore": 1872,
+            "TotalMaxCombo": 2,
+            "TotalTime": 1059,
+            "TotalUsedBlock": 74,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Jonathan",
+            "TotalLevel": 2,
+            "TotalScore": 884,
+            "TotalMaxCombo": 2,
+            "TotalTime": 353,
+            "TotalUsedBlock": 44,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Milton",
+            "TotalLevel": 13,
+            "TotalScore": 105651,
+            "TotalMaxCombo": 15,
+            "TotalTime": 2154,
+            "TotalUsedBlock": 352,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Björn",
+            "TotalLevel": 2,
+            "TotalScore": 700,
+            "TotalMaxCombo": 3,
+            "TotalTime": 613,
+            "TotalUsedBlock": 115,
+            "EnableScoringMethods": [
+                false,
+                false,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "anna",
+            "TotalLevel": 17,
+            "TotalScore": 42388,
+            "TotalMaxCombo": 8,
+            "TotalTime": 3003,
+            "TotalUsedBlock": 450,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "PlayerName": "Johan",
+            "TotalLevel": 20,
+            "TotalScore": 646792,
+            "TotalMaxCombo": 11,
+            "TotalTime": 2418,
+            "TotalUsedBlock": 559,
+            "EnableScoringMethods": [
+                true,
+                true,
+                true,
+                true
+            ]
         }
     ]
 }

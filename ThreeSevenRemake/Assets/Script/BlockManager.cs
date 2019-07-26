@@ -217,6 +217,8 @@ public class BlockManager
             achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes);
             GameManager.Instance.AddScore(ScoreType.LINKING, thisGroupScoringCubes.Count, thisGroupTaskTank);
             mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
+
+            LevelManager.Instance.AddLevelScore(1);
         }
         else
         {

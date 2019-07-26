@@ -37,11 +37,11 @@ public class CubeNumberGenerator
         int newNumber = GetRandomUnusedNumberFrom(ref someUsedNumber);
 
         someUsedNumber[newNumber] = true;
-        if (!someUsedNumber.Contains(false))
-        {
-            for (int i = 0; i < someUsedNumber.Count; i++)
-                someUsedNumber[i] = false;
-        }
+        //if (!someUsedNumber.Contains(false))
+        //{
+        //    for (int i = 0; i < someUsedNumber.Count; i++)
+        //        someUsedNumber[i] = false;
+        //}
 
         return newNumber;
     }
@@ -57,7 +57,13 @@ public class CubeNumberGenerator
         }
 
         if (ununsedNumberIndeces.Count == 1)
+        {   
+            for (int i = 0; i < someUsedNumber.Count; i++)
+                someUsedNumber[i] = false;
+
+            someUsedNumber[ununsedNumberIndeces[0]] = true;
             return ununsedNumberIndeces[0];
+        }
 
         return ununsedNumberIndeces[SupportTools.RNG(0, ununsedNumberIndeces.Count)];
     }
