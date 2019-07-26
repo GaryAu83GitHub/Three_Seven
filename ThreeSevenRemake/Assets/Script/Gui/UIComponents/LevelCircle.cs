@@ -74,7 +74,7 @@ public class LevelCircle : MonoBehaviour
         {
             mPreviewCurrentValue = 0f;
             //mDividing += 10;
-            mPreviewSectionFillingValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 2));
+            mPreviewSectionFillingValue = 1f / (float)(mBaseDividValue + (GameManager.Instance.CurrentLevel + 2));
             mPreviewDividedCount = 1;
             mFillupPreviewCircle = false;
         }
@@ -96,14 +96,14 @@ public class LevelCircle : MonoBehaviour
         if(mMainCurrentValue >= 1f)
         {
             mMainCurrentValue = 0f;
-            mMainSectionFillingValue = 1f / (float)(mBaseDividValue * (GameManager.Instance.CurrentLevel + 2));
+            mMainSectionFillingValue = 1f / (float)(mBaseDividValue + (GameManager.Instance.CurrentLevel + 2));
 
             if(mMainFillingValueRest > 0)
                 mMainFillingValue = mMainFillingValueRest;
             else
                 mFillupMainCircle = false;
 
-            LevelText.text = (GameManager.Instance.CurrentLevel + 1).ToString();
+            LevelText.text = (GameManager.Instance.CurrentLevel).ToString();
             LevelUpAnimation.Play();
         }
         else if(mMainCurrentValue >= mMainFillingValue)
