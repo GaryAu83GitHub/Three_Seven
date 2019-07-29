@@ -83,29 +83,6 @@ public class LevelCircle : MonoBehaviour
         //    LevelUpAnimation.Play();
     }
 
-    private void PreviewFilling()
-    {
-        if (!mFillupPreviewCircle)
-            return;
-
-        mPreviewCurrentValue += Time.deltaTime;
-        if (mPreviewCurrentValue >= 1f)
-        {
-            mPreviewCurrentValue = 0f;
-            //mDividing += 10;
-            mPreviewSectionFillingValue = 1f / (float)(mBaseDividValue + (GameManager.Instance.CurrentLevel + 1));
-            mPreviewDividedCount = 1;
-            mFillupPreviewCircle = false;
-        }
-        else if (mPreviewCurrentValue >= PreviewFillupAmount)
-        {
-            mPreviewCurrentValue = PreviewFillupAmount;
-            mPreviewDividedCount++;
-            mFillupPreviewCircle = false;
-        }
-        LevelPreviewValueFillingImage.fillAmount = mPreviewCurrentValue;
-    }
-
     private void PreviewCircleFilling()
     {
         if (!mFillupPreviewCircle)
@@ -126,6 +103,7 @@ public class LevelCircle : MonoBehaviour
         
         LevelPreviewValueFillingImage.fillAmount = mPreviewCurrentValue;
     }
+
     private void MainCircleFilling()
     {
         if (!mFillupMainCircle)
@@ -149,6 +127,30 @@ public class LevelCircle : MonoBehaviour
 
         LevelValueFillingImage.fillAmount = mMainCurrentValue;
     }
+
+    private void PreviewFilling()
+    {
+        if (!mFillupPreviewCircle)
+            return;
+
+        mPreviewCurrentValue += Time.deltaTime;
+        if (mPreviewCurrentValue >= 1f)
+        {
+            mPreviewCurrentValue = 0f;
+            //mDividing += 10;
+            mPreviewSectionFillingValue = 1f / (float)(mBaseDividValue + (GameManager.Instance.CurrentLevel + 1));
+            mPreviewDividedCount = 1;
+            mFillupPreviewCircle = false;
+        }
+        else if (mPreviewCurrentValue >= PreviewFillupAmount)
+        {
+            mPreviewCurrentValue = PreviewFillupAmount;
+            mPreviewDividedCount++;
+            mFillupPreviewCircle = false;
+        }
+        LevelPreviewValueFillingImage.fillAmount = mPreviewCurrentValue;
+    }
+
 
     private void MainFilling()
     {

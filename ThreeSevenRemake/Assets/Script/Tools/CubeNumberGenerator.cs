@@ -20,7 +20,10 @@ public class CubeNumberGenerator
     public int GetNewRootNumber { get { return GetNewCubeNumberFor(ref mUsedRootNumber); } }
     public int GetNewSubNumber { get { return GetNewCubeNumberFor(ref mUsedSubNumber); } }
 
+    public List<bool> UsedRootNumber { get { return mUsedRootNumber; } }
     private List<bool> mUsedRootNumber = new List<bool>();
+
+    public List<bool> UsedSubNumber { get { return mUsedSubNumber; } }
     private List<bool> mUsedSubNumber = new List<bool>();
 
     public CubeNumberGenerator()

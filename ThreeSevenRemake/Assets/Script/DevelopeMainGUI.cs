@@ -19,6 +19,8 @@ public class DevelopeMainGUI : MonoBehaviour
     //public Text ComboScoreText;
 
     public GameObject DebugPanel;
+    public Text TempDebugText;
+
 
     private Animation mComboAnimation;
 
@@ -79,6 +81,7 @@ public class DevelopeMainGUI : MonoBehaviour
     private void Update()
     {
         Clock();
+        Something();
 
         //if(mComboAppear)
         //    ComboTextFading();
@@ -101,6 +104,15 @@ public class DevelopeMainGUI : MonoBehaviour
         }
     }
 
+    public void Something()
+    {
+        string debug = "\tRoot\t\tSub\n";
+        for(int i = 0; i < 10; i++)
+        {
+            debug += i.ToString() + "\t" + CubeNumberGenerator.Instance.UsedRootNumber[i] + "\t\t" + CubeNumberGenerator.Instance.UsedSubNumber[i] + "\n";
+        }
+        TempDebugText.text = debug;
+    }
 
     public void UpdateScore(int aNewTotalScore, int anAddOnScore)
     {
