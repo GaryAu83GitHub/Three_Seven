@@ -175,6 +175,7 @@ public class BlockManager
         //if (mScoringPositionGroups.Any())
         //    return true;
 
+        LevelManager.Instance.FillUpTheMainBar();
         mScoringsCubes.Clear();
         mNewLandedCubes.Clear();
         return false;
@@ -212,13 +213,12 @@ public class BlockManager
                     }
                 }
             }
-            addLevelScore?.Invoke();
+            //addLevelScore?.Invoke();
             comboOccuring?.Invoke(mComboCount++);
             achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].ObjectiveRank, thisGroupScoringCubes);
+            LevelManager.Instance.AddLevelScore(1);
             GameManager.Instance.AddScore(ScoreType.LINKING, thisGroupScoringCubes.Count, thisGroupTaskTank);
             mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
-
-            //LevelManager.Instance.AddLevelScore(1);
         }
         else
         {
@@ -230,7 +230,7 @@ public class BlockManager
                 if(mCurrentScoringGroupIndex >= mScoringPositionGroups.Count)
                 {
                     GameManager.Instance.AddScore(ScoreType.COMBO, mScoringPositionGroups.Count - 1);
-                    GameManager.Instance.AddLevelPoint(mScoringPositionGroups.Count);
+                    //GameManager.Instance.AddLevelPoint(mScoringPositionGroups.Count);
                     PlayScoringAnimation();
                     mScoringPositionGroups.Clear();
                     mCurrentScoringGroupIndex = 0;

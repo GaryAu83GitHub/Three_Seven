@@ -39,7 +39,7 @@ public class LevelCircle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        LevelManager.levelUp += LevelUp;
+        //LevelManager.levelUp += LevelUp;
         LevelManager.addLevelScore += AddLevelScore;
         LevelManager.fillUpTheMain += FillupMainBar;
 
@@ -58,7 +58,7 @@ public class LevelCircle : MonoBehaviour
 
     private void OnDestroy()
     {
-        LevelManager.levelUp -= LevelUp;
+        //LevelManager.levelUp -= LevelUp;
         LevelManager.addLevelScore -= AddLevelScore;
         LevelManager.fillUpTheMain -= FillupMainBar;
 
@@ -69,16 +69,16 @@ public class LevelCircle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PreviewFilling();
-        MainFilling();
+        //PreviewFilling();
+        //MainFilling();
 
         //if (Input.GetKeyDown(KeyCode.V))
         //    LevelManager.Instance.AddLevelScore(1);
         //if(Input.GetKeyDown(KeyCode.B))
         //    LevelManager.Instance.FillUpTheMainBar();
 
-        //PreviewCircleFilling();
-        //MainCircleFilling();
+        PreviewCircleFilling();
+        MainCircleFilling();
         //if(Input.GetKeyDown(KeyCode.Y))
         //    LevelUpAnimation.Play();
     }
@@ -211,8 +211,9 @@ public class LevelCircle : MonoBehaviour
         mFillupPreviewCircle = true;
     }
 
-    private void FillupMainBar()
+    private void FillupMainBar(bool isLevelUp)
     {
         mFillupMainCircle = true;
+        mLevelUp = isLevelUp;
     }
 }

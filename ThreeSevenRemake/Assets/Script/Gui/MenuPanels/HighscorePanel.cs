@@ -55,7 +55,6 @@ public class HighscorePanel : MonoBehaviour
         {
             ScrollButtonContain.SetActive(true);
             mMaxScrollValue = mHighscores.Count - 10;
-            Debug.Log(mMaxScrollValue);
         }
 
         mCurrentScrollValue = 0;

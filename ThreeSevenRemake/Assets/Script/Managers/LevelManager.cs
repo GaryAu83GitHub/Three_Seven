@@ -16,26 +16,23 @@ public class LevelManager
     }
     private static LevelManager mInstance;
 
-    public delegate void OnLevelUp();
-    public static OnLevelUp levelUp;
+    //public delegate void OnLevelUp();
+    //public static OnLevelUp levelUp;
 
     public delegate void OnAddingLevelScore();
     public static OnAddingLevelScore addLevelScore;
 
-    public delegate void OnFillUpTheMain();
+    public delegate void OnFillUpTheMain(bool isLevelUp);
     public static OnFillUpTheMain fillUpTheMain;
         
 
-    public float CurrentFillupAmount { get { return mCurrentLevelScore * mLevelInfos[mCurrentLevel].UIBarFillingSectionValue; } }
+    public float CurrentFillupAmount { get { return mCurrentLevelScore * (mLevelInfos.Any() ? mLevelInfos[mCurrentLevel].UIBarFillingSectionValue : 0); } }
 
     public int CurrentLevel { get { return mCurrentLevel; } }
     private int mCurrentLevel = 0;
-
-
-
+    
     public LevelData GetCurrentLevelData { get { return GetLevelDataOf(mCurrentLevel); } }
-    public LevelData GetNextLevelData { get { return GetLevelDataOf(mCurrentLevel + 1); } }
-
+   
     private List<LevelData> mLevelInfos = new List<LevelData>();
 
     private int mCurrentLevelScore = 0;
@@ -65,17 +62,15 @@ public class LevelManager
         {
             mCurrentLevelScore = 0;
             mCurrentLevel++;
-            Debug.Log("Current level: " + mCurrentLevel.ToString());
-            Debug.Log("Level " + mCurrentLevel.ToString() + 
-                "'s Breakscore: " + GetLevelDataOf(mCurrentLevel).BreakLevelScore.ToString() + 
-                ", section value: " + GetLevelDataOf(mCurrentLevel).UIBarFillingSectionValue.ToString());
-            levelUp?.Invoke();
+            Objective.Instance.IncreaseObjectiveValue();
+            //levelUp?.Invoke();
+            fillUpTheMain?.Invoke(true);
         }
     }
 
     public void FillUpTheMainBar()
     {
-        fillUpTheMain?.Invoke();
+        fillUpTheMain?.Invoke(false);
     }
 
     private LevelData GetLevelDataOf(int anLevelIndex)
