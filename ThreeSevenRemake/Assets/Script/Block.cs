@@ -22,6 +22,8 @@ public class Block : MonoBehaviour
     private List<int> mCubeNumbers = new List<int>();
     public List<int> CubeNumbers { get { return mCubeNumbers; } }
 
+    public int BlockValue { get { return (mCubes[0] ?? null).Number + (mCubes[1] ?? null).Number; } }
+
     private int mCurrentRotation = 0;
     public int BlockRotation { get { return mCurrentRotation; } }
     

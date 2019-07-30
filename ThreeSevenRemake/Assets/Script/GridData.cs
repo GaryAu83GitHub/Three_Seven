@@ -196,6 +196,14 @@ public class GridData
         mOriginalLandedBlockPositions.Add(aBlockCubeGridPos);
     }
     
+    public List<ScoringGroupAchieveInfo> GetListOfScoringPositionGroups(Block aBlock)
+    {
+        List<ScoringGroupAchieveInfo> someGroupOfPosition = new List<ScoringGroupAchieveInfo>();
+        ScoreWithBlock(aBlock, ref someGroupOfPosition);
+
+        return someGroupOfPosition;
+    }
+
     public List<ScoringGroupAchieveInfo> GetListOfScoringPositionGroups(List<Cube> someNewLandedCubes)
     {
         List<ScoringGroupAchieveInfo> someGroupOfPosition = new List<ScoringGroupAchieveInfo>();
@@ -284,7 +292,46 @@ public class GridData
             }
         }
     }
-    
+
+    private void ScoreWithBlock(Block aBlock, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
+    {
+        List<List<Vector2Int>> scoreCombinationPositions = GenerateScoreCombinationPositions.Instance.GetScorePositionListForBlock(aBlock);
+        TaskRank getObjectiveRank = TaskRank.X1;
+        ScoringGroupAchieveInfo newInfo;
+        int totalValue = 0;
+        foreach (List<Vector2Int> pos in scoreCombinationPositions)
+        {
+            totalValue = TotalValueWithBlock(aBlock, pos);
+            if (Objective.Instance.AchiveObjective(ref getObjectiveRank, totalValue) &&
+                !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
+            {
+                newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, pos);
+                someGroupOfPositions.Add(newInfo);
+                Objective.Instance.ConfirmAchiveTaskOn(getObjectiveRank, totalValue);
+            }
+        }
+    }
+
+    private void ScoreWithCube(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
+    {
+        List<List<Vector2Int>> scoreCombinationPositions = GenerateScoreCombinationPositions.Instance.GetScorePositionListForCube(aCube);
+        TaskRank getObjectiveRank = TaskRank.X1;
+        ScoringGroupAchieveInfo newInfo;
+        int totalValue = 0;
+        foreach (List<Vector2Int> pos in scoreCombinationPositions)
+        {
+            totalValue = TotalValueWithCube(aCube, pos);
+            if (Objective.Instance.AchiveObjective(ref getObjectiveRank, totalValue) &&
+                !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
+            {
+                newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, pos);
+                someGroupOfPositions.Add(newInfo);
+                Objective.Instance.ConfirmAchiveTaskOn(getObjectiveRank, totalValue);
+            }
+        }
+    }
+
+
     private bool IsTheOriginal(List<Vector2Int> somePos)
     {
         // check it later if this can be use to replace the "if" below this
@@ -381,6 +428,32 @@ public class GridData
     private int TotalValue(List<Vector2Int> someScoringPositions)
     {
         int value = 0;
+        for (int i = 0; i < someScoringPositions.Count; i++)
+        {
+            if (GetCubeOn(someScoringPositions[i]) == null)
+                return -1;
+            else
+                value += GetCubeOn(someScoringPositions[i]).Number;
+        }
+        return value;
+    }
+
+    private int TotalValueWithBlock(Block aBlock, List<Vector2Int> someScoringPositions)
+    {
+        int value = aBlock.BlockValue;
+        for (int i = 0; i < someScoringPositions.Count; i++)
+        {
+            if (GetCubeOn(someScoringPositions[i]) == null)
+                return -1;
+            else
+                value += GetCubeOn(someScoringPositions[i]).Number;
+        }
+        return value;
+    }
+
+    private int TotalValueWithCube(Cube aCube, List<Vector2Int> someScoringPositions)
+    {
+        int value = aCube.Number;
         for (int i = 0; i < someScoringPositions.Count; i++)
         {
             if (GetCubeOn(someScoringPositions[i]) == null)

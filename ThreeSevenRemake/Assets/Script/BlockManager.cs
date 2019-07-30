@@ -98,8 +98,8 @@ public class BlockManager
     /// <param name="aBlock">The new landed block</param>
     public void AddBlock(Block aBlock, bool isTheOriginal = true)
     {
-        mBlocks.Add(aBlock);
-
+        //List<List<Vector2Int>> temp = GenerateScoreCombinationPositions.Instance.GetAllScorePositionFor(aBlock);
+        
         if (isTheOriginal)
         {
             GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
@@ -110,16 +110,39 @@ public class BlockManager
             mNewLandedOriginalBlock = null;
         }
 
-        foreach (Cube c in aBlock.Cubes)
+        mBlocks.Add(aBlock);
+
+        RegisterBlockCubesToGrid(aBlock);
+        //foreach (Cube c in aBlock.Cubes)
+        //{
+        //    if (isTheOriginal)
+        //        GridData.Instance.AddOriginalBlockPosition(c.GridPos);
+
+        //    GridData.Instance.RegistrateCell(c);
+
+        //    mNewLandedCubes.Add(c);
+        //}
+        //SortTheBlocks();
+    }
+
+    public void AddBlockNew(Block aBlock, bool isTheOriginal)
+    {
+        if (isTheOriginal)
         {
-            if (isTheOriginal)
-                GridData.Instance.AddOriginalBlockPosition(c.GridPos);
-
-            GridData.Instance.RegistrateCell(c);
-
-            mNewLandedCubes.Add(c);
+            GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
+            mNewLandedOriginalBlock = aBlock;
         }
-        SortTheBlocks();
+        else
+        {
+            mNewLandedOriginalBlock = null;
+        }
+
+        if (!(mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mNewLandedCubes)).Any())
+        {
+            mBlocks.Add(aBlock);
+
+            RegisterBlockCubesToGrid(aBlock);
+        }
     }
 
     // Add in cubes that had scored
@@ -305,6 +328,20 @@ public class BlockManager
             }
         }
         return mFloatingBlocks.Any();
+    }
+
+    private void RegisterBlockCubesToGrid(Block aBlock)
+    {
+        foreach (Cube c in aBlock.Cubes)
+        {
+            if (mNewLandedOriginalBlock != null)
+                GridData.Instance.AddOriginalBlockPosition(c.GridPos);
+
+            GridData.Instance.RegistrateCell(c);
+
+            mNewLandedCubes.Add(c);
+        }
+        SortTheBlocks();
     }
     
     private void TowerCollapse()

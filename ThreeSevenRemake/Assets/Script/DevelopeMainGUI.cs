@@ -169,8 +169,14 @@ public class DevelopeMainGUI : MonoBehaviour
     {
         if(mCurrentDisplayScore < mCurrentTotalScore)
         {
-            mCurrentDisplayScore++;
-            if(mCurrentDisplayScore >= mCurrentTotalScore)
+            if((mCurrentTotalScore - mCurrentDisplayScore) > 1000)
+                mCurrentDisplayScore += 101;
+            else if((mCurrentTotalScore - mCurrentDisplayScore) > 100)
+                mCurrentDisplayScore += 11;
+            else
+                mCurrentDisplayScore++;
+
+            if (mCurrentDisplayScore >= mCurrentTotalScore)
             {
                 mUpdateDisplayScore = false;
                 mCurrentDisplayScore = mCurrentTotalScore;
