@@ -103,7 +103,7 @@ public class GameManager
             mCurrentLevelPoint = restScore;
             mCurrentLevel++;
             mNextLevelUpScore = 10 + (mCurrentLevel);
-            Objective.Instance.IncreaseObjectiveValue();
+            TaskManager.Instance.IncreaseObjectiveValue();
         }
         levelChangingNew?.Invoke(aPoint);
         //levelChanging?.Invoke(mCurrentLevel, mCurrentLevelPoint, mNextLevelUpScore);

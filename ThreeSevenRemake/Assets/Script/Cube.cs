@@ -32,10 +32,6 @@ public class Cube : MonoBehaviour
     public bool IsScoring
     {
         get { return mIsScoring; }
-        set
-        {
-            mIsScoring = value;
-        }
     }
 
     private bool mAnimationIsPlaying = false;
@@ -111,10 +107,12 @@ public class Cube : MonoBehaviour
     public void PlayActiveParticlar()
     {
         mActiveParticle.Play();
+        mIsScoring = true;
     }
 
     public void PlayPassiveParticlar()
     {
         mPassiveParticle.Play();
+        mIsScoring = true;
     }
 }

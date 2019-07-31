@@ -148,7 +148,7 @@ public class SetLinkNumberPanel : SettingPanelBase
             DescriptionText.text = "Only 2 digit addition are enable. The available task value is between 0 to 18";
 
         GameRoundManager.Instance.Data.InitialTaskValue = Constants.MINIMAL_TASK_SUM;
-        Objective.Instance.SetMaxLimitObjectiveValue(maxSum);
+        TaskManager.Instance.SetMaxLimitObjectiveValue(maxSum);
         changeTaskMaskValue?.Invoke(maxSum);
     }
 

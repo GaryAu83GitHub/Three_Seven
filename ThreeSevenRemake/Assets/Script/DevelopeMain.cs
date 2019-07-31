@@ -89,11 +89,13 @@ public class DevelopeMain : MonoBehaviour
                 // if the block manager detect any scoring from the last landing block, the animation will be played
                 if (BlockManager.Instance.CheckIfAnyBlocksIsFloating())
                     BlockManager.Instance.RearrangeBlocks();
-                else if (BlockManager.Instance.IsScoring())
-                    BlockManager.Instance.ScoreCalculationProgression();
+                //else if (BlockManager.Instance.IsScoring())
+                //    BlockManager.Instance.ScoreCalculationProgression();
+                else if (BlockManager.Instance.IsScoringNew())
+                    BlockManager.Instance.ScoreCalculationProgressionNew();
                 else
                 {
-                    Objective.Instance.ChangeObjective();
+                    TaskManager.Instance.ChangeObjective();
                     CreateNewBlock();
                 }
             }
@@ -130,7 +132,8 @@ public class DevelopeMain : MonoBehaviour
         {
             if(!mCurrentBlock.CheckIfCellIsVacantBeneath())
             {
-                BlockManager.Instance.AddBlock(mCurrentBlock);
+                //BlockManager.Instance.AddBlock(mCurrentBlock);
+                BlockManager.Instance.AddBlockNew(mCurrentBlock);
                 GameManager.Instance.LandedBlockCount++;
                 UpdateDebugBoard();
 
@@ -171,7 +174,7 @@ public class DevelopeMain : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
 
-        Objective.Instance.StartFirstSetOfObjective();
+        TaskManager.Instance.StartFirstSetOfObjective();
         //GameManager.Instance.SetupGameset();
         CreateNewBlock();
         

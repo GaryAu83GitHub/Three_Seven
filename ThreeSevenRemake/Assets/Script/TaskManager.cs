@@ -9,18 +9,18 @@ public enum TaskRank
     X10,
 }
 
-public class Objective
+public class TaskManager
 {
-    public static Objective Instance
+    public static TaskManager Instance
     {
         get
         {
             if (mInstance == null)
-                mInstance = new Objective();
+                mInstance = new TaskManager();
             return mInstance;
         }
     }
-    private static Objective mInstance;
+    private static TaskManager mInstance;
     
     public delegate void OnAchieveObjective(TaskRank anObjective, int anObjectiveNumber);
     public static OnAchieveObjective achieveObjective;
@@ -33,8 +33,10 @@ public class Objective
     private int mMaxLimitObjectiveValue = 18;
     private int mCurrentObjectiveValueLimit = 0;
     public int CurrentLimetObjectiveValue { get { return mCurrentObjectiveValueLimit; } }
+
+    private readonly bool mDebugMode = true;
     
-    public Objective()
+    public TaskManager()
     {
         mObjectiveNumbersList.Add(TaskRank.X1, new List<int>());
         mObjectiveNumbersList.Add(TaskRank.X5, new List<int>());
@@ -46,14 +48,28 @@ public class Objective
             mActiveObjectives.Add(obj, 0);
         }
 
+        
+
         mCurrentObjectiveValueLimit = 0;
     }
 
     public void StartFirstSetOfObjective()
     {
-        foreach (TaskRank obj in mObjectiveNumbersList.Keys)
+        if (mDebugMode)
         {
-            achieveObjective?.Invoke(obj, mActiveObjectives[obj]);
+            mActiveObjectives[TaskRank.X1] = 7;
+            mActiveObjectives[TaskRank.X5] = 14;
+            mActiveObjectives[TaskRank.X10] = 21;
+
+            for(TaskRank r = TaskRank.X1; r != TaskRank.X10 + 1; r++)
+                achieveObjective?.Invoke(r, mActiveObjectives[r]);
+        }
+        else
+        {
+            foreach (TaskRank obj in mObjectiveNumbersList.Keys)
+            {
+                achieveObjective?.Invoke(obj, mActiveObjectives[obj]);
+            }
         }
     }
 
@@ -72,11 +88,14 @@ public class Objective
     public void ConfirmAchiveTaskOn(TaskRank aRank, int aTaskValue)
     {
         mObjectiveAchieveList[aRank] = true;
-        mUsedObjectiveNumbers[aTaskValue] = true;
+        //mUsedObjectiveNumbers[aTaskValue] = true;
     }
 
     public void ChangeObjective()
     {
+        if (mDebugMode)
+            return;
+
         if (!mObjectiveAchieveList.ContainsValue(true))
             return;
 

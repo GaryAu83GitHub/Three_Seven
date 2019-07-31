@@ -280,7 +280,7 @@ public class GridData
         int totalValue = 0;
         foreach(List<Vector2Int> pos in scoreCombinationPositions)
         {
-            if(Objective.Instance.AchiveObjective(ref getObjectiveRank, totalValue = TotalValue(pos)) && 
+            if(TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue = TotalValue(pos)) && 
                 !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
             {
                 if(BlockManager.Instance.IsNewOriginalBlockScoring(pos))//if (pos.Count == 2 && !IsTheOriginal(pos))
@@ -288,7 +288,7 @@ public class GridData
 
                 newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, pos);
                 someGroupOfPositions.Add(newInfo);
-                Objective.Instance.ConfirmAchiveTaskOn(getObjectiveRank, totalValue);
+                TaskManager.Instance.ConfirmAchiveTaskOn(getObjectiveRank, totalValue);
             }
         }
     }
@@ -302,12 +302,12 @@ public class GridData
         foreach (List<Vector2Int> pos in scoreCombinationPositions)
         {
             totalValue = TotalValueWithBlock(aBlock, pos);
-            if (Objective.Instance.AchiveObjective(ref getObjectiveRank, totalValue) &&
+            if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue) &&
                 !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
             {
-                newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, pos);
+                newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aBlock, pos);
                 someGroupOfPositions.Add(newInfo);
-                Objective.Instance.ConfirmAchiveTaskOn(getObjectiveRank, totalValue);
+                TaskManager.Instance.ConfirmAchiveTaskOn(getObjectiveRank, totalValue);
             }
         }
     }
@@ -321,12 +321,12 @@ public class GridData
         foreach (List<Vector2Int> pos in scoreCombinationPositions)
         {
             totalValue = TotalValueWithCube(aCube, pos);
-            if (Objective.Instance.AchiveObjective(ref getObjectiveRank, totalValue) &&
+            if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue) &&
                 !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
             {
-                newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, pos);
+                newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube, pos);
                 someGroupOfPositions.Add(newInfo);
-                Objective.Instance.ConfirmAchiveTaskOn(getObjectiveRank, totalValue);
+                TaskManager.Instance.ConfirmAchiveTaskOn(getObjectiveRank, totalValue);
             }
         }
     }

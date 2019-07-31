@@ -61,7 +61,7 @@ public class LevelManager
         {
             mCurrentLevelScore = 0;
             mCurrentLevel++;
-            Objective.Instance.IncreaseObjectiveValue();
+            TaskManager.Instance.IncreaseObjectiveValue();
             //levelUp?.Invoke();
             fillUpTheMain?.Invoke(true);
         }

@@ -91,7 +91,7 @@ public class TableDebugPanel : MonoBehaviour
                 else
                 {
                     tempColor = SupportTools.GetCubeHexColorOf(aGrid[x][y].Number);
-                    tempString = aGrid[x][y].ToString();
+                    tempString = aGrid[x][y].Number.ToString();
                 }
 
                 mGrid[y][x].SetCube(tempColor, tempString);

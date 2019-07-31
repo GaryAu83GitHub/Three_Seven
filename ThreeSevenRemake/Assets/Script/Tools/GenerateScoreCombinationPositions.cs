@@ -151,13 +151,13 @@ public class GenerateScoreCombinationPositions
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.Ze_R1_R2, new List<Vector2Int> { Vector2Int.right, Vector2Int.right * 2 });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L1_Ze_R1, new List<Vector2Int> { Vector2Int.left, Vector2Int.right });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L2_L1_Ze, new List<Vector2Int> { Vector2Int.left * 2, Vector2Int.left });
-            }
+            }*/
             {
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.Link_3_HORI_MI_MA_R1, new List<Vector2Int> { Vector2Int.right * 1 });
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.Link_3_HORI_L1_MI_MA, new List<Vector2Int> { Vector2Int.left * 1 });
                 mScorePosWithBlockAddons[Axis.VERT].Add(ScorePosWithBlockIndex.Link_3_VERT_D1_MI_MA, new List<Vector2Int> { Vector2Int.down * 1 });
                 mScorePosWithBlockAddons[Axis.VERT].Add(ScorePosWithBlockIndex.Link_3_VERT_MI_MA_U1, new List<Vector2Int> { Vector2Int.up * 1 });
-            }*/
+            }
         }
         if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT])
         {
@@ -180,7 +180,7 @@ public class GenerateScoreCombinationPositions
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L1_Ze_R1_R2, new List<Vector2Int> { Vector2Int.left, Vector2Int.right, Vector2Int.right * 2 });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L2_L1_Ze_R1, new List<Vector2Int> { Vector2Int.left * 2, Vector2Int.left, Vector2Int.right });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L3_L2_L1_Ze, new List<Vector2Int> { Vector2Int.left * 3, Vector2Int.left * 2, Vector2Int.left });
-            }
+            }*/
             {
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.LINK_4_HORI_MI_MA_R1_R2, new List<Vector2Int> { Vector2Int.right * 1, Vector2Int.right * 2 });
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.LINK_4_HORI_L1_MI_MA_R1, new List<Vector2Int> { Vector2Int.left * 1, Vector2Int.right * 1 });
@@ -188,7 +188,7 @@ public class GenerateScoreCombinationPositions
                 mScorePosWithBlockAddons[Axis.VERT].Add(ScorePosWithBlockIndex.LINK_4_VERT_D2_D1_MI_MA, new List<Vector2Int> { Vector2Int.down * 2, Vector2Int.down * 1 });
                 mScorePosWithBlockAddons[Axis.VERT].Add(ScorePosWithBlockIndex.LINK_4_VERT_D1_MI_MA_U1, new List<Vector2Int> { Vector2Int.down * 1, Vector2Int.up * 1 });
                 mScorePosWithBlockAddons[Axis.VERT].Add(ScorePosWithBlockIndex.LINK_4_VERT_MI_MA_U1_U2, new List<Vector2Int> { Vector2Int.up * 1, Vector2Int.up * 2 });
-            }*/
+            }
         }
         if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT])
         {
@@ -215,7 +215,7 @@ public class GenerateScoreCombinationPositions
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L2_L1_Ze_R1_R2, new List<Vector2Int> { Vector2Int.left * 2, Vector2Int.left, Vector2Int.right, Vector2Int.right * 2 });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L3_L2_L1_Ze_R1, new List<Vector2Int> { Vector2Int.left * 3, Vector2Int.left * 2, Vector2Int.left, Vector2Int.right });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L4_L3_L2_L1_Ze, new List<Vector2Int> { Vector2Int.left * 4, Vector2Int.left * 3, Vector2Int.left * 2, Vector2Int.left });
-            }
+            }*/
             {
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.LINK_5_HORI_MI_MA_R1_R2_R3, new List<Vector2Int> { Vector2Int.right * 1, Vector2Int.right * 2, Vector2Int.right * 3 });
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.LINK_5_HORI_L1_MI_MA_R1_R2, new List<Vector2Int> { Vector2Int.left * 1, Vector2Int.right * 1, Vector2Int.right * 2 });
@@ -225,17 +225,10 @@ public class GenerateScoreCombinationPositions
                 mScorePosWithBlockAddons[Axis.VERT].Add(ScorePosWithBlockIndex.LINK_5_VERT_D2_D1_MI_MA_U1, new List<Vector2Int> { Vector2Int.down * 2, Vector2Int.down * 1, Vector2Int.up * 1 });
                 mScorePosWithBlockAddons[Axis.VERT].Add(ScorePosWithBlockIndex.LINK_5_VERT_D1_MI_MA_U1_U2, new List<Vector2Int> { Vector2Int.down * 1, Vector2Int.up * 1, Vector2Int.up * 2 });
                 mScorePosWithBlockAddons[Axis.VERT].Add(ScorePosWithBlockIndex.LINK_5_VERT_MI_MA_U1_U2_U3, new List<Vector2Int> { Vector2Int.up * 1, Vector2Int.up * 2, Vector2Int.up * 3 });
-            }*/
+            }
         }
     }
-
-    public List<List<Vector2Int>> GetAllScorePositionFor(Block aBlock)
-    {
-        //list = list1.Concat(list2).Concat(list3).ToList();
-        List<List<Vector2Int>> positionListForBlock = GetScorePositionListForBlock(aBlock);
-        return positionListForBlock.Concat(GetScorePositionListForCube(aBlock.RootCube).Concat(GetScorePositionListForCube(aBlock.SubCube))).ToList();
-    }
-
+    
     public List<List<Vector2Int>> GetScorePositionListForBlock(Block aBlock)
     {
         if (aBlock.Cubes.Count == 1)

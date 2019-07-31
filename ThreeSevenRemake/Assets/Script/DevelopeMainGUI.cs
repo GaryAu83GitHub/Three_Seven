@@ -81,22 +81,22 @@ public class DevelopeMainGUI : MonoBehaviour
     private void Update()
     {
         Clock();
-        Something();
+        //Something();
 
         //if(mComboAppear)
         //    ComboTextFading();
 
-        //if(Input.GetKeyDown(KeyCode.Insert))
-        //{
-        //    if (DebugPanel.GetComponent<CanvasGroup>().alpha >= 1f)
-        //        DebugPanel.GetComponent<CanvasGroup>().alpha = 0f;
-        //    else
-        //        DebugPanel.GetComponent<CanvasGroup>().alpha = 1f;
-        //    //mLerpValue += .125f;
-        //    //if (mLerpValue > 1)
-        //    //    mLerpValue = 0f;
-        //    //TestImage.color = Color.Lerp(Color.green, Color.red, mLerpValue);
-        //}
+        if (Input.GetKeyDown(KeyCode.Insert))
+        {
+            if (DebugPanel.GetComponent<CanvasGroup>().alpha >= 1f)
+                DebugPanel.GetComponent<CanvasGroup>().alpha = 0f;
+            else
+                DebugPanel.GetComponent<CanvasGroup>().alpha = 1f;
+            //mLerpValue += .125f;
+            //if (mLerpValue > 1)
+            //    mLerpValue = 0f;
+            //TestImage.color = Color.Lerp(Color.green, Color.red, mLerpValue);
+        }
 
         if (mUpdateDisplayScore)
         {

@@ -81,6 +81,24 @@ public class Block : MonoBehaviour
         return false;
     }
 
+    public void PlayCubeAnimation()
+    {
+        foreach (Cube c in mCubes)
+        {
+            if (c.IsScoring)
+            {
+                c.PlayAnimation();
+                GridData.Instance.UnregistrateCell(c.GridPos);
+            }
+        }
+    }
+
+    public void PlayParticleEffect()
+    {
+        foreach (Cube c in mCubes)
+            c.PlayActiveParticlar();
+    }
+
     public bool IsThisBlockScoringAlone(List<Vector2Int> somePos)
     {
         if (somePos.Count != 2)
