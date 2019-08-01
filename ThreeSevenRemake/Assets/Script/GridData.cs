@@ -201,6 +201,9 @@ public class GridData
         List<ScoringGroupAchieveInfo> someGroupOfPosition = new List<ScoringGroupAchieveInfo>();
         ScoreWithBlock(aBlock, ref someGroupOfPosition);
 
+        foreach (Cube c in aBlock.Cubes)
+            ScoreWithCube(c, ref someGroupOfPosition);
+
         return someGroupOfPosition;
     }
 

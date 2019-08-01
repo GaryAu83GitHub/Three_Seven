@@ -54,7 +54,13 @@ public class Block : MonoBehaviour
         {
             for (int i = 0; i < mCubeNumbers.Count; i++)
                 mCubes[i].Init(this, mCubeNumbers[i]);
+
+            mCubes[0].ConnectSiblingCube(mCubes[1]);
+            mCubes[1].ConnectSiblingCube(mCubes[0]);
         }
+
+        mCubes[0].ConnectSiblingCube(mCubes[1]);
+        mCubes[1].ConnectSiblingCube(mCubes[0]);
 
         Joint = transform.GetChild(2);
 

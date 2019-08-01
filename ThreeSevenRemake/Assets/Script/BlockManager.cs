@@ -4,40 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class ScoringGroupAchieveInfo
-{
-    private readonly TaskRank mTaskRank = TaskRank.X1;
-    public TaskRank TaskRank { get { return mTaskRank; } }
 
-    private readonly List<Vector2Int> mGroupPositions = new List<Vector2Int>();
-    public List<Vector2Int> GroupPosition { get { return mGroupPositions; } }
-
-    private readonly Block mBlock = new Block();
-    public Block Block { get { return mBlock; } }
-
-    private readonly Cube mCube = new Cube();
-    public Cube Cube { get { return mCube; } }
-
-    public ScoringGroupAchieveInfo(TaskRank anObjectiveRank, List<Vector2Int> someGroupPositions)
-    {
-        mTaskRank = anObjectiveRank;
-        mGroupPositions = someGroupPositions;
-    }
-
-    public ScoringGroupAchieveInfo(TaskRank aTaskRank, Block aBlock, List<Vector2Int> someGroupPosition)
-    {
-        mTaskRank = aTaskRank;
-        mBlock = aBlock;
-        mGroupPositions = someGroupPosition;
-    }
-
-    public ScoringGroupAchieveInfo(TaskRank aTaskRank, Cube aCube, List<Vector2Int> someGroupPosition)
-    {
-        mTaskRank = aTaskRank;
-        mCube = aCube;
-        mGroupPositions = someGroupPosition;
-    }
-}
 /// <summary>
 /// This class is use to managing the all blocks that had been created
 /// It'll store all blocks that had landed into it collection and remove
@@ -152,23 +119,11 @@ public class BlockManager
     public void AddBlockNew(Block aBlock, bool isTheOriginal = true)
     {
         if (isTheOriginal)
-        {
             GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
-            mNewLandedOriginalBlock = aBlock;
-        }
-        else
-        {
-            mNewLandedOriginalBlock = null;
-        }
+        mBlocks.Add(aBlock);
+        RegisterBlockCubesToGrid(aBlock);
 
-        //if (!(mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mNewLandedCubes)).Any())
-        if (!(mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mNewLandedOriginalBlock)).Any())
-        {
-            mBlocks.Add(aBlock);
-
-            RegisterBlockCubesToGrid(aBlock);
-        }
-
+        mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(aBlock);
     }
 
     // Add in cubes that had scored
@@ -240,7 +195,6 @@ public class BlockManager
             return true;
 
         LevelManager.Instance.FillUpTheMainBar();
-        mScoringPassiveCubes.Clear();
         mNewLandedCubes.Clear();
         return false;
     }
@@ -315,7 +269,7 @@ public class BlockManager
         if (!mCurrentGroupScoreCalcInProgress)
         {
             mCurrentScoringInfo = mScoringPositionGroups[mCurrentScoringGroupIndex];
-            TaskRank thisGroupTaskTank = mCurrentScoringInfo.TaskRank;
+            TaskRank thisGroupTaskRank = mCurrentScoringInfo.TaskRank;
             List<Cube> thisGroupScoringCubes = new List<Cube>();
             for (int i = 0; i < mBlocks.Count; i++)
             {
@@ -323,7 +277,6 @@ public class BlockManager
                 {
                     if (mCurrentScoringInfo.GroupPosition.Contains(c.GridPos))
                     {
-                        //AddScoringCubes(c);
                         c.PlayActiveParticlar();
                         thisGroupScoringCubes.Add(c);
                     }
@@ -331,21 +284,15 @@ public class BlockManager
             }
 
             if (mCurrentScoringInfo.Block != null)
-            {
                 mCurrentScoringInfo.Block.PlayParticleEffect();
-                if (!mBlocks.Contains(mCurrentScoringInfo.Block))
-                {
-                    mBlocks.Add(mCurrentScoringInfo.Block);
-                    RegisterBlockCubesToGrid(mCurrentScoringInfo.Block);
-                }//if (!mScoringBlocks.Contains(mCurrentScoringInfo.Block))
-                //    mScoringBlocks.Add(mCurrentScoringInfo.Block);
-            }
+            if (mCurrentScoringInfo.Cube != null)
+                mCurrentScoringInfo.Cube.PlayActiveParticlar();
 
             //addLevelScore?.Invoke();
             comboOccuring?.Invoke(mComboCount++);
             achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].TaskRank, thisGroupScoringCubes);
             LevelManager.Instance.AddLevelScore(1);
-            GameManager.Instance.AddScore(ScoreType.LINKING, thisGroupScoringCubes.Count, thisGroupTaskTank);
+            GameManager.Instance.AddScore(ScoreType.LINKING, thisGroupScoringCubes.Count, thisGroupTaskRank);
             mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
         }
         else

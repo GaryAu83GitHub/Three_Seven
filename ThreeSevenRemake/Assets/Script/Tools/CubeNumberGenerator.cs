@@ -28,7 +28,7 @@ public class CubeNumberGenerator
 
     public CubeNumberGenerator()
     {
-        for (int i = 0; i < 8/*10*/; i++)
+        for (int i = 0; i != Constants.CUBE_MAX_NUMBER; i++)
         {
             mUsedRootNumber.Add(false);
             mUsedSubNumber.Add(false);

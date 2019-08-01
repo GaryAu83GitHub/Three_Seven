@@ -25,7 +25,7 @@ public class LevelManager
     public delegate void OnFillUpTheMain(bool isLevelUp);
     public static OnFillUpTheMain fillUpTheMain;
 
-    public float CurrentFillupAmount { get { return mCurrentLevelScore * (mLevelInfos.Any() ? mLevelInfos[mCurrentLevel].UIBarFillingSectionValue : 0); } }
+    public float CurrentFillupAmount { get { return mCurrentLevelScore * (mLevelInfos.Any() ? GetLevelDataOf(mCurrentLevel).UIBarFillingSectionValue : 0); } }
 
     public int CurrentLevel { get { return mCurrentLevel; } }
     private int mCurrentLevel = 0;

@@ -17,6 +17,9 @@ public class Cube : MonoBehaviour
     private Block mParentBlock;
     public Block ParentBlock { get { return mParentBlock; } }
 
+    private Cube mSiblingCube;
+    public Cube SiblingCube { get { return (mSiblingCube ?? null); } }
+
     [SerializeField]
     private Vector2Int mGridPosition;
     public Vector2Int GridPos { get { return mGridPosition; } set { mGridPosition = value; } }
@@ -68,6 +71,18 @@ public class Cube : MonoBehaviour
     {
         mParentBlock = aParentBlock;
         SetCubeNumber(aNumber);
+    }
+
+    public void ConnectSiblingCube(Cube aSiblingCube)
+    {
+        mSiblingCube = aSiblingCube;
+    }
+
+    public bool IsSiblingsPosition(Vector2Int aPos)
+    {
+        if (mSiblingCube == null)
+            return false;
+        return (mSiblingCube.GridPos == aPos);
     }
 
     /// <summary>

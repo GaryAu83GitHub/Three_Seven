@@ -18,4 +18,6 @@ public static class Constants
     public const int DEFAULT_ROOF_HEIGHT = 14;
 
     public const int ORIGINAL_BLOCK_LANDING_SCORE = 1;
+
+    public const int CUBE_MAX_NUMBER = 9;
 }

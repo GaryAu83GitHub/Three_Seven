@@ -127,12 +127,12 @@ public class GenerateScoreCombinationPositions
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.Ze_R1, new List<Vector2Int> { Vector2Int.zero, Vector2Int.right });
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.L1_Ze, new List<Vector2Int> { Vector2Int.left, Vector2Int.zero });
             }
-            /*{
+            {
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.U1_Ze, new List<Vector2Int> { Vector2Int.up });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.Ze_D1, new List<Vector2Int> { Vector2Int.down });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.Ze_R1, new List<Vector2Int> { Vector2Int.right });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L1_Ze, new List<Vector2Int> { Vector2Int.left });
-            }*/
+            }
         }
         if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT])
         {
@@ -144,14 +144,14 @@ public class GenerateScoreCombinationPositions
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.L1_Ze_R1, new List<Vector2Int> { Vector2Int.left, Vector2Int.zero, Vector2Int.right });
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.L2_L1_Ze, new List<Vector2Int> { Vector2Int.left * 2, Vector2Int.left, Vector2Int.zero });
             }
-            /*{
+            {
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.U2_U1_Ze, new List<Vector2Int> { Vector2Int.up * 2, Vector2Int.up });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.U1_Ze_D1, new List<Vector2Int> { Vector2Int.up, Vector2Int.down });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.Ze_D1_D2, new List<Vector2Int> { Vector2Int.down, Vector2Int.down * 2 });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.Ze_R1_R2, new List<Vector2Int> { Vector2Int.right, Vector2Int.right * 2 });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L1_Ze_R1, new List<Vector2Int> { Vector2Int.left, Vector2Int.right });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L2_L1_Ze, new List<Vector2Int> { Vector2Int.left * 2, Vector2Int.left });
-            }*/
+            }
             {
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.Link_3_HORI_MI_MA_R1, new List<Vector2Int> { Vector2Int.right * 1 });
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.Link_3_HORI_L1_MI_MA, new List<Vector2Int> { Vector2Int.left * 1 });
@@ -171,7 +171,7 @@ public class GenerateScoreCombinationPositions
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.L2_L1_Ze_R1, new List<Vector2Int> { Vector2Int.left * 2, Vector2Int.left, Vector2Int.zero, Vector2Int.right });
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.L3_L2_L1_Ze, new List<Vector2Int> { Vector2Int.left * 3, Vector2Int.left * 2, Vector2Int.left, Vector2Int.zero });
             }
-            /*{
+            {
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.U3_U2_U1_Ze, new List<Vector2Int> { Vector2Int.up * 3, Vector2Int.up * 2, Vector2Int.up });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.U2_U1_Ze_D1, new List<Vector2Int> { Vector2Int.up * 2, Vector2Int.up, Vector2Int.down });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.U1_Ze_D1_D2, new List<Vector2Int> { Vector2Int.up, Vector2Int.down, Vector2Int.down * 2 });
@@ -180,7 +180,7 @@ public class GenerateScoreCombinationPositions
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L1_Ze_R1_R2, new List<Vector2Int> { Vector2Int.left, Vector2Int.right, Vector2Int.right * 2 });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L2_L1_Ze_R1, new List<Vector2Int> { Vector2Int.left * 2, Vector2Int.left, Vector2Int.right });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L3_L2_L1_Ze, new List<Vector2Int> { Vector2Int.left * 3, Vector2Int.left * 2, Vector2Int.left });
-            }*/
+            }
             {
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.LINK_4_HORI_MI_MA_R1_R2, new List<Vector2Int> { Vector2Int.right * 1, Vector2Int.right * 2 });
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.LINK_4_HORI_L1_MI_MA_R1, new List<Vector2Int> { Vector2Int.left * 1, Vector2Int.right * 1 });
@@ -204,7 +204,7 @@ public class GenerateScoreCombinationPositions
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.L3_L2_L1_Ze_R1, new List<Vector2Int> { Vector2Int.left * 3, Vector2Int.left * 2, Vector2Int.left, Vector2Int.zero, Vector2Int.right });
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.L4_L3_L2_L1_Ze, new List<Vector2Int> { Vector2Int.left * 4, Vector2Int.left * 3, Vector2Int.left * 2, Vector2Int.left, Vector2Int.zero });
             }
-            /*{
+            {
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.U4_U3_U2_U1_Ze, new List<Vector2Int> { Vector2Int.up * 4, Vector2Int.up * 3, Vector2Int.up * 2, Vector2Int.up });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.U3_U2_U1_Ze_D1, new List<Vector2Int> { Vector2Int.up * 3, Vector2Int.up * 2, Vector2Int.up, Vector2Int.down });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.U2_U1_Ze_D1_D2, new List<Vector2Int> { Vector2Int.up * 2, Vector2Int.up, Vector2Int.down, Vector2Int.down * 2 });
@@ -215,7 +215,7 @@ public class GenerateScoreCombinationPositions
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L2_L1_Ze_R1_R2, new List<Vector2Int> { Vector2Int.left * 2, Vector2Int.left, Vector2Int.right, Vector2Int.right * 2 });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L3_L2_L1_Ze_R1, new List<Vector2Int> { Vector2Int.left * 3, Vector2Int.left * 2, Vector2Int.left, Vector2Int.right });
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L4_L3_L2_L1_Ze, new List<Vector2Int> { Vector2Int.left * 4, Vector2Int.left * 3, Vector2Int.left * 2, Vector2Int.left });
-            }*/
+            }
             {
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.LINK_5_HORI_MI_MA_R1_R2_R3, new List<Vector2Int> { Vector2Int.right * 1, Vector2Int.right * 2, Vector2Int.right * 3 });
                 mScorePosWithBlockAddons[Axis.HORI].Add(ScorePosWithBlockIndex.LINK_5_HORI_L1_MI_MA_R1_R2, new List<Vector2Int> { Vector2Int.left * 1, Vector2Int.right * 1, Vector2Int.right * 2 });
@@ -253,6 +253,8 @@ public class GenerateScoreCombinationPositions
         foreach (ScorePosWithCubeIndex index in mScorePosWithCubeAddons.Keys)
         {
             positionList.Add(AddPositionToListForCube(aCube, index));
+            if (!positionList[positionList.Count - 1].Any())
+                positionList.RemoveAt(positionList.Count - 1);
         }
         return positionList;
     }
@@ -300,10 +302,14 @@ public class GenerateScoreCombinationPositions
     private List<Vector2Int> AddPositionToListForCube(Cube aCube, ScorePosWithCubeIndex index)
     {
         List<Vector2Int> posList = new List<Vector2Int>();
-
-        for (int i = 0; i < mOldScorePosAddons[index].Count; i++)
-            posList.Add(aCube.GridPos + mOldScorePosAddons[index][i]);
-
+        Vector2Int tempVector = new Vector2Int();
+        for (int i = 0; i < mScorePosWithCubeAddons[index].Count; i++)
+        {
+            tempVector = aCube.GridPos + mScorePosWithCubeAddons[index][i];
+            if (aCube.IsSiblingsPosition(tempVector))
+                return new List<Vector2Int>();
+            posList.Add(tempVector);
+        }
         return posList;
     }
 }
