@@ -110,9 +110,10 @@ public class BlockManager
     }
 
     /// <summary>
-    /// 
+    /// Collect the new original block that had landed on the table and registrate it's landing position, add the landing score
+    /// and collect the scoring info from it position
     /// </summary>
-    /// <param name="aBlock"></param>
+    /// <param name="aBlock">the new landed original block</param>
     public void AddNewOriginalBlock(Block aBlock)
     {        
         if(!mBlocks.Contains(aBlock))
