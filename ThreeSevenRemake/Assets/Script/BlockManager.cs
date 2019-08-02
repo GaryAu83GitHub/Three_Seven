@@ -53,6 +53,7 @@ public class BlockManager
     private List<Cube> mScoringPassiveCubes = new List<Cube>();
     private List<Cube> mNewLandedCubes = new List<Cube>();
     private List<ScoringGroupAchieveInfo> mScoringPositionGroups = new List<ScoringGroupAchieveInfo>();
+    private List<int> mFirstFloatingBlockIndecies = new List<int>();
 
     private ScoringGroupAchieveInfo mCurrentScoringInfo = null;
 
@@ -104,26 +105,21 @@ public class BlockManager
         mBlocks.Add(aBlock);
 
         RegisterBlockCubesToGrid(aBlock);
-        //foreach (Cube c in aBlock.Cubes)
-        //{
-        //    if (isTheOriginal)
-        //        GridData.Instance.AddOriginalBlockPosition(c.GridPos);
-
-        //    GridData.Instance.RegistrateCell(c);
-
-        //    mNewLandedCubes.Add(c);
-        //}
-        //SortTheBlocks();
     }
 
-    public void AddBlockNew(Block aBlock, bool isTheOriginal = true)
-    {
-        if (isTheOriginal)
-            GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
-        mBlocks.Add(aBlock);
+    public void AddNewOriginalBlock(Block aBlock, bool isTheOriginal = true)
+    {        
+        if(!mBlocks.Contains(aBlock))
+            mBlocks.Add(aBlock);
+
         RegisterBlockCubesToGrid(aBlock);
 
-        mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(aBlock);
+        if (isTheOriginal)
+        {
+            GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
+
+            mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(aBlock);
+        }
     }
 
     // Add in cubes that had scored
@@ -152,16 +148,6 @@ public class BlockManager
 
         mScoringPassiveCubes.Clear();
         mNewLandedCubes.Clear();
-    }
-
-
-    public string BlockOrderInString()
-    {
-        string blockOrderString = "";
-        foreach (Block b in mBlocks)
-            blockOrderString += b.name + "\n";
-
-        return blockOrderString;
     }
 
     public bool BlockPassedGameOverLine()
@@ -305,12 +291,10 @@ public class BlockManager
                 if (mCurrentScoringGroupIndex >= mScoringPositionGroups.Count)
                 {
                     GameManager.Instance.AddScore(ScoreType.COMBO, mScoringPositionGroups.Count - 1);
-                    //GameManager.Instance.AddLevelPoint(mScoringPositionGroups.Count);
                     PlayScoringAnimation();
                     mScoringPositionGroups.Clear();
                     mCurrentScoringGroupIndex = 0;
                     mCurrentScoringInfo = null;
-                    //mComboCount = 0;
                 }
                 mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
             }
@@ -329,6 +313,9 @@ public class BlockManager
             if (mBlocks[i].IsAnimationPlaying())
                 return true;
         }
+        // Check after those blocks 
+        StoreTheFirstFloatingBlockIndecies();
+
         return false;
     }
 
@@ -355,8 +342,43 @@ public class BlockManager
             while(mFloatingBlocks[i].CheckIfCellIsVacantBeneath())
                 mFloatingBlocks[i].DropDown();
             //AddBlock(mFloatingBlocks[i], false);
-            AddBlockNew(mFloatingBlocks[i], false);
+            AddBlock(mFloatingBlocks[i], false);
         }
+    }
+
+    public void RearrangeBlockNew()
+    {
+        DropBlockRecursively(0);
+
+        if(mFirstFloatingBlockIndecies.Any())
+        {
+            for(int i = 0; i < mFirstFloatingBlockIndecies.Count; i++)
+                mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mBlocks[i]);
+        }
+
+        mFirstFloatingBlockIndecies.Clear();
+    }
+
+    private void DropBlockRecursively(int aBlockIndex)
+    {
+        int index = aBlockIndex;
+        if (index == mBlocks.Count)
+            return;
+
+        if (mBlocks[index].CheckIfCellIsVacantBeneath())
+        {
+            foreach (Cube c in mBlocks[index].Cubes)
+                GridData.Instance.UnregistrateCell(c.GridPos);
+            mBlocks[index].DropDown();
+        }
+
+        while (mBlocks[index].CheckIfCellIsVacantBeneath())
+            mBlocks[index].DropDown();
+
+        RegisterBlockCubesToGrid(mBlocks[index]);
+
+        index++;
+        DropBlockRecursively(index);
     }
 
     /// <summary>
@@ -380,6 +402,11 @@ public class BlockManager
             }
         }
         return mFloatingBlocks.Any();
+    }
+
+    public bool CheckIfAnyBlocksIsFloatingNew()
+    {
+        return mFirstFloatingBlockIndecies.Any();
     }
 
     private void RegisterBlockCubesToGrid(Block aBlock)
@@ -406,5 +433,14 @@ public class BlockManager
     {
         List<Block> SortedList = mBlocks.OrderBy(o => o.MinGridPos.x).ThenBy(o => o.MinGridPos.y).ToList();
         mBlocks = SortedList;
+    }
+
+    private void StoreTheFirstFloatingBlockIndecies()
+    {
+        for(int i = 0; i < mBlocks.Count; i++)
+        {
+            if (mBlocks[i].CheckIfCellIsVacantBeneath())
+                mFirstFloatingBlockIndecies.Add(i);
+        }
     }
 }
