@@ -22,7 +22,7 @@ public class Block : MonoBehaviour
     private List<int> mCubeNumbers = new List<int>();
     public List<int> CubeNumbers { get { return mCubeNumbers; } }
 
-    public int BlockValue { get { return (mCubes[0] ?? null).Number + (mCubes[1] ?? null).Number; } }
+    public int BlockValue { get { return GetTotalBlockValue(); } }
 
     private int mCurrentRotation = 0;
     public int BlockRotation { get { return mCurrentRotation; } }
@@ -87,13 +87,17 @@ public class Block : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Iterate through the cubes and play the vanish animation of those that had been part in a scoring
+    /// and unregistrate them from the GridData
+    /// </summary>
     public void PlayCubeAnimation()
     {
         foreach (Cube c in mCubes)
         {
             if (c.IsScoring)
             {
-                c.PlayAnimation();
+                c.PlayVanishAnimation();
                 GridData.Instance.UnregistrateCell(c.GridPos);
             }
         }
@@ -286,6 +290,15 @@ public class Block : MonoBehaviour
         
 
         return false;
+    }
+
+    private int GetTotalBlockValue()
+    {
+        int value = 0;
+        foreach (Cube c in mCubes)
+            value += c.Number;
+
+        return value;
     }
 
     private void GridPositionDebugLog()

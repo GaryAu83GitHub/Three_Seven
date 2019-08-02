@@ -108,7 +108,7 @@ public class Cube : MonoBehaviour
         mTextMesh.transform.Rotate(Vector3.back, -aDir * 90);
     }
 
-    public void PlayAnimation()
+    public void PlayVanishAnimation()
     {
         if (mIsFading == false)
         {

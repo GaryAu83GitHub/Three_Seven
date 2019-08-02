@@ -64,7 +64,9 @@ public class BlockManager
     private int mComboCount = 0;
 
     
-
+    /// <summary>
+    /// Reset all variabler for a new game
+    /// </summary>
     public void Reset()
     {
         mBlocks.Clear();
@@ -107,19 +109,20 @@ public class BlockManager
         RegisterBlockCubesToGrid(aBlock);
     }
 
-    public void AddNewOriginalBlock(Block aBlock, bool isTheOriginal = true)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="aBlock"></param>
+    public void AddNewOriginalBlock(Block aBlock)
     {        
         if(!mBlocks.Contains(aBlock))
             mBlocks.Add(aBlock);
 
         RegisterBlockCubesToGrid(aBlock);
 
-        if (isTheOriginal)
-        {
-            GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
+        GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
 
-            mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(aBlock);
-        }
+        mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(aBlock);
     }
 
     // Add in cubes that had scored
@@ -175,6 +178,12 @@ public class BlockManager
         return false;
     }
 
+    /// <summary>
+    /// Boolian method that check if the last landed block/blocks had made any scoring.
+    /// If had, then the ScoringProgress method will be called
+    /// Else it'll called for the LevelManager to fill up the GUI-bar for the level up GUI
+    /// </summary>
+    /// <returns>If there was any scoring info collected after the block/blocks landed</returns>
     public bool IsScoringNew()
     {
         if (mScoringPositionGroups.Any())
@@ -193,9 +202,6 @@ public class BlockManager
         return mNewLandedOriginalBlock.IsThisBlockScoringAlone(somePos);
     }
 
-    /// <summary>
-    /// The progression of the scoring moment
-    /// </summary>
     public void ScoreCalculationProgression()
     {
         // if the calculation isn't in progress it'll search through the list of landed block and compare their gridposition
@@ -247,6 +253,9 @@ public class BlockManager
 
     }
 
+    /// <summary>
+    /// The progression of the scoring moment
+    /// </summary>
     public void ScoreCalculationProgressionNew()
     {
         // if the calculation isn't in progress it'll search through the list of landed block and compare their gridposition
@@ -303,6 +312,7 @@ public class BlockManager
 
     /// <summary>
     /// Checking if any block have any of it's cube playing scoring animation
+    /// Once the animation is over, the method for collecting floating block indecies will be called
     /// </summary>
     /// <returns></returns>
     public bool AnyBlockPlayingAnimation()
@@ -331,10 +341,7 @@ public class BlockManager
             return block.DestroyThisCube();
             });
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
+    
     public void RearrangeBlocks()
     {
         for (int i = 0; i < mFloatingBlocks.Count; i++)
@@ -346,6 +353,13 @@ public class BlockManager
         }
     }
 
+    /// <summary>
+    /// This is the second score collecter method during each new original block has beed dropped.
+    /// It is combine with the method CheckIfAnyBlocksIsFloating.
+    /// Each block will go through a recursive dropping method in to rearrange their position after the scoring,
+    /// New scoring position info will be collected with those block that was first detected that was vacant beneath them
+    /// And the list that collected the indecies for the first floating block will be cleared.
+    /// </summary>
     public void RearrangeBlockNew()
     {
         DropBlockRecursively(0);
@@ -359,6 +373,12 @@ public class BlockManager
         mFirstFloatingBlockIndecies.Clear();
     }
 
+    /// <summary>
+    /// The recrusive method that unregistrate the passive block's cubes from GridData and reposition the current block if the cell beneath
+    /// it is vacant.
+    /// Once it had hit the ground or above another block, it'll be registrated to the GridData with it new position.
+    /// </summary>
+    /// <param name="aBlockIndex">Index of the previous block from the blocklist</param>
     private void DropBlockRecursively(int aBlockIndex)
     {
         int index = aBlockIndex;
@@ -381,12 +401,7 @@ public class BlockManager
         DropBlockRecursively(index);
     }
 
-    /// <summary>
-    /// After the scoring, some block might have have several cell vacant beneath their current position on the table.
-    /// This is to return if it true or not by checking every blocks that had been storred in the list of block of the
-    /// manager
-    /// </summary>
-    /// <returns>True if any block in the list happened to have a block that have a cell beneath vacant</returns>
+    
     public bool CheckIfAnyBlocksIsFloating()
     {
         mFloatingBlocks.Clear();
@@ -404,11 +419,19 @@ public class BlockManager
         return mFloatingBlocks.Any();
     }
 
+    /// <summary>
+    /// Return if there was any block that was floating from the scoring
+    /// </summary>
+    /// <returns>True if any block in the list happened to have a block that have a cell beneath vacant</returns>
     public bool CheckIfAnyBlocksIsFloatingNew()
     {
         return mFirstFloatingBlockIndecies.Any();
     }
 
+    /// <summary>
+    /// Registrate a block's cubes into the GridData and sort the blocks in the blocklist.
+    /// </summary>
+    /// <param name="aBlock"></param>
     private void RegisterBlockCubesToGrid(Block aBlock)
     {
         foreach (Cube c in aBlock.Cubes)
@@ -423,18 +446,27 @@ public class BlockManager
         SortTheBlocks();
     }
     
+    /// <summary>
+    /// Trigger every blocks useGravity in their rigidbody component
+    /// </summary>
     private void TowerCollapse()
     {
         foreach (Block b in mBlocks)
             b.GetComponent<Rigidbody>().useGravity = true;
     }
 
+    /// <summary>
+    /// Sorting the main block list by the block min x position and then by min y position.
+    /// </summary>
     private void SortTheBlocks()
     {
         List<Block> SortedList = mBlocks.OrderBy(o => o.MinGridPos.x).ThenBy(o => o.MinGridPos.y).ToList();
         mBlocks = SortedList;
     }
 
+    /// <summary>
+    /// Store in the very first blocks that was right above the vanished blocks after the scoring
+    /// </summary>
     private void StoreTheFirstFloatingBlockIndecies()
     {
         for(int i = 0; i < mBlocks.Count; i++)

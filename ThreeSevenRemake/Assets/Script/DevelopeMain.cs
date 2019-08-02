@@ -81,7 +81,7 @@ public class DevelopeMain : MonoBehaviour
             // the block was confirm nullified by the currentblock landed
             if (mBlockLanded)
             {
-                BlockManager.Instance.BlockPassedGameOverLine();
+                //BlockManager.Instance.BlockPassedGameOverLine();
                 if (BlockManager.Instance.AnyBlockPlayingAnimation())
                     return;
 
