@@ -163,6 +163,11 @@ public class DevelopeMain : MonoBehaviour
             mCurrentBlock.Swap();
         }
 
+        if(Input.GetKeyDown(KeyCode.RightControl))
+        {
+            mCurrentBlock.SwapWithPreviewBlock();
+        }
+
         if (mCurrentBlock != null)
         {
             mGuideBlock.SetupGuideBlock(mCurrentBlock);

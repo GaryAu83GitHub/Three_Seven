@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Block : MonoBehaviour
@@ -18,6 +19,9 @@ public class Block : MonoBehaviour
     [SerializeField]
     private Vector2Int mMaxPosition;
     public Vector2Int MaxGridPos { get { return mMaxPosition; } }
+
+    public delegate void OnSwapWithPreviewBlock(Block thisBlock);
+    public static OnSwapWithPreviewBlock swapWithPreviewBlock;
 
     private List<int> mCubeNumbers = new List<int>();
     public List<int> CubeNumbers { get { return mCubeNumbers; } }
@@ -127,8 +131,20 @@ public class Block : MonoBehaviour
     
     public void SetCubeNumbers(List<int> someNumbers)
     {
-        foreach (int n in someNumbers)
-            mCubeNumbers.Add(n);
+        if (!mCubeNumbers.Any())
+        {
+            foreach (int n in someNumbers)
+                mCubeNumbers.Add(n);
+        }
+        else
+        {
+            mCubeNumbers[0] = someNumbers[0];
+            mCubeNumbers[1] = someNumbers[1];
+
+            mCubes[0].SetCubeNumber(mCubeNumbers[0]);
+            mCubes[1].SetCubeNumber(mCubeNumbers[1]);
+        }
+
     }
 
     /// <summary>
@@ -176,6 +192,11 @@ public class Block : MonoBehaviour
 
         mCubes[0].SetCubeNumber(subNumber);
         mCubes[1].SetCubeNumber(rootNumber);
+    }
+
+    public void SwapWithPreviewBlock()
+    {
+        swapWithPreviewBlock?.Invoke(this);
     }
 
     public void DropDown()

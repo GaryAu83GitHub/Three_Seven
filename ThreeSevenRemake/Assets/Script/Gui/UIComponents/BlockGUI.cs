@@ -18,19 +18,15 @@ public class BlockGUI : MonoBehaviour
     public int SubNumber { get { return mSubNumber; } }
 
     private List<int> mPreviousNumber = new List<int>();
-    private List<bool> mUsedNumber = new List<bool>();
-
+    private List<int> mNextNumbers = new List<int>();
+    
     private void Start()
     {
-        for (int i = 0; i < 10; i++)
-            mUsedNumber.Add(false);
+        Block.swapWithPreviewBlock += SwapWithOriginalBlock;
 
         mRootNumber = CubeNumberGenerator.Instance.GetNewRootNumber;    //RandomNewRootCubeNumber();
         RootNumberText.text = RootNumber.ToString();
         RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);
-
-        // add in the new number for the root cube
-        //mPreviousNumber.Add(RootNumber);
 
         // randomize a new number for the sub cube
         mSubNumber = CubeNumberGenerator.Instance.GetNewSubNumber;      //RandomNewRootCubeNumber();
@@ -38,18 +34,13 @@ public class BlockGUI : MonoBehaviour
         SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
     }
 
+    private void OnDestroy()
+    {
+        Block.swapWithPreviewBlock -= SwapWithOriginalBlock;
+    }
+
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.C))
-        //    NewNumber();
-        //if (Input.GetKeyDown(KeyCode.B))
-        //    NewNumberTemp();
-        //if (Input.GetKeyDown(KeyCode.A))
-        //    Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X1);
-        //if (Input.GetKeyDown(KeyCode.S))
-        //    Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X5);
-        //if (Input.GetKeyDown(KeyCode.D))
-        //    Objective.Instance.ForceFullyChangeTaskValueOn(TaskRank.X10);
     }
 
     public List<int> NewNumber()
@@ -59,16 +50,17 @@ public class BlockGUI : MonoBehaviour
         mPreviousNumber.Add(RootNumber);
         mPreviousNumber.Add(SubNumber);
 
+        mNextNumbers.Clear();
+        mNextNumbers.Add(CubeNumberGenerator.Instance.GetNewRootNumber);
+        mNextNumbers.Add(CubeNumberGenerator.Instance.GetNewSubNumber);
+
         // randomize a new number for the root cube
-        mRootNumber = CubeNumberGenerator.Instance.GetNewRootNumber;
+        mRootNumber = mNextNumbers[0];
         RootNumberText.text = RootNumber.ToString();
         RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);
 
-        // add in the new number for the root cube
-        //mPreviousNumber.Add(RootNumber);
-
         // randomize a new number for the sub cube
-        mSubNumber = CubeNumberGenerator.Instance.GetNewSubNumber;
+        mSubNumber = mNextNumbers[1];
         SubNumberText.text = SubNumber.ToString();
         SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
 
@@ -76,45 +68,21 @@ public class BlockGUI : MonoBehaviour
         return mPreviousNumber;
     }
 
-    public List<int> NewNumberTemp()
+    private void SwapWithOriginalBlock(Block anOrignalBlock)
     {
-        // clear the previous cubenumber and store the current number
-        mPreviousNumber.Clear();
-        mPreviousNumber.Add(RootNumber);
-        mPreviousNumber.Add(SubNumber);
+        List<int> tempCubeNumbers = new List<int>(anOrignalBlock.CubeNumbers);
+        anOrignalBlock.SetCubeNumbers(mNextNumbers);
 
-        // randomize a new number for the root cube
-        mRootNumber = 4;
+        mNextNumbers.Clear();
+        mNextNumbers = new List<int>(tempCubeNumbers);
+
+        mRootNumber = mNextNumbers[0];
         RootNumberText.text = RootNumber.ToString();
         RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);
 
-        // add in the new number for the root cube
-        //mPreviousNumber.Add(RootNumber);
-
         // randomize a new number for the sub cube
-        mSubNumber = 0;
+        mSubNumber = mNextNumbers[1];
         SubNumberText.text = SubNumber.ToString();
         SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
-
-        // return the previous number for the new creating cube
-        return mPreviousNumber;
-    }
-
-    private int RandomNewRootCubeNumber()
-    {
-        int newNumber = SupportTools.RNG(0, 10);
-        while (mUsedNumber[newNumber] == true)
-        {
-            newNumber = SupportTools.RNG(0, 10);
-        }
-
-        mUsedNumber[newNumber] = true;
-        if(!mUsedNumber.Contains(false))
-        {
-            for (int i = 0; i < mUsedNumber.Count; i++)
-                mUsedNumber[i] = false;
-        }
-
-        return newNumber;
     }
 }
