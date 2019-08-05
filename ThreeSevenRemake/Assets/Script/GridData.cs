@@ -245,6 +245,22 @@ public class GridData
         return row;
     }
 
+    public int TallestRowFromCubePos(Vector2Int aGridPos)
+    {
+        //int row = mCurrentTallestCellInGrid;
+        int row = 0;
+
+        for (int y = aGridPos.y; y >= 0; y--)
+        {
+            if (mGrid[aGridPos.x][y] == null)
+                row = y;
+            else
+                break;
+        }
+
+        return row;
+    }
+
     public int GetCubeValueOn(Vector2Int aPos)
     {
         return GetCubeOn(aPos).Number;
