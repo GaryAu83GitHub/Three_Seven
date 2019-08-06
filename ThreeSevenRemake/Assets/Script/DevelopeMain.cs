@@ -35,8 +35,8 @@ public class DevelopeMain : MonoBehaviour
         // floats
     private float mNextDropTime = 0f;
     private float mDropRate = 1;
-    private float mButtonDownNextDropTime = 0f;
-    private readonly float mButtonDownDropRate = .1f;
+    private float mNextVerticalButtonDownTime = 0f;
+    private float mNextHorizontalButtonDownTime = 0f;
 
     // boolean
     private bool mGameInProgress = false;
@@ -116,21 +116,22 @@ public class DevelopeMain : MonoBehaviour
         if (PauseMenu.GameIsPause)
             return;
 
-        // input for move the block left if the left column is vacant
-        if(Input.GetKeyDown(KeyCode.LeftArrow))
+        if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) && Time.time > mNextHorizontalButtonDownTime)
         {
-            mCurrentBlock.MoveLeft();
-        }
+            // input for move the block left if the left column is vacant
+            if (Input.GetKey(KeyCode.LeftArrow))
+                mCurrentBlock.MoveLeft();
 
-        // input for move the block right if the right column is vacant
-        if(Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            mCurrentBlock.MoveRight();
+            // input for move the block right if the right column is vacant
+            if (Input.GetKey(KeyCode.RightArrow))
+                mCurrentBlock.MoveRight();
+
+            mNextHorizontalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
         }
 
         // input for move the block downward one row if the row below is vacant
         // and if the time between each keypress has expired
-        if((Input.GetKey(KeyCode.DownArrow) && Time.time > mButtonDownNextDropTime) || Time.time > mNextDropTime)
+        if((Input.GetKey(KeyCode.DownArrow) && Time.time > mNextVerticalButtonDownTime) || Time.time > mNextDropTime)
         {
             if(!mCurrentBlock.CheckIfCellIsVacantBeneath())
             {
@@ -146,7 +147,7 @@ public class DevelopeMain : MonoBehaviour
             else
                 mCurrentBlock.DropDown();
 
-            mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
+            mNextVerticalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;//mButtonDownDropRate;
             mNextDropTime = Time.time + mDropRate;
         }
 
@@ -209,7 +210,9 @@ public class DevelopeMain : MonoBehaviour
         // Get the block's droprate of the current level from GameManager
         mDropRate = GameManager.Instance.GetCurrentDroppingRate();
 
-        mButtonDownNextDropTime = Time.time + mButtonDownDropRate;
+        mNextVerticalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;//mButtonDownDropRate;
+        mNextHorizontalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
+
         mNextDropTime = Time.time + mDropRate;
 
         mBlockLanded = false;

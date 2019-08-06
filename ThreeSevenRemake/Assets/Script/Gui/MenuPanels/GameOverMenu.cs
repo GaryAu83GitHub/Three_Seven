@@ -65,7 +65,7 @@ public class GameOverMenu : MonoBehaviour
     {
         GameIsOver = true;
         GameOverMenuUI.SetActive(GameIsOver);
-        LevelResultText.text = GameManager.Instance.CurrentLevel.ToString();
+        LevelResultText.text = LevelManager.Instance.CurrentLevel.ToString();
         TimeSpendText.text = GameManager.Instance.GameTimeString;
         BlockLandedText.text = GameManager.Instance.LandedBlockCount.ToString();
         MaxComboText.text = GameManager.Instance.MaxCombo.ToString();

@@ -52,6 +52,14 @@ public class LevelManager
         //mLevelInfos.Add(new LevelData(10, 1f / 10f));
     }
 
+    /// <summary>
+    /// Add in point for level up to gain more score and increase the dropping speed
+    /// When a certain amount of points are aquired, the current level increase and
+    /// the next level up score will be increased based on the
+    /// current level.
+    /// From here it'll store the current max combo that player had achieved.
+    /// </summary>
+    /// <param name="aPoint">Points that to add to level up</param>
     public void AddLevelScore(int aScore)
     {
         mCurrentLevelScore += aScore;

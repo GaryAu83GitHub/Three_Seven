@@ -24,13 +24,10 @@ public class DevelopeMainGUI : MonoBehaviour
 
     private Animation mComboAnimation;
 
-    //private float mGameTimer = 0f;
     private bool mGameIsPlaying;
 
     private Color mComboTextColor = Color.black;
     private Color mTransparentColor = new Color(0f, 0f, 0f, 0f);
-    //private bool mComboAppear = false;
-    //private float mComboTextFadingTime = 0f;
 
     private bool mUpdateDisplayScore = false;
    
@@ -45,10 +42,6 @@ public class DevelopeMainGUI : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        UpdateLevel(GameManager.Instance.CurrentLevel, 0, 1);
-        
-        //GameManager.comboOccuring += ComboAppear;
-        //GameManager.levelChanging += UpdateLevel;
         GameManager.scoreChanging += UpdateScore;
 
         DevelopeMain.createNewBlock += TransferNewBlock;
@@ -65,8 +58,6 @@ public class DevelopeMainGUI : MonoBehaviour
 
     private void OnDisable()
     {
-        //GameManager.comboOccuring -= ComboAppear;
-        //GameManager.levelChanging -= UpdateLevel;
         GameManager.scoreChanging -= UpdateScore;
 
         DevelopeMain.createNewBlock -= TransferNewBlock;
@@ -81,12 +72,7 @@ public class DevelopeMainGUI : MonoBehaviour
     private void Update()
     {
         Clock();
-        //Something();
-
-        //if(mComboAppear)
-        //    ComboTextFading();
-
-        if (Input.GetKeyDown(KeyCode.Insert))
+        if (Input.GetKeyDown(KeyCode.F5))
         {
             if (DebugPanel.GetComponent<CanvasGroup>().alpha >= 1f)
                 DebugPanel.GetComponent<CanvasGroup>().alpha = 0f;
@@ -103,17 +89,7 @@ public class DevelopeMainGUI : MonoBehaviour
             UpdateDisplayScore();
         }
     }
-
-    public void Something()
-    {
-        string debug = "\tRoot\t\tSub\n";
-        for(int i = 0; i < 10; i++)
-        {
-            debug += i.ToString() + "\t" + CubeNumberGenerator.Instance.UsedRootNumber[i] + "\t\t" + CubeNumberGenerator.Instance.UsedSubNumber[i] + "\n";
-        }
-        TempDebugText.text = debug;
-    }
-
+    
     public void UpdateScore(int aNewTotalScore, int anAddOnScore)
     {
         mCurrentTotalScore = aNewTotalScore;
@@ -124,14 +100,7 @@ public class DevelopeMainGUI : MonoBehaviour
 
         mUpdateDisplayScore = true;
     }
-
-    public void UpdateLevel(int aNewLevel, int aCurrentLevelScore, int aNextLevelUpScore)
-    {
-        float filling = (float)aCurrentLevelScore / (float)aNextLevelUpScore;
-        //LevelUpFillingImage.fillAmount = filling;
-        //LevelText.text = aNewLevel.ToString();
-    }
-
+    
     public void UpdateCombo(int aComboCount)
     {
         if (aComboCount < 1)

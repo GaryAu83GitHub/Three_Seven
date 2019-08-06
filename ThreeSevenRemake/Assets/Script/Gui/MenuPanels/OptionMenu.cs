@@ -73,6 +73,7 @@ public class OptionMenu : MonoBehaviour
     private void LimitLineHieghtSliderOnValueChange()
     {
         mLimitLineHeight = (int)LimitLineHeightSlider.value;
+        Debug.Log(mLimitLineHeight);
         ActiveAdmitButton();
     }
 

@@ -368,7 +368,7 @@ public class BlockManager
         if(mFirstFloatingBlockIndecies.Any())
         {
             for(int i = 0; i < mFirstFloatingBlockIndecies.Count; i++)
-                mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mBlocks[i]);
+                mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mBlocks[mFirstFloatingBlockIndecies[i]]);
         }
 
         mFirstFloatingBlockIndecies.Clear();

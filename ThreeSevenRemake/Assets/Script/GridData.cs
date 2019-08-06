@@ -34,7 +34,7 @@ public class GridData
     private Vector2Int mGridSize = new Vector2Int(10, 20);
     public Vector2Int GridSize { get { return mGridSize; } }
 
-    private Vector2Int mBlockStartPosition = new Vector2Int(6, 18);
+    private Vector2Int mBlockStartPosition = new Vector2Int(Constants.BLOCK_START_POSITION_X, Constants.BLOCK_START_POSITION_Y);
     public Vector2Int GridStartPosition { get { return mBlockStartPosition; } }
     public Vector3 StartWorldPosition { get { return new Vector3(mBlockStartPosition.x * mCubeGapDistance, mBlockStartPosition.y * mCubeGapDistance, 0f); } }
 

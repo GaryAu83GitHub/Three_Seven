@@ -22,7 +22,7 @@ public class PlayThroughcs
         Name = GameSettings.Instance.PlayerName;
         GameTime = GameManager.Instance.GameTimeString;
 
-        Level = GameManager.Instance.CurrentLevel;
+        Level = LevelManager.Instance.CurrentLevel;
         Score = GameManager.Instance.CurrentScore;
         InitialValue = GameSettings.Instance.InitialValue;
 

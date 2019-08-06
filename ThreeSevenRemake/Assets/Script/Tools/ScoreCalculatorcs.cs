@@ -15,7 +15,7 @@ public static class ScoreCalculatorcs
 {
     public static int OriginalBlockLandingScoreCalculation()
     {
-        return (Constants.ORIGINAL_BLOCK_LANDING_SCORE * (GameManager.Instance.CurrentLevel + 1));
+        return (Constants.ORIGINAL_BLOCK_LANDING_SCORE * (LevelManager.Instance.CurrentLevel + 1));
     }
 
     public static int LinkingScoreCalculation(TaskRank anObjective, int aNumberCount)
@@ -36,6 +36,6 @@ public static class ScoreCalculatorcs
         if (aCombo < 1)
             return 0;
 
-        return (ComboBaseScoreFactory.Instance.GetComboBaseScore(aCombo) * (GameManager.Instance.CurrentLevel + 1));
+        return (ComboBaseScoreFactory.Instance.GetComboBaseScore(aCombo) * (LevelManager.Instance.CurrentLevel + 1));
     }
 }
