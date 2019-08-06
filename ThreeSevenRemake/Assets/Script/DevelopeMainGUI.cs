@@ -24,6 +24,9 @@ public class DevelopeMainGUI : MonoBehaviour
 
     private Animation mComboAnimation;
 
+    public delegate void ChangeNextBlock(Block nextBlock);
+    public static ChangeNextBlock changeNextBlock;
+
     private bool mGameIsPlaying;
 
     private Color mComboTextColor = Color.black;
@@ -126,7 +129,7 @@ public class DevelopeMainGUI : MonoBehaviour
 
     public void TransferNewBlock(Block aNewBlock)
     {
-        aNewBlock.SetCubeNumbers(NextBlockGUI.NewNumber());
+        changeNextBlock?.Invoke(aNewBlock);
     }
 
     public void GameIsPlaying(bool anIsPlaying)

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,39 +17,32 @@ public class BlockGUI : MonoBehaviour
 
     private int mSubNumber = 0;
     public int SubNumber { get { return mSubNumber; } }
-
-    private List<int> mPreviousNumber = new List<int>();
+    
+    public List<int> NextNumber { get { return mNextNumbers; } }
     private List<int> mNextNumbers = new List<int>();
     
     private void Start()
     {
         Block.swapWithPreviewBlock += SwapWithOriginalBlock;
+        DevelopeMainGUI.changeNextBlock += NewNumber;
 
-        mRootNumber = CubeNumberGenerator.Instance.GetNewRootNumber;    //RandomNewRootCubeNumber();
-        RootNumberText.text = RootNumber.ToString();
-        RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);
-
-        // randomize a new number for the sub cube
-        mSubNumber = CubeNumberGenerator.Instance.GetNewSubNumber;      //RandomNewRootCubeNumber();
-        SubNumberText.text = SubNumber.ToString();
-        SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
+        NewNumber(null);
     }
 
     private void OnDestroy()
     {
         Block.swapWithPreviewBlock -= SwapWithOriginalBlock;
+        DevelopeMainGUI.changeNextBlock -= NewNumber;
     }
 
     private void Update()
     {
     }
-
-    public List<int> NewNumber()
+    
+    public void NewNumber(Block aNextBlock)
     {
-        // clear the previous cubenumber and store the current number
-        mPreviousNumber.Clear();
-        mPreviousNumber.Add(RootNumber);
-        mPreviousNumber.Add(SubNumber);
+        if(aNextBlock != null)
+            aNextBlock.SetCubeNumbers(mNextNumbers);
 
         mNextNumbers.Clear();
         mNextNumbers.Add(CubeNumberGenerator.Instance.GetNewRootNumber);
@@ -64,8 +58,6 @@ public class BlockGUI : MonoBehaviour
         SubNumberText.text = SubNumber.ToString();
         SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
 
-        // return the previous number for the new creating cube
-        return mPreviousNumber;
     }
 
     private void SwapWithOriginalBlock(Block anOrignalBlock)

@@ -45,6 +45,8 @@ public class GameManager
     public delegate void OnScoreChange(int aNewScore, int anAddOnScore);
     public static OnScoreChange scoreChanging;
 
+    private List<int> mNextBlockNumbers = new List<int>();
+
     public void Reset()
     {
         mCurrentScore = 0;
@@ -53,6 +55,10 @@ public class GameManager
         mLandedBlockCount = 0;
         GameTime = 0;
         LevelManager.Instance.Reset();
+
+        mNextBlockNumbers.Clear();
+        mNextBlockNumbers.Add(CubeNumberGenerator.Instance.GetNewRootNumber);
+        mNextBlockNumbers.Add(CubeNumberGenerator.Instance.GetNewSubNumber);
     }
     
     public void AddScore(ScoreType anObtainScoreType, int anValue = 0, TaskRank anObjective = TaskRank.X1)
