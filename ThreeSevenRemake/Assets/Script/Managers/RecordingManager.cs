@@ -17,5 +17,16 @@ public class RecordingManager
     }
     private static RecordingManager mInstance;
 
-    
+    public Stack<TurnData> mRecordings = new Stack<TurnData>();
+
+    public void Record(TurnData aRecordData)
+    {
+        mRecordings.Push(aRecordData);
+    }
+
+    public TurnData Rewind()
+    {
+        mRecordings.Pop();
+        return mRecordings.Peek();
+    }
 }

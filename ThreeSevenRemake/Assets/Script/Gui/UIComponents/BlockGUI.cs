@@ -26,7 +26,7 @@ public class BlockGUI : MonoBehaviour
         Block.swapWithPreviewBlock += SwapWithOriginalBlock;
         DevelopeMainGUI.changeNextBlock += NewNumber;
 
-        NewNumber(null);
+        NewNumber();
     }
 
     private void OnDestroy()
@@ -39,14 +39,10 @@ public class BlockGUI : MonoBehaviour
     {
     }
     
-    public void NewNumber(Block aNextBlock)
+    public void NewNumber()
     {
-        if(aNextBlock != null)
-            aNextBlock.SetCubeNumbers(mNextNumbers);
-
         mNextNumbers.Clear();
-        mNextNumbers.Add(CubeNumberGenerator.Instance.GetNewRootNumber);
-        mNextNumbers.Add(CubeNumberGenerator.Instance.GetNewSubNumber);
+        mNextNumbers = new List<int>(GameManager.Instance.GenerateNewCubeNumber());
 
         // randomize a new number for the root cube
         mRootNumber = mNextNumbers[0];

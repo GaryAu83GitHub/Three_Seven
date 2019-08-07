@@ -24,7 +24,7 @@ public class DevelopeMainGUI : MonoBehaviour
 
     private Animation mComboAnimation;
 
-    public delegate void ChangeNextBlock(Block nextBlock);
+    public delegate void ChangeNextBlock();
     public static ChangeNextBlock changeNextBlock;
 
     private bool mGameIsPlaying;
@@ -129,7 +129,10 @@ public class DevelopeMainGUI : MonoBehaviour
 
     public void TransferNewBlock(Block aNewBlock)
     {
-        changeNextBlock?.Invoke(aNewBlock);
+        if (aNewBlock != null)
+            aNewBlock.SetCubeNumbers(GameManager.Instance.NextCubeNumbers);
+
+        changeNextBlock?.Invoke();
     }
 
     public void GameIsPlaying(bool anIsPlaying)
