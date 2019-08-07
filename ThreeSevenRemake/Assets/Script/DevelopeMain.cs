@@ -113,6 +113,11 @@ public class DevelopeMain : MonoBehaviour
     /// </summary>
     private void CheckInput()
     {
+        if(Input.GetKeyDown(KeyCode.PageUp))
+        {
+            RewindTurn();
+        }
+
         if (PauseMenu.GameIsPause)
             return;
 
@@ -192,7 +197,7 @@ public class DevelopeMain : MonoBehaviour
 
     private void CreateNewBlock()
     {
-        GameObject newBlock = Instantiate(BlockObject, GridData.Instance.StartWorldPosition, Quaternion.identity);
+        GameObject newBlock = Instantiate(BlockObject, GridData.Instance.StartWorldPosition, Quaternion.identity, transform);
         newBlock.name = "Block " + mBlockCount.ToString();
         mBlockCount++;
 
@@ -202,6 +207,7 @@ public class DevelopeMain : MonoBehaviour
         {
             mCurrentBlock = newBlock.GetComponent<Block>();
         }
+
 
         mGuideBlock = GuideBlockObject.GetComponent<GuideBlock>();
         //mGuideBlock.SetupGuideBlock(mCurrentBlock);
@@ -218,6 +224,8 @@ public class DevelopeMain : MonoBehaviour
         mBlockLanded = false;
 
         BlockManager.Instance.ResetCombo();
+
+        RecordingManager.Instance.Record(new TurnData(mCurrentBlock));
     }
 
     /// <summary>
@@ -233,5 +241,57 @@ public class DevelopeMain : MonoBehaviour
         BlockManager.Instance.Reset();
         GameManager.Instance.Reset();
         GameSettings.Instance.Reset();
+    }
+
+    private void RewindTurn()
+    {
+        if (RecordingManager.Instance.RecordCount < 2)
+            return;
+
+        int childs = transform.childCount;
+        for (int i = childs - 1; i > -1; i--)
+        {
+            GameObject.Destroy(transform.GetChild(i).gameObject);
+        }
+        GridData.Instance.GenerateGrid();
+        BlockManager.Instance.ResetBlockList();
+
+        StartCoroutine(Rewind());
+        ////GameObject.Destroy(mCurrentBlock.gameObject);
+        ////mBlockCount = 0;
+
+        //TurnData data = RecordingManager.Instance.Rewind();
+
+        //foreach(Block b in data.Blocks)
+        //{
+        //    GameObject rewindBlock = Instantiate(b.gameObject, new Vector3(b.RootCube.GridPos.x * Constants.CUBE_GAP_DISTANCE, b.RootCube.GridPos.y * Constants.CUBE_GAP_DISTANCE, 0f), Quaternion.identity, transform);
+        //    rewindBlock.name = b.gameObject.name;
+        //    //mBlockCount++;
+        //    BlockManager.Instance.AddRewindBlock(rewindBlock.GetComponent<Block>());
+        //}
+
+        //mCurrentBlock = Instantiate(data.ThisTurnFallingBlock.gameObject, GridData.Instance.StartWorldPosition, Quaternion.identity, transform).GetComponent<Block>();
+        ////GridData.Instance.SetGridAfterData(data.Blocks);
+        //GameManager.Instance.RewindNextNumber(data.ThisTurnNextBlock);
+    }
+
+    private IEnumerator Rewind()
+    {
+        yield return new WaitForSeconds(.5f);
+
+        TurnData data = RecordingManager.Instance.Rewind();
+
+        foreach (Block b in data.Blocks)
+        {
+            GameObject rewindBlock = Instantiate(BlockObject, new Vector3(b.RootCube.GridPos.x * Constants.CUBE_GAP_DISTANCE, b.RootCube.GridPos.y * Constants.CUBE_GAP_DISTANCE, 0f), Quaternion.identity, transform);
+            rewindBlock.name = b.BlockName;
+            //mBlockCount++;
+            BlockManager.Instance.AddRewindBlock(rewindBlock.GetComponent<Block>());
+        }
+
+        //mCurrentBlock = Instantiate(data.ThisTurnFallingBlock.gameObject, GridData.Instance.StartWorldPosition, Quaternion.identity, transform).GetComponent<Block>();
+        //GridData.Instance.SetGridAfterData(data.Blocks);
+        GameManager.Instance.RewindNextNumber(data.ThisTurnNextBlock);
+
     }
 }

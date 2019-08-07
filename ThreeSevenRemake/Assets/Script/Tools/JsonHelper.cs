@@ -12,7 +12,7 @@ public enum FileIndex
 
 public class JsonHelper<T>
 {
-    private static Dictionary<FileIndex, string> Files = new Dictionary<FileIndex, string>
+    private static readonly Dictionary<FileIndex, string> Files = new Dictionary<FileIndex, string>
     {
         { FileIndex.GAMESETTINGS, "gamesettings" },
         { FileIndex.HIGHSCORES, "highScores" },

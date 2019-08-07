@@ -47,7 +47,9 @@ public class BlockManager
     private Block mNewLandedOriginalBlock = null;
     public Block NewLandedOriginalBlock { get { return (mNewLandedOriginalBlock ?? null); } }
 
+    public List<Block> Blocks { get { return mBlocks; } }
     private List<Block> mBlocks = new List<Block>();
+
     private List<Block> mFloatingBlocks = new List<Block>();
     private List<Block> mScoringBlocks = new List<Block>();
     private List<Cube> mScoringPassiveCubes = new List<Cube>();
@@ -69,11 +71,7 @@ public class BlockManager
     /// </summary>
     public void Reset()
     {
-        mBlocks.Clear();
-        mFloatingBlocks.Clear();
-        mScoringBlocks.Clear();
-        mScoringPassiveCubes.Clear();
-        mNewLandedCubes.Clear();
+        ResetBlockList();
 
         mCurrentScoringGroupIndex = 0;
         mScoringCalculationTimer = 0f;
@@ -82,6 +80,21 @@ public class BlockManager
         ResetCombo();
 
         mNewLandedOriginalBlock = null;
+    }
+
+    public void AddRewindBlock(Block aRewindBlock)
+    {
+        mBlocks.Add(aRewindBlock);
+        RegisterBlockCubesToGrid(aRewindBlock);
+    }
+
+    public void ResetBlockList()
+    {
+        mBlocks.Clear();
+        mFloatingBlocks.Clear();
+        mScoringBlocks.Clear();
+        mScoringPassiveCubes.Clear();
+        mNewLandedCubes.Clear();
     }
 
     /// <summary>

@@ -20,7 +20,7 @@ public class GuideBlock : MonoBehaviour
         mCubes.Add(transform.GetChild(1).GetComponent<GuideCube>());
         mCubes[1].name = "SubCube";
 
-        mCubeGap = GridData.Instance.CubeGapDistance;
+        mCubeGap = Constants.CUBE_GAP_DISTANCE;//GridData.Instance.CubeGapDistance;
     }
 
     // Update is called once per frame

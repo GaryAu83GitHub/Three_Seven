@@ -30,14 +30,20 @@ public class Block : MonoBehaviour
 
     private int mCurrentRotation = 0;
     public int BlockRotation { get { return mCurrentRotation; } }
+
+    public string BlockName { get { return mBlockName; } }
+    private string mBlockName = "";
     
     private Transform Joint;
 
-    private float mCubeGap = 0f;
-    
+    private readonly float mCubeGap = Constants.CUBE_GAP_DISTANCE;
+    private bool mIsRewinding = false;
+        
     // Start is called before the first frame update
     void Start()
     {
+        mBlockName = gameObject.name;
+
         mCubes.Add(transform.GetChild(0).GetComponent<Cube>());
         mCubes[0].GridPos = GridData.Instance.GridStartPosition;
         mCubes[0].name = "RootCube";
@@ -68,7 +74,13 @@ public class Block : MonoBehaviour
 
         Joint = transform.GetChild(2);
 
-        mCubeGap = GridData.Instance.CubeGapDistance;
+        //mCubeGap = //GridData.Instance.CubeGapDistance;
+    }
+
+    public void SetBlockWithRewindData(BlockData aData)
+    {
+        mIsRewinding = true;
+
     }
     
     /// <summary>

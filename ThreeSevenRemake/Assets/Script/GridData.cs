@@ -36,13 +36,13 @@ public class GridData
 
     private Vector2Int mBlockStartPosition = new Vector2Int(Constants.BLOCK_START_POSITION_X, Constants.BLOCK_START_POSITION_Y);
     public Vector2Int GridStartPosition { get { return mBlockStartPosition; } }
-    public Vector3 StartWorldPosition { get { return new Vector3(mBlockStartPosition.x * mCubeGapDistance, mBlockStartPosition.y * mCubeGapDistance, 0f); } }
+    public Vector3 StartWorldPosition { get { return new Vector3(mBlockStartPosition.x * Constants.CUBE_GAP_DISTANCE, mBlockStartPosition.y * Constants.CUBE_GAP_DISTANCE, 0f); } }
 
     /// <summary>
     /// The distance between cubes.
     /// </summary>
-    private const float mCubeGapDistance = .5f;
-    public float CubeGapDistance { get { return mCubeGapDistance; } }
+    //private const float mCubeGapDistance = .5f;
+    //public float CubeGapDistance { get { return mCubeGapDistance; } }
 
     /// <summary>
     /// Use as a temporary storing for the new original landed block
@@ -67,6 +67,9 @@ public class GridData
     /// </summary>
     public void GenerateGrid()
     {
+        if(mGrid != null)
+            mGrid.Clear();
+
         mGrid = new Dictionary<int, List<Cube>>();
         for (int x = 0; x < mGridSize.x; x++)
         {
@@ -77,7 +80,7 @@ public class GridData
             }
         }
     }
-
+    
     /// <summary>
     /// Registrate the cell's value with the cube's value
     /// in the grid according to the cube's grid position

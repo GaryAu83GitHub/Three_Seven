@@ -25,6 +25,7 @@ public class BlockGUI : MonoBehaviour
     {
         Block.swapWithPreviewBlock += SwapWithOriginalBlock;
         DevelopeMainGUI.changeNextBlock += NewNumber;
+        GameManager.rewinding += RewindNumber;
 
         NewNumber();
     }
@@ -33,6 +34,7 @@ public class BlockGUI : MonoBehaviour
     {
         Block.swapWithPreviewBlock -= SwapWithOriginalBlock;
         DevelopeMainGUI.changeNextBlock -= NewNumber;
+        GameManager.rewinding -= RewindNumber;
     }
 
     private void Update()
@@ -44,16 +46,15 @@ public class BlockGUI : MonoBehaviour
         mNextNumbers.Clear();
         mNextNumbers = new List<int>(GameManager.Instance.GenerateNewCubeNumber());
 
-        // randomize a new number for the root cube
-        mRootNumber = mNextNumbers[0];
-        RootNumberText.text = RootNumber.ToString();
-        RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);
+        DisplayBlock();
+    }
 
-        // randomize a new number for the sub cube
-        mSubNumber = mNextNumbers[1];
-        SubNumberText.text = SubNumber.ToString();
-        SubCube.color = SupportTools.GetCubeHexColorOf(SubNumber);
+    private void RewindNumber()
+    {
+        mNextNumbers.Clear();
+        mNextNumbers = new List<int>(GameManager.Instance.NextCubeNumbers);
 
+        DisplayBlock();
     }
 
     private void SwapWithOriginalBlock(Block anOrignalBlock)
@@ -64,6 +65,12 @@ public class BlockGUI : MonoBehaviour
         mNextNumbers.Clear();
         mNextNumbers = new List<int>(tempCubeNumbers);
 
+        DisplayBlock();
+    }
+
+    private void DisplayBlock()
+    {
+        // randomize a new number for the root cube
         mRootNumber = mNextNumbers[0];
         RootNumberText.text = RootNumber.ToString();
         RootCube.color = SupportTools.GetCubeHexColorOf(RootNumber);

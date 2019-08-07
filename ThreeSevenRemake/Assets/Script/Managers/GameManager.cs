@@ -45,6 +45,10 @@ public class GameManager
     public delegate void OnScoreChange(int aNewScore, int anAddOnScore);
     public static OnScoreChange scoreChanging;
 
+    public delegate void OnRewinding();
+    public static OnRewinding rewinding;
+
+
     public List<int> NextCubeNumbers { get { return mNextBlockNumbers; } }
     private List<int> mNextBlockNumbers = new List<int>();
 
@@ -92,6 +96,14 @@ public class GameManager
         mNextBlockNumbers.Add(CubeNumberGenerator.Instance.GetNewSubNumber);
 
         return mNextBlockNumbers;
+    }
+
+    public void RewindNextNumber(List<int> aPreviousNextNumber)
+    {
+        mNextBlockNumbers.Clear();
+        mNextBlockNumbers = new List<int>(aPreviousNextNumber);
+
+        rewinding?.Invoke();
     }
 
     public GameRoundData GetRoundData()

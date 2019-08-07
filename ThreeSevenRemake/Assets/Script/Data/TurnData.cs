@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 public class TurnData
 {
-    private readonly Dictionary<int, List<Cube>> Grid = new Dictionary<int, List<Cube>>();
+    public readonly List<Block> Blocks = new List<Block>();
 
-    private readonly Block ThisTurnFallingBlock = new Block();
+    public readonly Block ThisTurnFallingBlock;
 
-    private readonly List<int> ThisTurnNextBlock = new List<int>();
+    public readonly List<int> ThisTurnNextBlock = new List<int>();
 
     public TurnData(Block thisTurnsBlock)
     {
-        Grid = new Dictionary<int, List<Cube>>(GridData.Instance.Grid);
+        Blocks = new List<Block>(BlockManager.Instance.Blocks);
         ThisTurnFallingBlock = thisTurnsBlock;
 
-        //ThisTurnNextBlock = new List<int>()
+        ThisTurnNextBlock = new List<int>(GameManager.Instance.NextCubeNumbers);
     }
 }
