@@ -42,6 +42,9 @@ public class DevelopeMain : MonoBehaviour
     private bool mGameInProgress = false;
     private bool mBlockLanded = false;
 
+    private List<Block> mRevindBlocks = new List<Block>();
+    private bool mIsRewinding = false;
+
     private void Awake()
     {
         GridData.Instance.GenerateGrid();
@@ -66,6 +69,17 @@ public class DevelopeMain : MonoBehaviour
 
     private void Update()
     {
+        if(mIsRewinding)
+        {
+            foreach(Block b in mRevindBlocks)
+            {
+                BlockManager.Instance.AddRewindBlock(b);
+            }
+            mIsRewinding = !mIsRewinding;
+            UpdateDebugBoard();
+            return;
+        }
+
         TableCover.SetActive(PauseMenu.GameIsPause);
         // If mGameOver is equal to true, don't proceed futher of this 
         if (BlockManager.Instance.BlockPassedGameOverLine())
@@ -113,7 +127,7 @@ public class DevelopeMain : MonoBehaviour
     /// </summary>
     private void CheckInput()
     {
-        if(Input.GetKeyDown(KeyCode.PageUp))
+        if (Input.GetKeyDown(KeyCode.PageUp))
         {
             RewindTurn();
         }
@@ -140,6 +154,7 @@ public class DevelopeMain : MonoBehaviour
         {
             if(!mCurrentBlock.CheckIfCellIsVacantBeneath())
             {
+                RecordingManager.Instance.Record(new TurnData(mCurrentBlock));
                 //BlockManager.Instance.AddBlock(mCurrentBlock);
                 BlockManager.Instance.AddNewOriginalBlock(mCurrentBlock);
                 GameManager.Instance.LandedBlockCount++;
@@ -160,7 +175,7 @@ public class DevelopeMain : MonoBehaviour
         // rotate to is vacant
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
-            mCurrentBlock.Rotate();
+            mCurrentBlock.RotateBlock();
         }
 
         // input for swaping the cubes value inside the block
@@ -206,6 +221,8 @@ public class DevelopeMain : MonoBehaviour
         if (newBlock.GetComponent<Block>() != null)
         {
             mCurrentBlock = newBlock.GetComponent<Block>();
+
+            //RecordingManager.Instance.Record(new TurnData(mCurrentBlock));
         }
 
 
@@ -224,8 +241,6 @@ public class DevelopeMain : MonoBehaviour
         mBlockLanded = false;
 
         BlockManager.Instance.ResetCombo();
-
-        RecordingManager.Instance.Record(new TurnData(mCurrentBlock));
     }
 
     /// <summary>
@@ -245,7 +260,7 @@ public class DevelopeMain : MonoBehaviour
 
     private void RewindTurn()
     {
-        if (RecordingManager.Instance.RecordCount < 2)
+        if (RecordingManager.Instance.RecordCount <= 0)
             return;
 
         int childs = transform.childCount;
@@ -256,42 +271,29 @@ public class DevelopeMain : MonoBehaviour
         GridData.Instance.GenerateGrid();
         BlockManager.Instance.ResetBlockList();
 
-        StartCoroutine(Rewind());
-        ////GameObject.Destroy(mCurrentBlock.gameObject);
-        ////mBlockCount = 0;
-
-        //TurnData data = RecordingManager.Instance.Rewind();
-
-        //foreach(Block b in data.Blocks)
-        //{
-        //    GameObject rewindBlock = Instantiate(b.gameObject, new Vector3(b.RootCube.GridPos.x * Constants.CUBE_GAP_DISTANCE, b.RootCube.GridPos.y * Constants.CUBE_GAP_DISTANCE, 0f), Quaternion.identity, transform);
-        //    rewindBlock.name = b.gameObject.name;
-        //    //mBlockCount++;
-        //    BlockManager.Instance.AddRewindBlock(rewindBlock.GetComponent<Block>());
-        //}
-
-        //mCurrentBlock = Instantiate(data.ThisTurnFallingBlock.gameObject, GridData.Instance.StartWorldPosition, Quaternion.identity, transform).GetComponent<Block>();
-        ////GridData.Instance.SetGridAfterData(data.Blocks);
-        //GameManager.Instance.RewindNextNumber(data.ThisTurnNextBlock);
+        RewindProgress();
     }
 
-    private IEnumerator Rewind()
+    private void RewindProgress()
     {
-        yield return new WaitForSeconds(.5f);
-
         TurnData data = RecordingManager.Instance.Rewind();
-
-        foreach (Block b in data.Blocks)
+        mRevindBlocks.Clear();
+        foreach (BlockData b in data.Blocks)
         {
-            GameObject rewindBlock = Instantiate(BlockObject, new Vector3(b.RootCube.GridPos.x * Constants.CUBE_GAP_DISTANCE, b.RootCube.GridPos.y * Constants.CUBE_GAP_DISTANCE, 0f), Quaternion.identity, transform);
-            rewindBlock.name = b.BlockName;
-            //mBlockCount++;
-            BlockManager.Instance.AddRewindBlock(rewindBlock.GetComponent<Block>());
+            Block rewindBlock = Instantiate(BlockObject, new Vector3(b.RootCubePosition.x * Constants.CUBE_GAP_DISTANCE, b.RootCubePosition.y * Constants.CUBE_GAP_DISTANCE, 0f), Quaternion.identity, transform).GetComponent<Block>();
+            rewindBlock.gameObject.name = b.BlockName;
+            rewindBlock.SetBlockWithRewindData(b);
+            mRevindBlocks.Add(rewindBlock);
+            //BlockManager.Instance.AddRewindBlock(rewindBlock);
         }
 
-        //mCurrentBlock = Instantiate(data.ThisTurnFallingBlock.gameObject, GridData.Instance.StartWorldPosition, Quaternion.identity, transform).GetComponent<Block>();
+        mCurrentBlock = Instantiate(BlockObject, GridData.Instance.StartWorldPosition, Quaternion.identity, transform).GetComponent<Block>();
+        mCurrentBlock.gameObject.name = data.ThisTurnFallingBlock.BlockName;
+        mCurrentBlock.SetBlockWithRewindData(data.ThisTurnFallingBlock, true);
+
         //GridData.Instance.SetGridAfterData(data.Blocks);
         GameManager.Instance.RewindNextNumber(data.ThisTurnNextBlock);
 
+        mIsRewinding = true;
     }
 }

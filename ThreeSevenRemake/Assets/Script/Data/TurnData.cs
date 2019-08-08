@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 
 public class TurnData
 {
-    public readonly List<Block> Blocks = new List<Block>();
+    public readonly List<BlockData> Blocks = new List<BlockData>();
 
-    public readonly Block ThisTurnFallingBlock;
+    public readonly BlockData ThisTurnFallingBlock;
 
     public readonly List<int> ThisTurnNextBlock = new List<int>();
 
     public TurnData(Block thisTurnsBlock)
     {
-        Blocks = new List<Block>(BlockManager.Instance.Blocks);
-        ThisTurnFallingBlock = thisTurnsBlock;
+        foreach(Block b in BlockManager.Instance.Blocks)
+        {
+            Blocks.Add(new BlockData(b));
+        }
+
+        ThisTurnFallingBlock = new BlockData(thisTurnsBlock);
 
         ThisTurnNextBlock = new List<int>(GameManager.Instance.NextCubeNumbers);
     }

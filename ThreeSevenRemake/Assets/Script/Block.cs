@@ -37,15 +37,16 @@ public class Block : MonoBehaviour
     private Transform Joint;
 
     private readonly float mCubeGap = Constants.CUBE_GAP_DISTANCE;
-    private bool mIsRewinding = false;
-        
+
+    private Vector2Int mPlacingPosition = GridData.Instance.GridStartPosition;
+
     // Start is called before the first frame update
     void Start()
     {
         mBlockName = gameObject.name;
 
         mCubes.Add(transform.GetChild(0).GetComponent<Cube>());
-        mCubes[0].GridPos = GridData.Instance.GridStartPosition;
+        mCubes[0].GridPos = mPlacingPosition;
         mCubes[0].name = "RootCube";
 
         mCubes.Add(transform.GetChild(1).GetComponent<Cube>());
@@ -65,9 +66,11 @@ public class Block : MonoBehaviour
             for (int i = 0; i < mCubeNumbers.Count; i++)
                 mCubes[i].Init(this, mCubeNumbers[i]);
 
-            mCubes[0].ConnectSiblingCube(mCubes[1]);
-            mCubes[1].ConnectSiblingCube(mCubes[0]);
+            //mCubes[0].ConnectSiblingCube(mCubes[1]);
+            //mCubes[1].ConnectSiblingCube(mCubes[0]);
         }
+
+        Rotate();
 
         mCubes[0].ConnectSiblingCube(mCubes[1]);
         mCubes[1].ConnectSiblingCube(mCubes[0]);
@@ -77,12 +80,37 @@ public class Block : MonoBehaviour
         //mCubeGap = //GridData.Instance.CubeGapDistance;
     }
 
-    public void SetBlockWithRewindData(BlockData aData)
+    public void SetBlockWithRewindData(BlockData aData, bool isActiveBlock = false)
     {
-        mIsRewinding = true;
+        mBlockName = aData.BlockName;
+        SetCubeNumbers(aData.CubeNumbers);
+        mCurrentRotation = 0;
+
+        if (!isActiveBlock)
+        {
+            mPlacingPosition = aData.RootCubePosition;
+            mCurrentRotation = aData.Rotation;
+        }
+    }
+
+    public void SetCubeNumbers(List<int> someNumbers)
+    {
+        if (!mCubeNumbers.Any())
+        {
+            foreach (int n in someNumbers)
+                mCubeNumbers.Add(n);
+        }
+        else
+        {
+            mCubeNumbers[0] = someNumbers[0];
+            mCubeNumbers[1] = someNumbers[1];
+
+            mCubes[0].SetCubeNumber(mCubeNumbers[0]);
+            mCubes[1].SetCubeNumber(mCubeNumbers[1]);
+        }
 
     }
-    
+
     /// <summary>
     /// A shortcut method to check if the cell beneath the block (both cubes) is
     /// vacant
@@ -141,23 +169,7 @@ public class Block : MonoBehaviour
         return false;
     }
     
-    public void SetCubeNumbers(List<int> someNumbers)
-    {
-        if (!mCubeNumbers.Any())
-        {
-            foreach (int n in someNumbers)
-                mCubeNumbers.Add(n);
-        }
-        else
-        {
-            mCubeNumbers[0] = someNumbers[0];
-            mCubeNumbers[1] = someNumbers[1];
-
-            mCubes[0].SetCubeNumber(mCubeNumbers[0]);
-            mCubes[1].SetCubeNumber(mCubeNumbers[1]);
-        }
-
-    }
+    
 
     /// <summary>
     /// The block will rearrange or destroy itself depending on the status of the cubes in it
@@ -226,7 +238,7 @@ public class Block : MonoBehaviour
         Move(Vector3.right);
     }
 
-    public void Rotate()
+    public void RotateBlock()
     {
         // check if the rotaion is possible with the block's current position and it current
         // add the comming degree of rotaion from the GridData
@@ -238,22 +250,23 @@ public class Block : MonoBehaviour
         if (mCurrentRotation >= 360)
             mCurrentRotation = 0;
 
-        switch(mCurrentRotation)
-        {
-            case 0:
-                SetSubCubPosition(Vector2Int.up);
-                break;
-            case 90:
-                SetSubCubPosition(Vector2Int.right);
-                break;
-            case 180:
-                SetSubCubPosition(Vector2Int.down);
-                break;
-            case 270:
-                SetSubCubPosition(Vector2Int.left);
-                break;
+        Rotate();
+        //switch(mCurrentRotation)
+        //{
+        //    case 0:
+        //        SetSubCubPosition(Vector2Int.up);
+        //        break;
+        //    case 90:
+        //        SetSubCubPosition(Vector2Int.right);
+        //        break;
+        //    case 180:
+        //        SetSubCubPosition(Vector2Int.down);
+        //        break;
+        //    case 270:
+        //        SetSubCubPosition(Vector2Int.left);
+        //        break;
 
-        }
+        //}
     }
 
     private void Move(Vector3 aDir)
@@ -272,6 +285,26 @@ public class Block : MonoBehaviour
 
         mMinPosition += dir;
         mMaxPosition += dir;
+    }
+
+    private void Rotate()
+    {
+        switch (mCurrentRotation)
+        {
+            case 0:
+                SetSubCubPosition(Vector2Int.up);
+                break;
+            case 90:
+                SetSubCubPosition(Vector2Int.right);
+                break;
+            case 180:
+                SetSubCubPosition(Vector2Int.down);
+                break;
+            case 270:
+                SetSubCubPosition(Vector2Int.left);
+                break;
+
+        }
     }
 
     private void SetSubCubPosition(Vector2Int aDir)

@@ -350,10 +350,11 @@ public class BlockManager
     {
         if (!mBlocks.Any())
             return;
-        
-        mBlocks.RemoveAll((block) => {
-            return block.DestroyThisCube();
-            });
+
+        //mBlocks.RemoveAll((block) => {
+        //    return block.DestroyThisCube();
+        //    });
+        mBlocks.RemoveAll(b => b.DestroyThisCube());
     }
     
     public void RearrangeBlocks()

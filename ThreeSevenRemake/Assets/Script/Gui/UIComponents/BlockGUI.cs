@@ -37,10 +37,6 @@ public class BlockGUI : MonoBehaviour
         GameManager.rewinding -= RewindNumber;
     }
 
-    private void Update()
-    {
-    }
-    
     public void NewNumber()
     {
         mNextNumbers.Clear();

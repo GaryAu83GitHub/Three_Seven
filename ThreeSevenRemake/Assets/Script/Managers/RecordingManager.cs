@@ -24,12 +24,10 @@ public class RecordingManager
     public void Record(TurnData aRecordData)
     {
         mRecordings.Push(aRecordData);
-
     }
 
     public TurnData Rewind()
-    {
-        mRecordings.Pop();
-        return mRecordings.Peek();
+    {   
+        return mRecordings.Pop();
     }
 }
