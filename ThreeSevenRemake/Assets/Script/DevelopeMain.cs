@@ -154,6 +154,7 @@ public class DevelopeMain : MonoBehaviour
         {
             if(!mCurrentBlock.CheckIfCellIsVacantBeneath())
             {
+                mCurrentBlock.name = "Block " + mBlockCount.ToString();
                 RecordingManager.Instance.Record(new TurnData(mCurrentBlock));
                 //BlockManager.Instance.AddBlock(mCurrentBlock);
                 BlockManager.Instance.AddNewOriginalBlock(mCurrentBlock);
@@ -213,7 +214,7 @@ public class DevelopeMain : MonoBehaviour
     private void CreateNewBlock()
     {
         GameObject newBlock = Instantiate(BlockObject, GridData.Instance.StartWorldPosition, Quaternion.identity, transform);
-        newBlock.name = "Block " + mBlockCount.ToString();
+        newBlock.name = "FallingBlock";
         mBlockCount++;
 
         createNewBlock?.Invoke(newBlock.GetComponent<Block>());
