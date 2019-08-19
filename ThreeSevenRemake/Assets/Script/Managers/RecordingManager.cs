@@ -23,6 +23,9 @@ public class RecordingManager
 
     public void Record(TurnData aRecordData)
     {
+        if(mRecordings.Any())
+            mRecordings.Pop();
+
         mRecordings.Push(aRecordData);
     }
 
