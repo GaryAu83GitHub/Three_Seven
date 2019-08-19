@@ -40,7 +40,7 @@ public class GuideBlock : MonoBehaviour
         RootCube.GridPos = anActiveBlock.RootCube.GridPos;
         SubCube.GridPos = anActiveBlock.SubCube.GridPos;
 
-        int placingPosition = 0;
+        int rowIndex = 0;
 
         // the block is laying horisontal, since both have different column value, it need to check both cube's
         // tallest row on their respective column value and compare which one have the tallest row beneath them
@@ -50,37 +50,42 @@ public class GuideBlock : MonoBehaviour
             int rootCubeTallestRow = GridData.Instance.TallestRowFromCubePos(RootCube.GridPos);//GridData.Instance.TallestRowOnColumn(RootCube.GridPos.x);
             int subCubeTallestRow = GridData.Instance.TallestRowFromCubePos(SubCube.GridPos);//GridData.Instance.TallestRowOnColumn(SubCube.GridPos.x);
 
-            placingPosition = (rootCubeTallestRow > subCubeTallestRow) ? rootCubeTallestRow : subCubeTallestRow;
+            rowIndex = (rootCubeTallestRow > subCubeTallestRow) ? rootCubeTallestRow : subCubeTallestRow;
         }
         // the block is standing vertical, since both cube has the same column value, it need only to check
         // on one column value
         else if(RootCube.GridPos.x == SubCube.GridPos.x)
-            placingPosition = GridData.Instance.TallestRowFromCubePos((RootCube.GridPos.y < SubCube.GridPos.y) ? RootCube.GridPos : SubCube.GridPos);//GridData.Instance.TallestRowOnColumn((RootCube.GridPos.y < SubCube.GridPos.y) ? RootCube.GridPos.x : SubCube.GridPos.x);
+            rowIndex = GridData.Instance.TallestRowFromCubePos((RootCube.GridPos.y < SubCube.GridPos.y) ? RootCube.GridPos : SubCube.GridPos);//GridData.Instance.TallestRowOnColumn((RootCube.GridPos.y < SubCube.GridPos.y) ? RootCube.GridPos.x : SubCube.GridPos.x);
 
-        if (anActiveBlock.BlockRotation == 0)
+        Rotation(rowIndex, anActiveBlock.BlockRotation);
+
+    }
+
+    private void Rotation(int aRowindex, int aRotation)
+    {
+        if (aRotation == 0)
         {
-            RootCube.GridPos = new Vector2Int(RootCube.GridPos.x, placingPosition);
-            SubCube.GridPos = new Vector2Int(SubCube.GridPos.x, placingPosition + 1);
+            RootCube.GridPos = new Vector2Int(RootCube.GridPos.x, aRowindex);
+            SubCube.GridPos = new Vector2Int(SubCube.GridPos.x, aRowindex + 1);
         }
-        else if(anActiveBlock.BlockRotation == 90)
+        else if (aRotation == 90)
         {
-            RootCube.GridPos = new Vector2Int(RootCube.GridPos.x, placingPosition);
-            SubCube.GridPos = new Vector2Int(SubCube.GridPos.x, placingPosition);
+            RootCube.GridPos = new Vector2Int(RootCube.GridPos.x, aRowindex);
+            SubCube.GridPos = new Vector2Int(SubCube.GridPos.x, aRowindex);
         }
-        else if(anActiveBlock.BlockRotation == 180)
+        else if (aRotation == 180)
         {
-            RootCube.GridPos = new Vector2Int(RootCube.GridPos.x, placingPosition + 1);
-            SubCube.GridPos = new Vector2Int(SubCube.GridPos.x, placingPosition);
+            RootCube.GridPos = new Vector2Int(RootCube.GridPos.x, aRowindex + 1);
+            SubCube.GridPos = new Vector2Int(SubCube.GridPos.x, aRowindex);
         }
-        else if (anActiveBlock.BlockRotation == 270)
+        else if (aRotation == 270)
         {
-            RootCube.GridPos = new Vector2Int(RootCube.GridPos.x, placingPosition);
-            SubCube.GridPos = new Vector2Int(SubCube.GridPos.x, placingPosition);
+            RootCube.GridPos = new Vector2Int(RootCube.GridPos.x, aRowindex);
+            SubCube.GridPos = new Vector2Int(SubCube.GridPos.x, aRowindex);
         }
 
         transform.position = new Vector3(RootCube.GridPos.x * mCubeGap, RootCube.GridPos.y * mCubeGap, 10f);
         RootCube.transform.position = new Vector3(RootCube.GridPos.x * mCubeGap, RootCube.GridPos.y * mCubeGap, 10f);
         SubCube.transform.position = new Vector3(SubCube.GridPos.x * mCubeGap, SubCube.GridPos.y * mCubeGap, 10f);
-
     }
 }

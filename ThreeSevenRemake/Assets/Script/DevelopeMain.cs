@@ -130,12 +130,13 @@ public class DevelopeMain : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.PageUp))
         {
             RewindTurn();
+            return;
         }
 
         if (PauseMenu.GameIsPause)
             return;
 
-        if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) && Time.time > mNextHorizontalButtonDownTime)
+        if (/*(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) &&*/ Time.time > mNextHorizontalButtonDownTime)
         {
             // input for move the block left if the left column is vacant
             if (Input.GetKey(KeyCode.LeftArrow))
