@@ -93,8 +93,8 @@ public class TaskManager
 
     public void ChangeObjective()
     {
-        if (mDebugMode)
-            return;
+        //if (mDebugMode)
+        //    return;
 
         if (!mObjectiveAchieveList.ContainsValue(true))
             return;
@@ -221,6 +221,9 @@ public class TaskManager
 
     private int GetObjectiveFrom(TaskRank anObjective)
     {
+        if (mDebugMode)
+            return mActiveObjectives[anObjective];
+
         List<int> avaiableObjective = new List<int>();
         
         for(int i = 0; i < mUsedObjectiveNumbers.Count; i++)

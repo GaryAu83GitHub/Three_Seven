@@ -293,10 +293,16 @@ public class BlockManager
             }
 
             if (mCurrentScoringInfo.Block != null)
+            {
+                foreach(Cube c in mCurrentScoringInfo.Block.Cubes)
+                    thisGroupScoringCubes.Add(c);
                 mCurrentScoringInfo.Block.PlayParticleEffect();
+            }
             if (mCurrentScoringInfo.Cube != null)
+            {
+                thisGroupScoringCubes.Add(mCurrentScoringInfo.Cube);
                 mCurrentScoringInfo.Cube.PlayActiveParticlar();
-
+            }
             //addLevelScore?.Invoke();
             comboOccuring?.Invoke(mComboCount++);
             achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].TaskRank, thisGroupScoringCubes);
