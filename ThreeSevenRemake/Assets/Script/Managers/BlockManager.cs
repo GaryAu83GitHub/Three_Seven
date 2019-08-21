@@ -303,11 +303,15 @@ public class BlockManager
                 thisGroupScoringCubes.Add(mCurrentScoringInfo.Cube);
                 mCurrentScoringInfo.Cube.PlayActiveParticlar();
             }
+
+            var sortCubeList = thisGroupScoringCubes.OrderBy(c => c.GridPos.x).ThenByDescending(c => c.GridPos.y).ToList();
+
+
             //addLevelScore?.Invoke();
             comboOccuring?.Invoke(mComboCount++);
-            achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].TaskRank, thisGroupScoringCubes);
+            achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].TaskRank, sortCubeList);
             LevelManager.Instance.AddLevelScore(1);
-            GameManager.Instance.AddScore(ScoreType.LINKING, thisGroupScoringCubes.Count, thisGroupTaskRank);
+            GameManager.Instance.AddScore(ScoreType.LINKING, sortCubeList.Count, thisGroupTaskRank);
             mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
         }
         else

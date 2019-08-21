@@ -7,6 +7,9 @@ public class ObjectiveBox : MonoBehaviour
 {
     public List<TaskFrame> TaskFrames;
 
+    public delegate void OnPopupAppear(Vector3 aTargetPosition, int aDisplayScore);
+    public static OnPopupAppear popupAppear;
+
     void Start()
     {
         BlockManager.achieveScoring += DisplayScoring;
@@ -28,17 +31,14 @@ public class ObjectiveBox : MonoBehaviour
     {
         int totalScore = ScoreCalculatorcs.LinkingScoreCalculation(anObjective, someScoringCube.Count);
 
+        Vector3 midPos = GetMidPointBetweenScoringCubes(someScoringCube[0].transform.position, someScoringCube[someScoringCube.Count - 1].transform.position);
+        popupAppear?.Invoke(midPos, totalScore);
+
         TaskFrames[(int)anObjective].DisplayScoring(totalScore, someScoringCube);
+    }
 
-        string formula = "";
-        
-        for(int i = 0; i < someScoringCube.Count; i++)
-        {
-            
-            formula += someScoringCube[i].Number.ToString();
-
-            if (i < someScoringCube.Count - 1)
-                formula += "+";
-        }
+    private Vector3 GetMidPointBetweenScoringCubes(Vector3 firstCubeWorldPos, Vector3 lastCubeWorldPos)
+    {
+        return Vector3.Lerp(firstCubeWorldPos, lastCubeWorldPos, .5f);
     }
 }
