@@ -36,7 +36,7 @@ public class GridData
 
     private Vector2Int mBlockStartPosition = new Vector2Int(Constants.BLOCK_START_POSITION_X, Constants.BLOCK_START_POSITION_Y);
     public Vector2Int GridStartPosition { get { return mBlockStartPosition; } }
-    public Vector3 StartWorldPosition { get { return new Vector3(mBlockStartPosition.x * Constants.CUBE_GAP_DISTANCE, mBlockStartPosition.y * Constants.CUBE_GAP_DISTANCE, 0f) - new Vector3(2.25f, 4.5f, 0f); } }
+    public Vector3 StartWorldPosition { get { return new Vector3(mBlockStartPosition.x * Constants.CUBE_GAP_DISTANCE, mBlockStartPosition.y * Constants.CUBE_GAP_DISTANCE, 0f); } }
 
     /// <summary>
     /// The distance between cubes.
