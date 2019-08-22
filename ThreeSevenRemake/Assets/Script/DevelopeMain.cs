@@ -214,7 +214,7 @@ public class DevelopeMain : MonoBehaviour
 
     private void CreateNewBlock()
     {
-        GameObject newBlock = Instantiate(BlockObject, GridData.Instance.StartWorldPosition, Quaternion.identity, transform);
+        GameObject newBlock = Instantiate(BlockObject, GridData.Instance.StartWorldPosition, Quaternion.identity/*, transform*/);
         newBlock.name = "FallingBlock";
         mBlockCount++;
 

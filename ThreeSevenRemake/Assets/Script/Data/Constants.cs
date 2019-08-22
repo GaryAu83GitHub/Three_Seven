@@ -26,5 +26,8 @@ public static class Constants
     public const int CUBE_MAX_NUMBER = 9;
     public const float CUBE_GAP_DISTANCE = .5f;
 
+    public const float WORLD_OFF_X = 2.25f;
+    public const float WORLD_OFF_Y = 4.5f;
+
     public const float BUTTON_DOWN_INTERVAL = .1f;
 }

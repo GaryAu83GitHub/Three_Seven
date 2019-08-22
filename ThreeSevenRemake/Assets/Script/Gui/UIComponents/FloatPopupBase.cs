@@ -13,13 +13,7 @@ public abstract class FloatPopupBase : MonoBehaviour
         mRect = GetComponent<RectTransform>();
         mScaleFactor = GetComponentInParent<Canvas>().scaleFactor;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     protected virtual void AppearOnPosition(Vector3 aWorldPosition)
     {
         mRect.anchoredPosition = GetScreenPositionAt(aWorldPosition);

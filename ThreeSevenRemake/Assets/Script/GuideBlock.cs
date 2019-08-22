@@ -10,6 +10,7 @@ public class GuideBlock : MonoBehaviour
     public GuideCube RootCube { get { return (mCubes[0] ?? null); } }
     public GuideCube SubCube { get { return (mCubes[1] ?? null); } }
 
+    private Vector3 mWorldOffSet = new Vector3(Constants.WORLD_OFF_X, Constants.WORLD_OFF_Y, 0f);
     private float mCubeGap = 0f;
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,7 @@ public class GuideBlock : MonoBehaviour
         mCubes.Add(transform.GetChild(1).GetComponent<GuideCube>());
         mCubes[1].name = "SubCube";
 
-        mCubeGap = Constants.CUBE_GAP_DISTANCE;//GridData.Instance.CubeGapDistance;
+        mCubeGap = Constants.CUBE_GAP_DISTANCE;
     }
 
     // Update is called once per frame
@@ -84,8 +85,8 @@ public class GuideBlock : MonoBehaviour
             SubCube.GridPos = new Vector2Int(SubCube.GridPos.x, aRowindex);
         }
 
-        transform.position = new Vector3(RootCube.GridPos.x * mCubeGap, RootCube.GridPos.y * mCubeGap, 10f);
-        RootCube.transform.position = new Vector3(RootCube.GridPos.x * mCubeGap, RootCube.GridPos.y * mCubeGap, 10f);
-        SubCube.transform.position = new Vector3(SubCube.GridPos.x * mCubeGap, SubCube.GridPos.y * mCubeGap, 10f);
+        transform.position = new Vector3(RootCube.GridPos.x * mCubeGap, RootCube.GridPos.y * mCubeGap, 10f) - mWorldOffSet;
+        RootCube.transform.position = new Vector3(RootCube.GridPos.x * mCubeGap, RootCube.GridPos.y * mCubeGap, 10f) - mWorldOffSet;
+        SubCube.transform.position = new Vector3(SubCube.GridPos.x * mCubeGap, SubCube.GridPos.y * mCubeGap, 10f) - mWorldOffSet;
     }
 }

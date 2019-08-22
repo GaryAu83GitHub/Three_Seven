@@ -187,10 +187,12 @@ public class Block : MonoBehaviour
 
         if (mCubes[0] == null)
         {
+            Vector2Int subCubeDir = mCubes[1].GridPos - mCubes[0].GridPos;
+
             mCubes.RemoveAt(0);
 
-            transform.position = new Vector3(mCubes[0].GridPos.x * mCubeGap, mCubes[0].GridPos.y * mCubeGap, 0f);
             mCubes[0].transform.localPosition = Vector3.zero;
+            transform.position += new Vector3(subCubeDir.x * mCubeGap, subCubeDir.y * mCubeGap, 0f);
         }
         if (mCubes.Count == 2 && mCubes[1] == null)
             mCubes.RemoveAt(1);
@@ -278,7 +280,8 @@ public class Block : MonoBehaviour
         if(!CheckNeighborCellIsVacant(dir))
             return;
 
-        transform.Translate(aDir * mCubeGap);
+        //transform.Translate(aDir * mCubeGap);
+        transform.position += (aDir * mCubeGap);
         mCubes[0].GridPos += dir;
         if (mCubes.Count > 1)
             mCubes[1].GridPos += dir;

@@ -36,7 +36,7 @@ public class GridData
 
     private Vector2Int mBlockStartPosition = new Vector2Int(Constants.BLOCK_START_POSITION_X, Constants.BLOCK_START_POSITION_Y);
     public Vector2Int GridStartPosition { get { return mBlockStartPosition; } }
-    public Vector3 StartWorldPosition { get { return new Vector3(mBlockStartPosition.x * Constants.CUBE_GAP_DISTANCE, mBlockStartPosition.y * Constants.CUBE_GAP_DISTANCE, 0f); } }
+    public Vector3 StartWorldPosition { get { return new Vector3((mBlockStartPosition.x * Constants.CUBE_GAP_DISTANCE) - Constants.WORLD_OFF_X, (mBlockStartPosition.y * Constants.CUBE_GAP_DISTANCE) - Constants.WORLD_OFF_Y, 0f); } }
 
     /// <summary>
     /// The distance between cubes.
@@ -105,32 +105,6 @@ public class GridData
     public void UnregistrateCell(Vector2Int aPos)
     {
         mGrid[aPos.x][aPos.y] = null;
-
-        //bool tallestCellHasChanged = true;
-        //for(int x = 0; x < mGridSize.x; x++)
-        //{
-        //    if (mGrid[x][mCurrentTallestCellInGrid] != null)
-        //    {
-        //        tallestCellHasChanged = false;
-        //        break;
-        //    }
-        //}
-
-        //if(tallestCellHasChanged)
-        //{
-        //    int tallestRow = 0;
-
-        //    for (int x = 0; x < mGridSize.x; x++)
-        //    {
-        //        int tallestRowOnThisColumn = TallestRowOnColumn(x);
-
-        //        if (tallestRowOnThisColumn > tallestRow)
-        //            tallestRow = tallestRowOnThisColumn;
-        //    }
-
-        //    mCurrentTallestCellInGrid = tallestRow;
-            //Debug.LogFormat("Current tallest cell row: {0}", mCurrentTallestCellInGrid);
-        //}
     }
 
     /// <summary>
