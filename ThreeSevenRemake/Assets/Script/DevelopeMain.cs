@@ -191,6 +191,13 @@ public class DevelopeMain : MonoBehaviour
             mCurrentBlock.SwapWithPreviewBlock();
         }
 
+        if(Input.GetKeyDown(KeyCode.F9))
+        {
+            Destroy(mCurrentBlock.gameObject);
+            CreateNewBlock();
+            return;
+        }
+
         if (mCurrentBlock != null)
         {
             mGuideBlock.SetupGuideBlock(mCurrentBlock);

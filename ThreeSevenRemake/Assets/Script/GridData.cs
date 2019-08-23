@@ -176,7 +176,8 @@ public class GridData
     public List<ScoringGroupAchieveInfo> GetListOfScoringPositionGroups(Block aBlock)
     {
         List<ScoringGroupAchieveInfo> someGroupOfPosition = new List<ScoringGroupAchieveInfo>();
-        ScoreWithBlock(aBlock, ref someGroupOfPosition);
+        if (aBlock.Cubes.Count == 2)
+            ScoreWithBlock(aBlock, ref someGroupOfPosition);
 
         foreach (Cube c in aBlock.Cubes)
             ScoreWithCube(c, ref someGroupOfPosition);
@@ -277,7 +278,7 @@ public class GridData
         foreach(List<Vector2Int> pos in scoreCombinationPositions)
         {
             if(TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue = TotalValue(pos)) && 
-                !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
+                !ThisGroupIsAlreadyRegistrated(ScoringType.NONE_SCORING, ref someGroupOfPositions, pos))
             {
                 if(BlockManager.Instance.IsNewOriginalBlockScoring(pos))//if (pos.Count == 2 && !IsTheOriginal(pos))
                     continue;
@@ -299,7 +300,7 @@ public class GridData
         {
             totalValue = TotalValueWithBlock(aBlock, pos);
             if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue) &&
-                !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
+                !ThisGroupIsAlreadyRegistrated(ScoringType.BLOCK_SCORING, ref someGroupOfPositions, pos))
             {
                 newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aBlock, pos);
                 someGroupOfPositions.Add(newInfo);
@@ -318,7 +319,7 @@ public class GridData
         {
             totalValue = TotalValueWithCube(aCube, pos);
             if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue) &&
-                !ThisGroupIsAlreadyRegistrated(ref someGroupOfPositions, pos))
+                !ThisGroupIsAlreadyRegistrated(ScoringType.CUBE_SCORING, ref someGroupOfPositions, pos))
             {
                 newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube, pos);
                 someGroupOfPositions.Add(newInfo);
@@ -340,12 +341,12 @@ public class GridData
         return true;
     }
 
-    private bool ThisGroupIsAlreadyRegistrated(ref List<ScoringGroupAchieveInfo> someGroupOfPosition, List<Vector2Int> someScoringPositions)
+    private bool ThisGroupIsAlreadyRegistrated(ScoringType aScoringType, ref List<ScoringGroupAchieveInfo> someGroupOfPosition, List<Vector2Int> someScoringPositions)
     {
         //var a = ints1.All(ints2.Contains) && ints1.Count == ints2.Count;
         foreach (ScoringGroupAchieveInfo info in someGroupOfPosition)
         {
-            if (info.GroupPosition.SequenceEqual(someScoringPositions))
+            if (info.ScoringType == aScoringType && info.GroupPosition.SequenceEqual(someScoringPositions))
                 return true;
         }
         return false;
