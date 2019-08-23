@@ -101,14 +101,10 @@ public class DevelopeMain : MonoBehaviour
 
                 UpdateDebugBoard();
                 // if the block manager detect any scoring from the last landing block, the animation will be played
-                //if (BlockManager.Instance.CheckIfAnyBlocksIsFloating())
-                //    BlockManager.Instance.RearrangeBlocks();
-                if (BlockManager.Instance.CheckIfAnyBlocksIsFloatingNew())
-                    BlockManager.Instance.RearrangeBlockNew();
-                //else if (BlockManager.Instance.IsScoring())
-                //    BlockManager.Instance.ScoreCalculationProgression();
-                else if (BlockManager.Instance.IsScoringNew())
-                    BlockManager.Instance.ScoreCalculationProgressionNew();
+                if (BlockManager.Instance.CheckIfAnyBlocksIsFloating())
+                    BlockManager.Instance.RearrangeBlock();
+                else if (BlockManager.Instance.IsScoring())
+                    BlockManager.Instance.ScoreCalculationProgression();
                 else
                 {
                     TaskManager.Instance.ChangeObjective();

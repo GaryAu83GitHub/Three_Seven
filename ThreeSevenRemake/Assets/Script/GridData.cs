@@ -37,18 +37,7 @@ public class GridData
     private Vector2Int mBlockStartPosition = new Vector2Int(Constants.BLOCK_START_POSITION_X, Constants.BLOCK_START_POSITION_Y);
     public Vector2Int GridStartPosition { get { return mBlockStartPosition; } }
     public Vector3 StartWorldPosition { get { return new Vector3((mBlockStartPosition.x * Constants.CUBE_GAP_DISTANCE) - Constants.WORLD_OFF_X, (mBlockStartPosition.y * Constants.CUBE_GAP_DISTANCE) - Constants.WORLD_OFF_Y, 0f); } }
-
-    /// <summary>
-    /// The distance between cubes.
-    /// </summary>
-    //private const float mCubeGapDistance = .5f;
-    //public float CubeGapDistance { get { return mCubeGapDistance; } }
-
-    /// <summary>
-    /// Use as a temporary storing for the new original landed block
-    /// </summary>
-    private List<Vector2Int> mOriginalLandedBlockPositions = new List<Vector2Int>();
-
+        
     /// <summary>
     /// The Griddata storage constructed with a dictionary holding a list on each item
     /// The Key to the Dictionary stands of the column (x) value
@@ -165,13 +154,6 @@ public class GridData
 
         return true;
     }
-
-    public void AddOriginalBlockPosition(Vector2Int aBlockCubeGridPos)
-    {
-        if (mOriginalLandedBlockPositions.Count == 2)
-            return;
-        mOriginalLandedBlockPositions.Add(aBlockCubeGridPos);
-    }
     
     public List<ScoringGroupAchieveInfo> GetListOfScoringPositionGroups(Block aBlock)
     {
@@ -181,21 +163,6 @@ public class GridData
 
         foreach (Cube c in aBlock.Cubes)
             ScoreWithCube(c, ref someGroupOfPosition);
-
-        return someGroupOfPosition;
-    }
-
-    public List<ScoringGroupAchieveInfo> GetListOfScoringPositionGroups(List<Cube> someNewLandedCubes)
-    {
-        List<ScoringGroupAchieveInfo> someGroupOfPosition = new List<ScoringGroupAchieveInfo>();
-
-        foreach (Cube c in someNewLandedCubes)
-        {
-            //Scoring(c, ref someGroupOfPosition);
-            ScoreWithAvailableCubes(c, ref someGroupOfPosition);
-        }
-
-        //mOriginalLandedBlockPositions.Clear();
 
         return someGroupOfPosition;
     }
@@ -262,34 +229,7 @@ public class GridData
         //return mGridInt[aPos.x, aPos.y];
         return mGrid[aPos.x][aPos.y];
     }
-
-    //private void Scoring(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
-    //{
-    //    ScoreWithAvailableCubes(aCube, ref someGroupOfPositions);
-    //}
-
-    private void ScoreWithAvailableCubes(Cube aCube, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
-    {
-        List<List<Vector2Int>> scoreCombinationPositions = GenerateScoreCombinationPositions.Instance.GetScorePositionListFrom(aCube.GridPos);
-
-        TaskRank getObjectiveRank = TaskRank.X1;
-        ScoringGroupAchieveInfo newInfo;
-        int totalValue = 0;
-        foreach(List<Vector2Int> pos in scoreCombinationPositions)
-        {
-            if(TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue = TotalValue(pos)) && 
-                !ThisGroupIsAlreadyRegistrated(ScoringType.NONE_SCORING, ref someGroupOfPositions, pos))
-            {
-                if(BlockManager.Instance.IsNewOriginalBlockScoring(pos))//if (pos.Count == 2 && !IsTheOriginal(pos))
-                    continue;
-
-                newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, pos);
-                someGroupOfPositions.Add(newInfo);
-                TaskManager.Instance.ConfirmAchiveTaskOn(getObjectiveRank, totalValue);
-            }
-        }
-    }
-
+    
     private void ScoreWithBlock(Block aBlock, ref List<ScoringGroupAchieveInfo> someGroupOfPositions)
     {
         List<List<Vector2Int>> scoreCombinationPositions = GenerateScoreCombinationPositions.Instance.GetScorePositionListForBlock(aBlock);
@@ -327,20 +267,7 @@ public class GridData
             }
         }
     }
-
-
-    private bool IsTheOriginal(List<Vector2Int> somePos)
-    {
-        // check it later if this can be use to replace the "if" below this
-        //if (mOriginalLandedBlockPositions.SequenceEqual(somePos))
-        //    return false;
-
-        if (mOriginalLandedBlockPositions.Contains(somePos[0]) && mOriginalLandedBlockPositions.Contains(somePos[1]))
-            return false;
-
-        return true;
-    }
-
+    
     private bool ThisGroupIsAlreadyRegistrated(ScoringType aScoringType, ref List<ScoringGroupAchieveInfo> someGroupOfPosition, List<Vector2Int> someScoringPositions)
     {
         //var a = ints1.All(ints2.Contains) && ints1.Count == ints2.Count;

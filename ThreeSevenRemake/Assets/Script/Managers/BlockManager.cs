@@ -39,22 +39,13 @@ public class BlockManager
     public delegate void OnComboOccures(int aComboCount);
     public static OnComboOccures comboOccuring;
 
-    public delegate void OnAddLevelScore();
-    public static OnAddLevelScore addLevelScore;
-
     public int BlockCount { get { return mBlocks.Count; } }
-
-    private Block mNewLandedOriginalBlock = null;
-    public Block NewLandedOriginalBlock { get { return (mNewLandedOriginalBlock ?? null); } }
 
     public List<Block> Blocks { get { return mBlocks; } }
     private List<Block> mBlocks = new List<Block>();
 
     private List<Block> mFloatingBlocks = new List<Block>();
-    private List<Block> mScoringBlocks = new List<Block>();
-    private List<Cube> mScoringPassiveCubes = new List<Cube>();
-    private List<Cube> mNewLandedCubes = new List<Cube>();
-    private List<ScoringGroupAchieveInfo> mScoringPositionGroups = new List<ScoringGroupAchieveInfo>();
+    private List<ScoringGroupAchieveInfo> mScoringInfos = new List<ScoringGroupAchieveInfo>();
     private List<int> mFirstFloatingBlockIndecies = new List<int>();
 
     private ScoringGroupAchieveInfo mCurrentScoringInfo = null;
@@ -78,8 +69,6 @@ public class BlockManager
         mCurrentGroupScoreCalcInProgress = false;
 
         ResetCombo();
-
-        mNewLandedOriginalBlock = null;
     }
 
     public void AddRewindBlock(Block aRewindBlock)
@@ -92,34 +81,6 @@ public class BlockManager
     {
         mBlocks.Clear();
         mFloatingBlocks.Clear();
-        mScoringBlocks.Clear();
-        mScoringPassiveCubes.Clear();
-        mNewLandedCubes.Clear();
-    }
-
-    /// <summary>
-    /// Add in the new landed and registrate it's cubes into the GridData.
-    /// At the same time the cubes of the new block will be added into a seperate list 
-    /// The order of the block list will be rearranged in their x then y position.
-    /// </summary>
-    /// <param name="aBlock">The new landed block</param>
-    public void AddBlock(Block aBlock, bool isTheOriginal = true)
-    {
-        //List<List<Vector2Int>> temp = GenerateScoreCombinationPositions.Instance.GetAllScorePositionFor(aBlock);
-        
-        if (isTheOriginal)
-        {
-            GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
-            mNewLandedOriginalBlock = aBlock;
-        }
-        else
-        {
-            mNewLandedOriginalBlock = null;
-        }
-
-        mBlocks.Add(aBlock);
-
-        RegisterBlockCubesToGrid(aBlock);
     }
 
     /// <summary>
@@ -136,13 +97,7 @@ public class BlockManager
 
         GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
 
-        mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(aBlock);
-    }
-
-    // Add in cubes that had scored
-    public void AddScoringCubes(Cube aCube)
-    {
-        mScoringPassiveCubes.Add(aCube);
+        mScoringInfos = GridData.Instance.GetListOfScoringPositionGroups(aBlock);
     }
 
     public void ResetCombo()
@@ -157,14 +112,6 @@ public class BlockManager
         {
             b.PlayCubeAnimation();
         }
-        //foreach(Cube c in mScoringPassiveCubes)
-        //{
-        //    c.PlayAnimation();
-        //    GridData.Instance.UnregistrateCell(c.GridPos);
-        //}
-
-        mScoringPassiveCubes.Clear();
-        mNewLandedCubes.Clear();
     }
 
     public bool BlockPassedGameOverLine()
@@ -176,108 +123,32 @@ public class BlockManager
         return gameover;
     }
     
-    public bool IsScoring()
-    {
-        if (mScoringPositionGroups.Any())
-            return true;
-
-        if ((mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mNewLandedCubes)).Any())
-            return true;
-        //if (mScoringPositionGroups.Any())
-        //    return true;
-
-        LevelManager.Instance.FillUpTheMainBar();
-        mScoringPassiveCubes.Clear();
-        mNewLandedCubes.Clear();
-        return false;
-    }
-
     /// <summary>
     /// Boolian method that check if the last landed block/blocks had made any scoring.
     /// If had, then the ScoringProgress method will be called
     /// Else it'll called for the LevelManager to fill up the GUI-bar for the level up GUI
     /// </summary>
     /// <returns>If there was any scoring info collected after the block/blocks landed</returns>
-    public bool IsScoringNew()
+    public bool IsScoring()
     {
-        if (mScoringPositionGroups.Any())
+        if (mScoringInfos.Any())
             return true;
 
         LevelManager.Instance.FillUpTheMainBar();
-        mNewLandedCubes.Clear();
         return false;
-    }
-
-    public bool IsNewOriginalBlockScoring(List<Vector2Int> somePos)
-    {
-        if (mNewLandedOriginalBlock == null)
-            return false;
-
-        return mNewLandedOriginalBlock.IsThisBlockScoringAlone(somePos);
-    }
-
-    public void ScoreCalculationProgression()
-    {
-        // if the calculation isn't in progress it'll search through the list of landed block and compare their gridposition
-        // with the list of position in the list of scoring group position, add them into the list of scoring cubes and make
-        // the cube play it particlar effect
-        if(!mCurrentGroupScoreCalcInProgress)
-        {
-            TaskRank thisGroupTaskTank = mScoringPositionGroups[mCurrentScoringGroupIndex].TaskRank;
-            List<Cube> thisGroupScoringCubes = new List<Cube>();
-            for (int i = 0; i < mBlocks.Count; i++)
-            {
-                foreach (Cube c in mBlocks[i].Cubes)
-                {
-                    if(mScoringPositionGroups[mCurrentScoringGroupIndex].GroupPosition.Contains(c.GridPos))
-                    {
-                        AddScoringCubes(c);
-                        c.PlayActiveParticlar();
-                        thisGroupScoringCubes.Add(c);
-                    }
-                }
-            }
-            //addLevelScore?.Invoke();
-            comboOccuring?.Invoke(mComboCount++);
-            achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].TaskRank, thisGroupScoringCubes);
-            LevelManager.Instance.AddLevelScore(1);
-            GameManager.Instance.AddScore(ScoreType.LINKING, thisGroupScoringCubes.Count, thisGroupTaskTank);
-            mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
-        }
-        else
-        {
-            mScoringCalculationTimer += Time.deltaTime;
-            if(mScoringCalculationTimer >= 1f)
-            {
-                mCurrentScoringGroupIndex++;
-                mScoringCalculationTimer = mScoringCalculationTimer - 1f;
-                if(mCurrentScoringGroupIndex >= mScoringPositionGroups.Count)
-                {
-                    GameManager.Instance.AddScore(ScoreType.COMBO, mScoringPositionGroups.Count - 1);
-                    //GameManager.Instance.AddLevelPoint(mScoringPositionGroups.Count);
-                    PlayScoringAnimation();
-                    mScoringPositionGroups.Clear();
-                    mCurrentScoringGroupIndex = 0;
-                    
-                    //mComboCount = 0;
-                }
-                mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
-            }
-        }
-
     }
 
     /// <summary>
     /// The progression of the scoring moment
     /// </summary>
-    public void ScoreCalculationProgressionNew()
+    public void ScoreCalculationProgression()
     {
         // if the calculation isn't in progress it'll search through the list of landed block and compare their gridposition
         // with the list of position in the list of scoring group position, add them into the list of scoring cubes and make
         // the cube play it particlar effect
         if (!mCurrentGroupScoreCalcInProgress)
         {
-            mCurrentScoringInfo = mScoringPositionGroups[mCurrentScoringGroupIndex];
+            mCurrentScoringInfo = mScoringInfos[mCurrentScoringGroupIndex];
             TaskRank thisGroupTaskRank = mCurrentScoringInfo.TaskRank;
             List<Cube> thisGroupScoringCubes = new List<Cube>();
             for (int i = 0; i < mBlocks.Count; i++)
@@ -309,7 +180,7 @@ public class BlockManager
 
             //addLevelScore?.Invoke();
             comboOccuring?.Invoke(mComboCount++);
-            achieveScoring?.Invoke(mScoringPositionGroups[mCurrentScoringGroupIndex].TaskRank, sortCubeList);
+            achieveScoring?.Invoke(mScoringInfos[mCurrentScoringGroupIndex].TaskRank, sortCubeList);
             LevelManager.Instance.AddLevelScore(1);
             GameManager.Instance.AddScore(ScoreType.LINKING, sortCubeList.Count, thisGroupTaskRank);
             mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
@@ -321,11 +192,11 @@ public class BlockManager
             {
                 mCurrentScoringGroupIndex++;
                 mScoringCalculationTimer = mScoringCalculationTimer - 1f;
-                if (mCurrentScoringGroupIndex >= mScoringPositionGroups.Count)
+                if (mCurrentScoringGroupIndex >= mScoringInfos.Count)
                 {
-                    GameManager.Instance.AddScore(ScoreType.COMBO, mScoringPositionGroups.Count - 1);
+                    GameManager.Instance.AddScore(ScoreType.COMBO, mScoringInfos.Count - 1);
                     PlayScoringAnimation();
-                    mScoringPositionGroups.Clear();
+                    mScoringInfos.Clear();
                     mCurrentScoringGroupIndex = 0;
                     mCurrentScoringInfo = null;
                 }
@@ -367,17 +238,6 @@ public class BlockManager
         mBlocks.RemoveAll(b => b.DestroyThisCube());
     }
     
-    public void RearrangeBlocks()
-    {
-        for (int i = 0; i < mFloatingBlocks.Count; i++)
-        {
-            while(mFloatingBlocks[i].CheckIfCellIsVacantBeneath())
-                mFloatingBlocks[i].DropDown();
-            //AddBlock(mFloatingBlocks[i], false);
-            AddBlock(mFloatingBlocks[i], false);
-        }
-    }
-
     /// <summary>
     /// This is the second score collecter method during each new original block has beed dropped.
     /// It is combine with the method CheckIfAnyBlocksIsFloating.
@@ -385,14 +245,14 @@ public class BlockManager
     /// New scoring position info will be collected with those block that was first detected that was vacant beneath them
     /// And the list that collected the indecies for the first floating block will be cleared.
     /// </summary>
-    public void RearrangeBlockNew()
+    public void RearrangeBlock()
     {
         DropBlockRecursively(0);
 
         if(mFirstFloatingBlockIndecies.Any())
         {
             for(int i = 0; i < mFirstFloatingBlockIndecies.Count; i++)
-                mScoringPositionGroups = GridData.Instance.GetListOfScoringPositionGroups(mBlocks[mFirstFloatingBlockIndecies[i]]);
+                mScoringInfos = GridData.Instance.GetListOfScoringPositionGroups(mBlocks[mFirstFloatingBlockIndecies[i]]);
         }
 
         mFirstFloatingBlockIndecies.Clear();
@@ -426,29 +286,11 @@ public class BlockManager
         DropBlockRecursively(index);
     }
 
-    
-    public bool CheckIfAnyBlocksIsFloating()
-    {
-        mFloatingBlocks.Clear();
-
-        for (int i = mBlocks.Count - 1; i >= 0; i--)
-        {
-            if (mBlocks[i].CheckIfCellIsVacantBeneath())
-            {
-                foreach (Cube c in mBlocks[i].Cubes)
-                    GridData.Instance.UnregistrateCell(c.GridPos);
-                mFloatingBlocks.Add(mBlocks[i]);
-                mBlocks.RemoveAt(i);
-            }
-        }
-        return mFloatingBlocks.Any();
-    }
-
     /// <summary>
     /// Return if there was any block that was floating from the scoring
     /// </summary>
     /// <returns>True if any block in the list happened to have a block that have a cell beneath vacant</returns>
-    public bool CheckIfAnyBlocksIsFloatingNew()
+    public bool CheckIfAnyBlocksIsFloating()
     {
         return mFirstFloatingBlockIndecies.Any();
     }
@@ -461,12 +303,7 @@ public class BlockManager
     {
         foreach (Cube c in aBlock.Cubes)
         {
-            if (mNewLandedOriginalBlock != null)
-                GridData.Instance.AddOriginalBlockPosition(c.GridPos);
-
             GridData.Instance.RegistrateCell(c);
-
-            mNewLandedCubes.Add(c);
         }
         SortTheBlocks();
     }
