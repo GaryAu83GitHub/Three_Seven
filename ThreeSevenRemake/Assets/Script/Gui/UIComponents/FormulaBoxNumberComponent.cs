@@ -19,13 +19,14 @@ public class FormulaBoxNumberComponent : MonoBehaviour
         
     }
 
-    public void SetCubeValue(int aNumber)
+    public void SetCubeValue(int aNumber, bool displayBox = true)
     {
         NumberText.gameObject.SetActive(true);
         CubeBox.gameObject.SetActive(true);
 
         NumberText.text = aNumber.ToString();
-        CubeBox.color = SupportTools.GetCubeHexColorOf(aNumber);
+        if(displayBox)
+            CubeBox.color = SupportTools.GetCubeHexColorOf(aNumber);
     }
 
     public void DeactivateCube()
