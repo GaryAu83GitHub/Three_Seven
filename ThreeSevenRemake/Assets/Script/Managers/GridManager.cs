@@ -4,21 +4,21 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class GridData
+public class GridManager
 {
     // The static instance for this manager class
-    public static GridData Instance
+    public static GridManager Instance
     {
         get
         {
             if (mInstance == null)
             {
-                mInstance = new GridData();
+                mInstance = new GridManager();
             }
             return mInstance;
         }
     }
-    private static GridData mInstance;
+    private static GridManager mInstance;
 
     
     /// <summary>

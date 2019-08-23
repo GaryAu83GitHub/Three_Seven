@@ -38,7 +38,7 @@ public class Block : MonoBehaviour
 
     private readonly float mCubeGap = Constants.CUBE_GAP_DISTANCE;
 
-    private Vector2Int mPlacingPosition = GridData.Instance.GridStartPosition;
+    private Vector2Int mPlacingPosition = GridManager.Instance.GridStartPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -77,7 +77,7 @@ public class Block : MonoBehaviour
 
         Joint = transform.GetChild(2);
 
-        //mCubeGap = //GridData.Instance.CubeGapDistance;
+        //mCubeGap = //GridManager.Instance.CubeGapDistance;
     }
 
     public void SetBlockWithRewindData(BlockData aData, bool isActiveBlock = false)
@@ -133,7 +133,7 @@ public class Block : MonoBehaviour
 
     /// <summary>
     /// Iterate through the cubes and play the vanish animation of those that had been part in a scoring
-    /// and unregistrate them from the GridData
+    /// and unregistrate them from the GridManager
     /// </summary>
     public void PlayCubeAnimation()
     {
@@ -142,7 +142,7 @@ public class Block : MonoBehaviour
             if (c.IsScoring)
             {
                 c.PlayVanishAnimation();
-                GridData.Instance.UnregistrateCell(c.GridPos);
+                GridManager.Instance.UnregistrateCell(c.GridPos);
             }
         }
     }
@@ -160,9 +160,9 @@ public class Block : MonoBehaviour
 
         if(somePos.Contains(mMinPosition) && somePos.Contains(mMaxPosition))
         {
-            if ((GridData.Instance.GetCubeValueOn(somePos[0]) == RootCube.Number && GridData.Instance.GetCubeValueOn(somePos[1]) == SubCube.Number))
+            if ((GridManager.Instance.GetCubeValueOn(somePos[0]) == RootCube.Number && GridManager.Instance.GetCubeValueOn(somePos[1]) == SubCube.Number))
                 return true;
-            else if ((GridData.Instance.GetCubeValueOn(somePos[0]) == SubCube.Number && GridData.Instance.GetCubeValueOn(somePos[1]) == RootCube.Number))
+            else if ((GridManager.Instance.GetCubeValueOn(somePos[0]) == SubCube.Number && GridManager.Instance.GetCubeValueOn(somePos[1]) == RootCube.Number))
                 return true;
         }
 
@@ -243,8 +243,8 @@ public class Block : MonoBehaviour
     public void RotateBlock()
     {
         // check if the rotaion is possible with the block's current position and it current
-        // add the comming degree of rotaion from the GridData
-        if (!GridData.Instance.IsRotateAvailable(mCubes[0].GridPos, mCurrentRotation + 90))
+        // add the comming degree of rotaion from the GridManager
+        if (!GridManager.Instance.IsRotateAvailable(mCubes[0].GridPos, mCurrentRotation + 90))
             return;
 
         Joint.Rotate(Vector3.back, 90);
@@ -276,7 +276,7 @@ public class Block : MonoBehaviour
         Vector2Int dir = new Vector2Int((int)aDir.x, (int)aDir.y);
 
         // check for the cell to move is vacant
-        //if (!GridData.Instance.IsCellVacant(mMinPosition + dir) || !GridData.Instance.IsCellVacant(mMaxPosition + dir))
+        //if (!GridManager.Instance.IsCellVacant(mMinPosition + dir) || !GridManager.Instance.IsCellVacant(mMaxPosition + dir))
         if(!CheckNeighborCellIsVacant(dir))
             return;
 
@@ -334,26 +334,26 @@ public class Block : MonoBehaviour
         if(mCurrentRotation == 90 || mCurrentRotation == 270)
         {
             // check the cell to the right of the block maximal horizontal position is vacant
-            if (aDir == Vector2Int.right && GridData.Instance.IsCellVacant(mMaxPosition + aDir))
+            if (aDir == Vector2Int.right && GridManager.Instance.IsCellVacant(mMaxPosition + aDir))
                 return true;
             // check the cell to the left of the block minimal horizontal position is vacant
-            if (aDir == Vector2Int.left && GridData.Instance.IsCellVacant(mMinPosition + aDir))
+            if (aDir == Vector2Int.left && GridManager.Instance.IsCellVacant(mMinPosition + aDir))
                 return true;
             // check the cell/cells below block min/max vertical position is vacant
-            if (aDir == Vector2Int.down && GridData.Instance.IsCellVacant(mMinPosition + aDir) && GridData.Instance.IsCellVacant(mMaxPosition + aDir))
+            if (aDir == Vector2Int.down && GridManager.Instance.IsCellVacant(mMinPosition + aDir) && GridManager.Instance.IsCellVacant(mMaxPosition + aDir))
                 return true;
         }
         // the block stands vertical
         if (mCurrentRotation == 0 || mCurrentRotation == 180)
         {
             // check the cell to the right of the block maximal horizontal position is vacant
-            if (aDir == Vector2Int.right && GridData.Instance.IsCellVacant(mMinPosition + aDir) && GridData.Instance.IsCellVacant(mMaxPosition + aDir))
+            if (aDir == Vector2Int.right && GridManager.Instance.IsCellVacant(mMinPosition + aDir) && GridManager.Instance.IsCellVacant(mMaxPosition + aDir))
                 return true;
             // check the cell to the left of the block minimal horizontal position is vacant
-            if (aDir == Vector2Int.left && GridData.Instance.IsCellVacant(mMinPosition + aDir) && GridData.Instance.IsCellVacant(mMaxPosition + aDir))
+            if (aDir == Vector2Int.left && GridManager.Instance.IsCellVacant(mMinPosition + aDir) && GridManager.Instance.IsCellVacant(mMaxPosition + aDir))
                 return true;
             // check the cell/cells below block min/max vertical position is vacant
-            if (aDir == Vector2Int.down && GridData.Instance.IsCellVacant(mMinPosition + aDir))
+            if (aDir == Vector2Int.down && GridManager.Instance.IsCellVacant(mMinPosition + aDir))
                 return true;
         }
         

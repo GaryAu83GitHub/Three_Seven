@@ -97,7 +97,7 @@ public class BlockManager
 
         GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
 
-        mScoringInfos = GridData.Instance.GetListOfScoringPositionGroups(aBlock);
+        mScoringInfos = GridManager.Instance.GetListOfScoringPositionGroups(aBlock);
     }
 
     public void ResetCombo()
@@ -252,16 +252,16 @@ public class BlockManager
         if(mFirstFloatingBlockIndecies.Any())
         {
             for(int i = 0; i < mFirstFloatingBlockIndecies.Count; i++)
-                mScoringInfos = GridData.Instance.GetListOfScoringPositionGroups(mBlocks[mFirstFloatingBlockIndecies[i]]);
+                mScoringInfos = GridManager.Instance.GetListOfScoringPositionGroups(mBlocks[mFirstFloatingBlockIndecies[i]]);
         }
 
         mFirstFloatingBlockIndecies.Clear();
     }
 
     /// <summary>
-    /// The recrusive method that unregistrate the passive block's cubes from GridData and reposition the current block if the cell beneath
+    /// The recrusive method that unregistrate the passive block's cubes from GridManager and reposition the current block if the cell beneath
     /// it is vacant.
-    /// Once it had hit the ground or above another block, it'll be registrated to the GridData with it new position.
+    /// Once it had hit the ground or above another block, it'll be registrated to the GridManager with it new position.
     /// </summary>
     /// <param name="aBlockIndex">Index of the previous block from the blocklist</param>
     private void DropBlockRecursively(int aBlockIndex)
@@ -273,7 +273,7 @@ public class BlockManager
         if (mBlocks[index].CheckIfCellIsVacantBeneath())
         {
             foreach (Cube c in mBlocks[index].Cubes)
-                GridData.Instance.UnregistrateCell(c.GridPos);
+                GridManager.Instance.UnregistrateCell(c.GridPos);
             mBlocks[index].DropDown();
         }
 
@@ -296,14 +296,14 @@ public class BlockManager
     }
 
     /// <summary>
-    /// Registrate a block's cubes into the GridData and sort the blocks in the blocklist.
+    /// Registrate a block's cubes into the GridManager and sort the blocks in the blocklist.
     /// </summary>
     /// <param name="aBlock"></param>
     private void RegisterBlockCubesToGrid(Block aBlock)
     {
         foreach (Cube c in aBlock.Cubes)
         {
-            GridData.Instance.RegistrateCell(c);
+            GridManager.Instance.RegistrateCell(c);
         }
         SortTheBlocks();
     }

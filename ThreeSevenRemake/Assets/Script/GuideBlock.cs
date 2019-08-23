@@ -48,15 +48,15 @@ public class GuideBlock : MonoBehaviour
         // will determined which y position the block will be placed.
         if (RootCube.GridPos.y == SubCube.GridPos.y)
         {
-            int rootCubeTallestRow = GridData.Instance.TallestRowFromCubePos(RootCube.GridPos);//GridData.Instance.TallestRowOnColumn(RootCube.GridPos.x);
-            int subCubeTallestRow = GridData.Instance.TallestRowFromCubePos(SubCube.GridPos);//GridData.Instance.TallestRowOnColumn(SubCube.GridPos.x);
+            int rootCubeTallestRow = GridManager.Instance.TallestRowFromCubePos(RootCube.GridPos);//GridManager.Instance.TallestRowOnColumn(RootCube.GridPos.x);
+            int subCubeTallestRow = GridManager.Instance.TallestRowFromCubePos(SubCube.GridPos);//GridManager.Instance.TallestRowOnColumn(SubCube.GridPos.x);
 
             rowIndex = (rootCubeTallestRow > subCubeTallestRow) ? rootCubeTallestRow : subCubeTallestRow;
         }
         // the block is standing vertical, since both cube has the same column value, it need only to check
         // on one column value
         else if(RootCube.GridPos.x == SubCube.GridPos.x)
-            rowIndex = GridData.Instance.TallestRowFromCubePos((RootCube.GridPos.y < SubCube.GridPos.y) ? RootCube.GridPos : SubCube.GridPos);//GridData.Instance.TallestRowOnColumn((RootCube.GridPos.y < SubCube.GridPos.y) ? RootCube.GridPos.x : SubCube.GridPos.x);
+            rowIndex = GridManager.Instance.TallestRowFromCubePos((RootCube.GridPos.y < SubCube.GridPos.y) ? RootCube.GridPos : SubCube.GridPos);//GridManager.Instance.TallestRowOnColumn((RootCube.GridPos.y < SubCube.GridPos.y) ? RootCube.GridPos.x : SubCube.GridPos.x);
 
         Rotation(rowIndex, anActiveBlock.BlockRotation);
 

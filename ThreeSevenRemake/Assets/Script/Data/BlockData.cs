@@ -20,7 +20,7 @@ public class BlockData
     {
         mName = aBlock.BlockName;
         mCubeNumbers = new List<int>(aBlock.CubeNumbers);
-        mRootCubePosition = ((!aBlock.Cubes.Any()) ? GridData.Instance.GridStartPosition : aBlock.RootCube.GridPos);
+        mRootCubePosition = ((!aBlock.Cubes.Any()) ? GridManager.Instance.GridStartPosition : aBlock.RootCube.GridPos);
         mRotation = aBlock.BlockRotation;
     }
 

@@ -47,7 +47,7 @@ public class DevelopeMain : MonoBehaviour
 
     private void Awake()
     {
-        GridData.Instance.GenerateGrid();
+        GridManager.Instance.GenerateGrid();
         UpdateDebugBoard();
     }
 
@@ -217,7 +217,7 @@ public class DevelopeMain : MonoBehaviour
 
     private void CreateNewBlock()
     {
-        GameObject newBlock = Instantiate(BlockObject, GridData.Instance.StartWorldPosition, Quaternion.identity/*, transform*/);
+        GameObject newBlock = Instantiate(BlockObject, GridManager.Instance.StartWorldPosition, Quaternion.identity/*, transform*/);
         newBlock.name = "FallingBlock";
         mBlockCount++;
 
@@ -253,7 +253,7 @@ public class DevelopeMain : MonoBehaviour
     /// </summary>
     private void UpdateDebugBoard()
     {
-        blockLandedDebug?.Invoke(GridData.Instance.Grid);
+        blockLandedDebug?.Invoke(GridManager.Instance.Grid);
     }
 
     private void ResetGame()
@@ -273,7 +273,7 @@ public class DevelopeMain : MonoBehaviour
         {
             GameObject.Destroy(transform.GetChild(i).gameObject);
         }
-        GridData.Instance.GenerateGrid();
+        GridManager.Instance.GenerateGrid();
         BlockManager.Instance.ResetBlockList();
 
         RewindProgress();
@@ -292,11 +292,11 @@ public class DevelopeMain : MonoBehaviour
             //BlockManager.Instance.AddRewindBlock(rewindBlock);
         }
 
-        mCurrentBlock = Instantiate(BlockObject, GridData.Instance.StartWorldPosition, Quaternion.identity, transform).GetComponent<Block>();
+        mCurrentBlock = Instantiate(BlockObject, GridManager.Instance.StartWorldPosition, Quaternion.identity, transform).GetComponent<Block>();
         mCurrentBlock.gameObject.name = data.ThisTurnFallingBlock.BlockName;
         mCurrentBlock.SetBlockWithRewindData(data.ThisTurnFallingBlock, true);
 
-        //GridData.Instance.SetGridAfterData(data.Blocks);
+        //GridManager.Instance.SetGridAfterData(data.Blocks);
         GameManager.Instance.RewindNextNumber(data.ThisTurnNextBlock);
 
         mIsRewinding = true;
