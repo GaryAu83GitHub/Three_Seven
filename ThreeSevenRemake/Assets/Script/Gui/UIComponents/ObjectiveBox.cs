@@ -13,18 +13,19 @@ public class ObjectiveBox : MonoBehaviour
     void Start()
     {
         BlockManager.achieveScoring += DisplayScoring;
-        TaskManager.achieveObjective += SetObjectiveNumbersFor;
+        TaskManager.achieveObjective += SetTaskNumbersFor;
     }
 
     private void OnDestroy()
     {
         BlockManager.achieveScoring -= DisplayScoring;
-        TaskManager.achieveObjective -= SetObjectiveNumbersFor;
+        TaskManager.achieveObjective -= SetTaskNumbersFor;
     }
     
-    public void SetObjectiveNumbersFor(TaskRank anObjective, int aTaskValue)
+    public void SetTaskNumbersFor(TaskRank anObjective, TaskData aTaskData/*int aTaskValue*/)
     {
-        TaskFrames[(int)anObjective].SetTaskValue(aTaskValue);
+        //TaskFrames[(int)anObjective].SetTaskValue(aTaskValue);
+        TaskFrames[(int)anObjective].SetTaskValue(aTaskData.Number, aTaskData.CubeCount);
     }
     
     private void DisplayScoring(TaskRank anObjective, List<Cube> someScoringCube)

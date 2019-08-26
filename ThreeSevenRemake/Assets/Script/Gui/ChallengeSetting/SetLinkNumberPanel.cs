@@ -47,13 +47,13 @@ public class SetLinkNumberPanel : SettingPanelBase
         ThreeDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT];
         FourDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT];
         FiveDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT];
-        SetMasSum();
+        SetMaxSum();
     }
 
     public override void NextButtonOnClick()
     {
         base.NextButtonOnClick();
-        SetMasSum();
+        SetMaxSum();
         if(OnlyTwoDigitLinkIsEnable())
             displaySettingPanel?.Invoke(Setting_Index.SET_NAME);
         else
@@ -77,7 +77,7 @@ public class SetLinkNumberPanel : SettingPanelBase
 
         DescriptionText.text = "2 digit addition are " + GetEnableText(ScoreingLinks.LINK_2_DIGIT);
 
-        SetMasSum();
+        SetMaxSum();
     }
 
     private void ThreeCubesButtonClicked()
@@ -91,7 +91,7 @@ public class SetLinkNumberPanel : SettingPanelBase
 
         DescriptionText.text = "3 digit addition are " + GetEnableText(ScoreingLinks.LINK_3_DIGIT);
 
-        SetMasSum();
+        SetMaxSum();
     }
 
     private void FourCubesButtonClicked()
@@ -105,7 +105,7 @@ public class SetLinkNumberPanel : SettingPanelBase
 
         DescriptionText.text = "4 digit addition are " + GetEnableText(ScoreingLinks.LINK_4_DIGIT);
 
-        SetMasSum();
+        SetMaxSum();
     }
 
     private void FiveCubesButtonClicked()
@@ -119,10 +119,10 @@ public class SetLinkNumberPanel : SettingPanelBase
 
         DescriptionText.text = "5 digit addition are " + GetEnableText(ScoreingLinks.LINK_5_DIGIT);
 
-        SetMasSum();
+        SetMaxSum();
     }
 
-    private void SetMasSum()
+    private void SetMaxSum()
     {
         int maxSum = 0;
         if (GameRoundManager.Instance.Data.EnableScoringMethods[0])

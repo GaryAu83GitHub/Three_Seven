@@ -236,10 +236,12 @@ public class GridManager
         TaskRank getObjectiveRank = TaskRank.X1;
         ScoringGroupAchieveInfo newInfo;
         int totalValue = 0;
+
         foreach (List<Vector2Int> pos in scoreCombinationPositions)
         {
             totalValue = TotalValueWithBlock(aBlock, pos);
-            if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue) &&
+            int cubeCount = 2 + pos.Count;
+            if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue, cubeCount) &&
                 !ThisGroupIsAlreadyRegistrated(ScoringType.BLOCK_SCORING, ref someGroupOfPositions, pos))
             {
                 newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aBlock, pos);
@@ -255,10 +257,12 @@ public class GridManager
         TaskRank getObjectiveRank = TaskRank.X1;
         ScoringGroupAchieveInfo newInfo;
         int totalValue = 0;
+        
         foreach (List<Vector2Int> pos in scoreCombinationPositions)
         {
             totalValue = TotalValueWithCube(aCube, pos);
-            if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue) &&
+            int cubeCount = 1 + pos.Count;
+            if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue, cubeCount) &&
                 !ThisGroupIsAlreadyRegistrated(ScoringType.CUBE_SCORING, ref someGroupOfPositions, pos))
             {
                 newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube, pos);

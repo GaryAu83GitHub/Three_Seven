@@ -24,9 +24,10 @@ public class TaskFrame : MonoBehaviour
         DeactivateFormulaNumberBoxes();
     }
     
-    public void SetTaskValue(int aTaskValue)
+    public void SetTaskValue(int aTaskValue, int aTaskCubeCount)
     {
         DeactivateFormulaNumberBoxes();
+        ActiveFormulaNumberBoxes(aTaskCubeCount);
         FrameText.text = aTaskValue.ToString();
     }
 
@@ -58,6 +59,15 @@ public class TaskFrame : MonoBehaviour
         {
             NumberBox[i].gameObject.SetActive(true);
             NumberBox[i].SetCubeValue(someScoringCube[i].Number);
+        }
+    }
+
+    private void ActiveFormulaNumberBoxes(int aCubeCount)
+    {
+        for (int i = 0; i < aCubeCount; i++)
+        {
+            NumberBox[i].gameObject.SetActive(true);
+            NumberBox[i].SetCubeValue();
         }
     }
 

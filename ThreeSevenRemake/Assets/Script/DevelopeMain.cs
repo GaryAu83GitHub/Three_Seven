@@ -90,7 +90,7 @@ public class DevelopeMain : MonoBehaviour
         }*/
         
         // If the currentBlock is null or undergoing scoreing progression
-        if (mCurrentBlock == null || !BlockManager.Instance.GameOver)
+        if (mCurrentBlock == null && !BlockManager.Instance.GameOver)
         {
             // the block was confirm nullified by the currentblock landed
             if (mBlockLanded)
