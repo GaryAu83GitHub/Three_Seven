@@ -39,10 +39,16 @@ public class BlockManager
     public delegate void OnComboOccures(int aComboCount);
     public static OnComboOccures comboOccuring;
 
+    /// <summary>
+    /// This was only for the debugging purpose to show how many original block has been landed
+    /// </summary>
     public int BlockCount { get { return mBlocks.Count; } }
 
     public List<Block> Blocks { get { return mBlocks; } }
     private List<Block> mBlocks = new List<Block>();
+
+    public bool GameOver { get { return mGameOver; } }
+    private bool mGameOver = false;
 
     private List<Block> mFloatingBlocks = new List<Block>();
     private List<ScoringGroupAchieveInfo> mScoringInfos = new List<ScoringGroupAchieveInfo>();
@@ -116,11 +122,11 @@ public class BlockManager
 
     public bool BlockPassedGameOverLine()
     {
-        bool gameover = (mBlocks.FirstOrDefault(block => block.MaxGridPos.y > GameSettings.Instance.LimitHigh) ? true : false);
-        if (gameover)
+        mGameOver = (mBlocks.FirstOrDefault(block => block.MaxGridPos.y > GameSettings.Instance.LimitHigh) ? true : false);
+        if (mGameOver)
             TowerCollapse();
 
-        return gameover;
+        return mGameOver;
     }
     
     /// <summary>

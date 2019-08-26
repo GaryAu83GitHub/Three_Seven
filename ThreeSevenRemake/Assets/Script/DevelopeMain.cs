@@ -82,15 +82,15 @@ public class DevelopeMain : MonoBehaviour
 
         TableCover.SetActive(PauseMenu.GameIsPause);
         // If mGameOver is equal to true, don't proceed futher of this 
-        if (BlockManager.Instance.BlockPassedGameOverLine())
+        /*if (BlockManager.Instance.BlockPassedGameOverLine())
         {
             // Call the function to display the result
             finalResult?.Invoke();
             return;
-        }
+        }*/
         
         // If the currentBlock is null or undergoing scoreing progression
-        if (mCurrentBlock == null)
+        if (mCurrentBlock == null || !BlockManager.Instance.GameOver)
         {
             // the block was confirm nullified by the currentblock landed
             if (mBlockLanded)
@@ -107,8 +107,16 @@ public class DevelopeMain : MonoBehaviour
                     BlockManager.Instance.ScoreCalculationProgression();
                 else
                 {
-                    TaskManager.Instance.ChangeObjective();
-                    CreateNewBlock();
+                    if (BlockManager.Instance.BlockPassedGameOverLine())
+                    {
+                        // Call the function to display the result
+                        finalResult?.Invoke();
+                    }
+                    else
+                    {
+                        TaskManager.Instance.ChangeObjective();
+                        CreateNewBlock();
+                    }
                 }
             }
             
