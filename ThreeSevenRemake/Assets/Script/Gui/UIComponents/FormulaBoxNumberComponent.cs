@@ -24,18 +24,16 @@ public class FormulaBoxNumberComponent : MonoBehaviour
         NumberText.gameObject.SetActive(true);
         CubeBox.gameObject.SetActive(true);
 
+        CubeBox.enabled = true;
+        CubeBox.color = SupportTools.GetCubeHexColorOf(aNumber);
+        NumberText.color = Color.black;
         NumberText.text = aNumber.ToString();
+
         if (aNumber == -1)
         {
             CubeBox.enabled = false;
             NumberText.color = Color.white;
             NumberText.text = "?";
-        }
-        if (displayBox)
-        {
-            CubeBox.enabled = true;
-            CubeBox.color = SupportTools.GetCubeHexColorOf(aNumber);            
-            NumberText.color = Color.black;
         }
     }
 

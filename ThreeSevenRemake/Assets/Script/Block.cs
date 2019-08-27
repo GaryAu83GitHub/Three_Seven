@@ -65,9 +65,6 @@ public class Block : MonoBehaviour
         {
             for (int i = 0; i < mCubeNumbers.Count; i++)
                 mCubes[i].Init(this, mCubeNumbers[i]);
-
-            //mCubes[0].ConnectSiblingCube(mCubes[1]);
-            //mCubes[1].ConnectSiblingCube(mCubes[0]);
         }
 
         Rotate();
@@ -168,8 +165,6 @@ public class Block : MonoBehaviour
 
         return false;
     }
-    
-    
 
     /// <summary>
     /// The block will rearrange or destroy itself depending on the status of the cubes in it

@@ -53,10 +53,12 @@ public class DevelopeMain : MonoBehaviour
 
     private void Start()
     {
+        TaskManager.Instance.PrepareObjectives();
+
         GameOverMenu.leaveTheGame += ResetGame;
         PauseMenu.leaveTheGame += ResetGame;
 
-        LimitLine.transform.position += new Vector3(0f, .25f + (.5f * GameSettings.Instance.LimitHigh), 0f);
+        LimitLine.transform.position += new Vector3(0f, .625f + (Constants.CUBE_GAP_DISTANCE * GameSettings.Instance.LimitHigh), 0f);
         // When the game start, begin delay for the first block to be created
         StartCoroutine(GameStart());
     }
