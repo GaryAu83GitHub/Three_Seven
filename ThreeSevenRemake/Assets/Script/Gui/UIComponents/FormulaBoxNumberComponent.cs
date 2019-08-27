@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class FormulaBoxNumberComponent : MonoBehaviour
 {
-    public Text NumberText;
     public Image CubeBox;
+    public Text NumberText;
 
     // Start is called before the first frame update
     void Start()
@@ -26,10 +26,17 @@ public class FormulaBoxNumberComponent : MonoBehaviour
 
         NumberText.text = aNumber.ToString();
         if (aNumber == -1)
+        {
+            CubeBox.enabled = false;
+            NumberText.color = Color.white;
             NumberText.text = "?";
-
+        }
         if (displayBox)
-            CubeBox.color = SupportTools.GetCubeHexColorOf(aNumber);
+        {
+            CubeBox.enabled = true;
+            CubeBox.color = SupportTools.GetCubeHexColorOf(aNumber);            
+            NumberText.color = Color.black;
+        }
     }
 
     public void DeactivateCube()

@@ -81,13 +81,7 @@ public class DevelopeMain : MonoBehaviour
         }
 
         TableCover.SetActive(PauseMenu.GameIsPause);
-        // If mGameOver is equal to true, don't proceed futher of this 
-        /*if (BlockManager.Instance.BlockPassedGameOverLine())
-        {
-            // Call the function to display the result
-            finalResult?.Invoke();
-            return;
-        }*/
+        
         
         // If the currentBlock is null or undergoing scoreing progression
         if (mCurrentBlock == null && !BlockManager.Instance.GameOver)
@@ -106,21 +100,21 @@ public class DevelopeMain : MonoBehaviour
                 else if (BlockManager.Instance.IsScoring())
                     BlockManager.Instance.ScoreCalculationProgression();
                 else
-                {
-                    if (BlockManager.Instance.BlockPassedGameOverLine())
-                    {
-                        // Call the function to display the result
-                        finalResult?.Invoke();
-                    }
-                    else
-                    {
-                        TaskManager.Instance.ChangeObjective();
-                        CreateNewBlock();
-                    }
+                {   
+                    TaskManager.Instance.ChangeObjective();
+                    CreateNewBlock();                    
                 }
             }
             
             return; // don't proceed futher of this block
+        }
+
+        // If mGameOver is equal to true, don't proceed futher of this 
+        if (BlockManager.Instance.BlockPassedGameOverLine())
+        {
+            //Call the function to display the result
+            finalResult?.Invoke();
+            return;
         }
         CheckInput();
     }
