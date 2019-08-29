@@ -37,7 +37,7 @@ public class TaskManager
     private int mCurrentObjectiveValueLimit = 0;
     public int CurrentLimetObjectiveValue { get { return mCurrentObjectiveValueLimit; } }
 
-    private readonly bool mDebugMode = true;
+    private readonly bool mDebugMode = false;
     
     public TaskManager()
     {
@@ -255,6 +255,7 @@ public class TaskManager
     private TaskData CreateNewTask(int aTaskValue)
     {
         List<int> availableLinkCube = new List<int>();
+        int selectIndex = 0;
 
         foreach(int cc in mLinkCubeTaskValueCountList.Keys)
         {
@@ -263,8 +264,10 @@ public class TaskManager
         }
 
         int linkCount = availableLinkCube.Count;
+        if (linkCount > 1)
+            selectIndex = Random.Range(0, linkCount);
 
-        TaskData data = new TaskData(aTaskValue, availableLinkCube[Random.Range(0, linkCount)]);
+        TaskData data = new TaskData(aTaskValue, availableLinkCube[selectIndex]);
         return data;
     }
 

@@ -53,7 +53,7 @@ public class DevelopeMain : MonoBehaviour
 
     private void Start()
     {
-        TaskManager.Instance.PrepareObjectives();
+        //TaskManager.Instance.PrepareObjectives();
 
         GameOverMenu.leaveTheGame += ResetGame;
         PauseMenu.leaveTheGame += ResetGame;

@@ -24,7 +24,7 @@ public class FormulaBoxNumberComponent : MonoBehaviour
         NumberText.gameObject.SetActive(true);
         CubeBox.gameObject.SetActive(true);
 
-        CubeBox.enabled = true;
+        CubeBox.enabled = displayBox;
         CubeBox.color = SupportTools.GetCubeHexColorOf(aNumber);
         NumberText.color = Color.black;
         NumberText.text = aNumber.ToString();
