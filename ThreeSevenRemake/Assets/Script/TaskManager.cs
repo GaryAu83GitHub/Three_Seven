@@ -286,22 +286,30 @@ public class TaskManager
         Dictionary<int, int> combinationList = new Dictionary<int, int>();
 
         if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_2_DIGIT))
-        {   
+        {
+            TaskValueData data = new TaskValueData(2);
+
             IterateTwoCubesCombination(ref combinationList);
             mActiveLinkedCubes.Add(2);
         }
         if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_3_DIGIT))
         {
+            TaskValueData data = new TaskValueData(3);
+
             IterateThreeCubesCombination(ref combinationList);
             mActiveLinkedCubes.Add(3);
         }
         if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_4_DIGIT))
         {
+            TaskValueData data = new TaskValueData(4);
+
             IterateFourCubesCombination(ref combinationList);
             mActiveLinkedCubes.Add(4);
         }
         if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_5_DIGIT))
         {
+            TaskValueData data = new TaskValueData(5);
+
             IterateFiveCubesCombination(ref combinationList);
             mActiveLinkedCubes.Add(5);
         }
@@ -312,6 +320,7 @@ public class TaskManager
     private void IterateTwoCubesCombination(ref Dictionary<int, int> someObjectives)
     {
         int sum = 0;
+
         mLinkCubeTaskValueCountList.Add(2, new List<int>());
 
         for (int a = 0; a < 10; a++)
@@ -321,7 +330,9 @@ public class TaskManager
                 sum = a + b;
 
                 if (!mLinkCubeTaskValueCountList[2].Contains(sum))
+                {
                     mLinkCubeTaskValueCountList[2].Add(sum);
+                }
 
                 if (!someObjectives.ContainsKey(sum))
                     someObjectives.Add(sum, 0);
@@ -452,6 +463,56 @@ public class TaskData
     {
         mTaskNumber = aTaskNumber;
         mTaskCubeCount = aTaskCubeCount;
+    }
+}
+
+public class TaskValueData
+{
+    private readonly int mLinkedCubeCount = 0;
+
+    private readonly int mMaxValue = 1;
+
+    private bool[] mUsedNumber = new bool[0];
+    private Dictionary<TaskRank, List<int>> mRankNumberList = new Dictionary<TaskRank, List<int>>();
+
+    public TaskValueData()
+    {
+
+    }
+
+    public TaskValueData(int aCubeCount)
+    {
+        mLinkedCubeCount = aCubeCount;
+
+        mMaxValue += 9 * aCubeCount;
+        mUsedNumber = new bool[mMaxValue];
+
+        for (TaskRank r = TaskRank.X1; r != TaskRank.X10 + 1; r++)
+            mRankNumberList.Add(r, new List<int>());
+
+        IEnumerable<IEnumerable<int>> result = GetPermutationsWithRept(Enumerable.Range(0, 10), aCubeCount);
+        //List<int> lists = new List<int>();
+
+        List<List<int>> lists = result.Select(i => i.ToList()).ToList();
+
+        
+
+        //var result = input.Select(i => i.ToList()).ToList();
+        return;
+    }
+
+    public void SetUpValueData()
+    {
+
+    }
+
+    static IEnumerable<IEnumerable<T>>
+    GetPermutationsWithRept<T>(IEnumerable<T> list, int length)
+    {
+        if (length == 1) return list.Select(t => new T[] { t });
+        return GetPermutationsWithRept(list, length - 1)
+            .SelectMany(t => list,
+                (t1, t2) => t1.Concat(new T[] { t2 }));
     }
 }
 
