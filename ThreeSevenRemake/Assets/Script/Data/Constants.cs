@@ -14,7 +14,7 @@ public static class Constants
     public const float MINIMAL_DROPRATE = .1f;
     public const float MAXIMAL_DROPRATE = 1f;
 
-    public const int MINIMAL_TASK_SUM = 18;
+    public const int MINIMAL_TASK_VALUE = 18;
 
     public const int MAX_CEILING_HIGH = 18;
     public const int MIN_CEILING_HIGH = 9;

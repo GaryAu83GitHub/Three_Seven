@@ -48,7 +48,7 @@ public class SetStartTaskValuePanel : SettingPanelBase
         base.InitBaseValue();
 
         if (mLastSelectedValue == -1)
-            mCurrentStartValue = Constants.MINIMAL_TASK_SUM;
+            mCurrentStartValue = Constants.MINIMAL_TASK_VALUE;
         else
             mCurrentStartValue = MINIMAL_MAX_SUM + mLastSelectedValue;
 
