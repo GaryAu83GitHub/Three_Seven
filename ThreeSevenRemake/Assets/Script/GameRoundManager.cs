@@ -33,8 +33,7 @@ public class GameRoundManager
         TaskManager.Instance.SetInitialObjectiveValue(mGameRoundData.InitialTaskValue);
         GenerateScoreCombinationPositions.Instance.GenerateCompinationPositions();
         
-        //GameSettings.Instance.SetLimitLineLevel(mGameRoundData.RoofHeightValue);
-        //GameSettings.Instance.SetStartDropSpeed(mGameRoundData.DroppingSpeedMultiplyValue);
         TaskManager.Instance.PrepareObjectives();
+        TaskManager.Instance.PrepareTaskValues(mGameRoundData.InitialTaskValue);
     }
 }
