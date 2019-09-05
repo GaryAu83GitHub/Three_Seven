@@ -103,7 +103,8 @@ public class DevelopeMain : MonoBehaviour
                     BlockManager.Instance.ScoreCalculationProgression();
                 else
                 {   
-                    TaskManager.Instance.ChangeObjective();
+                    //TaskManager.Instance.ChangeObjective();
+                    TaskManager.Instance.ChangeTask();
                     CreateNewBlock();                    
                 }
             }

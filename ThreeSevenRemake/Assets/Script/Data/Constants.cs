@@ -23,7 +23,7 @@ public static class Constants
 
     public const int ORIGINAL_BLOCK_LANDING_SCORE = 1;
 
-    public const int CUBE_MAX_NUMBER = 9;
+    public const int CUBE_MAX_NUMBER = 10;
     public const float CUBE_GAP_DISTANCE = 1.25f;//.5f;
 
     public const float WORLD_OFF_X = 5.625f;//2.25f;
