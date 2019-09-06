@@ -98,6 +98,12 @@ public class GameManager
         return mNextBlockNumbers;
     }
 
+    public void SwapWithOriginalNumbers(List<int> anOriginalBlockNumbers)
+    {
+        mNextBlockNumbers.Clear();
+        mNextBlockNumbers = new List<int>(anOriginalBlockNumbers);
+    }
+
     public void RewindNextNumber(List<int> aPreviousNextNumber)
     {
         mNextBlockNumbers.Clear();

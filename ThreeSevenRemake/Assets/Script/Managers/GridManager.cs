@@ -294,7 +294,8 @@ public class GridManager
             resultValue = TotalValueWithCube(aCube, somePositions);
         }
 
-        if (!TaskManager.Instance.AchiveObjective(ref achieveRank, resultValue, cubeCount))
+        //if (!TaskManager.Instance.AchiveObjective(ref achieveRank, resultValue, cubeCount))
+        if(!TaskManager.Instance.MatchTaskData(ref achieveRank, resultValue, cubeCount))
             return;
 
         if (ThisGroupIsAlreadyRegistrated(scoringType, ref someScoringInfos, somePositions))

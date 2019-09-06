@@ -248,22 +248,6 @@ public class Block : MonoBehaviour
             mCurrentRotation = 0;
 
         Rotate();
-        //switch(mCurrentRotation)
-        //{
-        //    case 0:
-        //        SetSubCubPosition(Vector2Int.up);
-        //        break;
-        //    case 90:
-        //        SetSubCubPosition(Vector2Int.right);
-        //        break;
-        //    case 180:
-        //        SetSubCubPosition(Vector2Int.down);
-        //        break;
-        //    case 270:
-        //        SetSubCubPosition(Vector2Int.left);
-        //        break;
-
-        //}
     }
 
     private void Move(Vector3 aDir)

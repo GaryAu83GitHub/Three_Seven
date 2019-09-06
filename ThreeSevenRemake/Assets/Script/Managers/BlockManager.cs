@@ -100,6 +100,7 @@ public class BlockManager
             mBlocks.Add(aBlock);
 
         RegisterBlockCubesToGrid(aBlock);
+        aBlock.transform.position = aBlock.transform.position + (Vector3.forward * 5);
 
         GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
 

@@ -80,10 +80,24 @@ public class TaskManager
         }
     }
 
+    public bool MatchTaskData(ref TaskRank retriveRank, int aValue, int aLinkCubes)
+    {
+        foreach (TaskData d in mActiveTasks.Values)
+        {
+            if (d.Number == aValue && d.LinkedCubes == aLinkCubes)
+            {
+                retriveRank = d.Rank;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // this will be replaced by MatchTaskData
     public bool AchiveObjective(ref TaskRank getObjectiveRank, int aCheckingNumber, int aScoringCubeCount)
     {
-        if(!TaskDataContainValue(ref getObjectiveRank, aCheckingNumber))
-            return false;
+        //if(!TaskDataContainValue(ref getObjectiveRank, aCheckingNumber))
+        //    return false;
 
         //getObjectiveRank = mActiveTasks.FirstOrDefault(x => x.Value.Number == aCheckingNumber).Key;
 
@@ -242,8 +256,8 @@ public class TaskManager
     {
         GameSettings.Instance.SetInitialValue(aStartValue);
 
-        mTaskSubjects.Add(TaskRank.X1, new TaskSubject(TaskRank.X1, aStartValue));
-        mTaskSubjects.Add(TaskRank.X5, new TaskSubject(TaskRank.X5, aStartValue));
+        mTaskSubjects.Add(TaskRank.X1, new TaskSubject(TaskRank.X1, aStartValue, true, 6, 2));
+        mTaskSubjects.Add(TaskRank.X5, new TaskSubject(TaskRank.X5, aStartValue, true, 6, 3));
         mTaskSubjects.Add(TaskRank.X10, new TaskSubject(TaskRank.X10, aStartValue));
 
         if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_2_DIGIT))
@@ -274,23 +288,12 @@ public class TaskManager
         }
     }
 
+    
+
     private void FillTaskSubjects(TaskRankValueData aData)
     {
         foreach (TaskRank key in mTaskSubjects.Keys)
             mTaskSubjects[key].FillValueListFor(aData);
-    }
-
-    private bool TaskDataContainValue(ref TaskRank retriveRank, int aValue)
-    {
-        foreach (TaskData d in mActiveTasks.Values)
-        {
-            if (d.Number == aValue)
-            {
-                retriveRank = d.Rank;
-                return true;
-            }
-        }
-        return false;
     }
 
     // when the TaskSubject class is confirm working on its own, the rest of the code below will be removed from this class
@@ -517,10 +520,18 @@ public class TaskSubject
     private int mTaskValueLimit = 0;
     private int mMaxValue = 0;
 
-    public TaskSubject(TaskRank aRank, int aInitialTaskValueLimit)
+    private readonly bool mUnderDebuging = false;
+    private readonly int mDebugingValue = 0;
+    private readonly int mDebugingLink = 0;
+
+    public TaskSubject(TaskRank aRank, int aInitialTaskValueLimit, bool useDebuging = false, int debugingValue = 0, int debugingLink = 0)
     {
         mRank = aRank;
         mTaskValueLimit = aInitialTaskValueLimit;
+
+        mUnderDebuging = useDebuging;
+        mDebugingLink = debugingLink;
+        mDebugingValue = debugingValue;
     }
 
     public void FillValueListFor(TaskRankValueData aData)
@@ -550,6 +561,12 @@ public class TaskSubject
     {
         int linkCount = GetCubesLink();
         int taskValue = GetTaskValue(linkCount);
+
+        if (mUnderDebuging)
+        {
+            linkCount = mDebugingLink;
+            taskValue = mDebugingValue;
+        }
 
         return new TaskData(mRank, linkCount, taskValue);
     }

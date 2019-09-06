@@ -60,6 +60,7 @@ public class BlockGUI : MonoBehaviour
 
         mNextNumbers.Clear();
         mNextNumbers = new List<int>(tempCubeNumbers);
+        GameManager.Instance.SwapWithOriginalNumbers(mNextNumbers);
 
         DisplayBlock();
     }

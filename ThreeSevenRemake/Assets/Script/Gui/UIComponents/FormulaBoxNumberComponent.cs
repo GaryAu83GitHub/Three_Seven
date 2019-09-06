@@ -19,7 +19,7 @@ public class FormulaBoxNumberComponent : MonoBehaviour
         
     }
 
-    public void SetCubeValue(int aNumber = -1, bool displayBox = true)
+    public void SetCubeValue(int aNumber, bool displayBox = true)
     {
         NumberText.gameObject.SetActive(true);
         CubeBox.gameObject.SetActive(true);
@@ -29,11 +29,13 @@ public class FormulaBoxNumberComponent : MonoBehaviour
         NumberText.color = Color.black;
         NumberText.text = aNumber.ToString();
 
-        if (aNumber == -1)
+        if(!CubeBox.enabled)
         {
-            CubeBox.enabled = false;
             NumberText.color = Color.white;
-            NumberText.text = "?";
+            if (aNumber == -1)
+            {
+                NumberText.text = "?";
+            }
         }
     }
 

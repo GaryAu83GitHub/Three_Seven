@@ -67,7 +67,7 @@ public class TaskFrame : MonoBehaviour
         for (int i = 0; i < aCubeCount; i++)
         {
             NumberBox[i].gameObject.SetActive(true);
-            NumberBox[i].SetCubeValue();
+            NumberBox[i].SetCubeValue(-1, false);
         }
     }
 

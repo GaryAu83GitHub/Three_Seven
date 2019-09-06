@@ -29,7 +29,7 @@ public static class Constants
     public const float WORLD_OFF_X = 5.625f;//2.25f;
     public const float WORLD_OFF_Y = 11.25f;//4.5f;
 
-    public const float BUTTON_DOWN_INTERVAL = .1f;
+    public const float BUTTON_DOWN_INTERVAL = .05f;
 
     // 13.22
 }
