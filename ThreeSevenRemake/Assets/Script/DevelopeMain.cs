@@ -178,7 +178,8 @@ public class DevelopeMain : MonoBehaviour
         // rotate to is vacant
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
-            mCurrentBlock.RotateBlock();
+            //mCurrentBlock.RotateBlock();
+            mCurrentBlock.RotateBlockUpgrade();
         }
 
         // input for swaping the cubes value inside the block

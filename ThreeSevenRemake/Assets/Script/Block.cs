@@ -243,11 +243,46 @@ public class Block : MonoBehaviour
             return;
 
         Joint.Rotate(Vector3.back, 90);
+        
+        mCurrentRotation += 90;
+        if (mCurrentRotation >= 360)
+            mCurrentRotation = 0;
+        
+        Rotate();
+    }
+
+    public void RotateBlockUpgrade()
+    {
+        if (!GridManager.Instance.IsRotateAvailableUppgrade(mCubes[0].GridPos, mCurrentRotation + 90))
+            return;
+        
         mCurrentRotation += 90;
         if (mCurrentRotation >= 360)
             mCurrentRotation = 0;
 
+        Joint.Rotate(Vector3.back, 90);
+        MoveRootCubeAtRotation();
         Rotate();
+    }
+
+    private void MoveRootCubeAtRotation()
+    {
+        //if(mCurrentRotation == 0 && !GridManager.Instance.IsCellVacant(mCubes[0].GridPos + Vector2Int.up) && GridManager.Instance.IsCellVacant(mCubes[0].GridPos + Vector2Int.down))
+        //{
+        //    Move(Vector3.down);
+        //}
+        if (mCurrentRotation == 90 && !GridManager.Instance.IsCellVacant(mCubes[0].GridPos + Vector2Int.right) && GridManager.Instance.IsCellVacant(mCubes[0].GridPos + Vector2Int.left))
+        {
+            Move(Vector3.left);
+        }
+        if (mCurrentRotation == 180 && !GridManager.Instance.IsCellVacant(mCubes[0].GridPos + Vector2Int.down) && GridManager.Instance.IsCellVacant(mCubes[0].GridPos + Vector2Int.up))
+        {
+            Move(Vector3.up);
+        }
+        if (mCurrentRotation == 270 && !GridManager.Instance.IsCellVacant(mCubes[0].GridPos + Vector2Int.left) && GridManager.Instance.IsCellVacant(mCubes[0].GridPos + Vector2Int.right))
+        {
+            Move(Vector3.right);
+        }
     }
 
     private void Move(Vector3 aDir)
@@ -321,6 +356,9 @@ public class Block : MonoBehaviour
             // check the cell/cells below block min/max vertical position is vacant
             if (aDir == Vector2Int.down && GridManager.Instance.IsCellVacant(mMinPosition + aDir) && GridManager.Instance.IsCellVacant(mMaxPosition + aDir))
                 return true;
+            // check the cell/cells above block min/max vertical position is vacant
+            if (aDir == Vector2Int.up && GridManager.Instance.IsCellVacant(mMinPosition + aDir) && GridManager.Instance.IsCellVacant(mMaxPosition + aDir))
+                return true;
         }
         // the block stands vertical
         if (mCurrentRotation == 0 || mCurrentRotation == 180)
@@ -334,6 +372,9 @@ public class Block : MonoBehaviour
             // check the cell/cells below block min/max vertical position is vacant
             if (aDir == Vector2Int.down && GridManager.Instance.IsCellVacant(mMinPosition + aDir))
                 return true;
+            // check the cell/cells above block min/max vertical position is vacant
+            if (aDir == Vector2Int.up && GridManager.Instance.IsCellVacant(mMaxPosition + aDir))
+            return true;
         }
         
 
