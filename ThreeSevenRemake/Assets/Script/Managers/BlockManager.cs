@@ -39,6 +39,10 @@ public class BlockManager
     public delegate void OnComboOccures(int aComboCount);
     public static OnComboOccures comboOccuring;
 
+    public delegate void InitlizeResult();
+    public static InitlizeResult finalResult;
+
+
     /// <summary>
     /// This was only for the debugging purpose to show how many original block has been landed
     /// </summary>
@@ -125,8 +129,10 @@ public class BlockManager
     {
         mGameOver = (mBlocks.FirstOrDefault(block => block.MaxGridPos.y > GameSettings.Instance.LimitHigh) ? true : false);
         if (mGameOver)
+        {
+            finalResult?.Invoke();
             TowerCollapse();
-
+        }
         return mGameOver;
     }
     

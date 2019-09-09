@@ -1,6 +1,7 @@
 ﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Custom/BlurCodeShader"{
+Shader "Unlit/BlurUnlitShader"
+{
 	Properties{
 		_Color("Main Color", Color) = (1,1,1,1)
 		_BumpAmt("Distortion", Range(0,128)) = 10

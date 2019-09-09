@@ -18,9 +18,6 @@ public class DevelopeMain : MonoBehaviour
     public delegate void OnCreateNewBlock(Block aNewBlock);
     public static OnCreateNewBlock createNewBlock;
     
-    public delegate void InitlizeResult();
-    public static InitlizeResult finalResult;
-
     public delegate void OnBlockLandedDebug(Dictionary<int, List<Cube>> aGrid);
     public static OnBlockLandedDebug blockLandedDebug;
 
@@ -116,7 +113,6 @@ public class DevelopeMain : MonoBehaviour
         if (BlockManager.Instance.BlockPassedGameOverLine())
         {
             //Call the function to display the result
-            finalResult?.Invoke();
             return;
         }
         CheckInput();
