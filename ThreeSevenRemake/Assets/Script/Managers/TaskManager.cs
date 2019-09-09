@@ -256,8 +256,8 @@ public class TaskManager
     {
         GameSettings.Instance.SetInitialValue(aStartValue);
 
-        mTaskSubjects.Add(TaskRank.X1, new TaskSubject(TaskRank.X1, aStartValue, true, 6, 2));
-        mTaskSubjects.Add(TaskRank.X5, new TaskSubject(TaskRank.X5, aStartValue, true, 6, 3));
+        mTaskSubjects.Add(TaskRank.X1, new TaskSubject(TaskRank.X1, aStartValue));
+        mTaskSubjects.Add(TaskRank.X5, new TaskSubject(TaskRank.X5, aStartValue));
         mTaskSubjects.Add(TaskRank.X10, new TaskSubject(TaskRank.X10, aStartValue));
 
         if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_2_DIGIT))

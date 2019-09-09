@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -23,7 +24,12 @@ public class PauseMenu : MonoBehaviour
     private void Start()
     {
         ResumeButton.onClick.AddListener(Resume);
-        MenuButton.onClick.AddListener(MainMenu);
+        MenuButton.onClick.AddListener(LeaveToMain);
+
+        if (GameSettings.Instance.PlayerName.Any())
+            MenuButton.GetComponentInChildren<Text>().text = "Give Up";
+        else
+            MenuButton.GetComponentInChildren<Text>().text = "Leave";
     }
 
     // Update is called once per frame
@@ -56,7 +62,7 @@ public class PauseMenu : MonoBehaviour
         
     }
 
-    public void MainMenu()
+    public void LeaveToMain()
     {
         Time.timeScale = 1;
         GameIsPause = false;
