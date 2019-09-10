@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Assets.Script.Tools;
+using TMPro;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -27,9 +28,15 @@ public class PauseMenu : MonoBehaviour
         MenuButton.onClick.AddListener(LeaveToMain);
 
         if (GameSettings.Instance.PlayerName.Any())
-            MenuButton.GetComponentInChildren<Text>().text = "Give Up";
+        {
+            MenuButton.onClick.AddListener(Surrender);
+            MenuButton.GetComponentInChildren<TextMeshProUGUI>().text = "SURRENDER";
+        }
         else
-            MenuButton.GetComponentInChildren<Text>().text = "Leave";
+        {
+            MenuButton.onClick.AddListener(LeaveToMain);
+            MenuButton.GetComponentInChildren<TextMeshProUGUI>().text = "LEAVE";
+        }
     }
 
     // Update is called once per frame
@@ -62,6 +69,12 @@ public class PauseMenu : MonoBehaviour
         
     }
 
+    private void Surrender()
+    {
+        MenuButton.onClick.RemoveListener(Surrender);
+        BlockManager.Instance.SurrenderGameRound();
+    }
+
     public void LeaveToMain()
     {
         Time.timeScale = 1;
@@ -69,6 +82,7 @@ public class PauseMenu : MonoBehaviour
         leaveTheGame?.Invoke();
         //SceneManager.LoadScene("Menu");
         //StartCoroutine(GoToStart());
+        MenuButton.onClick.RemoveListener(LeaveToMain);
         ScreenTransistor.Instance.FadeToSceneWithIndex(0);
     }
 

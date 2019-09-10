@@ -37,13 +37,13 @@ public class GameOverMenu : MonoBehaviour
         myAnimationDuration = clips[0].length;
         LeaveButton.onClick.AddListener(LeaveToMainMenu);
         
-        BlockManager.finalResult += Result;
+        BlockManager.displayFinalResult += Result;
         LeavePanel.SetActive(false);
     }
 
     private void OnDisable()
     {
-        BlockManager.finalResult -= Result;
+        BlockManager.displayFinalResult -= Result;
     }
 
     private void Update()

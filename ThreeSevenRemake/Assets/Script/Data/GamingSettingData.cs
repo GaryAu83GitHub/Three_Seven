@@ -12,7 +12,7 @@ public class GameRoundData
     public string PlayerName { get { return mPlayerName; } set { mPlayerName = value; } }
 
     // Game round settings variabler
-    private List<bool> mEnableScoringMethods = new List<bool>() { true, true, true, true };
+    private List<bool> mEnableScoringMethods = new List<bool>() { true, false, false, false };
     public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } set { mEnableScoringMethods = value; } }
 
     private int mInitialTaskValue = 0;

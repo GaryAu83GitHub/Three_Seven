@@ -255,6 +255,7 @@ public class TaskManager
     public void PrepareTaskValues(int aStartValue)
     {
         GameSettings.Instance.SetInitialValue(aStartValue);
+        mTaskSubjects.Clear();
 
         mTaskSubjects.Add(TaskRank.X1, new TaskSubject(TaskRank.X1, aStartValue));
         mTaskSubjects.Add(TaskRank.X5, new TaskSubject(TaskRank.X5, aStartValue));
@@ -524,14 +525,31 @@ public class TaskSubject
     private readonly int mDebugingValue = 0;
     private readonly int mDebugingLink = 0;
 
-    public TaskSubject(TaskRank aRank, int aInitialTaskValueLimit, bool useDebuging = false, int debugingValue = 0, int debugingLink = 0)
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="aRank">Task subjects rank</param>
+    /// <param name="aInitialTaskValueLimit">the start task value</param>
+    public TaskSubject(TaskRank aRank, int aInitialTaskValueLimit)
     {
         mRank = aRank;
         mTaskValueLimit = aInitialTaskValueLimit;
+    }
 
-        mUnderDebuging = useDebuging;
+    /// <summary>
+    /// This constructor is called when an Tasksubject is used for debug purpose, with this set the value and link will not change during the game progress
+    /// </summary>
+    /// <param name="aRank">The task rank that want to be use for debug</param>
+    /// <param name="useDebuging">The link use for debug</param>
+    /// <param name="debugingValue">The value use for debug</param>
+    public TaskSubject(TaskRank aRank, int debugingValue, int debugingLink)
+    {
+        mRank = aRank;
+        mTaskValueLimit = Constants.MINIMAL_TASK_VALUE;
+
         mDebugingLink = debugingLink;
         mDebugingValue = debugingValue;
+        mUnderDebuging = true;
     }
 
     public void FillValueListFor(TaskRankValueData aData)

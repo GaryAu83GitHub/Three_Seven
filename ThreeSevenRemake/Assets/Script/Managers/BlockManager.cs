@@ -39,8 +39,8 @@ public class BlockManager
     public delegate void OnComboOccures(int aComboCount);
     public static OnComboOccures comboOccuring;
 
-    public delegate void InitlizeResult();
-    public static InitlizeResult finalResult;
+    public delegate void OnDisplayFinalResult();
+    public static OnDisplayFinalResult displayFinalResult;
 
 
     /// <summary>
@@ -77,6 +77,7 @@ public class BlockManager
         mCurrentScoringGroupIndex = 0;
         mScoringCalculationTimer = 0f;
         mCurrentGroupScoreCalcInProgress = false;
+        mGameOver = false;
 
         ResetCombo();
     }
@@ -129,12 +130,18 @@ public class BlockManager
     {
         mGameOver = (mBlocks.FirstOrDefault(block => block.MaxGridPos.y > GameSettings.Instance.LimitHigh) ? true : false);
         if (mGameOver)
-        {
-            finalResult?.Invoke();
             TowerCollapse();
-        }
+
         return mGameOver;
     }
+
+    public void SurrenderGameRound()
+    {
+        mGameOver = true;
+        TowerCollapse();
+    }
+
+
     
     /// <summary>
     /// Boolian method that check if the last landed block/blocks had made any scoring.
@@ -326,6 +333,8 @@ public class BlockManager
     /// </summary>
     private void TowerCollapse()
     {
+        displayFinalResult?.Invoke();
+
         foreach (Block b in mBlocks)
             b.GetComponent<Rigidbody>().useGravity = true;
     }
