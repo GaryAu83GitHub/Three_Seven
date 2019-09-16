@@ -11,13 +11,16 @@ public class OptionMenu : MonoBehaviour
     public Slider DroppingSpeedSlider;
     public Toggle GuideActiveToggle;
     public TextMeshProUGUI GuideActiveText;
+    //public Toggle LinkRestrictionToggle;
+    //public TextMeshProUGUI LinkRestrictionText;
 
     public Button ExitButton;
     public Button AdmitButton;
 
     private int mLimitLineHeight = Constants.DEFAULT_ROOF_HEIGHT;
     private int mSpeedMultiplyer = 0;
-    private bool mActiveGuide = true;
+    private bool mActiveGuide = GameSettings.Instance.ActiveGuideBlock;
+    //private bool mActiveLinkRestriction = GameSettings.Instance.ActivateLinkRestriction;
 
     private int mPreSetLimitLineHeight = Constants.DEFAULT_ROOF_HEIGHT;
     private int mPreSetSpeedMultiplyer = 0;
@@ -40,7 +43,7 @@ public class OptionMenu : MonoBehaviour
 
         GuideActiveToggle.isOn = mActiveGuide;
         GuideActiveToggle.onValueChanged.AddListener(delegate { GuideActiveToggleOnValueChanged(); });
-        GuideActiveText.text = ToggleText();
+        GuideActiveText.text = ToggleText(GuideActiveToggle);
 
         ExitButton.onClick.AddListener(ExitButtonOnClick);
         AdmitButton.onClick.AddListener(AdmitButtonOnClick);
@@ -73,13 +76,11 @@ public class OptionMenu : MonoBehaviour
     private void LimitLineHieghtSliderOnValueChange()
     {
         mLimitLineHeight = (int)LimitLineHeightSlider.value;
-        Debug.Log(mLimitLineHeight);
         ActiveAdmitButton();
     }
 
     private void DroppingSpeedSliderOnValueChange()
     {
-        //GameRoundManager.Instance.Data.DroppingSpeedMultiplyValue = (int)DroppingSpeedSlider.value;
         mSpeedMultiplyer = (int)DroppingSpeedSlider.value;
         ActiveAdmitButton();
     }
@@ -87,7 +88,7 @@ public class OptionMenu : MonoBehaviour
     private void GuideActiveToggleOnValueChanged()
     {
         mActiveGuide = GuideActiveToggle.isOn;
-        GuideActiveText.text = ToggleText();
+        GuideActiveText.text = ToggleText(GuideActiveToggle);
         ActiveAdmitButton();
     }
 
@@ -100,7 +101,7 @@ public class OptionMenu : MonoBehaviour
     {
         GameSettings.Instance.SetLimitLineLevel(mLimitLineHeight);
         GameSettings.Instance.SetStartDropSpeed(mSpeedMultiplyer);
-        GameSettings.Instance.ActiveteGuideBlock(mActiveGuide);
+        GameSettings.Instance.SetActiveteGuideBlock(mActiveGuide);
 
         mPreSetLimitLineHeight = mLimitLineHeight;
         mPreSetSpeedMultiplyer = mSpeedMultiplyer;
@@ -109,9 +110,9 @@ public class OptionMenu : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private string ToggleText()
+    private string ToggleText(Toggle aToggle)
     {
-        return (GuideActiveToggle.isOn ? "ON" : "OFF");
+        return (aToggle.isOn ? "ON" : "OFF");
     }
 
     private void ActiveAdmitButton()

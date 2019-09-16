@@ -35,5 +35,6 @@ public class GameRoundManager
         
         //TaskManager.Instance.PrepareObjectives();
         TaskManager.Instance.PrepareTaskValues(mGameRoundData.InitialTaskValue);
+        //TaskManager.Instance.StartFirstSetOfObjective();
     }
 }

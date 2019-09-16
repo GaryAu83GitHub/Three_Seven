@@ -40,10 +40,10 @@ public class SetLinkNumberPanel : SettingPanelBase
         //FourDigitButton.onClick.AddListener(FourCubesButtonClicked);
         //FiveDigitButton.onClick.AddListener(FiveCubesButtonClicked);
 
-        LinkButtons[(int)ScoreingLinks.LINK_2_DIGIT].onClick.AddListener(TwoCubesButtonClicked);
-        LinkButtons[(int)ScoreingLinks.LINK_3_DIGIT].onClick.AddListener(ThreeCubesButtonClicked);
-        LinkButtons[(int)ScoreingLinks.LINK_4_DIGIT].onClick.AddListener(FourCubesButtonClicked);
-        LinkButtons[(int)ScoreingLinks.LINK_5_DIGIT].onClick.AddListener(FiveCubesButtonClicked);
+        LinkButtons[(int)LinkIndexes.LINK_2_DIGIT].onClick.AddListener(TwoCubesButtonClicked);
+        LinkButtons[(int)LinkIndexes.LINK_3_DIGIT].onClick.AddListener(ThreeCubesButtonClicked);
+        LinkButtons[(int)LinkIndexes.LINK_4_DIGIT].onClick.AddListener(FourCubesButtonClicked);
+        LinkButtons[(int)LinkIndexes.LINK_5_DIGIT].onClick.AddListener(FiveCubesButtonClicked);
 
         //DescriptionText.text = "";
     }
@@ -57,7 +57,7 @@ public class SetLinkNumberPanel : SettingPanelBase
         //FourDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT];
         //FiveDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT];
 
-        for(ScoreingLinks i = ScoreingLinks.LINK_2_DIGIT; i != ScoreingLinks.MAX; i++)
+        for(LinkIndexes i = LinkIndexes.LINK_2_DIGIT; i != LinkIndexes.MAX; i++)
             ButtonDisplay(i);
         SetMaxSum();
     }
@@ -80,61 +80,61 @@ public class SetLinkNumberPanel : SettingPanelBase
 
     private void TwoCubesButtonClicked()
     {
-        SwapScoringCubeCountOn(ScoreingLinks.LINK_2_DIGIT);
+        SwapScoringCubeCountOn(LinkIndexes.LINK_2_DIGIT);
         //TwoDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT];
 
         //bool onOff = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT];
         //TwoDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (onOff ? "ON" : "OFF");
         //TwoDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = (onOff ? Color.green : Color.red);
-        ButtonDisplay(ScoreingLinks.LINK_2_DIGIT);
-        DescriptionText.text = "2 digit addition are " + GetEnableText(ScoreingLinks.LINK_2_DIGIT);
+        ButtonDisplay(LinkIndexes.LINK_2_DIGIT);
+        DescriptionText.text = "2 digit addition are " + GetEnableText(LinkIndexes.LINK_2_DIGIT);
 
         SetMaxSum();
     }
 
     private void ThreeCubesButtonClicked()
     {
-        SwapScoringCubeCountOn(ScoreingLinks.LINK_3_DIGIT);
+        SwapScoringCubeCountOn(LinkIndexes.LINK_3_DIGIT);
         //ThreeDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT];
 
         //bool onOff = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT];
         //ThreeDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (onOff ? "ON" : "OFF");
         //ThreeDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = (onOff ? Color.green : Color.red);
-        ButtonDisplay(ScoreingLinks.LINK_3_DIGIT);
-        DescriptionText.text = "3 digit addition are " + GetEnableText(ScoreingLinks.LINK_3_DIGIT);
+        ButtonDisplay(LinkIndexes.LINK_3_DIGIT);
+        DescriptionText.text = "3 digit addition are " + GetEnableText(LinkIndexes.LINK_3_DIGIT);
 
         SetMaxSum();
     }
 
     private void FourCubesButtonClicked()
     {
-        SwapScoringCubeCountOn(ScoreingLinks.LINK_4_DIGIT);
+        SwapScoringCubeCountOn(LinkIndexes.LINK_4_DIGIT);
         //FourDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT];
 
         //bool onOff = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT];
         //FourDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (onOff ? "ON" : "OFF");
         //FourDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = (onOff ? Color.green : Color.red);
-        ButtonDisplay(ScoreingLinks.LINK_4_DIGIT);
-        DescriptionText.text = "4 digit addition are " + GetEnableText(ScoreingLinks.LINK_4_DIGIT);
+        ButtonDisplay(LinkIndexes.LINK_4_DIGIT);
+        DescriptionText.text = "4 digit addition are " + GetEnableText(LinkIndexes.LINK_4_DIGIT);
 
         SetMaxSum();
     }
 
     private void FiveCubesButtonClicked()
     {
-        SwapScoringCubeCountOn(ScoreingLinks.LINK_5_DIGIT);
+        SwapScoringCubeCountOn(LinkIndexes.LINK_5_DIGIT);
         //FiveDigitButton.GetComponent<Image>().enabled = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT];
 
         //bool onOff = GameRoundManager.Instance.Data.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT];
         //FiveDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (onOff ? "ON" : "OFF");
         //FiveDigitButton.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = (onOff ? Color.green : Color.red);
-        ButtonDisplay(ScoreingLinks.LINK_5_DIGIT);
-        DescriptionText.text = "5 digit addition are " + GetEnableText(ScoreingLinks.LINK_5_DIGIT);
+        ButtonDisplay(LinkIndexes.LINK_5_DIGIT);
+        DescriptionText.text = "5 digit addition are " + GetEnableText(LinkIndexes.LINK_5_DIGIT);
 
         SetMaxSum();
     }
 
-    private void ButtonDisplay(ScoreingLinks aLink)
+    private void ButtonDisplay(LinkIndexes aLink)
     {
         bool onOff = GameRoundManager.Instance.Data.EnableScoringMethods[(int)aLink];
         LinkButtons[(int)aLink].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (onOff ? "ON" : "OFF");
@@ -171,16 +171,16 @@ public class SetLinkNumberPanel : SettingPanelBase
         //TaskManager.Instance.SetMaxLimitObjectiveValue(maxSum);
     }
 
-    private string GetEnableText(ScoreingLinks aLink)
+    private string GetEnableText(LinkIndexes aLink)
     {
-        return (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT] ? "enable" : "disable");
+        return (GameSettings.Instance.EnableScoringMethods[(int)LinkIndexes.LINK_5_DIGIT] ? "enable" : "disable");
     }
 
-    private void SwapScoringCubeCountOn(ScoreingLinks anIndex)
+    private void SwapScoringCubeCountOn(LinkIndexes anIndex)
     {
         bool isThereAnotherOptionEnable = false;
 
-        for (ScoreingLinks i = ScoreingLinks.LINK_2_DIGIT; i < ScoreingLinks.MAX; i++)
+        for (LinkIndexes i = LinkIndexes.LINK_2_DIGIT; i < LinkIndexes.MAX; i++)
         {
             if (i == anIndex)
                 continue;

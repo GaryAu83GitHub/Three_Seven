@@ -119,7 +119,7 @@ public class GenerateScoreCombinationPositions
         }
 
 
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_2_DIGIT])
+        if (GameSettings.Instance.EnableScoringMethods[(int)LinkIndexes.LINK_2_DIGIT])
         {
             {
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.U1_Ze, new List<Vector2Int> { Vector2Int.up, Vector2Int.zero });
@@ -134,7 +134,7 @@ public class GenerateScoreCombinationPositions
                 mScorePosWithCubeAddons.Add(ScorePosWithCubeIndex.L1_Ze, new List<Vector2Int> { Vector2Int.left });
             }
         }
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_3_DIGIT])
+        if (GameSettings.Instance.EnableScoringMethods[(int)LinkIndexes.LINK_3_DIGIT])
         {
             {
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.U2_U1_Ze, new List<Vector2Int> { Vector2Int.up * 2, Vector2Int.up, Vector2Int.zero });
@@ -159,7 +159,7 @@ public class GenerateScoreCombinationPositions
                 mScorePosWithBlockAddons[Axis.VERT].Add(ScorePosWithBlockIndex.Link_3_VERT_MI_MA_U1, new List<Vector2Int> { Vector2Int.up * 1 });
             }
         }
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_4_DIGIT])
+        if (GameSettings.Instance.EnableScoringMethods[(int)LinkIndexes.LINK_4_DIGIT])
         {
             {
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.U3_U2_U1_Ze, new List<Vector2Int> { Vector2Int.up * 3, Vector2Int.up * 2, Vector2Int.up, Vector2Int.zero });
@@ -190,7 +190,7 @@ public class GenerateScoreCombinationPositions
                 mScorePosWithBlockAddons[Axis.VERT].Add(ScorePosWithBlockIndex.LINK_4_VERT_MI_MA_U1_U2, new List<Vector2Int> { Vector2Int.up * 1, Vector2Int.up * 2 });
             }
         }
-        if (GameSettings.Instance.EnableScoringMethods[(int)ScoreingLinks.LINK_5_DIGIT])
+        if (GameSettings.Instance.EnableScoringMethods[(int)LinkIndexes.LINK_5_DIGIT])
         {
             {
                 mOldScorePosAddons.Add(ScorePosWithCubeIndex.U4_U3_U2_U1_Ze, new List<Vector2Int> { Vector2Int.up * 4, Vector2Int.up * 3, Vector2Int.up * 2, Vector2Int.up, Vector2Int.zero });

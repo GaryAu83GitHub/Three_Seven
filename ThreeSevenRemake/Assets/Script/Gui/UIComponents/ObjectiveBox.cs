@@ -25,7 +25,7 @@ public class ObjectiveBox : MonoBehaviour
     public void SetTaskNumbersFor(TaskRank anObjective, TaskData aTaskData/*int aTaskValue*/)
     {
         //TaskFrames[(int)anObjective].SetTaskValue(aTaskValue);
-        TaskFrames[(int)anObjective].SetTaskValue(aTaskData.Number, aTaskData.LinkedCubes);
+        TaskFrames[(int)anObjective].SetTaskValue(aTaskData.TaskValue, aTaskData.LinkedCubes);
     }
     
     private void DisplayScoring(TaskRank anObjective, List<Cube> someScoringCube)

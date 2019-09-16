@@ -40,7 +40,7 @@ public class TaskManager
     private int mCurrentObjectiveValueLimit = 0;
     public int CurrentLimetObjectiveValue { get { return mCurrentObjectiveValueLimit; } }
 
-    private readonly bool mDebugMode = false;
+    private readonly bool mDebugMode = true;
     
     public TaskManager()
     {
@@ -64,9 +64,10 @@ public class TaskManager
     {
         if (mDebugMode)
         {
-            mActiveTasks[TaskRank.X1].SetValue(CreateNewTask(TaskRank.X1, 9));
-            mActiveTasks[TaskRank.X5].SetValue(CreateNewTask(TaskRank.X5, 13));
-            mActiveTasks[TaskRank.X10].SetValue(CreateNewTask(TaskRank.X10, 16));
+            mActiveTasks[TaskRank.X1].SetValue(CreateNewTask(2, 9));
+            mActiveTasks[TaskRank.X5].SetValue(CreateNewTask(2, 3));
+            mActiveTasks[TaskRank.X10].SetValue(CreateNewTask(2, 18));
+
 
             for (TaskRank r = TaskRank.X1; r != TaskRank.X10 + 1; r++)
                 achieveObjective?.Invoke(r, mActiveTasks[r]);
@@ -78,13 +79,15 @@ public class TaskManager
                 achieveObjective?.Invoke(obj, mActiveTasks[obj]);
             }
         }
+
+        CubeNumberManager.Instance.GenerateNewCubeNumberOdds(mActiveTasks.Values.ToList());
     }
 
     public bool MatchTaskData(ref TaskRank retriveRank, int aValue, int aLinkCubes)
     {
         foreach (TaskData d in mActiveTasks.Values)
         {
-            if (d.Number == aValue && d.LinkedCubes == aLinkCubes)
+            if (d.TaskValue == aValue && d.LinkedCubes == aLinkCubes)
             {
                 retriveRank = d.Rank;
                 return true;
@@ -150,6 +153,8 @@ public class TaskManager
                 achieveObjective?.Invoke(obj, mActiveTasks[obj]);
             }
         }
+
+        
     }
 
     // this will be removed and will be handle in the TaskSubject class, it won't be affecting the GUI of setting the initialStartValue
@@ -221,7 +226,7 @@ public class TaskManager
             }
             else
             {
-               if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_3_DIGIT))
+               if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_3_DIGIT))
                 {
                     if (key <= 3 || key >= 24) // 1 to 3 combination
                         mTaskNumbersList[TaskRank.X10].Add(key);
@@ -261,22 +266,22 @@ public class TaskManager
         mTaskSubjects.Add(TaskRank.X5, new TaskSubject(TaskRank.X5, aStartValue));
         mTaskSubjects.Add(TaskRank.X10, new TaskSubject(TaskRank.X10, aStartValue));
 
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_2_DIGIT))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_2_DIGIT))
         {
             TaskRankValueData data = new TaskRankValueData(2, 0.035f, 0.065f);
             FillTaskSubjects(data);
         }
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_3_DIGIT))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_3_DIGIT))
         {
             TaskRankValueData data = new TaskRankValueData(3, 0.013f, 0.04f);
             FillTaskSubjects(data);
         }
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_4_DIGIT))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_4_DIGIT))
         {
             TaskRankValueData data = new TaskRankValueData(4, 0.007f, 0.037f);
             FillTaskSubjects(data);
         }
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_5_DIGIT))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_5_DIGIT))
         {
             TaskRankValueData data = new TaskRankValueData(5, 0.0028f, 0.025f);
             FillTaskSubjects(data);
@@ -287,6 +292,8 @@ public class TaskManager
             mActiveTasks[obj].SetValue(mTaskSubjects[obj].CreateNewTask());
             achieveObjective?.Invoke(obj, mActiveTasks[obj]);
         }
+
+        CubeNumberManager.Instance.GenerateNewCubeNumberOdds(mActiveTasks.Values.ToList());
     }
 
     
@@ -315,7 +322,7 @@ public class TaskManager
     private int GetTaskValueFor(TaskRank anObjective)
     {
         if (mDebugMode)
-            return mActiveTasks[anObjective].Number;
+            return mActiveTasks[anObjective].TaskValue;
 
         List<int> avaiableObjective = new List<int>();
         
@@ -354,8 +361,21 @@ public class TaskManager
         int linkCount = availableLinkCube.Count;
         if (linkCount > 1)
             selectIndex = Random.Range(0, linkCount);
-
+        
         TaskData data = new TaskData(aRank, availableLinkCube[selectIndex], aTaskValue);
+        return data;
+    }
+
+    private TaskData CreateNewTask(int aLinkCount, int aTaskValue)
+    {
+        TaskRank selectedRank = TaskRank.X1;
+        foreach(TaskSubject sub in mTaskSubjects.Values)
+        {
+            if (sub.Contains(aLinkCount, aTaskValue))
+                selectedRank = sub.Rank;
+        }
+
+        TaskData data = new TaskData(selectedRank, aLinkCount, aTaskValue);
         return data;
     }
 
@@ -363,7 +383,7 @@ public class TaskManager
     {
         Dictionary<int, int> combinationList = new Dictionary<int, int>();
 
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_2_DIGIT))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_2_DIGIT))
         {
             TaskRankValueData data = new TaskRankValueData(2, 0.035f, 0.065f);
             //mTaskSubjects.Add(2, data);
@@ -371,7 +391,7 @@ public class TaskManager
             IterateTwoCubesCombination(ref combinationList);
             mActiveLinkedCubes.Add(2);
         }
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_3_DIGIT))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_3_DIGIT))
         {
             TaskRankValueData data = new TaskRankValueData(3, 0.013f, 0.04f);
             //mTaskSubjects.Add(3, data);
@@ -379,7 +399,7 @@ public class TaskManager
             IterateThreeCubesCombination(ref combinationList);
             mActiveLinkedCubes.Add(3);
         }
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_4_DIGIT))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_4_DIGIT))
         {
             TaskRankValueData data = new TaskRankValueData(4, 0.007f, 0.037f);
             //mTaskSubjects.Add(4, data);
@@ -387,7 +407,7 @@ public class TaskManager
             IterateFourCubesCombination(ref combinationList);
             mActiveLinkedCubes.Add(4);
         }
-        if (GameSettings.Instance.IsScoringMethodActiveTo(ScoreingLinks.LINK_5_DIGIT))
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_5_DIGIT))
         {
             TaskRankValueData data = new TaskRankValueData(5, 0.0028f, 0.025f);
             //mTaskSubjects.Add(5, data);
@@ -599,6 +619,11 @@ public class TaskSubject
             mUsedTaskNumbers[key].Add(false);
     }
 
+    public bool Contains(int aLinkCount, int aValue)
+    {
+        return mTaskValueLists[aLinkCount].Contains(aValue);
+    }
+
     private int GetCubesLink()
     {
         if (mUsedLinks.Count < 2)
@@ -676,8 +701,8 @@ public class TaskData
     public TaskRank Rank { get { return mRank; } }
     private TaskRank mRank = TaskRank.X1;
 
-    public int Number { get { return mTaskNumber; } }
-    private int mTaskNumber = 0;
+    public int TaskValue { get { return mTaskValue; } }
+    private int mTaskValue = 0;
 
     public int LinkedCubes { get { return mTaskLinkedCube; } }
     private int mTaskLinkedCube = 0;
@@ -687,14 +712,14 @@ public class TaskData
     
     public TaskData()
     {
-        mTaskNumber = 0;
+        mTaskValue = 0;
         mTaskLinkedCube = 0;
     }
 
     public TaskData(TaskData aData)
     {
         mRank = aData.Rank;
-        mTaskNumber = aData.Number;
+        mTaskValue = aData.TaskValue;
         mTaskLinkedCube = aData.LinkedCubes;
         mTaskComplete = false;
     }
@@ -703,21 +728,21 @@ public class TaskData
     {
         mRank = aRank;
         mTaskLinkedCube = aTaskCubeCount;
-        mTaskNumber = aTaskNumber;
+        mTaskValue = aTaskNumber;
         mTaskComplete = false;
     }
 
     public void SetValue(TaskData aData)
     {
         mRank = aData.Rank;
-        mTaskNumber = aData.Number;
+        mTaskValue = aData.TaskValue;
         mTaskLinkedCube = aData.LinkedCubes;
         mTaskComplete = false;
     }
 
     public bool IsMatchingData(int aTaskNumber, int aLinkCube)
     {
-        if (mTaskNumber == aTaskNumber && mTaskLinkedCube == aLinkCube)
+        if (mTaskValue == aTaskNumber && mTaskLinkedCube == aLinkCube)
             return true;
 
         return false;
@@ -775,6 +800,7 @@ public class TaskRankValueData
     private void RankDistribution(List<List<int>> aPremutatedList)
     {
         Dictionary<int, float> oddsList = CategorizeSumOdds(CategorizeSumValue(aPremutatedList));
+        CubeNumberManager.Instance.GenerateCubeNumberOddsFor((LinkIndexes)(mLinkedCubeCount - 2), oddsList.Keys.ToList());
 
         foreach(int key in oddsList.Keys)
         {

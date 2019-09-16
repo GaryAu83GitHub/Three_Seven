@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum ScoreingLinks
+public enum LinkIndexes
 {
     LINK_2_DIGIT,
     LINK_3_DIGIT,
@@ -40,11 +40,14 @@ public class GameSettings
     private bool mDisplayingLongScoring = true;
     public bool ActiveLongScoringDisplay { get { return mDisplayingLongScoring; } }
 
-    private bool mActiveGuideBlock = true;
-    //public bool ActiveGuideBlock { get { return mActiveGuideBlock; } }
+    public bool ActivateLinkRestriction { get { return mActivateLinkRestriction; } }
+    private bool mActivateLinkRestriction = true;
 
-    private List<bool> mEnableScoringMethods = new List<bool>();
+    public bool ActiveGuideBlock { get { return mActiveGuideBlock; } }
+    private bool mActiveGuideBlock = true;
+
     public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } }
+    private List<bool> mEnableScoringMethods = new List<bool>();
 
     private const int mMaxLimitRow = 18;
     private const int mMinLimitRow = 9;
@@ -52,7 +55,7 @@ public class GameSettings
 
     public GameSettings()
     {
-        for(ScoreingLinks i = 0; i < (ScoreingLinks.MAX); i++)
+        for(LinkIndexes i = 0; i < (LinkIndexes.MAX); i++)
         {
             mEnableScoringMethods.Add(true);
         }
@@ -63,21 +66,21 @@ public class GameSettings
         mPlayerName = aName;
     }
 
-    public void SetScoringCubesCount(ScoreingLinks anIndex, bool isActive)
+    public void SetScoringCubesCount(LinkIndexes anIndex, bool isActive)
     {
         mEnableScoringMethods[(int)anIndex] = isActive;
     }
 
-    public bool IsScoringMethodActiveTo(ScoreingLinks anIndex)
+    public bool IsScoringMethodActiveTo(LinkIndexes anIndex)
     {
         return mEnableScoringMethods[(int)anIndex];
     }
 
-    public void SwapScoringCubeCountOn(ScoreingLinks anIndex)
+    public void SwapScoringCubeCountOn(LinkIndexes anIndex)
     {
         bool isThereAnotherOptionEnable = false;
 
-        for(ScoreingLinks i = ScoreingLinks.LINK_2_DIGIT; i < ScoreingLinks.MAX; i++)
+        for(LinkIndexes i = LinkIndexes.LINK_2_DIGIT; i < LinkIndexes.MAX; i++)
         {
             if (i == anIndex)
                 continue;
@@ -115,9 +118,14 @@ public class GameSettings
         return mDisplayingLongScoring = !mDisplayingLongScoring;
     }
 
-    public void ActiveteGuideBlock(bool aChangeValue)
+    public void SetActiveteGuideBlock(bool aChangeValue)
     {
         mActiveGuideBlock = aChangeValue;
+    }
+
+    public void SetActiveteLinkRestriction(bool aChangeValue)
+    {
+        mActivateLinkRestriction = aChangeValue;
     }
 
     public bool GetGuideBlockVisible(bool aSetOn)
@@ -130,6 +138,6 @@ public class GameSettings
 
     public void Reset()
     {
-        mEnableScoringMethods = new List<bool>() { true, true, true, true };
+        mEnableScoringMethods = new List<bool>() { true, false, false, false };
     }
 }

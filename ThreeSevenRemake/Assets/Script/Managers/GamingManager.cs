@@ -92,8 +92,8 @@ public class GameManager
     {
         mNextBlockNumbers.Clear();
 
-        mNextBlockNumbers.Add(CubeNumberGenerator.Instance.GetNewRootNumber);
-        mNextBlockNumbers.Add(CubeNumberGenerator.Instance.GetNewSubNumber);
+        mNextBlockNumbers.Add(CubeNumberManager.Instance.GetNewRootNumber);
+        mNextBlockNumbers.Add(CubeNumberManager.Instance.GetNewSubNumber);
 
         return mNextBlockNumbers;
     }
