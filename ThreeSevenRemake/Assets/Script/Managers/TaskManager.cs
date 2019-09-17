@@ -40,7 +40,7 @@ public class TaskManager
     private int mCurrentObjectiveValueLimit = 0;
     public int CurrentLimetObjectiveValue { get { return mCurrentObjectiveValueLimit; } }
 
-    private readonly bool mDebugMode = true;
+    private readonly bool mDebugMode = false;
     
     public TaskManager()
     {
@@ -685,6 +685,11 @@ public class TaskSubject
         }
 
         mUsedTaskNumbers[aLinkKey][selectedIndex] = true;
+
+        if (selectedIndex < 0 || selectedIndex >= mTaskValueLists[aLinkKey].Count)
+        {
+            return mTaskValueLists[aLinkKey][0];
+        }
 
         return mTaskValueLists[aLinkKey][selectedIndex];
     }

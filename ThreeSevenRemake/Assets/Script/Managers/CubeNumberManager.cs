@@ -109,17 +109,7 @@ public class CubeNumberManager
 
     private int GetNewCubeNumber()
     {
-        int newNumber = GetCubeNumberRecrusive(0, Random.Range(0, 100));//GetCubeNumberFromIntervall(Random.Range(0, 100));
-        //List<int> temp = new List<int>();
-        //for (int i = 0; i < 10; i++)
-        //    temp.Add(0);
-        //for (int i = 0; i < 3000000; i++)
-        //{
-        //    int index = GetCubeNumberRecrusive(0, Random.Range(0, 100));
-        //    temp[index]++;
-        //}
-        //TempLabClass templab = new TempLabClass(temp);
-        //JsonHelper<TempLabClass>.CreateNewJsonFile("testRandom", templab);
+        int newNumber = GetCubeNumberRecrusive(0, Random.Range(0, 100));
 
         return newNumber;
     }

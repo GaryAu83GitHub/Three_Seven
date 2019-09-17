@@ -41,17 +41,3 @@ public class JsonHelper<T>
         return obj;
     }
 }
-
-[Serializable]
-public class TempLabClass
-{
-    public List<int> ScoreList = new List<int>();
-
-    public TempLabClass()
-    { }
-
-    public TempLabClass(List<int> aScoreList)
-    {
-        ScoreList = aScoreList ?? throw new ArgumentNullException(nameof(aScoreList));
-    }
-}
