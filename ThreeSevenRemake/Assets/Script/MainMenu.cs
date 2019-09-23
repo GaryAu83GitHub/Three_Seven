@@ -41,6 +41,7 @@ public class MainMenu : MonoBehaviour
         OptionPanel.SetActive(false);
         GameSettingPanel.SetActive(false);
         HighScorePanel.SetActive(false);
+        
     }
 
     public void PlayGame()

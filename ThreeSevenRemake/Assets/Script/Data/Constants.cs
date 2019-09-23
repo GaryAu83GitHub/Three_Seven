@@ -13,6 +13,8 @@ public static class Constants
     public const float DROPPING_VALUE = .09f;//.03f;
     public const float MINIMAL_DROPRATE = .1f;
     public const float MAXIMAL_DROPRATE = 1f;
+    public const double DROPPING_INITIAL_SPEED = 1f;
+    public const double DROPPING_COEFFICIENT = -0.035f;
 
     public const int MINIMAL_TASK_VALUE = 18;
 

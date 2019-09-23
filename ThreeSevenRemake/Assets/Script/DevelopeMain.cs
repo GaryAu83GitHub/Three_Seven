@@ -31,7 +31,7 @@ public class DevelopeMain : MonoBehaviour
 
         // floats
     private float mNextDropTime = 0f;
-    private float mDropRate = 1;
+    //private float mDropRate = 1;
     private float mNextVerticalButtonDownTime = 0f;
     private float mNextHorizontalButtonDownTime = 0f;
 
@@ -167,7 +167,7 @@ public class DevelopeMain : MonoBehaviour
                 mCurrentBlock.DropDown();
 
             mNextVerticalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;//mButtonDownDropRate;
-            mNextDropTime = Time.time + mDropRate;
+            mNextDropTime = Time.time + GameManager.Instance.DropRate; //mDropRate;
         }
 
         // input for rotate the block clockwise if the column or row of where the block
@@ -238,12 +238,12 @@ public class DevelopeMain : MonoBehaviour
         GuideBlockObject.SetActive(GameSettings.Instance.GetGuideBlockVisible(true));
 
         // Get the block's droprate of the current level from GameManager
-        mDropRate = GameManager.Instance.GetCurrentDroppingRate();
+        //mDropRate = GameManager.Instance.DropRate;//GameManager.Instance.GetCurrentDroppingRate();
 
         mNextVerticalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;//mButtonDownDropRate;
         mNextHorizontalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
 
-        mNextDropTime = Time.time + mDropRate;
+        mNextDropTime = Time.time + GameManager.Instance.DropRate;//mDropRate;
 
         mBlockLanded = false;
 
