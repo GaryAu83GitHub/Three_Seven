@@ -22,10 +22,11 @@ public class ObjectiveBox : MonoBehaviour
         TaskManager.achieveObjective -= SetTaskNumbersFor;
     }
     
-    public void SetTaskNumbersFor(TaskRank anObjective, TaskData aTaskData/*int aTaskValue*/)
+    public void SetTaskNumbersFor(TaskRank aRank, TaskData aTaskData/*int aTaskValue*/)
     {
         //TaskFrames[(int)anObjective].SetTaskValue(aTaskValue);
-        TaskFrames[(int)anObjective].SetTaskValue(aTaskData.TaskValue, aTaskData.LinkedCubes);
+        //TaskFrames[(int)aRank].SetTaskValue(aTaskData.TaskValue, aTaskData.LinkedCubes);
+        TaskFrames[(int)aRank].SetUpTask(aTaskData);
     }
     
     private void DisplayScoring(TaskRank anObjective, List<Cube> someScoringCube)

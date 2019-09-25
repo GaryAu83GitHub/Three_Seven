@@ -48,6 +48,11 @@ public class CubeNumberManager
         mNumberGenerators.Add(aCubeLinkIndex, new NumberGenerator(aCubeLinkIndex, someTaskValue));
     }
 
+    public void GenerateCubeNumberUsedCountFor(LinkIndexes aLinkIndex, List<List<int>> someTaskValueList)
+    {
+        mNumberGenerators.Add(aLinkIndex, new NumberGenerator(aLinkIndex, someTaskValueList));
+    }
+
     public void GenerateNewCubeNumberOdds(List<TaskData> someTaskDatas)
     {
         ClearNumberOddsList();
@@ -193,6 +198,7 @@ public class NumberGenerator
     /// Exp, play select to challenge 2 cube link addition, the task value intervall are between 0 - 18. And each cube number have a different procentage of use on each value.
     /// </summary>
     private Dictionary<int, List<float>> mTaskNumberOddsList = new Dictionary<int, List<float>>();
+    private readonly List<List<int>> mNumberCountList = new List<List<int>>();
     
     private readonly int mLinkCount = 0;
     public NumberGenerator(LinkIndexes aLinkIndex, List<int> taskValueList)
@@ -203,12 +209,24 @@ public class NumberGenerator
         {
             mTaskNumberOddsList.Add(key, GenerateOdds(key));
         }
-        return;
+    }
+
+    public NumberGenerator(LinkIndexes aLinkIndex, List<List<int>> aTaskValueList)
+    {
+        mLinkIndex = aLinkIndex;
+        mLinkCount = (int)mLinkIndex + 2;
+
+        mNumberCountList = NumberCategorize(aTaskValueList);
     }
 
     public List<float> GetNumberOddsForTaskValue(int aTaskValue)
     {
         return mTaskNumberOddsList[aTaskValue];
+    }
+
+    public List<int> GetNumberCountListForTaskValue(int aTaskValue)
+    {
+        return mNumberCountList[aTaskValue];
     }
 
     private List<float> GenerateOdds(int aTaskValue)
@@ -224,5 +242,59 @@ public class NumberGenerator
         }
 
         return oddsList;
+    }
+
+    private List<List<int>> NumberCategorize(List<List<int>> aTaskValueList)
+    {
+        Dictionary<int, List<List<int>>> summary = new Dictionary<int, List<List<int>>>();
+
+        for (int i = 0; i < aTaskValueList.Count; i++)
+        {
+            aTaskValueList[i].Sort();
+            int sumKey = RecrusiveSum(0, 0, aTaskValueList[i]);
+            if (!summary.ContainsKey(sumKey))
+                summary.Add(sumKey, new List<List<int>>());
+
+            if (!BothListAreMatched(summary[sumKey], aTaskValueList[i]))
+                summary[sumKey].Add(aTaskValueList[i]);
+        }
+
+        List<List<int>> result = new List<List<int>>();
+        foreach (int key in summary.Keys)
+        {
+            int[] numberCount = new int[10];
+            for (int i = 0; i < summary[key].Count; i++)
+            {
+                for (int j = 0; j < summary[key][i].Count; j++)
+                {
+                    int index = summary[key][i][j];
+                    numberCount[index]++;
+                }
+            }
+            result.Add(numberCount.ToList());
+        }
+
+        return result;
+    }
+
+    static int RecrusiveSum(int anIndex, int aSumSoFar, List<int> someValue)
+    {
+        int currentSum = aSumSoFar + someValue[anIndex];
+        int nextIndex = anIndex + 1;
+
+        if (nextIndex >= someValue.Count)
+            return currentSum;
+
+        return RecrusiveSum(nextIndex, currentSum, someValue);
+    }
+
+    static bool BothListAreMatched(List<List<int>> anOrgiginalList, List<int> testingList)
+    {
+        for (int i = 0; i < anOrgiginalList.Count; i++)
+        {
+            if (anOrgiginalList[i].SequenceEqual(testingList))
+                return true;
+        }
+        return false;
     }
 }

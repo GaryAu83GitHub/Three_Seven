@@ -804,7 +804,8 @@ public class TaskRankValueData
     
     private void RankDistribution(List<List<int>> aPremutatedList)
     {
-        Dictionary<int, float> oddsList = CategorizeSumOdds(CategorizeSumValue(aPremutatedList));
+        Dictionary<int, int> combinationCountList = new Dictionary<int, int>(CategorizeSumValue(aPremutatedList));
+        Dictionary<int, float> oddsList = CategorizeSumOdds(combinationCountList);
         CubeNumberManager.Instance.GenerateCubeNumberOddsFor((LinkIndexes)(mLinkedCubeCount - 2), oddsList.Keys.ToList());
 
         foreach(int key in oddsList.Keys)

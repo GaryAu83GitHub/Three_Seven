@@ -17,4 +17,19 @@ public class MathTools
     {
         return aDefaultValue * Math.Exp(aConstant * aTime);
     }
+
+    public static List<List<int>> GetPermutationList(int aMinValue, int aMaxValue, int aLenght)
+    {
+        IEnumerable<IEnumerable<int>> result = GetPermutationsWithRept(Enumerable.Range(aMinValue, aMaxValue), aLenght);
+        
+        return result.Select(i => i.ToList()).ToList();
+    }
+
+    static IEnumerable<IEnumerable<T>> GetPermutationsWithRept<T>(IEnumerable<T> list, int length)
+    {
+        if (length == 1) return list.Select(t => new T[] { t });
+        return GetPermutationsWithRept(list, length - 1)
+            .SelectMany(t => list,
+                (t1, t2) => t1.Concat(new T[] { t2 }));
+    }
 }
