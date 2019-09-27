@@ -32,9 +32,10 @@ public class GameRoundManager
 
         //TaskManager.Instance.SetInitialObjectiveValue(mGameRoundData.InitialTaskValue);
         GenerateScoreCombinationPositions.Instance.GenerateCompinationPositions();
-        
+
         //TaskManager.Instance.PrepareObjectives();
-        TaskManager.Instance.PrepareTaskValues(mGameRoundData.InitialTaskValue);
+        //TaskManager.Instance.PrepareTaskValues(mGameRoundData.InitialTaskValue);
+        TaskManagerNew.Instance.PrepareNewTaskSubjects();
         //TaskManager.Instance.StartFirstSetOfObjective();
     }
 }

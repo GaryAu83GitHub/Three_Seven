@@ -274,7 +274,7 @@ public class GridManager
             //totalValue = TotalValueWithBlock(aBlock, pos);
             //int cubeCount = 2 + pos.Count;
             //if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue, cubeCount) &&
-            //    !ThisGroupIsAlreadyRegistrated(ScoringType.BLOCK_SCORING, ref infoList, pos))
+            //    !ThisGroupHasNotbeenRegistrate(ScoringType.BLOCK_SCORING, ref infoList, pos))
             //{
             //    newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aBlock, pos);
             //    infoList.Add(newInfo);
@@ -297,7 +297,7 @@ public class GridManager
             //totalValue = TotalValueWithCube(aCube, pos);
             //int cubeCount = 1 + pos.Count;
             //if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue, cubeCount) &&
-            //    !ThisGroupIsAlreadyRegistrated(ScoringType.CUBE_SCORING, ref infoList, pos))
+            //    !ThisGroupHasNotbeenRegistrate(ScoringType.CUBE_SCORING, ref infoList, pos))
             //{
             //    newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube, pos);
             //    infoList.Add(newInfo);
@@ -311,6 +311,7 @@ public class GridManager
     {
         ScoringType scoringType = ((aBlock != null) ? ScoringType.BLOCK_SCORING : ScoringType.CUBE_SCORING);
         TaskRank achieveRank = TaskRank.X1;
+        int slotIndex = -1;
 
         int cubeCount = somePositions.Count(); //+ ((scoringType == ScoringType.BLOCK_SCORING) ? 2 : 1);
         int resultValue = 0; //= ((scoringType == ScoringType.BLOCK_SCORING) ? TotalValueWithBlock(aBlock, somePositions) : TotalValueWithCube(aCube, somePositions));
@@ -327,31 +328,34 @@ public class GridManager
         }
 
         //if (!TaskManager.Instance.AchiveObjective(ref achieveRank, resultValue, cubeCount))
-        if(!TaskManager.Instance.MatchTaskData(ref achieveRank, resultValue, cubeCount))
+        //if(!TaskManager.Instance.MatchTaskData(ref achieveRank, resultValue, cubeCount))
+        //    return;
+        if (!TaskManagerNew.Instance.MatchTaskData(ref achieveRank, ref slotIndex, resultValue, cubeCount))
             return;
 
-        if (ThisGroupIsAlreadyRegistrated(scoringType, ref someScoringInfos, somePositions))
+        if (!ThisGroupHasNotbeenRegistrate(scoringType, ref someScoringInfos, somePositions))
             return;
 
 
         ScoringGroupAchieveInfo registrateInfo = ((scoringType == ScoringType.BLOCK_SCORING) ? 
-            new ScoringGroupAchieveInfo(achieveRank, aBlock, somePositions) : 
-            new ScoringGroupAchieveInfo(achieveRank, aCube, somePositions));
+            new ScoringGroupAchieveInfo(achieveRank, slotIndex, aBlock, somePositions) : 
+            new ScoringGroupAchieveInfo(achieveRank, slotIndex, aCube, somePositions));
 
-        TaskManager.Instance.ConfirmAchiveTaskOn(achieveRank);
+        //TaskManager.Instance.ConfirmAchiveTaskOn(achieveRank);
         someScoringInfos.Add(registrateInfo);
         return;
     }
     
-    private bool ThisGroupIsAlreadyRegistrated(ScoringType aScoringType, ref List<ScoringGroupAchieveInfo> someGroupOfPosition, List<Vector2Int> someScoringPositions)
+    private bool ThisGroupHasNotbeenRegistrate(ScoringType aScoringType, ref List<ScoringGroupAchieveInfo> someGroupOfPosition, List<Vector2Int> someScoringPositions)
     {
         //var a = ints1.All(ints2.Contains) && ints1.Count == ints2.Count;
         foreach (ScoringGroupAchieveInfo info in someGroupOfPosition)
         {
-            if (info.ScoringType == aScoringType && info.GroupPosition.SequenceEqual(someScoringPositions))
-                return true;
+            if (info.ScoringType == aScoringType && info.GroupPosition.SequenceEqual(someScoringPositions))  
+                return false;            
         }
-        return false;
+        TaskManagerNew.Instance.ConfirmAchiveTask();
+        return true;
     }
 
     /// <summary>

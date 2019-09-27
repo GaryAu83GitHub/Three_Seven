@@ -32,6 +32,16 @@ public class CubeNumberManager
     private Dictionary<LinkIndexes, NumberGenerator> mNumberGenerators = new Dictionary<LinkIndexes, NumberGenerator>();
     private List<float> mNumberOddsIntervall = new List<float>();
 
+    /// <summary>
+    /// This is use for storing the original counts of each number when new task is created
+    /// </summary>
+    private Dictionary<int, int> mOriginalNumberCounts = new Dictionary<int, int>();
+    /// <summary>
+    /// This is use for storing the current counts of each number when their counts reduce when they been selected once
+    /// </summary>
+    private Dictionary<int, int> mCurrentNumberCounts = new Dictionary<int, int>();
+
+
     public CubeNumberManager()
     {
         for (int i = 0; i != Constants.CUBE_MAX_NUMBER; i++)
@@ -41,6 +51,7 @@ public class CubeNumberManager
         }
 
         ClearNumberOddsList();
+        ClearUseableNumberList();
     }
 
     public void GenerateCubeNumberOddsFor(LinkIndexes aCubeLinkIndex, List<int> someTaskValue)
@@ -53,8 +64,49 @@ public class CubeNumberManager
         mNumberGenerators.Add(aLinkIndex, new NumberGenerator(aLinkIndex, someTaskValueList));
     }
 
-    public void GenerateNewCubeNumberOdds(List<TaskData> someTaskDatas)
+    public void GenerateNewUseableCubeNumberFor(List<TaskData> someTaskDatas)
     {
+        ClearUseableNumberList();
+        List<int> odds = new List<int>();
+        List<int> keys = new List<int>();
+        List<int> counts = new List<int>();
+
+        LinkIndexes key = LinkIndexes.MAX;
+        int taskValue = 0;
+
+        foreach (TaskData data in someTaskDatas)
+        {
+            key = (LinkIndexes)data.LinkedCubes - 2;
+            taskValue = data.TaskValue;
+            List<int> thisDataNumberCounts = new List<int>(mNumberGenerators[key].GetNumberCountListForTaskValue(taskValue));
+
+            for (int i = 0; i < thisDataNumberCounts.Count; i++)
+            {
+                if(!keys.Contains(i))
+                {
+                    keys.Add(i);
+                    counts.Add(thisDataNumberCounts[i]);
+                }
+                else
+                {
+                    counts[i] += thisDataNumberCounts[i];
+                }
+            }
+        }
+
+        for (int i = 0; i < keys.Count; i++)
+        {
+            if (counts[i] != 0)
+            {
+                mOriginalNumberCounts.Add(keys[i], counts[i]);
+                mCurrentNumberCounts.Add(keys[i], counts[i]);
+            }
+        }
+        return;
+    }
+
+    public void GenerateNewCubeNumberOdds(List<TaskData> someTaskDatas)
+    {   
         ClearNumberOddsList();
 
         List<float> odds = new List<float>();
@@ -94,7 +146,7 @@ public class CubeNumberManager
                 mNumberOddsIntervall[i] = (mNumberOddsIntervall[i - 1] + odds[i - 1]);
             }
         }
-
+        
         return;
     }
 
@@ -164,6 +216,12 @@ public class CubeNumberManager
             mNumberOddsIntervall.Add(0f);
     }
 
+    private void ClearUseableNumberList()
+    {
+        mOriginalNumberCounts.Clear();
+        mCurrentNumberCounts.Clear();
+    }
+
     private float OddSummary(List<float> someOdds)
     {
         float result = 0f;
@@ -173,7 +231,18 @@ public class CubeNumberManager
 
         return result;
     }
-    
+
+    private int TotalSummary(List<int> someCounts)
+    {
+        int result = 0;
+
+        for (int i = 0; i < someCounts.Count; i++)
+            result += someCounts[i];
+
+        return result;
+    }
+
+
     private int GetCubeNumberRecrusive(int anIndex, int randomValue)
     {
         int currentIndex = anIndex;
@@ -185,6 +254,28 @@ public class CubeNumberManager
             return currentIndex - 1;
 
         return GetCubeNumberRecrusive(currentIndex + 1, randomValue);
+    }
+
+    private Dictionary<int, float> GenerateNumbersInterval()
+    {
+        float totalSum = TotalSummary(mCurrentNumberCounts.Values.ToList());
+        for (int i = 0; i < mCurrentNumberCounts.Values.ToList().Count; i++)
+        {
+            float temp = odds[i];
+            odds[i] = Mathf.RoundToInt((temp / totalSum) * 100f);
+        }
+
+        Dictionary<int, float> intervall = new Dictionary<int, float>();
+
+        for (int i = 0; i < odds.Count; i++)
+        {
+            if (i == 0)
+                mNumberOddsIntervall[0] = 0f;
+            else
+            {
+                mNumberOddsIntervall[i] = (mNumberOddsIntervall[i - 1] + odds[i - 1]);
+            }
+        }
     }
 }
 

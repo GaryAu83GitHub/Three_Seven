@@ -14,6 +14,9 @@ public class ScoringGroupAchieveInfo
     private readonly TaskRank mTaskRank = TaskRank.X1;
     public TaskRank TaskRank { get { return mTaskRank; } }
 
+    private readonly int mSlotIndex = -1;
+    public int TaskSlotIndex { get { return mSlotIndex; } }
+
     private readonly List<Vector2Int> mGroupPositions = new List<Vector2Int>();
     public List<Vector2Int> GroupPosition { get { return mGroupPositions; } }
 
@@ -32,17 +35,19 @@ public class ScoringGroupAchieveInfo
         mGroupPositions = someGroupPositions;
     }
 
-    public ScoringGroupAchieveInfo(TaskRank aTaskRank, Block aBlock, List<Vector2Int> someGroupPosition)
+    public ScoringGroupAchieveInfo(TaskRank aTaskRank, int aSlotIndex, Block aBlock, List<Vector2Int> someGroupPosition)
     {
         mScoringType = ScoringType.BLOCK_SCORING;
+        mSlotIndex = aSlotIndex;
         mTaskRank = aTaskRank;
         mBlock = aBlock;
         mGroupPositions = someGroupPosition;
     }
 
-    public ScoringGroupAchieveInfo(TaskRank aTaskRank, Cube aCube, List<Vector2Int> someGroupPosition)
+    public ScoringGroupAchieveInfo(TaskRank aTaskRank, int aSlotIndex, Cube aCube, List<Vector2Int> someGroupPosition)
     {
         mScoringType = ScoringType.CUBE_SCORING;
+        mSlotIndex = aSlotIndex;
         mTaskRank = aTaskRank;
         mCube = aCube;
         mGroupPositions = someGroupPosition;

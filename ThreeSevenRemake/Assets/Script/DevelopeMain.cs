@@ -99,9 +99,10 @@ public class DevelopeMain : MonoBehaviour
                 else if (BlockManager.Instance.IsScoring())
                     BlockManager.Instance.ScoreCalculationProgression();
                 else
-                {   
+                {
                     //TaskManager.Instance.ChangeObjective();
-                    TaskManager.Instance.ChangeTask();
+                    //TaskManager.Instance.ChangeTask();
+                    TaskManagerNew.Instance.ChangeTask();
                     CreateNewBlock();                    
                 }
             }
@@ -208,8 +209,8 @@ public class DevelopeMain : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
 
-
-        TaskManager.Instance.StartFirstSetOfObjective();
+        TaskManagerNew.Instance.StartFirstSetOfTask();
+        //TaskManager.Instance.StartFirstSetOfObjective();
         //GameManager.Instance.SetupGameset();
         CreateNewBlock();
         

@@ -36,6 +36,10 @@ public class BlockManager
     public delegate void OnAchieveScoring(TaskRank anObjective, List<Cube> thisGroupsCubes);
     public static OnAchieveScoring achieveScoring;
 
+    public delegate void OnAchieveScoringFor(ScoringGroupAchieveInfo anInfo, List<Cube> thisGroupsCubes);
+    public static OnAchieveScoringFor achieveScoringFor;
+
+
     public delegate void OnComboOccures(int aComboCount);
     public static OnComboOccures comboOccuring;
 
@@ -200,7 +204,8 @@ public class BlockManager
 
             //addLevelScore?.Invoke();
             comboOccuring?.Invoke(mComboCount++);
-            achieveScoring?.Invoke(mScoringInfos[mCurrentScoringGroupIndex].TaskRank, sortCubeList);
+            //achieveScoring?.Invoke(mScoringInfos[mCurrentScoringGroupIndex].TaskRank, sortCubeList);
+            achieveScoringFor?.Invoke(mScoringInfos[mCurrentScoringGroupIndex], sortCubeList);
             LevelManager.Instance.AddLevelScore(1);
             GameManager.Instance.AddScore(ScoreType.LINKING, sortCubeList.Count, thisGroupTaskRank);
             mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;

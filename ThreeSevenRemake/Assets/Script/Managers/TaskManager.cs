@@ -31,10 +31,12 @@ public class TaskManager
     private Dictionary<TaskRank, List<int>> mTaskNumbersList = new Dictionary<TaskRank, List<int>>();
     private Dictionary<TaskRank, bool> mTaskAchieveList = new Dictionary<TaskRank, bool>();
     private Dictionary<int, List<int>> mLinkCubeTaskValueCountList = new Dictionary<int, List<int>>();
-
-    // these two dictionary will replace the two lists and three dictionary in the future
     private Dictionary<TaskRank, TaskSubject> mTaskSubjects = new Dictionary<TaskRank, TaskSubject>();
     private Dictionary<TaskRank, TaskData> mActiveTasks = new Dictionary<TaskRank, TaskData>();
+
+    // these two variable will replace all dictionary and list from above 
+    private TaskSubject mSubject = new TaskSubject();
+    private List<TaskData> mTaskDatas = new List<TaskData>();
 
     private int mMaxLimitObjectiveValue = 18;
     private int mCurrentObjectiveValueLimit = 0;
@@ -58,6 +60,9 @@ public class TaskManager
         }
 
         mCurrentObjectiveValueLimit = 0;
+
+        for (int i = 0; i < 3; i++)
+            mTaskDatas.Add(new TaskData());
     }
 
     public void StartFirstSetOfObjective()
@@ -71,6 +76,10 @@ public class TaskManager
 
             for (TaskRank r = TaskRank.X1; r != TaskRank.X10 + 1; r++)
                 achieveObjective?.Invoke(r, mActiveTasks[r]);
+
+            mTaskDatas[0].SetValue(CreateNewTask(2, 9));
+            mTaskDatas[1].SetValue(CreateNewTask(2, 3));
+            mTaskDatas[2].SetValue(CreateNewTask(2, 18));
         }
         else
         {
@@ -256,7 +265,7 @@ public class TaskManager
         }
         return;
     }
-
+    
     public void PrepareTaskValues(int aStartValue)
     {
         GameSettings.Instance.SetInitialValue(aStartValue);
@@ -268,22 +277,22 @@ public class TaskManager
 
         if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_2_DIGIT))
         {
-            TaskRankValueData data = new TaskRankValueData(2, 0.035f, 0.065f);
+            TaskSubjectObject data = new TaskSubjectObject(2, 0.035f, 0.065f);
             FillTaskSubjects(data);
         }
         if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_3_DIGIT))
         {
-            TaskRankValueData data = new TaskRankValueData(3, 0.013f, 0.04f);
+            TaskSubjectObject data = new TaskSubjectObject(3, 0.013f, 0.04f);
             FillTaskSubjects(data);
         }
         if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_4_DIGIT))
         {
-            TaskRankValueData data = new TaskRankValueData(4, 0.007f, 0.037f);
+            TaskSubjectObject data = new TaskSubjectObject(4, 0.007f, 0.037f);
             FillTaskSubjects(data);
         }
         if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_5_DIGIT))
         {
-            TaskRankValueData data = new TaskRankValueData(5, 0.0028f, 0.025f);
+            TaskSubjectObject data = new TaskSubjectObject(5, 0.0028f, 0.025f);
             FillTaskSubjects(data);
         }
 
@@ -294,11 +303,47 @@ public class TaskManager
         }
 
         CubeNumberManager.Instance.GenerateNewCubeNumberOdds(mActiveTasks.Values.ToList());
+
+        
+    }
+
+    public void PrepareNewTaskSubjects()
+    {
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_2_DIGIT))
+        {
+            TaskSubjectObject data = new TaskSubjectObject(2);
+            mSubject.FillValueListFor(data);
+            
+        }
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_3_DIGIT))
+        {
+            TaskSubjectObject data = new TaskSubjectObject(3);
+            mSubject.FillValueListFor(data);
+            
+        }
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_4_DIGIT))
+        {
+            TaskSubjectObject data = new TaskSubjectObject(4);
+            mSubject.FillValueListFor(data);
+        }
+        if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_5_DIGIT))
+        {
+            TaskSubjectObject data = new TaskSubjectObject(5);
+            mSubject.FillValueListFor(data);
+        }
+
+        //foreach (TaskRank obj in mTaskNumbersList.Keys)
+        //{
+        //    mActiveTasks[obj].SetValue(mTaskSubjects[obj].CreateNewTask());
+        //    achieveObjective?.Invoke(obj, mActiveTasks[obj]);
+        //}
+
+        //CubeNumberManager.Instance.GenerateNewCubeNumberOdds(mActiveTasks.Values.ToList());
     }
 
     
 
-    private void FillTaskSubjects(TaskRankValueData aData)
+    private void FillTaskSubjects(TaskSubjectObject aData)
     {
         foreach (TaskRank key in mTaskSubjects.Keys)
             mTaskSubjects[key].FillValueListFor(aData);
@@ -385,7 +430,7 @@ public class TaskManager
 
         if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_2_DIGIT))
         {
-            TaskRankValueData data = new TaskRankValueData(2, 0.035f, 0.065f);
+            TaskSubjectObject data = new TaskSubjectObject(2, 0.035f, 0.065f);
             //mTaskSubjects.Add(2, data);
 
             IterateTwoCubesCombination(ref combinationList);
@@ -393,7 +438,7 @@ public class TaskManager
         }
         if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_3_DIGIT))
         {
-            TaskRankValueData data = new TaskRankValueData(3, 0.013f, 0.04f);
+            TaskSubjectObject data = new TaskSubjectObject(3, 0.013f, 0.04f);
             //mTaskSubjects.Add(3, data);
 
             IterateThreeCubesCombination(ref combinationList);
@@ -401,7 +446,7 @@ public class TaskManager
         }
         if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_4_DIGIT))
         {
-            TaskRankValueData data = new TaskRankValueData(4, 0.007f, 0.037f);
+            TaskSubjectObject data = new TaskSubjectObject(4, 0.007f, 0.037f);
             //mTaskSubjects.Add(4, data);
 
             IterateFourCubesCombination(ref combinationList);
@@ -409,7 +454,7 @@ public class TaskManager
         }
         if (GameSettings.Instance.IsScoringMethodActiveTo(LinkIndexes.LINK_5_DIGIT))
         {
-            TaskRankValueData data = new TaskRankValueData(5, 0.0028f, 0.025f);
+            TaskSubjectObject data = new TaskSubjectObject(5, 0.0028f, 0.025f);
             //mTaskSubjects.Add(5, data);
 
             IterateFiveCubesCombination(ref combinationList);
@@ -538,6 +583,9 @@ public class TaskSubject
     private Dictionary<int, List<int>> mTaskValueLists = new Dictionary<int, List<int>>();
     private Dictionary<int, List<bool>> mUsedTaskNumbers = new Dictionary<int, List<bool>>();
 
+    private List<int> mAvailableLinks = new List<int>();
+    private Dictionary<int, TaskSubjectObject> mSubjectData = new Dictionary<int, TaskSubjectObject>();
+
     private int mTaskValueLimit = 0;
     private int mMaxValue = 0;
 
@@ -545,8 +593,17 @@ public class TaskSubject
     private readonly int mDebugingValue = 0;
     private readonly int mDebugingLink = 0;
 
+
     /// <summary>
     /// Default constructor
+    /// </summary>
+    public TaskSubject()
+    {
+
+    }
+
+    /// <summary>
+    /// Previous Default constructor
     /// </summary>
     /// <param name="aRank">Task subjects rank</param>
     /// <param name="aInitialTaskValueLimit">the start task value</param>
@@ -572,27 +629,39 @@ public class TaskSubject
         mUnderDebuging = true;
     }
 
-    public void FillValueListFor(TaskRankValueData aData)
+    public void FillValueListFor(TaskSubjectObject aData)
     {
-        mUsedLinks.Add(aData.LinkCubes, false);
+        mAvailableLinks.Add(aData.LinkCubes);
+        mSubjectData.Add(aData.LinkCubes, aData);
 
-        if(!mUsedTaskNumbers.ContainsKey(aData.LinkCubes) && !mTaskValueLists.ContainsKey(aData.LinkCubes))
-        {
-            mUsedTaskNumbers.Add(aData.LinkCubes, new List<bool>());
-            mTaskValueLists.Add(aData.LinkCubes, new List<int>());
-        }
+        //mUsedLinks.Add(aData.LinkCubes, false);
 
-        List<int> valueList = aData.GetNumberListForRank(mRank);
+        //if(!mUsedTaskNumbers.ContainsKey(aData.LinkCubes) && !mTaskValueLists.ContainsKey(aData.LinkCubes))
+        //{
+        //    mUsedTaskNumbers.Add(aData.LinkCubes, new List<bool>());
+        //    mTaskValueLists.Add(aData.LinkCubes, new List<int>());
+        //}
 
-        for(int i = 0; i < valueList.Count; i++)
-        {
-            mTaskValueLists[aData.LinkCubes].Add(valueList[i]);
-            if (valueList[i] <= mTaskValueLimit)
-                mUsedTaskNumbers[aData.LinkCubes].Add(false);
-        }
+        //List<int> valueList = aData.GetNumberListForRank(mRank);
 
-        mMaxValue = valueList.Last();
+        //for(int i = 0; i < valueList.Count; i++)
+        //{
+        //    mTaskValueLists[aData.LinkCubes].Add(valueList[i]);
+        //    if (valueList[i] <= mTaskValueLimit)
+        //        mUsedTaskNumbers[aData.LinkCubes].Add(false);
+        //}
+
+        //mMaxValue = valueList.Last();
         return;
+    }
+
+    public TaskData CreateTask()
+    {
+        int link = mAvailableLinks[Random.Range(0, mAvailableLinks.Count)];
+        int task = GetNewTaskValue(link);
+        TaskRank rank = mSubjectData[link].GetRankFor(task);
+
+        return new TaskData(rank, link, task);
     }
 
     public TaskData CreateNewTask()
@@ -605,6 +674,13 @@ public class TaskSubject
             linkCount = mDebugingLink;
             taskValue = mDebugingValue;
         }
+
+        //if (mCombinationCountList[aTaskValue] > 500)
+        //    return TaskRank.X10;
+        //else if (mCombinationCountList[aTaskValue] > 50 && mCombinationCountList[aTaskValue] < 500)
+        //    return TaskRank.X5;
+
+        //return TaskRank.X1;
 
         return new TaskData(mRank, linkCount, taskValue);
     }
@@ -662,6 +738,22 @@ public class TaskSubject
             mUsedLinks[key] = false;
     }
 
+    private int GetNewTaskValue(int aLink)
+    {
+        List<int> availableValues = mSubjectData[aLink].GetUnusedTaskValue();
+
+        if(availableValues.Count == 1)
+        {
+            mSubjectData[aLink].ResetUsedTaskValue(availableValues[0]);
+            return availableValues[0];
+        }
+
+        int selectedValue = availableValues[Random.Range(0, availableValues.Count)];
+
+        return selectedValue;
+    }
+
+    // this will be replaced by GetNewTaskValue
     private int GetTaskValue(int aLinkKey)
     {
         int selectedIndex = 0;
@@ -701,163 +793,7 @@ public class TaskSubject
     }
 }
 
-public class TaskData
-{
-    public TaskRank Rank { get { return mRank; } }
-    private TaskRank mRank = TaskRank.X1;
 
-    public int TaskValue { get { return mTaskValue; } }
-    private int mTaskValue = 0;
 
-    public int LinkedCubes { get { return mTaskLinkedCube; } }
-    private int mTaskLinkedCube = 0;
 
-    public bool TaskComplete { get { return mTaskComplete; } }
-    private bool mTaskComplete = false;
-    
-    public TaskData()
-    {
-        mTaskValue = 0;
-        mTaskLinkedCube = 0;
-    }
-
-    public TaskData(TaskData aData)
-    {
-        mRank = aData.Rank;
-        mTaskValue = aData.TaskValue;
-        mTaskLinkedCube = aData.LinkedCubes;
-        mTaskComplete = false;
-    }
-
-    public TaskData(TaskRank aRank, int aTaskCubeCount, int aTaskNumber)
-    {
-        mRank = aRank;
-        mTaskLinkedCube = aTaskCubeCount;
-        mTaskValue = aTaskNumber;
-        mTaskComplete = false;
-    }
-
-    public void SetValue(TaskData aData)
-    {
-        mRank = aData.Rank;
-        mTaskValue = aData.TaskValue;
-        mTaskLinkedCube = aData.LinkedCubes;
-        mTaskComplete = false;
-    }
-
-    public bool IsMatchingData(int aTaskNumber, int aLinkCube)
-    {
-        if (mTaskValue == aTaskNumber && mTaskLinkedCube == aLinkCube)
-            return true;
-
-        return false;
-    }
-
-    public void TaskCompleted()
-    {
-        mTaskComplete = true;
-    }
-}
-
-public class TaskRankValueData
-{
-    public int LinkCubes { get { return mLinkedCubeCount; } }
-    private readonly int mLinkedCubeCount = 0;
-
-    private readonly int mMaxValue = 1;
-
-    private List<bool> mNumberUsed = new List<bool>();
-    private Dictionary<TaskRank, List<int>> mRankNumberList = new Dictionary<TaskRank, List<int>>();
-
-    private readonly float mRedSumDistribution = 0f;
-    private readonly float mBlueSumDistribution = 0f;
-    
-    public TaskRankValueData()
-    {
-
-    }
-
-    public TaskRankValueData(int aCubeCount, float redDistribution, float blueDistribution)
-    {
-        mLinkedCubeCount = aCubeCount;
-        mRedSumDistribution = redDistribution;
-        mBlueSumDistribution = blueDistribution;
-
-        mMaxValue += 9 * aCubeCount;
-        for(int i = 0; i < Constants.MINIMAL_TASK_VALUE; i++)
-            mNumberUsed.Add(false);
-
-        for (TaskRank r = TaskRank.X1; r != TaskRank.X10 + 1; r++)
-            mRankNumberList.Add(r, new List<int>());
-
-        IEnumerable<IEnumerable<int>> result = GetPermutationsWithRept(Enumerable.Range(0, 10), aCubeCount);
-
-        List<List<int>> lists = result.Select(i => i.ToList()).ToList();
-
-        RankDistribution(lists);
-    }
-    
-    public List<int> GetNumberListForRank(TaskRank aRank)
-    {
-        return mRankNumberList[aRank];
-    }
-    
-    private void RankDistribution(List<List<int>> aPremutatedList)
-    {
-        Dictionary<int, int> combinationCountList = new Dictionary<int, int>(CategorizeSumValue(aPremutatedList));
-        Dictionary<int, float> oddsList = CategorizeSumOdds(combinationCountList);
-        CubeNumberManager.Instance.GenerateCubeNumberOddsFor((LinkIndexes)(mLinkedCubeCount - 2), oddsList.Keys.ToList());
-
-        foreach(int key in oddsList.Keys)
-        {
-            if (oddsList[key] < mRedSumDistribution)
-                mRankNumberList[TaskRank.X10].Add(key);
-            else if(oddsList[key] < mBlueSumDistribution && oddsList[key] > mRedSumDistribution)
-                mRankNumberList[TaskRank.X5].Add(key);
-            else
-                mRankNumberList[TaskRank.X1].Add(key);
-        }
-    }
-
-    private Dictionary<int, int> CategorizeSumValue(List<List<int>> aPremutatedList)
-    {
-        Dictionary<int, int> categorizedList = new Dictionary<int, int>();
-
-        for(int i = 0; i < aPremutatedList.Count; i++)
-        {
-            int sum = 0;
-            for (int j = 0; j < aPremutatedList[i].Count; j++)
-                sum += aPremutatedList[i][j];
-
-            if (!categorizedList.ContainsKey(sum))
-                categorizedList.Add(sum, 0);
-            categorizedList[sum]++;
-        }
-
-        return categorizedList;
-    }
-
-    private Dictionary<int, float> CategorizeSumOdds(Dictionary<int, int> aCategorizedList)
-    {
-        float total = 0f;
-        foreach (int key in aCategorizedList.Keys)
-            total += aCategorizedList[key];
-
-        Dictionary<int, float> sumOddsList = new Dictionary<int, float>();
-
-        foreach (int key in aCategorizedList.Keys)
-            sumOddsList.Add(key, (float)aCategorizedList[key] / total);
-
-        return sumOddsList;
-    }
-
-    static IEnumerable<IEnumerable<T>>
-    GetPermutationsWithRept<T>(IEnumerable<T> list, int length)
-    {
-        if (length == 1) return list.Select(t => new T[] { t });
-        return GetPermutationsWithRept(list, length - 1)
-            .SelectMany(t => list,
-                (t1, t2) => t1.Concat(new T[] { t2 }));
-    }
-}
 
