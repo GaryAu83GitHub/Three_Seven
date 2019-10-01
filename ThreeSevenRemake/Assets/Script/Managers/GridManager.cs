@@ -265,46 +265,17 @@ public class GridManager
     private void ScoreWithBlock(Block aBlock, ref List<ScoringGroupAchieveInfo> infoList)
     {
         List<List<Vector2Int>> scoreCombinationPositions = GenerateScoreCombinationPositions.Instance.GetScorePositionListForBlock(aBlock);
-        //TaskRank getObjectiveRank = TaskRank.X1;
-        //ScoringGroupAchieveInfo newInfo;
-        //int totalValue = 0;
 
         foreach (List<Vector2Int> pos in scoreCombinationPositions)
-        {
-            //totalValue = TotalValueWithBlock(aBlock, pos);
-            //int cubeCount = 2 + pos.Count;
-            //if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue, cubeCount) &&
-            //    !ThisGroupHasNotbeenRegistrate(ScoringType.BLOCK_SCORING, ref infoList, pos))
-            //{
-            //    newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aBlock, pos);
-            //    infoList.Add(newInfo);
-            //    TaskManager.Instance.ConfirmAchiveTaskOn(getObjectiveRank);
-            //}
-
             RegistrateInfo(aBlock, null, ref infoList, pos);
-        }
     }
 
     private void ScoreWithCube(Cube aCube, ref List<ScoringGroupAchieveInfo> infoList)
     {
         List<List<Vector2Int>> scoreCombinationPositions = GenerateScoreCombinationPositions.Instance.GetScorePositionListForCube(aCube);
-        //TaskRank getObjectiveRank = TaskRank.X1;
-        //ScoringGroupAchieveInfo newInfo;
-        //int totalValue = 0;
         
         foreach (List<Vector2Int> pos in scoreCombinationPositions)
-        {
-            //totalValue = TotalValueWithCube(aCube, pos);
-            //int cubeCount = 1 + pos.Count;
-            //if (TaskManager.Instance.AchiveObjective(ref getObjectiveRank, totalValue, cubeCount) &&
-            //    !ThisGroupHasNotbeenRegistrate(ScoringType.CUBE_SCORING, ref infoList, pos))
-            //{
-            //    newInfo = new ScoringGroupAchieveInfo(getObjectiveRank, aCube, pos);
-            //    infoList.Add(newInfo);
-            //    TaskManager.Instance.ConfirmAchiveTaskOn(getObjectiveRank);
-            //}
             RegistrateInfo(null, aCube, ref infoList, pos);
-        }
     }
 
     private void RegistrateInfo(Block aBlock, Cube aCube, ref List<ScoringGroupAchieveInfo> someScoringInfos, List<Vector2Int> somePositions)
@@ -327,9 +298,6 @@ public class GridManager
             resultValue = TotalValueWithCube(aCube, somePositions);
         }
 
-        //if (!TaskManager.Instance.AchiveObjective(ref achieveRank, resultValue, cubeCount))
-        //if(!TaskManager.Instance.MatchTaskData(ref achieveRank, resultValue, cubeCount))
-        //    return;
         if (!TaskManagerNew.Instance.MatchTaskData(ref achieveRank, ref slotIndex, resultValue, cubeCount))
             return;
 
@@ -341,7 +309,6 @@ public class GridManager
             new ScoringGroupAchieveInfo(achieveRank, slotIndex, aBlock, somePositions) : 
             new ScoringGroupAchieveInfo(achieveRank, slotIndex, aCube, somePositions));
 
-        //TaskManager.Instance.ConfirmAchiveTaskOn(achieveRank);
         someScoringInfos.Add(registrateInfo);
         return;
     }

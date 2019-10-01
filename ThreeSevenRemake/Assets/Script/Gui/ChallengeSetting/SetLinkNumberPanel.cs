@@ -168,7 +168,6 @@ public class SetLinkNumberPanel : SettingPanelBase
 
         GameRoundManager.Instance.Data.InitialTaskValue = Constants.MINIMAL_TASK_VALUE;
         changeTaskMaskValue?.Invoke(maxSum);
-        //TaskManager.Instance.SetMaxLimitObjectiveValue(maxSum);
     }
 
     private string GetEnableText(LinkIndexes aLink)

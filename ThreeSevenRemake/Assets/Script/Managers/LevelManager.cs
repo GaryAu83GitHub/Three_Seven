@@ -69,10 +69,7 @@ public class LevelManager
         {
             mCurrentLevelScore = 0;
             mCurrentLevel++;
-            //TaskManager.Instance.IncreaseObjectiveValue();
-            //TaskManager.Instance.ExpandTaskValue();
             GameManager.Instance.UpdateDropRateAtLevelUp(mCurrentLevel);
-            //levelUp?.Invoke();
             fillUpTheMain?.Invoke(true);
         }
     }

@@ -30,12 +30,7 @@ public class GameRoundManager
         for (int i = 0; i < 4; i++)
             GameSettings.Instance.EnableScoringMethods[i] = mGameRoundData.EnableScoringMethods[i];
 
-        //TaskManager.Instance.SetInitialObjectiveValue(mGameRoundData.InitialTaskValue);
         GenerateScoreCombinationPositions.Instance.GenerateCompinationPositions();
-
-        //TaskManager.Instance.PrepareObjectives();
-        //TaskManager.Instance.PrepareTaskValues(mGameRoundData.InitialTaskValue);
         TaskManagerNew.Instance.PrepareNewTaskSubjects();
-        //TaskManager.Instance.StartFirstSetOfObjective();
     }
 }

@@ -50,8 +50,6 @@ public class DevelopeMain : MonoBehaviour
 
     private void Start()
     {
-        //TaskManager.Instance.PrepareObjectives();
-
         GameOverMenu.leaveTheGame += ResetGame;
         PauseMenu.leaveTheGame += ResetGame;
 
@@ -100,8 +98,6 @@ public class DevelopeMain : MonoBehaviour
                     BlockManager.Instance.ScoreCalculationProgression();
                 else
                 {
-                    //TaskManager.Instance.ChangeObjective();
-                    //TaskManager.Instance.ChangeTask();
                     TaskManagerNew.Instance.ChangeTask();
                     CreateNewBlock();                    
                 }
@@ -210,8 +206,6 @@ public class DevelopeMain : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         TaskManagerNew.Instance.StartFirstSetOfTask();
-        //TaskManager.Instance.StartFirstSetOfObjective();
-        //GameManager.Instance.SetupGameset();
         CreateNewBlock();
         
         mGameInProgress = true;
