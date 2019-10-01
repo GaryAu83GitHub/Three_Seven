@@ -223,6 +223,48 @@
                 true,
                 true
             ]
+        },
+        {
+            "PlayerName": "Player1",
+            "TotalLevel": 15,
+            "TotalScore": 17118,
+            "TotalMaxCombo": 3,
+            "TotalTime": 3115,
+            "TotalUsedBlock": 274,
+            "EnableScoringMethods": [
+                true,
+                false,
+                false,
+                false
+            ]
+        },
+        {
+            "PlayerName": "Magda",
+            "TotalLevel": 4,
+            "TotalScore": 1215,
+            "TotalMaxCombo": 2,
+            "TotalTime": 679,
+            "TotalUsedBlock": 77,
+            "EnableScoringMethods": [
+                true,
+                true,
+                false,
+                false
+            ]
+        },
+        {
+            "PlayerName": "adrian",
+            "TotalLevel": 11,
+            "TotalScore": 8652,
+            "TotalMaxCombo": 5,
+            "TotalTime": 2181,
+            "TotalUsedBlock": 195,
+            "EnableScoringMethods": [
+                true,
+                false,
+                false,
+                false
+            ]
         }
     ]
 }

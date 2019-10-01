@@ -53,6 +53,7 @@ public class DevelopeMainGUI : MonoBehaviour
         GameOverMenu.leaveTheGame += ResetGameTime;
 
         BlockManager.comboOccuring += UpdateCombo;
+        CubeNumberManager.updateIntervall += UpdateDebugTextWithDicitonary;
 
         mComboAnimation = ComboFrame.GetComponent<Animation>();
 
@@ -69,6 +70,7 @@ public class DevelopeMainGUI : MonoBehaviour
         GameOverMenu.leaveTheGame -= ResetGameTime;
 
         BlockManager.comboOccuring -= UpdateCombo;
+        CubeNumberManager.updateIntervall -= UpdateDebugTextWithDicitonary;
     }
 
     // Update is called once per frame
@@ -114,6 +116,19 @@ public class DevelopeMainGUI : MonoBehaviour
 
         ComboCountText.text = aComboCount.ToString();
         mComboAnimation.Play();
+    }
+
+    public void UpdateDebugTextWithDicitonary(Dictionary<int, int> originalValue, Dictionary<int, int> currentValue)
+    {
+        string displayText = "Num\tOri\tCur\n";
+        foreach (int key in originalValue.Keys)
+        {
+            if (currentValue.ContainsKey(key))
+                displayText += key.ToString() + " :\t\t" + originalValue[key] + "\t\t" + currentValue[key] + "\n";
+            else
+                displayText += key.ToString() + " :\t\t" + originalValue[key] + "\n";
+        }
+        TempDebugText.text = displayText;
     }
 
     //public void ComboAppear(int aComboCount, int aComboScore, string aComboText)

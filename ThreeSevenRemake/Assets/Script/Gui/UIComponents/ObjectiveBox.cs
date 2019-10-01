@@ -14,7 +14,6 @@ public class ObjectiveBox : MonoBehaviour
     {
         BlockManager.achieveScoring += DisplayScoring;
         BlockManager.achieveScoringFor += DisplayScoringFor;
-        TaskManager.achieveObjective += SetTaskNumbersFor;
         TaskManagerNew.displayTaskAt += SetTaskNumbersAt;
         TaskManagerNew.displayTaskList += SetTaskNumbersByList;
     }
@@ -23,7 +22,6 @@ public class ObjectiveBox : MonoBehaviour
     {
         BlockManager.achieveScoring -= DisplayScoring;
         BlockManager.achieveScoringFor -= DisplayScoringFor;
-        TaskManager.achieveObjective -= SetTaskNumbersFor;
         TaskManagerNew.displayTaskAt -= SetTaskNumbersAt;
         TaskManagerNew.displayTaskList -= SetTaskNumbersByList;
     }

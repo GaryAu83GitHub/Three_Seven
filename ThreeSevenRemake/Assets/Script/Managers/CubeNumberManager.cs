@@ -17,11 +17,11 @@ public class CubeNumberManager
     }
     private static CubeNumberManager mInstance;
 
-    //public int GetNewRootNumber { get { return GetNewCubeNumberFor(ref mUsedRootNumber); } }
-    //public int GetNewSubNumber { get { return GetNewCubeNumberFor(ref mUsedSubNumber); } }
-
     public int GetNewRootNumber { get { return GetNewCubeNumber(); } }
     public int GetNewSubNumber { get { return GetNewCubeNumber(); } }
+
+    public delegate void OnUpdateCubeNumberIntervall(Dictionary<int, int> anOriginalIntervall, Dictionary<int, int> aCurrentIntervall);
+    public static OnUpdateCubeNumberIntervall updateIntervall;
 
     public List<bool> UsedRootNumber { get { return mUsedRootNumber; } }
     private List<bool> mUsedRootNumber = new List<bool>();
@@ -40,6 +40,7 @@ public class CubeNumberManager
     /// This is use for storing the current counts of each number when their counts reduce when they been selected once
     /// </summary>
     private Dictionary<int, int> mCurrentNumberCounts = new Dictionary<int, int>();
+    public Dictionary<int, int> CurrentNumberCounts { get { return mCurrentNumberCounts; } }
 
 
     public CubeNumberManager()
@@ -61,7 +62,10 @@ public class CubeNumberManager
 
     public void GenerateCubeNumberUsedCountFor(LinkIndexes aLinkIndex, List<List<int>> someTaskValueList)
     {
-        mNumberGenerators.Add(aLinkIndex, new NumberGenerator(aLinkIndex, someTaskValueList));
+        if (!mNumberGenerators.ContainsKey(aLinkIndex))
+            mNumberGenerators.Add(aLinkIndex, new NumberGenerator(aLinkIndex, someTaskValueList));
+        else
+            mNumberGenerators[aLinkIndex] = new NumberGenerator(aLinkIndex, someTaskValueList);
     }
 
     public void GenerateNewUseableCubeNumberFor(List<TaskData> someTaskDatas)
@@ -105,6 +109,7 @@ public class CubeNumberManager
         return;
     }
 
+    // this method will be replace by GenerateNewUseableCubeNumberFor
     public void GenerateNewCubeNumberOdds(List<TaskData> someTaskDatas)
     {   
         ClearNumberOddsList();
@@ -166,9 +171,22 @@ public class CubeNumberManager
 
     private int GetNewCubeNumber()
     {
-        int newNumber = GetCubeNumberRecrusive(0, Random.Range(0, 100));
+        Dictionary<int, float> intervall = GenerateNumbersInterval();
+        //int newNumber = GetCubeNumberRecrusive(0, Random.Range(0, 100));
+        int keyNumber = GetCubeNumberRecrusiveOf(intervall, 0, Random.Range(0, 100));
+        if (mCurrentNumberCounts[keyNumber] > 0)
+            mCurrentNumberCounts[keyNumber]--;
 
-        return newNumber;
+        if (mCurrentNumberCounts[keyNumber] == 0)
+            mCurrentNumberCounts.Remove(keyNumber);
+
+        if (!mCurrentNumberCounts.Any())
+        {
+            mCurrentNumberCounts = new Dictionary<int, int>(mOriginalNumberCounts);
+            GenerateNewUseableCubeNumberFor(TaskManagerNew.Instance.ActiveTask);
+        }
+        updateIntervall?.Invoke(mOriginalNumberCounts, mCurrentNumberCounts);
+        return keyNumber;
     }
 
     private int GetCubeNumberFromIntervall(int aRandomizedValue)
@@ -242,7 +260,20 @@ public class CubeNumberManager
         return result;
     }
 
+    private int GetCubeNumberRecrusiveOf(Dictionary<int, float> someIntervalls, int anIndex, int randomValue)
+    {
+        int currentIndex = anIndex;
 
+        if (currentIndex == someIntervalls.Count)
+            return someIntervalls.ElementAt(currentIndex - 1).Key;
+
+        if (randomValue < someIntervalls.ElementAt(currentIndex).Value)
+            return someIntervalls.ElementAt(currentIndex - 1).Key;
+
+        return GetCubeNumberRecrusiveOf(someIntervalls, currentIndex + 1, randomValue);
+    }
+
+    // This will be replace by GetCubeNumberRecrusiveOf
     private int GetCubeNumberRecrusive(int anIndex, int randomValue)
     {
         int currentIndex = anIndex;
@@ -258,8 +289,10 @@ public class CubeNumberManager
 
     private Dictionary<int, float> GenerateNumbersInterval()
     {
-        float totalSum = TotalSummary(mCurrentNumberCounts.Values.ToList());
-        for (int i = 0; i < mCurrentNumberCounts.Values.ToList().Count; i++)
+        int[] odds = mCurrentNumberCounts.Values.ToArray();
+
+        float totalSum = TotalSummary(odds.ToList());
+        for (int i = 0; i < odds.Length; i++)
         {
             float temp = odds[i];
             odds[i] = Mathf.RoundToInt((temp / totalSum) * 100f);
@@ -267,15 +300,17 @@ public class CubeNumberManager
 
         Dictionary<int, float> intervall = new Dictionary<int, float>();
 
-        for (int i = 0; i < odds.Count; i++)
+        for (int i = 0; i < mCurrentNumberCounts.Keys.Count; i++)
         {
+            int key = mCurrentNumberCounts.Keys.ToList()[i];
             if (i == 0)
-                mNumberOddsIntervall[0] = 0f;
+                intervall.Add(key, 0);
             else
             {
-                mNumberOddsIntervall[i] = (mNumberOddsIntervall[i - 1] + odds[i - 1]);
+                intervall.Add(key, (intervall.ElementAt(i - 1).Value + odds[i - 1]));
             }
         }
+        return intervall;
     }
 }
 
