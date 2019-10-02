@@ -23,6 +23,7 @@ public class SetDifficultyPanel : SettingPanelBase
         DifficultButtons[(int)Difficulties.CUSTOMIZE].onClick.AddListener(CostumizeButtonOnClick);
 
         //DescriptionText.text = "";
+        SetDifficulty(Difficulties.EASY);
     }
 
     public override void NextButtonOnClick()
@@ -80,7 +81,8 @@ public class SetDifficultyPanel : SettingPanelBase
 
     private void ButtonAppearance(Difficulties aSelectedDifficulty)
     {
-        GameRoundManager.Instance.Data.SelectedDifficulty = aSelectedDifficulty;
+        if(GameRoundManager.Instance.Data != null)
+            GameRoundManager.Instance.Data.SelectedDifficulty = aSelectedDifficulty;
         for (int i = 0; i < DifficultButtons.Count; i++)
             DifficultButtons[i].interactable = true;
 

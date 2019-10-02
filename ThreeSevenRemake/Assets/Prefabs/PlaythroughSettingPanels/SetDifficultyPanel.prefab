@@ -108,7 +108,7 @@ MonoBehaviour:
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 2aecceacc32468040bc17486b0dc9206, type: 3}
     m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: ee3b3bd487ae3ee458f4f7d4d24815b4, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -230,7 +230,7 @@ MonoBehaviour:
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 2aecceacc32468040bc17486b0dc9206, type: 3}
     m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: ee3b3bd487ae3ee458f4f7d4d24815b4, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -666,7 +666,7 @@ MonoBehaviour:
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 2aecceacc32468040bc17486b0dc9206, type: 3}
     m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: ee3b3bd487ae3ee458f4f7d4d24815b4, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -1102,7 +1102,7 @@ MonoBehaviour:
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 2aecceacc32468040bc17486b0dc9206, type: 3}
     m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: ee3b3bd487ae3ee458f4f7d4d24815b4, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -1999,10 +1999,11 @@ MonoBehaviour:
   DescriptionText: {fileID: 2918753279376296696}
   NextButton: {fileID: 2539579972278652237}
   PreviousButton: {fileID: 5543678968906147635}
-  EasyButton: {fileID: 208547052}
-  NormalButton: {fileID: 1731899181}
-  HardButton: {fileID: 864279431}
-  CostumizeButton: {fileID: 55672848}
+  DifficultButtons:
+  - {fileID: 208547052}
+  - {fileID: 1731899181}
+  - {fileID: 864279431}
+  - {fileID: 55672848}
 --- !u!1 &6862771016708715535
 GameObject:
   m_ObjectHideFlags: 0

@@ -48,7 +48,7 @@ public class MainMenu : MonoBehaviour
     {
         GameSettingPanel.SetActive(true);
         GameRoundManager.Instance.CreateNewData();
-        displaySettingPanel?.Invoke(Setting_Index.SET_LINK);
+        displaySettingPanel?.Invoke(Setting_Index.SET_DIFFICULTY);
     }
 
     public void DisplayHighscore()

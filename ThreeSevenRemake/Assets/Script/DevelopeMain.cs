@@ -121,11 +121,11 @@ public class DevelopeMain : MonoBehaviour
     /// </summary>
     private void CheckInput()
     {
-        if (Input.GetKeyDown(KeyCode.PageUp))
-        {
-            RewindTurn();
-            return;
-        }
+        //if (Input.GetKeyDown(KeyCode.PageUp))
+        //{
+        //    RewindTurn();
+        //    return;
+        //}
 
         if (PauseMenu.GameIsPause)
             return;

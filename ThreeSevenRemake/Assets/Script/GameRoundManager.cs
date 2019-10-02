@@ -17,7 +17,7 @@ public class GameRoundManager
     }
     private static GameRoundManager mInstance;
 
-    private GameRoundData mGameRoundData = null;
+    private GameRoundData mGameRoundData = new GameRoundData();
     public GameRoundData Data { get { return mGameRoundData; } }
 
     public void CreateNewData()

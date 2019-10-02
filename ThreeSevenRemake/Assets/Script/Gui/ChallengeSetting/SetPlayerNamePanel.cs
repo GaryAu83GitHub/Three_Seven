@@ -44,10 +44,11 @@ public class SetPlayerNamePanel : SettingPanelBase
     public override void PreviousButtonOnClick()
     {
         base.PreviousButtonOnClick();
-        if (OnlyTwoDigitLinkIsEnable())
-            displaySettingPanel?.Invoke(Setting_Index.SET_LINK);
-        else
-            displaySettingPanel?.Invoke(Setting_Index.SET_START_TASK_VALUE);
+        displaySettingPanel?.Invoke(Setting_Index.SET_DIFFICULTY);
+        //if (OnlyTwoDigitLinkIsEnable())
+        //    displaySettingPanel?.Invoke(Setting_Index.SET_LINK);
+        //else
+        //    displaySettingPanel?.Invoke(Setting_Index.SET_START_TASK_VALUE);
     }
 
     private void PlayerNameInputFieldOnValueChange(TMP_InputField anInput)
