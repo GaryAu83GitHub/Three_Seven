@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public enum Setting_Index
 {
     NONE,
+    SET_DIFFICULTY,
     SET_LINK,
     SET_START_TASK_VALUE,
     SET_NAME,
@@ -32,7 +33,7 @@ public class SettingPanelBase : MonoBehaviour
     {
         mAnimation = GetComponent<Animation>();
     }
-
+    //public virtual void Start()
     void Start()
     {
         

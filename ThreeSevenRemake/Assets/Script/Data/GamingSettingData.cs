@@ -4,6 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+public enum Difficulties
+{
+    EASY,
+    NORMAL,
+    HARD,
+    CUSTOMIZE
+}
 
 public class GameRoundData
 {
@@ -12,8 +19,11 @@ public class GameRoundData
     public string PlayerName { get { return mPlayerName; } set { mPlayerName = value; } }
 
     // Game round settings variabler
-    private List<bool> mEnableScoringMethods = new List<bool>() { true, false, false, false };
+    private List<bool> mEnableScoringMethods = new List<bool>() { true, true, false, false };
     public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } set { mEnableScoringMethods = value; } }
+
+    private Difficulties mSelectedDifficulty = Difficulties.EASY;
+    public Difficulties SelectedDifficulty { get { return mSelectedDifficulty; } set { mSelectedDifficulty = value; } }
 
     private int mInitialTaskValue = 0;
     public int InitialTaskValue { get { return mInitialTaskValue; } set { mInitialTaskValue = value; } }
