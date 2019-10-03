@@ -265,6 +265,20 @@
                 false,
                 false
             ]
+        },
+        {
+            "PlayerName": "arty",
+            "TotalLevel": 6,
+            "TotalScore": 4473,
+            "TotalMaxCombo": 2,
+            "TotalTime": 1474,
+            "TotalUsedBlock": 120,
+            "EnableScoringMethods": [
+                true,
+                true,
+                false,
+                false
+            ]
         }
     ]
 }

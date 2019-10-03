@@ -15029,8 +15029,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SettingPanels:
+  - {fileID: 1792799595}
   - {fileID: 1015122228}
-  - {fileID: 4922086411845008371}
   - {fileID: 390369777}
 --- !u!114 &1728058305
 MonoBehaviour:
@@ -15083,8 +15083,8 @@ RectTransform:
   - {fileID: 1039716666}
   - {fileID: 4193625663294899497}
   - {fileID: 1015122229}
-  - {fileID: 711909019904960910}
   - {fileID: 2763044309881364224}
+  - {fileID: 711909019904960910}
   m_Father: {fileID: 1863821381}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -16134,6 +16134,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1792623840}
   m_CullTransparentMesh: 0
+--- !u!114 &1792799595 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5795113794434448596, guid: f4efdf3c9192e1b40ba9c040f4fc70ce,
+    type: 3}
+  m_PrefabInstance: {fileID: 974269738850981571}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 416376acea0a9ad4ba6d5495288f2b4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1795820661
 GameObject:
   m_ObjectHideFlags: 0
@@ -18925,7 +18937,7 @@ PrefabInstance:
     - target: {fileID: 3160685827026356675, guid: f4efdf3c9192e1b40ba9c040f4fc70ce,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3160685827026356675, guid: f4efdf3c9192e1b40ba9c040f4fc70ce,
         type: 3}
@@ -19451,18 +19463,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 139202193628821683}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4922086411845008371 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4922086411845008371, guid: fed3841563e2aee4ebc6042228447c11,
-    type: 3}
-  m_PrefabInstance: {fileID: 7885227228722749656}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc733089e62d5c142b861866a2c78667, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7885227228722749656
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19513,7 +19513,7 @@ PrefabInstance:
     - target: {fileID: 7245378210808269142, guid: fed3841563e2aee4ebc6042228447c11,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7245378210808269142, guid: fed3841563e2aee4ebc6042228447c11,
         type: 3}

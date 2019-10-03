@@ -235,6 +235,7 @@ public class Block : MonoBehaviour
         Move(Vector3.right);
     }
 
+    // this will be replace by RotateBlockUpgrade
     public void RotateBlock()
     {
         // check if the rotaion is possible with the block's current position and it current

@@ -29,6 +29,11 @@ public class MainMenu : MonoBehaviour
     public delegate void OnOpenHighscorePanel();
     public static OnOpenHighscorePanel openHighscorePanel;
 
+    private void Awake()
+    {
+        InputManager.Ins.DefaultSetting();   
+    }
+
     private void Start()
     {
         PlayButton.onClick.AddListener(PlayGame);

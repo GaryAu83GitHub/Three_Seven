@@ -133,11 +133,11 @@ public class DevelopeMain : MonoBehaviour
         if (/*(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) &&*/ Time.time > mNextHorizontalButtonDownTime)
         {
             // input for move the block left if the left column is vacant
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (InputManager.Ins.KeyPress(InputIndex.BLOCK_MOVE_LEFT)/* Input.GetKey(KeyCode.LeftArrow)*/)
                 mCurrentBlock.MoveLeft();
 
             // input for move the block right if the right column is vacant
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (InputManager.Ins.KeyPress(InputIndex.BLOCK_MOVE_RIGHT)/*Input.GetKey(KeyCode.RightArrow)*/)
                 mCurrentBlock.MoveRight();
 
             mNextHorizontalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
@@ -145,7 +145,7 @@ public class DevelopeMain : MonoBehaviour
 
         // input for move the block downward one row if the row below is vacant
         // and if the time between each keypress has expired
-        if((Input.GetKey(KeyCode.DownArrow) && Time.time > mNextVerticalButtonDownTime) || Time.time > mNextDropTime)
+        if((InputManager.Ins.KeyPress(InputIndex.BLOCK_DROP)/*Input.GetKey(KeyCode.DownArrow)*/ && Time.time > mNextVerticalButtonDownTime) || Time.time > mNextDropTime)
         {
             if(!mCurrentBlock.CheckIfCellIsVacantBeneath())
             {
@@ -169,19 +169,19 @@ public class DevelopeMain : MonoBehaviour
 
         // input for rotate the block clockwise if the column or row of where the block
         // rotate to is vacant
-        if(Input.GetKeyDown(KeyCode.UpArrow))
+        if(InputManager.Ins.KeyDown(InputIndex.BLOCK_ROTATE)/*Input.GetKeyDown(KeyCode.UpArrow)*/)
         {
             //mCurrentBlock.RotateBlock();
             mCurrentBlock.RotateBlockUpgrade();
         }
 
         // input for swaping the cubes value inside the block
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(InputManager.Ins.KeyDown(InputIndex.BLOCK_INVERT)/*Input.GetKeyDown(KeyCode.Space)*/)
         {
             mCurrentBlock.Swap();
         }
 
-        if(Input.GetKeyDown(KeyCode.RightControl))
+        if(InputManager.Ins.KeyDown(InputIndex.PREVIEW_SWAP)/*Input.GetKeyDown(KeyCode.RightControl)*/)
         {
             mCurrentBlock.SwapWithPreviewBlock();
         }
