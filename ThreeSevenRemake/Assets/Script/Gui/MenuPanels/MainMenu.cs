@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Assets.Script.Tools;
 
-public class MainMenu : MonoBehaviour
+public class MainMenu : MenuPanelBase
 {
     public Fading FadingScript;
 
@@ -33,8 +33,8 @@ public class MainMenu : MonoBehaviour
     {
         InputManager.Ins.DefaultSetting();   
     }
-
-    private void Start()
+    
+    public override void Start()
     {
         PlayButton.onClick.AddListener(PlayGame);
         HighScoreTableButton.onClick.AddListener(DisplayHighscore);
@@ -46,7 +46,13 @@ public class MainMenu : MonoBehaviour
         OptionPanel.SetActive(false);
         GameSettingPanel.SetActive(false);
         HighScorePanel.SetActive(false);
-        
+    }
+
+    protected override void Input()
+    {
+        base.Input();
+        if (InputManager.Ins.KeyPress(CommandIndex.CONFIRM))
+            PlayGame();
     }
 
     public void PlayGame()
