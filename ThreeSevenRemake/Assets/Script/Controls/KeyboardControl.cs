@@ -11,9 +11,9 @@ public class KeyboardControl : ControlObject
         mType = ControlType.KEYBOARD;
     }
 
-    public override void DefaultSetting(Dictionary<CommandIndex, KeyCode> someSetting)
+    public override void KeySettings(Dictionary<CommandIndex, KeyCode> someNewKeys)
     {
-        Dictionary<CommandIndex, KeyCode> presets = new Dictionary<CommandIndex, KeyCode>
+        Dictionary<CommandIndex, KeyCode> defaultSets = new Dictionary<CommandIndex, KeyCode>
         {
             // navigation
             { CommandIndex.NAVI_LEFT, KeyCode.LeftArrow },
@@ -34,6 +34,47 @@ public class KeyboardControl : ControlObject
             { CommandIndex.INGAME_PAUSE, KeyCode.Return }
         };
 
-        base.DefaultSetting((someSetting.Any() ? someSetting : presets));
+        base.KeySettings((someNewKeys.Any() ? someNewKeys : defaultSets));
+    }
+
+    public override Vector2Int MenuNavigate()
+    {
+        if (KeyDown(CommandIndex.NAVI_DOWN))
+            return Vector2Int.down;
+        if (KeyDown(CommandIndex.NAVI_LEFT))
+            return Vector2Int.left;
+        if (KeyDown(CommandIndex.NAVI_RIGHT))
+            return Vector2Int.right;
+        if (KeyDown(CommandIndex.NAVI_UP))
+            return Vector2Int.up;
+
+        return base.MenuNavigate();
+    }
+
+    public override Vector3 GameMoveBlockHorizontal()
+    {
+        if(!MoveHorizontButtonTimePassed())
+            return base.GameMoveBlockHorizontal();
+
+        Vector3 dir = Vector3.zero;
+        if (HorizontBottomHit(ref dir))
+            ResetMoveHorizontTimer();
+
+        return dir;
+    }
+
+    private bool HorizontBottomHit(ref Vector3 aDir)
+    {
+        if (KeyDown(CommandIndex.BLOCK_MOVE_LEFT))
+        {
+            aDir = Vector3.left;
+            return true;
+        }
+        if (KeyDown(CommandIndex.BLOCK_MOVE_RIGHT))
+        {
+            aDir = Vector3.right;
+            return true;
+        }
+        return false;
     }
 }

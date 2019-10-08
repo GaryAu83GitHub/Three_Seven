@@ -31,7 +31,7 @@ public class MainMenu : MenuPanelBase
 
     private void Awake()
     {
-        InputManager.Ins.DefaultSetting();   
+        ControlManager.Ins.DefaultSetting();   
     }
     
     public override void Start()
@@ -48,10 +48,10 @@ public class MainMenu : MenuPanelBase
         HighScorePanel.SetActive(false);
     }
 
-    protected override void Input()
+    protected override void CheckInput()
     {
-        base.Input();
-        if (InputManager.Ins.KeyPress(CommandIndex.CONFIRM))
+        base.CheckInput();
+        if (ControlManager.Ins.KeyPress(CommandIndex.CONFIRM))
             PlayGame();
     }
 

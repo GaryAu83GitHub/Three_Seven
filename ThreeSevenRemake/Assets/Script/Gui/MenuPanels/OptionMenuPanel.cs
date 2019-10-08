@@ -49,9 +49,9 @@ public class OptionMenuPanel : MenuPanelBase
         GuideActiveText.text = ToggleText(GuideActiveToggle);
     }
 
-    protected override void Input()
+    protected override void CheckInput()
     {
-        base.Input();
+        base.CheckInput();
     }
 
     private void ExitButtonOnClick()

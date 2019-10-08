@@ -286,12 +286,11 @@ public class Block : MonoBehaviour
         }
     }
 
-    private void Move(Vector3 aDir)
+    public void Move(Vector3 aDir)
     {
         Vector2Int dir = new Vector2Int((int)aDir.x, (int)aDir.y);
 
         // check for the cell to move is vacant
-        //if (!GridManager.Instance.IsCellVacant(mMinPosition + dir) || !GridManager.Instance.IsCellVacant(mMaxPosition + dir))
         if(!CheckNeighborCellIsVacant(dir))
             return;
 

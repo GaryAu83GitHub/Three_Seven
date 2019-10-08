@@ -1,25 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class InputManager
+public class ControlManager
 {
-    public static InputManager Ins
+    public static ControlManager Ins
     {
         get
         {
             if (mInstance == null)
             {
-                mInstance = new InputManager();
+                mInstance = new ControlManager();
             }
             return mInstance;
         }
     }
-    private static InputManager mInstance;
+    private static ControlManager mInstance;
+
+    private List<ControlObject> mControls = new List<ControlObject>();
 
     private Dictionary<CommandIndex, KeyCode> mDefaultKeyBoard = new Dictionary<CommandIndex, KeyCode>();
     private Dictionary<CommandIndex, KeyCode> mKeyBoard = new Dictionary<CommandIndex, KeyCode>();
-    //private Dictionary<InputIndex, KeyCode> mGamePad = new Dictionary<InputIndex, KeyCode>();
+    
+    public ControlManager()
+    {
+        
+    }
 
     public void DefaultSetting()
     {
@@ -41,7 +48,31 @@ public class InputManager
         mDefaultKeyBoard.Add(CommandIndex.INGAME_PAUSE, KeyCode.Return);
 
         mKeyBoard = new Dictionary<CommandIndex, KeyCode>(mDefaultKeyBoard);
+
+        List<string> temp = Input.GetJoystickNames().ToList();
+        for (int i = 0; i < temp.Count; i++)
+        {
+            if(!temp[i].Any())
+                mControls.Add(new KeyboardControl());
+            
+        }
+
+        foreach (ControlObject c in mControls)
+            c.KeySettings(new Dictionary<CommandIndex, KeyCode>());
     }
+
+    public void ResetButtonPressTimer(){ mControls[0].ResetButtonPressTimer(); }
+
+    public Vector3 MoveBlockHorizontal() { return mControls[0].GameMoveBlockHorizontal(); }
+
+    public bool DropBlock() { return mControls[0].GameDropBlock(); }
+
+    public bool RotateBlock() { return mControls[0].GameRotateBlock(); }
+
+    public bool InvertBlock() { return mControls[0].GameInverteBlock(); }
+
+    public bool SwapPreview() { return mControls[0].GameSwapPreview(); }
+
 
     public bool KeyPress(CommandIndex anCommand)
     {

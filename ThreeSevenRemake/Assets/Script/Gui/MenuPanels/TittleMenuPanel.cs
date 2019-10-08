@@ -25,9 +25,9 @@ public class TittleMenuPanel : MenuPanelBase
         Buttons[(int)ButtonIndex.QUIT_BUTTON].onClick.AddListener(QuitGame);
     }
 
-    protected override void Input()
+    protected override void CheckInput()
     {
-        base.Input();
+        base.CheckInput();
     }
 
     public void PlayGame()

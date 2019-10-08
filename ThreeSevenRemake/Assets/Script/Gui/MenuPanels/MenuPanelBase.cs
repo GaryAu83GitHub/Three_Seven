@@ -18,10 +18,10 @@ public class MenuPanelBase : MonoBehaviour
 
     public virtual void Update()
     {
-        Input();
+        CheckInput();
     }
 
-    protected virtual void Input()
+    protected virtual void CheckInput()
     {
 
     }
