@@ -49,13 +49,14 @@ public class ControlManager
 
         mKeyBoard = new Dictionary<CommandIndex, KeyCode>(mDefaultKeyBoard);
 
+        mControls.Add(new KeyboardControl());
         List<string> temp = Input.GetJoystickNames().ToList();
-        for (int i = 0; i < temp.Count; i++)
-        {
-            if(!temp[i].Any())
-                mControls.Add(new KeyboardControl());
-            
-        }
+        //for (int i = 0; i < temp.Count; i++)
+        //{
+        //    if (!temp[i].Any())
+        //        continue;
+        //    //mControls.Add(new KeyboardControl());
+        //}
 
         foreach (ControlObject c in mControls)
             c.KeySettings(new Dictionary<CommandIndex, KeyCode>());
@@ -65,7 +66,7 @@ public class ControlManager
 
     public Vector3 MoveBlockHorizontal() { return mControls[0].GameMoveBlockHorizontal(); }
 
-    public bool DropBlock() { return mControls[0].GameDropBlock(); }
+    public bool DropBlock(float aBlockNextDropTime) { return mControls[0].GameDropBlock(aBlockNextDropTime); }
 
     public bool RotateBlock() { return mControls[0].GameRotateBlock(); }
 

@@ -112,22 +112,22 @@ public class DevelopeMain : MonoBehaviour
             //Call the function to display the result
             return;
         }
-        CheckControlManager();
+        InputHandle();
     }
 
-    private void CheckControlManager()
+    private void InputHandle()
     {
         if (PauseMenu.GameIsPause)
             return;
 
         // move block horizontal
-        Vector3 horizontDir = ControlManager.Ins.MoveBlockHorizontal();
-        if (horizontDir != Vector3.zero)
-            mCurrentBlock.Move(horizontDir);
+        //Vector3 horizontDir = ;
+        //if (horizontDir != Vector3.zero)
+            mCurrentBlock.Move(ControlManager.Ins.MoveBlockHorizontal());
 
         // input for move the block downward one row if the row below is vacant
         // and if the time between each keypress has expired
-        if (ControlManager.Ins.DropBlock() || Time.time > mNextDropTime)
+        if (ControlManager.Ins.DropBlock(mNextDropTime)/* || Time.time > mNextDropTime*/)
         {
             if (!mCurrentBlock.CheckIfCellIsVacantBeneath())
             {
@@ -144,8 +144,7 @@ public class DevelopeMain : MonoBehaviour
             else
                 mCurrentBlock.DropDown();
 
-            //ControlManager.Ins.ResetButtonPressTimer();
-            mNextDropTime = Time.time + GameManager.Instance.DropRate; //mDropRate;
+            mNextDropTime = GameManager.Instance.BlockNextDropTime;//Time.time + GameManager.Instance.DropRate; //mDropRate;
         }
 
         // input for rotate the block clockwise if the column or row of where the block
@@ -294,10 +293,10 @@ public class DevelopeMain : MonoBehaviour
         // Get the block's droprate of the current level from GameManager
         //mDropRate = GameManager.Instance.DropRate;//GameManager.Instance.GetCurrentDroppingRate();
 
-        mNextVerticalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;//mButtonDownDropRate;
-        mNextHorizontalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
-
-        mNextDropTime = Time.time + GameManager.Instance.DropRate;//mDropRate;
+        //mNextVerticalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;//mButtonDownDropRate;
+        //mNextHorizontalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
+        ControlManager.Ins.ResetButtonPressTimer();
+        mNextDropTime = GameManager.Instance.BlockNextDropTime;//Time.time + GameManager.Instance.DropRate;//mDropRate;
 
         mBlockLanded = false;
 

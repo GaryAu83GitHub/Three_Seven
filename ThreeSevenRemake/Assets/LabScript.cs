@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LabScript : MonoBehaviour
 {
+
     // Start is called before the first frame update
     private float[] noiseValues;
     void Start()
@@ -21,5 +22,9 @@ public class LabScript : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void FixedUpdate()
+    {
     }
 }

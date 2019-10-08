@@ -62,9 +62,9 @@ public class ControlObject
 
     public virtual Vector3 GameMoveBlockHorizontal() { return Vector3.zero; }
 
-    public virtual bool GameDropBlock()
+    public virtual bool GameDropBlock(float aBlockNextDropTime)
     {
-        if (KeyDown(CommandIndex.BLOCK_DROP) && DropButtonTimePassed())
+        if ((KeyDown(CommandIndex.BLOCK_DROP) && DropButtonTimePassed()) || Time.time > aBlockNextDropTime)
         {
             ResetDropTimer();
             return true;
@@ -97,7 +97,7 @@ public class ControlObject
     {
         if (!mKeybindList.ContainsKey(aCommand))
             return false;
-
+        
         return Input.GetKey(mKeybindList[aCommand]);
     }
 
@@ -119,7 +119,7 @@ public class ControlObject
     /// </summary>
     protected void ResetDropTimer()
     {
-        mBlockDropButtonDelayTime = Time.time + GameManager.Instance.DropRate;
+        mBlockDropButtonDelayTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
     }
 
     /// <summary>

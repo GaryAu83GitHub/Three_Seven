@@ -35,6 +35,7 @@ public class GameManager
 
     private float mCurrentDropRate = (float)Constants.DROPPING_INITIAL_SPEED;
     public float DropRate { get { return mCurrentDropRate; } }
+    public float BlockNextDropTime { get { return Time.time + DropRate; } }
 
     public float GameTime { get; set; }
 
