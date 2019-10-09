@@ -47,6 +47,13 @@ public class MainMenu : MenuPanelBase
         GameSettingPanel.SetActive(false);
         HighScorePanel.SetActive(false);
     }
+    
+    //private void OnGUI()
+    //{
+    //    Event e = Event.current;
+    //    if(e.isKey)
+    //        Debug.Log("Detected key code: " + e.keyCode);
+    //}
 
     protected override void CheckInput()
     {
