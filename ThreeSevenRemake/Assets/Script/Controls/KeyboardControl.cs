@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class KeyboardControl : ControlObject
 {
+    private readonly Dictionary<CommandIndex, KeyCode> mCommands = new Dictionary<CommandIndex, KeyCode>();
 
     public KeyboardControl()
     {
         mType = ControlType.KEYBOARD;
     }
 
-    public override void KeySettings(Dictionary<CommandIndex, KeyCode> someNewKeys)
+    public override void KeySettings(/*Dictionary<CommandIndex, object> someSetting*/)
     {
         Dictionary<CommandIndex, KeyCode> defaultSets = new Dictionary<CommandIndex, KeyCode>
         {
@@ -26,6 +27,7 @@ public class KeyboardControl : ControlObject
             { CommandIndex.BLOCK_MOVE_LEFT, KeyCode.A },
             { CommandIndex.BLOCK_MOVE_RIGHT, KeyCode.D },
             { CommandIndex.BLOCK_DROP, KeyCode.S },
+            { CommandIndex.BLOCK_INSTANT_DROP, KeyCode.X },
             { CommandIndex.BLOCK_ROTATE, KeyCode.W },
             { CommandIndex.BLOCK_INVERT, KeyCode.E },
             { CommandIndex.PREVIEW_SWAP, KeyCode.Space },
@@ -33,36 +35,53 @@ public class KeyboardControl : ControlObject
             { CommandIndex.INGAME_PAUSE, KeyCode.Return }
         };
 
-        base.KeySettings((someNewKeys.Any() ? someNewKeys : defaultSets));
+        foreach (CommandIndex com in defaultSets.Keys)
+            mCommands[com] = (KeyCode)defaultSets[com];
     }
 
-    public override Vector2Int MenuNavigate()
+    //public override Vector2Int MenuNavigate()
+    //{
+    //    if (KeyDown(CommandIndex.NAVI_DOWN))
+    //        return Vector2Int.down;
+    //    if (KeyDown(CommandIndex.NAVI_LEFT))
+    //        return Vector2Int.left;
+    //    if (KeyDown(CommandIndex.NAVI_RIGHT))
+    //        return Vector2Int.right;
+    //    if (KeyDown(CommandIndex.NAVI_UP))
+    //        return Vector2Int.up;
+
+    //    return base.MenuNavigate();
+    //}
+
+    protected override bool KeyDown(CommandIndex aCommand)
     {
-        if (KeyDown(CommandIndex.NAVI_DOWN))
-            return Vector2Int.down;
-        if (KeyDown(CommandIndex.NAVI_LEFT))
-            return Vector2Int.left;
-        if (KeyDown(CommandIndex.NAVI_RIGHT))
-            return Vector2Int.right;
-        if (KeyDown(CommandIndex.NAVI_UP))
-            return Vector2Int.up;
+        if(!mCommands.ContainsKey(aCommand))
+            return base.KeyDown(aCommand);
 
-        return base.MenuNavigate();
+        return Input.GetKey(mCommands[aCommand]);
     }
 
-    public override Vector3 GameMoveBlockHorizontal()
+    protected override bool KeyPress(CommandIndex aCommand)
     {
-        if(!MoveHorizontButtonTimePassed())
-            return base.GameMoveBlockHorizontal();
+        if (!mCommands.ContainsKey(aCommand))
+            return base.KeyPress(aCommand);
 
-        Vector3 dir = Vector3.zero;
-        if (HorizontBottomHit(ref dir))
-            ResetMoveHorizontTimer();
-
-        return dir;
+        return Input.GetKeyDown(mCommands[aCommand]);
     }
 
-    private bool HorizontBottomHit(ref Vector3 aDir)
+    //public override Vector3 GameMoveBlockHorizontal()
+    //{
+    //    if(!MoveHorizontButtonTimePassed())
+    //        return base.GameMoveBlockHorizontal();
+
+    //    Vector3 dir = Vector3.zero;
+    //    if (HorizontBottomHit(ref dir))
+    //        ResetMoveHorizontTimer();
+
+    //    return dir;
+    //}
+
+    protected override bool HorizontBottomHit(ref Vector3 aDir)
     {
         if (KeyDown(CommandIndex.BLOCK_MOVE_LEFT))
         {
@@ -74,6 +93,7 @@ public class KeyboardControl : ControlObject
             aDir = Vector3.right;
             return true;
         }
-        return false;
+
+        return base.HorizontBottomHit(ref aDir);
     }
 }

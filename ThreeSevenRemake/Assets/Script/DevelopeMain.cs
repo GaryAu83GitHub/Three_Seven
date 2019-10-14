@@ -115,36 +115,34 @@ public class DevelopeMain : MonoBehaviour
         InputHandle();
     }
 
+    /// <summary>
+    /// All navigation input to the block include suspend the game is done from 
+    /// this block
+    /// </summary>
     private void InputHandle()
     {
         if (PauseMenu.GameIsPause)
             return;
 
-        // move block horizontal
-        //Vector3 horizontDir = ;
-        //if (horizontDir != Vector3.zero)
-            mCurrentBlock.Move(ControlManager.Ins.MoveBlockHorizontal());
+        mCurrentBlock.Move(ControlManager.Ins.MoveBlockHorizontal());
 
         // input for move the block downward one row if the row below is vacant
         // and if the time between each keypress has expired
         if (ControlManager.Ins.DropBlock(mNextDropTime)/* || Time.time > mNextDropTime*/)
         {
             if (!mCurrentBlock.CheckIfCellIsVacantBeneath())
-            {
-                mCurrentBlock.name = "Block " + mBlockCount.ToString();
-                RecordingManager.Instance.Record(new TurnData(mCurrentBlock));
-                BlockManager.Instance.AddNewOriginalBlock(mCurrentBlock);
-                GameManager.Instance.LandedBlockCount++;
-                UpdateDebugBoard();
-
-                mCurrentBlock = null;
-                mBlockLanded = true;
-                GuideBlockObject.SetActive(GameSettings.Instance.GetGuideBlockVisible(false));
-            }
+                RegistrateNewLandedBlock();
             else
                 mCurrentBlock.DropDown();
 
             mNextDropTime = GameManager.Instance.BlockNextDropTime;//Time.time + GameManager.Instance.DropRate; //mDropRate;
+        }
+
+        if(ControlManager.Ins.DropBlockInstantly())
+        {
+            mCurrentBlock.InstantDrop();
+            RegistrateNewLandedBlock();
+            mNextDropTime = GameManager.Instance.BlockNextDropTime;
         }
 
         // input for rotate the block clockwise if the column or row of where the block
@@ -172,93 +170,7 @@ public class DevelopeMain : MonoBehaviour
             mGuideBlock.SetPosition(mCurrentBlock);
         }
     }
-
-    /// <summary>
-    /// All navigation input to the block include suspend the game is done from 
-    /// this block
-    /// </summary>
-    private void CheckInput()
-    {
-        //if (Input.GetKeyDown(KeyCode.PageUp))
-        //{
-        //    RewindTurn();
-        //    return;
-        //}
-
-        if (PauseMenu.GameIsPause)
-            return;
-
-        if (/*(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) &&*/ Time.time > mNextHorizontalButtonDownTime)
-        {
-            // input for move the block left if the left column is vacant
-            if (ControlManager.Ins.KeyPress(CommandIndex.BLOCK_MOVE_LEFT)/* Input.GetKey(KeyCode.LeftArrow)*/)
-                mCurrentBlock.MoveLeft();
-
-            // input for move the block right if the right column is vacant
-            if (ControlManager.Ins.KeyPress(CommandIndex.BLOCK_MOVE_RIGHT)/*Input.GetKey(KeyCode.RightArrow)*/)
-                mCurrentBlock.MoveRight();
-
-            mNextHorizontalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
-        }
-
-        // input for move the block downward one row if the row below is vacant
-        // and if the time between each keypress has expired
-        if((ControlManager.Ins.KeyPress(CommandIndex.BLOCK_DROP)/*Input.GetKey(KeyCode.DownArrow)*/ && Time.time > mNextVerticalButtonDownTime) || Time.time > mNextDropTime)
-        {
-            if(!mCurrentBlock.CheckIfCellIsVacantBeneath())
-            {
-                mCurrentBlock.name = "Block " + mBlockCount.ToString();
-                RecordingManager.Instance.Record(new TurnData(mCurrentBlock));
-                //BlockManager.Instance.AddBlock(mCurrentBlock);
-                BlockManager.Instance.AddNewOriginalBlock(mCurrentBlock);
-                GameManager.Instance.LandedBlockCount++;
-                UpdateDebugBoard();
-
-                mCurrentBlock = null;
-                mBlockLanded = true;
-                GuideBlockObject.SetActive(GameSettings.Instance.GetGuideBlockVisible(false));
-            }
-            else
-                mCurrentBlock.DropDown();
-
-            mNextVerticalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;//mButtonDownDropRate;
-            mNextDropTime = Time.time + GameManager.Instance.DropRate; //mDropRate;
-        }
-
-        // input for rotate the block clockwise if the column or row of where the block
-        // rotate to is vacant
-        if(ControlManager.Ins.KeyDown(CommandIndex.BLOCK_ROTATE)/*Input.GetKeyDown(KeyCode.UpArrow)*/)
-        {
-            //mCurrentBlock.RotateBlock();
-            mCurrentBlock.RotateBlockUpgrade();
-        }
-
-        // input for swaping the cubes value inside the block
-        if(ControlManager.Ins.KeyDown(CommandIndex.BLOCK_INVERT)/*Input.GetKeyDown(KeyCode.Space)*/)
-        {
-            mCurrentBlock.Swap();
-        }
-
-        if(ControlManager.Ins.KeyDown(CommandIndex.PREVIEW_SWAP)/*Input.GetKeyDown(KeyCode.RightControl)*/)
-        {
-            mCurrentBlock.SwapWithPreviewBlock();
-        }
-
-        if(Input.GetKeyDown(KeyCode.F9))
-        {
-            Destroy(mCurrentBlock.gameObject);
-            CreateNewBlock();
-            return;
-        }
-
-        if (mCurrentBlock != null)
-        {
-            mGuideBlock.SetupGuideBlock(mCurrentBlock);
-            mGuideBlock.SetPosition(mCurrentBlock);
-        }
         
-    }
-    
     private IEnumerator GameStart()
     {
         yield return new WaitForSeconds(3f);
@@ -301,6 +213,19 @@ public class DevelopeMain : MonoBehaviour
         mBlockLanded = false;
 
         BlockManager.Instance.ResetCombo();
+    }
+
+    private void RegistrateNewLandedBlock()
+    {
+        mCurrentBlock.name = "Block " + mBlockCount.ToString();
+        RecordingManager.Instance.Record(new TurnData(mCurrentBlock));
+        BlockManager.Instance.AddNewOriginalBlock(mCurrentBlock);
+        GameManager.Instance.LandedBlockCount++;
+        UpdateDebugBoard();
+
+        mCurrentBlock = null;
+        mBlockLanded = true;
+        GuideBlockObject.SetActive(GameSettings.Instance.GetGuideBlockVisible(false));
     }
 
     /// <summary>

@@ -220,6 +220,25 @@ public class Block : MonoBehaviour
         swapWithPreviewBlock?.Invoke(this);
     }
 
+
+    public void InstantDrop()
+    {
+        int rowIndex = 0;
+        if (RootCube.GridPos.y == SubCube.GridPos.y)
+        {
+            int rootCubeTallestRow = GridManager.Instance.TallestRowFromCubePos(RootCube.GridPos);//GridManager.Instance.TallestRowOnColumn(RootCube.GridPos.x);
+            int subCubeTallestRow = GridManager.Instance.TallestRowFromCubePos(SubCube.GridPos);//GridManager.Instance.TallestRowOnColumn(SubCube.GridPos.x);
+
+            rowIndex = (rootCubeTallestRow > subCubeTallestRow) ? rootCubeTallestRow : subCubeTallestRow;
+        }
+        // the block is standing vertical, since both cube has the same column value, it need only to check
+        // on one column value
+        else if (RootCube.GridPos.x == SubCube.GridPos.x)
+            rowIndex = GridManager.Instance.TallestRowFromCubePos((RootCube.GridPos.y < SubCube.GridPos.y) ? RootCube.GridPos : SubCube.GridPos);//GridManager.Instance.TallestRowOnColumn((RootCube.GridPos.y < SubCube.GridPos.y) ? RootCube.GridPos.x : SubCube.GridPos.x);
+
+        DropRecrusive(rowIndex);
+    }
+
     public void DropDown()
     {
         Move(Vector3.down);
@@ -322,6 +341,15 @@ public class Block : MonoBehaviour
                 break;
 
         }
+    }
+
+    private int DropRecrusive(int aDepth)
+    {
+        if (mMinPosition.y == aDepth)
+            return 0;
+
+        DropDown();
+        return DropRecrusive(aDepth);
     }
 
     private void SetSubCubPosition(Vector2Int aDir)

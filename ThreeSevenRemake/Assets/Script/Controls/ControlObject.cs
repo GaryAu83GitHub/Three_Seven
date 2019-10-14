@@ -18,6 +18,7 @@ public enum CommandIndex
     BLOCK_MOVE_LEFT,
     BLOCK_MOVE_RIGHT,
     BLOCK_DROP,
+    BLOCK_INSTANT_DROP,
     BLOCK_ROTATE,
     BLOCK_INVERT,
     PREVIEW_SWAP,
@@ -39,7 +40,7 @@ public class ControlObject
     protected ControlType mType = ControlType.KEYBOARD;
     public ControlType Type { get { return mType; } }
 
-    protected Dictionary<CommandIndex, KeyCode> mKeybindList = new Dictionary<CommandIndex, KeyCode>();
+    //protected Dictionary<CommandIndex, object> mKeybindList = new Dictionary<CommandIndex, object>();
 
     protected float mBlockDropButtonDelayTime = 0f;
     protected float mBlockMoveHorizontButtonDelayTime = 0f;
@@ -47,20 +48,47 @@ public class ControlObject
     public ControlObject()
     { }
 
-    public virtual void KeySettings(Dictionary<CommandIndex, KeyCode> someSetting)
+    public virtual void UpdateControl()
     {
-        mKeybindList = new Dictionary<CommandIndex, KeyCode>(someSetting);
+
     }
 
-    public virtual Vector2Int MenuNavigate() { return Vector2Int.zero; }
+    public virtual void KeySettings(/*Dictionary<CommandIndex, object> someSetting*/)
+    {
+        //mKeybindList = new Dictionary<CommandIndex, object>(someSetting);
+    }
 
-    public virtual bool MenuSelect() { return KeyDown(CommandIndex.SELECT); }
+    public virtual Vector2Int MenuNavigate()
+    {
+        if (KeyDown(CommandIndex.NAVI_DOWN))
+            return Vector2Int.down;
+        if (KeyDown(CommandIndex.NAVI_LEFT))
+            return Vector2Int.left;
+        if (KeyDown(CommandIndex.NAVI_RIGHT))
+            return Vector2Int.right;
+        if (KeyDown(CommandIndex.NAVI_UP))
+            return Vector2Int.up;
 
-    public virtual bool MenuConfirm(){ return KeyDown(CommandIndex.CONFIRM); }
+        return Vector2Int.zero;
+    }
 
-    public virtual bool MenuBack(){ return KeyDown(CommandIndex.BACK); }
+    public virtual bool MenuSelect() { return KeyPress(CommandIndex.SELECT); }
 
-    public virtual Vector3 GameMoveBlockHorizontal() { return Vector3.zero; }
+    public virtual bool MenuConfirm(){ return KeyPress(CommandIndex.CONFIRM); }
+
+    public virtual bool MenuBack(){ return KeyPress(CommandIndex.BACK); }
+
+    public Vector3 GameMoveBlockHorizontal()
+    {
+        if(!MoveHorizontButtonTimePassed())
+            return Vector3.zero;
+
+        Vector3 dir = Vector3.zero;
+        if (HorizontBottomHit(ref dir))
+            ResetMoveHorizontTimer();
+
+        return dir;
+    }
 
     public virtual bool GameDropBlock(float aBlockNextDropTime)
     {
@@ -72,15 +100,17 @@ public class ControlObject
         return false;
     }
 
-    public bool GameRotateBlock() { return KeyPress(CommandIndex.BLOCK_ROTATE); }
+    public virtual bool GameInstantBlockDrop() { return KeyPress(CommandIndex.BLOCK_INSTANT_DROP); }
+    
+    public virtual bool GameRotateBlock() { return KeyPress(CommandIndex.BLOCK_ROTATE); }
 
-    public bool GameInverteBlock() { return KeyPress(CommandIndex.BLOCK_INVERT); }
+    public virtual bool GameInverteBlock() { return KeyPress(CommandIndex.BLOCK_INVERT); }
 
-    public bool GameSwapPreview() { return KeyPress(CommandIndex.PREVIEW_SWAP); }
+    public virtual bool GameSwapPreview() { return KeyPress(CommandIndex.PREVIEW_SWAP); }
 
-    public bool GameRotatePreview() { return KeyPress(CommandIndex.PREVIEW_ROTATE); }
+    public virtual bool GameRotatePreview() { return KeyPress(CommandIndex.PREVIEW_ROTATE); }
 
-    public bool GamePause() { return KeyPress(CommandIndex.INGAME_PAUSE); }
+    public virtual bool GamePause() { return KeyPress(CommandIndex.INGAME_PAUSE); }
 
     public void ResetButtonPressTimer()
     {
@@ -93,12 +123,13 @@ public class ControlObject
     /// </summary>
     /// <param name="aCommand">The requesting command</param>
     /// <returns>true if the command was registrate and was pressed</returns>
-    public virtual bool KeyDown(CommandIndex aCommand)
+    protected virtual bool KeyDown(CommandIndex aCommand)
     {
-        if (!mKeybindList.ContainsKey(aCommand))
-            return false;
+        return false;
+        //if (!mKeybindList.ContainsKey(aCommand))
+        //    return false;
         
-        return Input.GetKey(mKeybindList[aCommand]);
+        //return Input.GetKey(mKeybindList[aCommand]);
     }
 
     /// <summary>
@@ -106,13 +137,15 @@ public class ControlObject
     /// </summary>
     /// <param name="aCommand">The requesting command</param>
     /// <returns>true if the command was registrate and is holding down</returns>
-    public virtual bool KeyPress(CommandIndex aCommand)
+    protected virtual bool KeyPress(CommandIndex aCommand)
     {
-        if (!mKeybindList.ContainsKey(aCommand))
-            return false;
+        return false;
+        //if (!mKeybindList.ContainsKey(aCommand))
+        //    return false;
 
-        return Input.GetKeyDown(mKeybindList[aCommand]);
+        //return Input.GetKeyDown(mKeybindList[aCommand]);
     }
+
 
     /// <summary>
     /// Reset dropp button's delay intervall timer
@@ -140,4 +173,7 @@ public class ControlObject
     {
         return (Time.time > mBlockMoveHorizontButtonDelayTime);
     }
+
+    protected virtual bool HorizontBottomHit(ref Vector3 aDir) { return false; }
+    
 }

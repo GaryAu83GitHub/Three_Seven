@@ -57,16 +57,22 @@ public class ControlManager
         //        continue;
         //    //mControls.Add(new KeyboardControl());
         //}
+        if (temp.Any() && temp[0].Any())
+            mControls[0] = new XBox360Constrol();
 
         foreach (ControlObject c in mControls)
-            c.KeySettings(new Dictionary<CommandIndex, KeyCode>());
+            c.KeySettings(/*new Dictionary<CommandIndex, KeyCode>()*/);
     }
+
+    public bool GamePause() { return mControls[0].GamePause(); }
 
     public void ResetButtonPressTimer(){ mControls[0].ResetButtonPressTimer(); }
 
     public Vector3 MoveBlockHorizontal() { return mControls[0].GameMoveBlockHorizontal(); }
 
     public bool DropBlock(float aBlockNextDropTime) { return mControls[0].GameDropBlock(aBlockNextDropTime); }
+
+    public bool DropBlockInstantly() { return mControls[0].GameInstantBlockDrop(); }
 
     public bool RotateBlock() { return mControls[0].GameRotateBlock(); }
 

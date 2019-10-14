@@ -4,6 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+public enum GameMode
+{
+    CLASSIC,
+    SURVIVAL,
+    TIME_ATTACK
+}
+
 public class GameRoundManager
 {
     public static GameRoundManager Instance
