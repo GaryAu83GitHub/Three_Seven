@@ -39,21 +39,21 @@ public class KeyboardControl : ControlObject
             mCommands[com] = (KeyCode)defaultSets[com];
     }
 
-    //public override Vector2Int MenuNavigate()
-    //{
-    //    if (KeyDown(CommandIndex.NAVI_DOWN))
-    //        return Vector2Int.down;
-    //    if (KeyDown(CommandIndex.NAVI_LEFT))
-    //        return Vector2Int.left;
-    //    if (KeyDown(CommandIndex.NAVI_RIGHT))
-    //        return Vector2Int.right;
-    //    if (KeyDown(CommandIndex.NAVI_UP))
-    //        return Vector2Int.up;
+    public override bool MenuNavigate(CommandIndex aCommand)
+    {
+        //if (KeyDown(CommandIndex.NAVI_DOWN))
+        //    return Vector2Int.down;
+        //if (KeyDown(CommandIndex.NAVI_LEFT))
+        //    return Vector2Int.left;
+        //if (KeyDown(CommandIndex.NAVI_RIGHT))
+        //    return Vector2Int.right;
+        //if (KeyDown(CommandIndex.NAVI_UP))
+        //    return Vector2Int.up;
 
-    //    return base.MenuNavigate();
-    //}
+        return KeyPress(aCommand);
+    }
 
-    protected override bool KeyDown(CommandIndex aCommand)
+    public override bool KeyDown(CommandIndex aCommand)
     {
         if(!mCommands.ContainsKey(aCommand))
             return base.KeyDown(aCommand);
@@ -61,7 +61,7 @@ public class KeyboardControl : ControlObject
         return Input.GetKey(mCommands[aCommand]);
     }
 
-    protected override bool KeyPress(CommandIndex aCommand)
+    public override bool KeyPress(CommandIndex aCommand)
     {
         if (!mCommands.ContainsKey(aCommand))
             return base.KeyPress(aCommand);
@@ -81,19 +81,36 @@ public class KeyboardControl : ControlObject
     //    return dir;
     //}
 
-    protected override bool HorizontBottomHit(ref Vector3 aDir)
+    protected override bool HorizontBottomHit(ref Vector3 aDir, float aHorizontValue = 0f)
     {
-        if (KeyDown(CommandIndex.BLOCK_MOVE_LEFT))
-        {
-            aDir = Vector3.left;
-            return true;
-        }
-        if (KeyDown(CommandIndex.BLOCK_MOVE_RIGHT))
-        {
-            aDir = Vector3.right;
-            return true;
-        }
+        //float horizontal = HorizontNavigation();
+        //if ((horizontal <= -1 || horizontal >= 1))
+        //{
+        //    if (!SupressHorizontMove())
+        //        aDir = new Vector3(horizontal, 0, 0);
+        //    else
+        //        aDir = Vector3.zero;
 
-        return base.HorizontBottomHit(ref aDir);
+        //    if(mCurrentHorizontDirection != (int)horizontal)
+        //    {
+        //        mCurrentHorizontDirection = (int)horizontal;
+        //        mHorizontSurpressTimer = 0f;
+        //    }
+
+        //    mHorizontSurpressTimer += Time.deltaTime * mIncreaseDeltaTimeConst;
+        //    return true;
+        //}
+
+        return base.HorizontBottomHit(ref aDir, HorizontNavigation());
+    }
+
+    private float HorizontNavigation()
+    {
+        float navi = 0;
+        if (KeyDown(CommandIndex.BLOCK_MOVE_LEFT))
+            navi = -1f;
+        if (KeyDown(CommandIndex.BLOCK_MOVE_RIGHT))
+            navi = 1f;
+        return navi;
     }
 }

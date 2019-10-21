@@ -18,6 +18,8 @@ public class LabMenu : MonoBehaviour
     private float lineRotateIntervall = 360f / 60f;
     private int second = 0;
     private int minute = 0;
+    private int nextSecond = 0;
+    private int nextMinute = 1;
     private float secondDegree = 0f;
     private float minuteDegree = 0f;
 
@@ -35,34 +37,46 @@ public class LabMenu : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        labText.text = ((int)timer).ToString();
+
+        //labText.text = timer.ToString();
 
         if (timer >= 1)
         {
-            timer = 0;
             second++;
-            
+            Clock();
+            timer = 0;
         }
-        if (second > 60)
+        if (second >= 60)
         {
-            second = 0;
             minute++;
-
+            Clock();
+            second = 0;
+            nextSecond = 1;
         }
         if (minute >= 60)
+        {
             minute = 0;
+            nextMinute = 1;
+        }
 
+        labText.text = ((int)minute).ToString() + " : " + ((int)second).ToString();
         //Seconds.fillAmount = (int)timer * sectionValue;
         //Minutes.fillAmount = minute * sectionValue;
 
-        Clock();
+        
     }
 
     private void Clock()
     {
-        secondDegree = second * lineRotateIntervall;
-        minuteDegree = minute * lineRotateIntervall;
-        secondLineTransform.rotation.z = new Vector3(0, 0, -secondDegree);
-        minuteLineTransform.Rotate(new Vector3(0, 0, -minuteDegree));
+        if (second >= nextSecond)
+        {
+            secondLineTransform.Rotate(new Vector3(0, 0, -lineRotateIntervall));
+            nextSecond++;
+        }
+        if (minute >= nextMinute)
+        {
+            minuteLineTransform.Rotate(new Vector3(0, 0, -lineRotateIntervall));
+            nextMinute++;
+        }
     }
 }

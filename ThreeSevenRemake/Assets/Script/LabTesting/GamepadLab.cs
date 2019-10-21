@@ -93,9 +93,9 @@ public class GamepadLab : MonoBehaviour
             thisTransform.position = startPos + inputDirection;
         }
 
-        Debug.Log("Left stick (" + Input.GetAxis(nameList[10]).ToString() + " : " + Input.GetAxis(nameList[11]).ToString() + ")");
-        Debug.Log("Trigger (" + Input.GetAxis(nameList[12]).ToString() + ")");
-        Debug.Log("Right stick (" + Input.GetAxis(nameList[13]).ToString() + " : " + Input.GetAxis(nameList[14]).ToString() + ")");
-        Debug.Log("DPad (" + Input.GetAxis(nameList[15]).ToString() + " : " + Input.GetAxis(nameList[16]).ToString() + ")");
+        //Debug.Log("Left stick (" + Input.GetAxis(nameList[10]).ToString() + " : " + Input.GetAxis(nameList[11]).ToString() + ")");
+        //Debug.Log("Trigger (" + Input.GetAxis(nameList[12]).ToString() + ")");
+        //Debug.Log("Right stick (" + Input.GetAxis(nameList[13]).ToString() + " : " + Input.GetAxis(nameList[14]).ToString() + ")");
+        //Debug.Log("DPad (" + Input.GetAxis(nameList[15]).ToString() + " : " + Input.GetAxis(nameList[16]).ToString() + ")");
     }
 }

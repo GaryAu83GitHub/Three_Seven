@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class TittleMenuPanel : MenuPanelBase
 {
     public Fading FadingScript;
+    public Text tempText;
 
     private enum ButtonIndex
     {
@@ -23,11 +24,29 @@ public class TittleMenuPanel : MenuPanelBase
         Buttons[(int)ButtonIndex.HIGHSCORE_BUTTON].onClick.AddListener(DisplayHighscore);
         Buttons[(int)ButtonIndex.OPTION_BUTTON].onClick.AddListener(OptionSetting);
         Buttons[(int)ButtonIndex.QUIT_BUTTON].onClick.AddListener(QuitGame);
+        base.Start();
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        tempText.text = mCurrentSelectButtonIndex.ToString();
     }
 
     protected override void CheckInput()
     {
+
         base.CheckInput();
+    }
+
+    protected override void NavigateMenuButtons(CommandIndex theIncreaseCommand, CommandIndex theDecreaseCommand)
+    {
+        base.NavigateMenuButtons(CommandIndex.NAVI_DOWN, CommandIndex.NAVI_UP);
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
     }
 
     public void PlayGame()

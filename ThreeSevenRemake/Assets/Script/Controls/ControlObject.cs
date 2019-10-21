@@ -45,6 +45,11 @@ public class ControlObject
     protected float mBlockDropButtonDelayTime = 0f;
     protected float mBlockMoveHorizontButtonDelayTime = 0f;
 
+    protected float mHorizontSurpressTimer = 0f;
+    protected int mCurrentHorizontDirection = 0;
+
+    protected const int mIncreaseDeltaTimeConst = 10;
+
     public ControlObject()
     { }
 
@@ -58,18 +63,18 @@ public class ControlObject
         //mKeybindList = new Dictionary<CommandIndex, object>(someSetting);
     }
 
-    public virtual Vector2Int MenuNavigate()
+    public virtual bool MenuNavigate(CommandIndex aCommand)
     {
-        if (KeyDown(CommandIndex.NAVI_DOWN))
-            return Vector2Int.down;
-        if (KeyDown(CommandIndex.NAVI_LEFT))
-            return Vector2Int.left;
-        if (KeyDown(CommandIndex.NAVI_RIGHT))
-            return Vector2Int.right;
-        if (KeyDown(CommandIndex.NAVI_UP))
-            return Vector2Int.up;
+        //if (KeyDown(CommandIndex.NAVI_DOWN))
+        //    return Vector2Int.down;
+        //if (KeyDown(CommandIndex.NAVI_LEFT))
+        //    return Vector2Int.left;
+        //if (KeyDown(CommandIndex.NAVI_RIGHT))
+        //    return Vector2Int.right;
+        //if (KeyDown(CommandIndex.NAVI_UP))
+        //    return Vector2Int.up;
 
-        return Vector2Int.zero;
+        return false;
     }
 
     public virtual bool MenuSelect() { return KeyPress(CommandIndex.SELECT); }
@@ -112,6 +117,33 @@ public class ControlObject
 
     public virtual bool GamePause() { return KeyPress(CommandIndex.INGAME_PAUSE); }
 
+    protected virtual bool HorizontBottomHit(ref Vector3 aDir, float aHorizontValue = 0f)
+    {
+        return MoveHorizontal(ref aDir, aHorizontValue);
+    }
+
+    protected virtual bool MoveHorizontal(ref Vector3 aDir, float aHorizontValue)
+    {
+        if ((aHorizontValue <= -1 || aHorizontValue >= 1))
+        {
+            if (!SupressHorizontMove())
+                aDir = new Vector3(aHorizontValue, 0, 0);
+            else
+                aDir = Vector3.zero;
+
+            if (mCurrentHorizontDirection != (int)aHorizontValue)
+            {
+                mCurrentHorizontDirection = (int)aHorizontValue;
+                mHorizontSurpressTimer = 0f;
+            }
+
+            mHorizontSurpressTimer += Time.deltaTime * mIncreaseDeltaTimeConst;
+            return true;
+        }
+        mHorizontSurpressTimer = 0f;
+        return false;
+    }
+
     public void ResetButtonPressTimer()
     {
         ResetDropTimer();
@@ -123,7 +155,7 @@ public class ControlObject
     /// </summary>
     /// <param name="aCommand">The requesting command</param>
     /// <returns>true if the command was registrate and was pressed</returns>
-    protected virtual bool KeyDown(CommandIndex aCommand)
+    public virtual bool KeyDown(CommandIndex aCommand)
     {
         return false;
         //if (!mKeybindList.ContainsKey(aCommand))
@@ -137,7 +169,7 @@ public class ControlObject
     /// </summary>
     /// <param name="aCommand">The requesting command</param>
     /// <returns>true if the command was registrate and is holding down</returns>
-    protected virtual bool KeyPress(CommandIndex aCommand)
+    public virtual bool KeyPress(CommandIndex aCommand)
     {
         return false;
         //if (!mKeybindList.ContainsKey(aCommand))
@@ -174,6 +206,8 @@ public class ControlObject
         return (Time.time > mBlockMoveHorizontButtonDelayTime);
     }
 
-    protected virtual bool HorizontBottomHit(ref Vector3 aDir) { return false; }
-    
+    protected bool SupressHorizontMove()
+    {
+        return (mHorizontSurpressTimer > 0f && mHorizontSurpressTimer < .5f);
+    }
 }

@@ -30,24 +30,24 @@ public class ControlManager
 
     public void DefaultSetting()
     {
-        // navigation
-        mDefaultKeyBoard.Add(CommandIndex.NAVI_LEFT, KeyCode.LeftArrow);
-        mDefaultKeyBoard.Add(CommandIndex.NAVI_RIGHT, KeyCode.RightArrow);
-        mDefaultKeyBoard.Add(CommandIndex.NAVI_DOWN, KeyCode.DownArrow);
-        mDefaultKeyBoard.Add(CommandIndex.NAVI_UP, KeyCode.UpArrow);
-        mDefaultKeyBoard.Add(CommandIndex.CONFIRM, KeyCode.Return);
-        mDefaultKeyBoard.Add(CommandIndex.BACK, KeyCode.Backspace);
-        // gameplay
-        mDefaultKeyBoard.Add(CommandIndex.BLOCK_MOVE_LEFT, KeyCode.A);
-        mDefaultKeyBoard.Add(CommandIndex.BLOCK_MOVE_RIGHT, KeyCode.D);
-        mDefaultKeyBoard.Add(CommandIndex.BLOCK_DROP, KeyCode.S);
-        mDefaultKeyBoard.Add(CommandIndex.BLOCK_ROTATE, KeyCode.W);
-        mDefaultKeyBoard.Add(CommandIndex.BLOCK_INVERT, KeyCode.E);
-        mDefaultKeyBoard.Add(CommandIndex.PREVIEW_SWAP, KeyCode.Space);
-        mDefaultKeyBoard.Add(CommandIndex.PREVIEW_ROTATE, KeyCode.UpArrow);
-        mDefaultKeyBoard.Add(CommandIndex.INGAME_PAUSE, KeyCode.Return);
+        //// navigation
+        //mDefaultKeyBoard.Add(CommandIndex.NAVI_LEFT, KeyCode.LeftArrow);
+        //mDefaultKeyBoard.Add(CommandIndex.NAVI_RIGHT, KeyCode.RightArrow);
+        //mDefaultKeyBoard.Add(CommandIndex.NAVI_DOWN, KeyCode.DownArrow);
+        //mDefaultKeyBoard.Add(CommandIndex.NAVI_UP, KeyCode.UpArrow);
+        //mDefaultKeyBoard.Add(CommandIndex.CONFIRM, KeyCode.Return);
+        //mDefaultKeyBoard.Add(CommandIndex.BACK, KeyCode.Backspace);
+        //// gameplay
+        //mDefaultKeyBoard.Add(CommandIndex.BLOCK_MOVE_LEFT, KeyCode.A);
+        //mDefaultKeyBoard.Add(CommandIndex.BLOCK_MOVE_RIGHT, KeyCode.D);
+        //mDefaultKeyBoard.Add(CommandIndex.BLOCK_DROP, KeyCode.S);
+        //mDefaultKeyBoard.Add(CommandIndex.BLOCK_ROTATE, KeyCode.W);
+        //mDefaultKeyBoard.Add(CommandIndex.BLOCK_INVERT, KeyCode.E);
+        //mDefaultKeyBoard.Add(CommandIndex.PREVIEW_SWAP, KeyCode.Space);
+        //mDefaultKeyBoard.Add(CommandIndex.PREVIEW_ROTATE, KeyCode.UpArrow);
+        //mDefaultKeyBoard.Add(CommandIndex.INGAME_PAUSE, KeyCode.Return);
 
-        mKeyBoard = new Dictionary<CommandIndex, KeyCode>(mDefaultKeyBoard);
+        //mKeyBoard = new Dictionary<CommandIndex, KeyCode>(mDefaultKeyBoard);
 
         mControls.Add(new KeyboardControl());
         List<string> temp = Input.GetJoystickNames().ToList();
@@ -64,11 +64,13 @@ public class ControlManager
             c.KeySettings(/*new Dictionary<CommandIndex, KeyCode>()*/);
     }
 
-    public bool GamePause() { return mControls[0].GamePause(); }
-
     public void ResetButtonPressTimer(){ mControls[0].ResetButtonPressTimer(); }
 
+    public bool MenuNavigation(CommandIndex aCommand) { return mControls[0].MenuNavigate(aCommand); }
+
     public Vector3 MoveBlockHorizontal() { return mControls[0].GameMoveBlockHorizontal(); }
+
+    public bool GamePause() { return mControls[0].GamePause(); }
 
     public bool DropBlock(float aBlockNextDropTime) { return mControls[0].GameDropBlock(aBlockNextDropTime); }
 
@@ -83,11 +85,13 @@ public class ControlManager
 
     public bool KeyPress(CommandIndex anCommand)
     {
-        return Input.GetKey(mKeyBoard[anCommand]);
+        return mControls[0].KeyPress(anCommand);
+        //return Input.GetKey(mKeyBoard[anCommand]);
     }
 
     public bool KeyDown(CommandIndex anCommand)
     {
-        return Input.GetKeyDown(mKeyBoard[anCommand]);
+        return mControls[0].KeyDown(anCommand);
+        //return Input.GetKeyDown(mKeyBoard[anCommand]);
     }
 }
