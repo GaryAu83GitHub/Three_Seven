@@ -9,7 +9,7 @@ public class MenuPanelBase : MonoBehaviour
     {
         DEFAULT,
         SELECTED,
-        PICKED,
+        //PICKED,
     }
 
     public Image BackgroundImage;
@@ -18,11 +18,16 @@ public class MenuPanelBase : MonoBehaviour
 
     public List<Sprite> ButtonStatesSprites;
 
+    public MenuPanelIndex PanelIndex { get { return mPanelIndex; } }
+    protected MenuPanelIndex mPanelIndex = MenuPanelIndex.NONE;
+
     protected int mCurrentSelectButtonIndex = 0;
     protected int mPreviousSelectedButtonIndex = -1;
+    protected int mButtonCount = 0;
 
     private Animation mAnimation;
     private Button mCurrentSelectedButton;
+    
 
     private void Awake()
     {
@@ -32,9 +37,13 @@ public class MenuPanelBase : MonoBehaviour
     public virtual void Start()
     {
         mAnimation = GetComponent<Animation>();
-        mCurrentSelectedButton = Buttons[mCurrentSelectButtonIndex];
-        //ChangeSelectedButtonSprite(ButtonSpriteIndex.SELECTED);
-        SwithCurrentSelectButton();
+        mButtonCount = Buttons.Count;
+        if (mButtonCount > 0)
+        {
+            mCurrentSelectedButton = Buttons[mCurrentSelectButtonIndex];
+            SwithCurrentSelectButton();
+        }
+        MenuManager.Instance.AddPanel(mPanelIndex, this);
     }
 
     public virtual void Update()
@@ -44,27 +53,30 @@ public class MenuPanelBase : MonoBehaviour
 
     public virtual void Enter()
     {
+        this.gameObject.SetActive(true);
         Container.SetActive(true);
     }
 
     public virtual void Exit()
     {
+        this.gameObject.SetActive(false);
         Container.SetActive(false);
     }
 
     protected virtual void CheckInput()
     {
-        //if (ControlManager.Ins.KeyPress(CommandIndex.NAVI_DOWN))
-        //    mCurrentSelectButtonIndex++;
-        //if (ControlManager.Ins.KeyPress(CommandIndex.NAVI_UP))
-        //    mCurrentSelectButtonIndex--;
-
         NavigateMenuButtons();
-        
+        if (ControlManager.Ins.MenuSelectButtonPressed())
+            SelectButtonPressed();
     }
 
     protected virtual void NavigateMenuButtons(CommandIndex theIncreaseCommand = CommandIndex.NAVI_DOWN, CommandIndex theDecreaseCommand = CommandIndex.NAVI_UP)
     {
+        if (theIncreaseCommand == theDecreaseCommand)
+        {
+            Debug.LogError("Increase and Decrease use same command, NavigateMenuButtons in " + this.GetType().Name + " are invalid");
+            return;
+        }
         bool increaseButtonPressed = ControlManager.Ins.MenuNavigation(theIncreaseCommand);
         bool decreaseButtonPressed = ControlManager.Ins.MenuNavigation(theDecreaseCommand);
         
@@ -72,41 +84,57 @@ public class MenuPanelBase : MonoBehaviour
         if (increaseButtonPressed || decreaseButtonPressed)
         {
             int increament = 0;
+            int newButtonIndex = mCurrentSelectButtonIndex;
+
             if (increaseButtonPressed)
                 increament++;
             if (decreaseButtonPressed)
                 increament--;
 
-            mPreviousSelectedButtonIndex = mCurrentSelectButtonIndex;
-            mCurrentSelectButtonIndex += increament;
+            if ((newButtonIndex + increament) < 0)
+                newButtonIndex = mButtonCount - 1;
+            else if ((newButtonIndex + increament) >= mButtonCount)
+                newButtonIndex = 0;
+            else
+                newButtonIndex += increament;
 
-            if (mCurrentSelectButtonIndex < 0)
-                mCurrentSelectButtonIndex = Buttons.Count - 1;
-            else if (mCurrentSelectButtonIndex >= Buttons.Count)
-                mCurrentSelectButtonIndex = 0;
+            SetSelectedButton(newButtonIndex);
+            //mPreviousSelectedButtonIndex = mCurrentSelectButtonIndex;
+            //mCurrentSelectButtonIndex += increament;
 
-            SwithCurrentSelectButton();
+
+            //SwithCurrentSelectButton();
         }
     }
 
-    private void SwithCurrentSelectButton()
+    protected virtual void SelectButtonPressed()
     {
+    }
 
-        //ChangeSelectedButtonSprite(ButtonSpriteIndex.DEFAULT);
-        //mCurrentSelectedButton = Buttons[mCurrentSelectButtonIndex];
-        //ChangeSelectedButtonSprite(ButtonSpriteIndex.SELECTED);
+    protected virtual void ChangePanel(MenuPanelIndex aPanelIndex)
+    {
+        MenuManager.Instance.GoTo(aPanelIndex);
+    }
+
+    protected void SetSelectedButton(int aButtonIndex)
+    {
+        mPreviousSelectedButtonIndex = mCurrentSelectButtonIndex;
+        mCurrentSelectButtonIndex = aButtonIndex;
+        SwithCurrentSelectButton();
+    }
+
+    protected void SwithCurrentSelectButton()
+    {
         ChangeSelectedButtonSprite(mPreviousSelectedButtonIndex, ButtonSpriteIndex.DEFAULT);
         ChangeSelectedButtonSprite(mCurrentSelectButtonIndex, ButtonSpriteIndex.SELECTED);
         mCurrentSelectedButton = Buttons[mCurrentSelectButtonIndex];
     }
 
-    private void ChangeSelectedButtonSprite(int aButtonIndex, ButtonSpriteIndex aStateSprite)
+    protected void ChangeSelectedButtonSprite(int aButtonIndex, ButtonSpriteIndex aStateSprite)
     {
-        if (aButtonIndex < 0 || aButtonIndex >= Buttons.Count)
-        {
-            //Buttons[aButtonIndex].image.sprite = ButtonStatesSprites[(int)ButtonSpriteIndex.DEFAULT];
+        if (aButtonIndex < 0 || aButtonIndex >= mButtonCount)
             return;
-        }
+
         Buttons[aButtonIndex].image.sprite = ButtonStatesSprites[(int)aStateSprite];
     }
 }

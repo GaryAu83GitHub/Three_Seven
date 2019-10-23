@@ -68,6 +68,14 @@ public class ControlManager
 
     public bool MenuNavigation(CommandIndex aCommand) { return mControls[0].MenuNavigate(aCommand); }
 
+    public bool MenuConfirmButtonPressed() { return mControls[0].MenuConfirm(); }
+
+    public bool MenuSelectButtonPressed() { return mControls[0].MenuSelect(); }
+
+    public bool MenuCancelButtonPressed() { return mControls[0].MenuCancel(); }
+
+    public bool MenuBackButtonPressed() { return mControls[0].MenuBack(); }
+
     public Vector3 MoveBlockHorizontal() { return mControls[0].GameMoveBlockHorizontal(); }
 
     public bool GamePause() { return mControls[0].GamePause(); }

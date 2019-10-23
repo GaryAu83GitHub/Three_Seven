@@ -12,6 +12,7 @@ public enum CommandIndex
     NAVI_DOWN,
     NAVI_UP,
     SELECT,
+    CANCEL,
     CONFIRM,
     BACK,
     // gameplay
@@ -78,6 +79,8 @@ public class ControlObject
     }
 
     public virtual bool MenuSelect() { return KeyPress(CommandIndex.SELECT); }
+
+    public virtual bool MenuCancel() { return KeyPress(CommandIndex.CANCEL); }
 
     public virtual bool MenuConfirm(){ return KeyPress(CommandIndex.CONFIRM); }
 

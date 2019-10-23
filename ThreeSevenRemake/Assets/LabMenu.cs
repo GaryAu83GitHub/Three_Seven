@@ -11,17 +11,17 @@ public class LabMenu : MonoBehaviour
     public Image SecondLine;
     public Image MinuteLine;
 
-    private float waitTime = 2.0f;
+    //private float waitTime = 2.0f;
     private float timer = 0.0f;
-    private float visualTime = 0.0f;
-    private float sectionValue = 1f / 60f;
+    //private float visualTime = 0.0f;
+    //private float sectionValue = 1f / 60f;
     private float lineRotateIntervall = 360f / 60f;
     private int second = 0;
     private int minute = 0;
     private int nextSecond = 0;
     private int nextMinute = 1;
-    private float secondDegree = 0f;
-    private float minuteDegree = 0f;
+    //private float secondDegree = 0f;
+    //private float minuteDegree = 0f;
 
     private RectTransform secondLineTransform;
     private RectTransform minuteLineTransform;
@@ -29,39 +29,40 @@ public class LabMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        secondLineTransform = SecondLine.GetComponent<RectTransform>();
-        minuteLineTransform = MinuteLine.GetComponent<RectTransform>();
+        MenuManager.Instance.StartWithPanel(MenuPanelIndex.TITLE_PANEL);
+        //secondLineTransform = SecondLine.GetComponent<RectTransform>();
+        //minuteLineTransform = MinuteLine.GetComponent<RectTransform>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
+        //timer += Time.deltaTime;
 
-        //labText.text = timer.ToString();
+        ////labText.text = timer.ToString();
 
-        if (timer >= 1)
-        {
-            second++;
-            Clock();
-            timer = 0;
-        }
-        if (second >= 60)
-        {
-            minute++;
-            Clock();
-            second = 0;
-            nextSecond = 1;
-        }
-        if (minute >= 60)
-        {
-            minute = 0;
-            nextMinute = 1;
-        }
+        //if (timer >= 1)
+        //{
+        //    second++;
+        //    Clock();
+        //    timer = 0;
+        //}
+        //if (second >= 60)
+        //{
+        //    minute++;
+        //    Clock();
+        //    second = 0;
+        //    nextSecond = 1;
+        //}
+        //if (minute >= 60)
+        //{
+        //    minute = 0;
+        //    nextMinute = 1;
+        //}
 
-        labText.text = ((int)minute).ToString() + " : " + ((int)second).ToString();
-        //Seconds.fillAmount = (int)timer * sectionValue;
-        //Minutes.fillAmount = minute * sectionValue;
+        //labText.text = ((int)minute).ToString() + " : " + ((int)second).ToString();
+        ////Seconds.fillAmount = (int)timer * sectionValue;
+        ////Minutes.fillAmount = minute * sectionValue;
 
         
     }

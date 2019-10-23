@@ -33,7 +33,7 @@ public enum AxisInput
 
 public class XBox360Constrol : ControlObject
 {
-    private readonly AxisInput mNavigation = AxisInput.L_STICK;
+    //private readonly AxisInput mNavigation = AxisInput.L_STICK;
 
     private readonly List<string> mButtonNames;
     private readonly List<string> mAxisNames;
@@ -104,7 +104,8 @@ public class XBox360Constrol : ControlObject
             { CommandIndex.NAVI_RIGHT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_THUMB_RIGHT, Vector2Int.right) },
             { CommandIndex.NAVI_DOWN, new ControlInput(AxisInput.L_STICK, XBoxButton.L_THUMB_DOWN, Vector2Int.down) },
             { CommandIndex.NAVI_UP, new ControlInput(AxisInput.L_STICK, XBoxButton.L_THUMB_UP, Vector2Int.up) },
-            { CommandIndex.SELECT, new ControlInput(XBoxButton.X) },
+            { CommandIndex.SELECT, new ControlInput(XBoxButton.A) },
+            { CommandIndex.CANCEL, new ControlInput(XBoxButton.B) },
             { CommandIndex.CONFIRM, new ControlInput(XBoxButton.START) },
             { CommandIndex.BACK, new ControlInput(XBoxButton.BACK) },
             // gameplay

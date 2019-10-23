@@ -32,8 +32,8 @@ public class DevelopeMain : MonoBehaviour
         // floats
     private float mNextDropTime = 0f;
     //private float mDropRate = 1;
-    private float mNextVerticalButtonDownTime = 0f;
-    private float mNextHorizontalButtonDownTime = 0f;
+    //private float mNextVerticalButtonDownTime = 0f;
+    //private float mNextHorizontalButtonDownTime = 0f;
 
     // boolean
     private bool mGameInProgress = false;
