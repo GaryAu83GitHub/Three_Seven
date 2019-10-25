@@ -96,7 +96,7 @@ public class GameOverMenu : MonoBehaviour
         GameIsOver = false;
         LeavePanel.SetActive(false);
         ScreenTransistor.Instance.FadeToSceneWithIndex(0);
-        //StartCoroutine(GoToStart());
+        StartCoroutine(GoToStart());
     }
 
     IEnumerator LeavePanelAppear()

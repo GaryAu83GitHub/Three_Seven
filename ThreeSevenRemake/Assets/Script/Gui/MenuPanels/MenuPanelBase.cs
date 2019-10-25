@@ -15,6 +15,7 @@ public class MenuPanelBase : MonoBehaviour
     public Image BackgroundImage;
     public GameObject Container;
     public List<Button> Buttons;
+    public List<AnimationClip> AnimationClips;
 
     public List<Sprite> ButtonStatesSprites;
 
@@ -24,6 +25,7 @@ public class MenuPanelBase : MonoBehaviour
     protected int mCurrentSelectButtonIndex = 0;
     protected int mPreviousSelectedButtonIndex = -1;
     protected int mButtonCount = 0;
+    protected bool mIsButtonsInteractable = true;
 
     private Animation mAnimation;
     private Button mCurrentSelectedButton;
@@ -43,6 +45,7 @@ public class MenuPanelBase : MonoBehaviour
             mCurrentSelectedButton = Buttons[mCurrentSelectButtonIndex];
             SwithCurrentSelectButton();
         }
+        ActivateButtons();
         MenuManager.Instance.AddPanel(mPanelIndex, this);
     }
 
@@ -65,6 +68,9 @@ public class MenuPanelBase : MonoBehaviour
 
     protected virtual void CheckInput()
     {
+        //if (!mIsButtonsInteractable)
+        //    return;
+
         NavigateMenuButtons();
         if (ControlManager.Ins.MenuSelectButtonPressed())
             SelectButtonPressed();
@@ -136,5 +142,13 @@ public class MenuPanelBase : MonoBehaviour
             return;
 
         Buttons[aButtonIndex].image.sprite = ButtonStatesSprites[(int)aStateSprite];
+    }
+
+    public void ActivateButtons()
+    {
+        mIsButtonsInteractable = !mIsButtonsInteractable;
+
+        //for (int i = 0; i < Buttons.Count; i++)
+        //    Buttons[i].interactable = mIsButtonsInteractable;
     }
 }

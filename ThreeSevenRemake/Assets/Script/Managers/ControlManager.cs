@@ -57,9 +57,14 @@ public class ControlManager
         //        continue;
         //    //mControls.Add(new KeyboardControl());
         //}
-        if (temp.Any() && temp[0].Any())
-            mControls[0] = new XBox360Constrol();
-
+        if (temp.Any())
+        {
+            for (int i = 0; i < temp.Count; i++)
+            {
+                if(temp[i].Any())
+                    mControls[0] = new XBox360Constrol();
+            }
+        }
         foreach (ControlObject c in mControls)
             c.KeySettings(/*new Dictionary<CommandIndex, KeyCode>()*/);
     }
