@@ -21,6 +21,9 @@ public static class Constants
     public const int MAX_CEILING_HIGH = 18;
     public const int MIN_CEILING_HIGH = 9;
 
+    public const int MAX_DROPPING_SPEED_LEVEL = 100;
+    public const int MIN_DROPPING_SPEED_LEVEL = 0;
+
     public const int DEFAULT_ROOF_HEIGHT = 14;
 
     public const int ORIGINAL_BLOCK_LANDING_SCORE = 1;

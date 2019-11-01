@@ -42,8 +42,10 @@ public class XBox360Constrol : ControlObject
     private Dictionary<AxisInput, bool> mEnableNavigationSticks = new Dictionary<AxisInput, bool>();
 
     private Vector2Int mCurrentMenuNavigateDireciton = Vector2Int.zero;
+    private Vector2Int mLastNavigateAxisDirection = Vector2Int.zero;
     private float mMenuNavigationSuppressTimer = 0f;
 
+    private ControlInput mLastInput = null;
     //private int mCurrentHorizontDirection = 0;
     public XBox360Constrol()
     {
@@ -124,20 +126,20 @@ public class XBox360Constrol : ControlObject
             mCommands[com] = (ControlInput)defaultSets[com];
     }
 
-    public override bool MenuNavigate(CommandIndex aCommand)
+    public override bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall = .1f)
     {
-        //if (CheckNaviCommands(mCommands[CommandIndex.NAVI_LEFT]))
-        //    return mCommands[CommandIndex.NAVI_LEFT].Direction;
-        //if (CheckNaviCommands(mCommands[CommandIndex.NAVI_RIGHT]))
-        //    return mCommands[CommandIndex.NAVI_RIGHT].Direction;
-        //if (CheckNaviCommands(mCommands[CommandIndex.NAVI_DOWN]))
-        //    return mCommands[CommandIndex.NAVI_DOWN].Direction;
-        //if (CheckNaviCommands(mCommands[CommandIndex.NAVI_UP]))
-        //    return mCommands[CommandIndex.NAVI_UP].Direction;
-        if (CheckNaviCommands(mCommands[aCommand]))
-            return true;//mCommands[aCommand].Direction;
+        if (CheckNaviCommandsWithTimer(mCommands[aCommand], anDelayIntervall))
+            return true;
 
-        return base.MenuNavigate(aCommand);
+        return base.MenuNavigateHold(aCommand, anDelayIntervall);
+    }
+
+    public override bool MenuNavigatePress(CommandIndex aCommand)
+    {
+        if (CheckNaviCommandsWithPreviousDirection(mCommands[aCommand]))
+            return true;
+
+        return base.MenuNavigatePress(aCommand);
     }
 
     public override bool GameDropBlock(float aBlockNextDropTime)
@@ -226,14 +228,14 @@ public class XBox360Constrol : ControlObject
         return false;
     }
 
-    private bool CheckNaviCommands(ControlInput anInput)
+    private bool CheckNaviCommandsWithTimer(ControlInput anInput, float anDelayIntervall)
     {
         if (GetAxisInput(anInput.AxisType) && 
             (GetDirectionFromAxis(anInput.AxisType) == anInput.Direction) &&
             mMenuNavigationSuppressTimer <= 0f)
         {
             mCurrentMenuNavigateDireciton = anInput.Direction;
-            mMenuNavigationSuppressTimer = Constants.BUTTON_DOWN_INTERVAL;
+            mMenuNavigationSuppressTimer = .1f;//Constants.BUTTON_DOWN_INTERVAL;
             return true;
         }
 
@@ -241,7 +243,36 @@ public class XBox360Constrol : ControlObject
             mMenuNavigationSuppressTimer = 0;
 
         if (mMenuNavigationSuppressTimer > 0f)
-            mMenuNavigationSuppressTimer -= Time.deltaTime * .1f;
+            mMenuNavigationSuppressTimer -= Time.deltaTime * anDelayIntervall;
+
+        return false;
+    }
+
+    private bool CheckNaviCommandsWithPreviousDirection(ControlInput anInput)
+    {
+        mCurrentMenuNavigateDireciton = GetDirectionFromAxis(anInput.AxisType);
+        //Debug.Log(anInput.Button);
+        if (GetAxisInput(anInput.AxisType))
+        {
+            if ((mLastInput != null) && (mCurrentMenuNavigateDireciton == mLastInput.Direction))
+                return false;
+            else if ((mLastInput == null) && (mCurrentMenuNavigateDireciton == anInput.Direction))
+            {
+                mLastInput = anInput;
+                return true;
+            }
+        }
+        //if (GetAxisInput(anInput.AxisType) && (mCurrentMenuNavigateDireciton == mLastNavigateAxisDirection))
+        //{
+        //    return false;
+        //}
+        //else if (GetAxisInput(anInput.AxisType) && (mCurrentMenuNavigateDireciton == anInput.Direction))
+        //{
+        //    mLastNavigateAxisDirection = mCurrentMenuNavigateDireciton;
+        //    return true;
+        //}
+
+            mLastInput = null;
 
         return false;
     }

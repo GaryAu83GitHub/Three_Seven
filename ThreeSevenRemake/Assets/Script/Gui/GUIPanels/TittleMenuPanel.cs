@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class TittleMenuPanel : MenuPanelBase
+public class TittleMenuPanel : GUIPanelBase
 {
     public Fading FadingScript;
     //public Text tempText;

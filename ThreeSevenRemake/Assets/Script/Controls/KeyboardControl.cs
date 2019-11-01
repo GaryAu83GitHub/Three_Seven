@@ -6,6 +6,8 @@ public class KeyboardControl : ControlObject
 {
     private readonly Dictionary<CommandIndex, KeyCode> mCommands = new Dictionary<CommandIndex, KeyCode>();
 
+    private float mMenuNavigationSuppressTimer = 0f;
+
     public KeyboardControl()
     {
         mType = ControlType.KEYBOARD;
@@ -40,7 +42,7 @@ public class KeyboardControl : ControlObject
             mCommands[com] = (KeyCode)defaultSets[com];
     }
 
-    public override bool MenuNavigate(CommandIndex aCommand)
+    public override bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall = .1f)
     {
         //if (KeyDown(CommandIndex.NAVI_DOWN))
         //    return Vector2Int.down;
@@ -51,7 +53,20 @@ public class KeyboardControl : ControlObject
         //if (KeyDown(CommandIndex.NAVI_UP))
         //    return Vector2Int.up;
 
-        return KeyPress(aCommand);
+        if(KeyPress(aCommand) && mMenuNavigationSuppressTimer <= 0f)
+        {
+            mMenuNavigationSuppressTimer = .1f;
+            return true;
+        }
+
+        if(!KeyPress(aCommand))
+            mMenuNavigationSuppressTimer = 0;
+
+        if (mMenuNavigationSuppressTimer > 0f)
+            mMenuNavigationSuppressTimer -= Time.deltaTime * anDelayIntervall;
+
+        //return KeyPress(aCommand);
+        return false;
     }
 
     public override bool KeyDown(CommandIndex aCommand)

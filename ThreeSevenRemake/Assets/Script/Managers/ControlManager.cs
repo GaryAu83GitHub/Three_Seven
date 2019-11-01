@@ -71,7 +71,9 @@ public class ControlManager
 
     public void ResetButtonPressTimer(){ mControls[0].ResetButtonPressTimer(); }
 
-    public bool MenuNavigation(CommandIndex aCommand) { return mControls[0].MenuNavigate(aCommand); }
+    public bool MenuNavigationHold(CommandIndex aCommand, float anDelayIntervall = .1f) { return mControls[0].MenuNavigateHold(aCommand, anDelayIntervall); }
+
+    public bool MenuNavigationPress(CommandIndex aCommand) { return mControls[0].MenuNavigatePress(aCommand); }
 
     public bool MenuConfirmButtonPressed() { return mControls[0].MenuConfirm(); }
 

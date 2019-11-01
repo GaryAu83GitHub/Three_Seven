@@ -64,17 +64,13 @@ public class ControlObject
         //mKeybindList = new Dictionary<CommandIndex, object>(someSetting);
     }
 
-    public virtual bool MenuNavigate(CommandIndex aCommand)
+    public virtual bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall)
     {
-        //if (KeyDown(CommandIndex.NAVI_DOWN))
-        //    return Vector2Int.down;
-        //if (KeyDown(CommandIndex.NAVI_LEFT))
-        //    return Vector2Int.left;
-        //if (KeyDown(CommandIndex.NAVI_RIGHT))
-        //    return Vector2Int.right;
-        //if (KeyDown(CommandIndex.NAVI_UP))
-        //    return Vector2Int.up;
+        return false;
+    }
 
+    public virtual bool MenuNavigatePress(CommandIndex aCommand)
+    {
         return false;
     }
 

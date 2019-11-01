@@ -29,13 +29,13 @@ public class MenuManager
     }
     private static MenuManager mInstance;
 
-    private Dictionary<MenuPanelIndex, MenuPanelBase> mScenePanels = new Dictionary<MenuPanelIndex, MenuPanelBase>();
+    private Dictionary<MenuPanelIndex, GUIPanelBase> mScenePanels = new Dictionary<MenuPanelIndex, GUIPanelBase>();
 
-    private MenuPanelBase mCurrentActiveMenuPanel;
+    private GUIPanelBase mCurrentActiveMenuPanel;
 
     private MenuPanelIndex mPreviousPanelIndex = MenuPanelIndex.NONE;
 
-    public void AddPanel(MenuPanelIndex aPanelIndex, MenuPanelBase aPanel)
+    public void AddPanel(MenuPanelIndex aPanelIndex, GUIPanelBase aPanel)
     {
         if (mScenePanels.ContainsKey(aPanelIndex))
             return;
@@ -48,7 +48,7 @@ public class MenuManager
         //    mScenePanels[aPanelIndex].Exit();
         if (mScenePanels.Count > 1)
         {
-            mScenePanels = new Dictionary<MenuPanelIndex, MenuPanelBase>(GetSortedPanels());
+            mScenePanels = new Dictionary<MenuPanelIndex, GUIPanelBase>(GetSortedPanels());
         }
     }
 
@@ -88,11 +88,11 @@ public class MenuManager
         mCurrentActiveMenuPanel.Enter();
     }
 
-    private Dictionary<MenuPanelIndex, MenuPanelBase> GetSortedPanels()
+    private Dictionary<MenuPanelIndex, GUIPanelBase> GetSortedPanels()
     {
         List<MenuPanelIndex> keys = mScenePanels.Keys.ToList();
         keys.Sort();
-        Dictionary<MenuPanelIndex, MenuPanelBase> result = new Dictionary<MenuPanelIndex, MenuPanelBase>();
+        Dictionary<MenuPanelIndex, GUIPanelBase> result = new Dictionary<MenuPanelIndex, GUIPanelBase>();
         for (int i = 0; i < keys.Count; i++)
             result.Add(keys[i], mScenePanels[keys[i]]);
 

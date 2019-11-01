@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HighscoreGUIPanel : MenuPanelBase
+public class HighscoreGUIPanel : GUIPanelBase
 {
     private enum ButtonIndex
     {
@@ -38,9 +38,9 @@ public class HighscoreGUIPanel : MenuPanelBase
 
     protected override void NavigateMenuButtons(CommandIndex theIncreaseCommand = CommandIndex.NAVI_DOWN, CommandIndex theDecreaseCommand = CommandIndex.NAVI_UP)
     {
-        if (ControlManager.Ins.MenuNavigation(CommandIndex.NAVI_UP))
+        if (ControlManager.Ins.MenuNavigationHold(CommandIndex.NAVI_UP))
             ScrollListUp();
-        if (ControlManager.Ins.MenuNavigation(CommandIndex.NAVI_DOWN))
+        if (ControlManager.Ins.MenuNavigationHold(CommandIndex.NAVI_DOWN))
             ScrollListDown();
         if (ControlManager.Ins.MenuCancelButtonPressed())
             ExitHighscore();

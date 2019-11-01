@@ -12,19 +12,19 @@ public class LabMenu : MonoBehaviour
     public Image MinuteLine;
 
     //private float waitTime = 2.0f;
-    private float timer = 0.0f;
+    //private float timer = 0.0f;
     //private float visualTime = 0.0f;
     //private float sectionValue = 1f / 60f;
-    private float lineRotateIntervall = 360f / 60f;
-    private int second = 0;
-    private int minute = 0;
-    private int nextSecond = 0;
-    private int nextMinute = 1;
+    //private float lineRotateIntervall = 360f / 60f;
+    //private int second = 0;
+    //private int minute = 0;
+    //private int nextSecond = 0;
+    //private int nextMinute = 1;
     //private float secondDegree = 0f;
     //private float minuteDegree = 0f;
 
-    private RectTransform secondLineTransform;
-    private RectTransform minuteLineTransform;
+    //private RectTransform secondLineTransform;
+    //private RectTransform minuteLineTransform;
 
     // Start is called before the first frame update
     void Start()
@@ -69,15 +69,15 @@ public class LabMenu : MonoBehaviour
 
     private void Clock()
     {
-        if (second >= nextSecond)
-        {
-            secondLineTransform.Rotate(new Vector3(0, 0, -lineRotateIntervall));
-            nextSecond++;
-        }
-        if (minute >= nextMinute)
-        {
-            minuteLineTransform.Rotate(new Vector3(0, 0, -lineRotateIntervall));
-            nextMinute++;
-        }
+        //if (second >= nextSecond)
+        //{
+        //    secondLineTransform.Rotate(new Vector3(0, 0, -lineRotateIntervall));
+        //    nextSecond++;
+        //}
+        //if (minute >= nextMinute)
+        //{
+        //    minuteLineTransform.Rotate(new Vector3(0, 0, -lineRotateIntervall));
+        //    nextMinute++;
+        //}
     }
 }

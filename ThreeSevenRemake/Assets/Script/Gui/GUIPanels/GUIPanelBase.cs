@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuPanelBase : MonoBehaviour
+public class GUIPanelBase : MonoBehaviour
 {
     protected enum ButtonSpriteIndex
     {
@@ -29,7 +29,6 @@ public class MenuPanelBase : MonoBehaviour
 
     private Animation mAnimation;
     private Button mCurrentSelectedButton;
-    
 
     private void Awake()
     {
@@ -83,18 +82,17 @@ public class MenuPanelBase : MonoBehaviour
             Debug.LogError("Increase and Decrease use same command, NavigateMenuButtons in " + this.GetType().Name + " are invalid");
             return;
         }
-        bool increaseButtonPressed = ControlManager.Ins.MenuNavigation(theIncreaseCommand);
-        bool decreaseButtonPressed = ControlManager.Ins.MenuNavigation(theDecreaseCommand);
-        
+        //bool increaseButtonPressed = ControlManager.Ins.MenuNavigationPress(theIncreaseCommand);
+        //bool decreaseButtonPressed = ControlManager.Ins.MenuNavigationPress(theDecreaseCommand);
 
-        if (increaseButtonPressed || decreaseButtonPressed)
-        {
+        //if ((increaseButtonPressed || decreaseButtonPressed))
+        //{
             int increament = 0;
             int newButtonIndex = mCurrentSelectButtonIndex;
 
-            if (increaseButtonPressed)
+            if (ControlManager.Ins.MenuNavigationPress(theIncreaseCommand))
                 increament++;
-            if (decreaseButtonPressed)
+            else if (ControlManager.Ins.MenuNavigationPress(theDecreaseCommand))
                 increament--;
 
             if ((newButtonIndex + increament) < 0)
@@ -110,7 +108,7 @@ public class MenuPanelBase : MonoBehaviour
 
 
             //SwithCurrentSelectButton();
-        }
+        //}
     }
 
     protected virtual void SelectButtonPressed()
