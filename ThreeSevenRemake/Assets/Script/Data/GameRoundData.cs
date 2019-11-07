@@ -31,13 +31,16 @@ public class GameRoundData
     private int mRoofHeightValue = 0;
     public int RoofHeightValue { get { return mRoofHeightValue; } set { mRoofHeightValue = value; } }
 
+    private int mCurrentLevel = 0;
+    public int CurrentLevel { get { return mCurrentLevel; } set { mCurrentLevel = value; } }
+
+    private bool mGuideblockActive = true;
+    public bool GuideblockActive { get { return mGuideblockActive; } set { mGuideblockActive = value; } }
+
     private int mDroppingSpeedMultiplyValue = 0;
     public int DroppingSpeedMultiplyValue { get { return mDroppingSpeedMultiplyValue; } set { mDroppingSpeedMultiplyValue = value; } }
 
     // game round achievments for storing purpose
-    private int mCurrentLevel = 0;
-    public int CurrentLevel { get { return mCurrentLevel; } set { mCurrentLevel = value; } }
-
     private int mCurrentScore = 0;
     public int CurrentScore { get { return mCurrentScore; } set { mCurrentScore = value; } }
 

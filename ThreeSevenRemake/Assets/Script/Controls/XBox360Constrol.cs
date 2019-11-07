@@ -128,6 +128,7 @@ public class XBox360Constrol : ControlObject
 
     public override bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall = .1f)
     {
+
         if (CheckNaviCommandsWithTimer(mCommands[aCommand], anDelayIntervall))
             return true;
 
@@ -235,7 +236,7 @@ public class XBox360Constrol : ControlObject
             mMenuNavigationSuppressTimer <= 0f)
         {
             mCurrentMenuNavigateDireciton = anInput.Direction;
-            mMenuNavigationSuppressTimer = .1f;//Constants.BUTTON_DOWN_INTERVAL;
+            mMenuNavigationSuppressTimer = anDelayIntervall;//.1f;//Constants.BUTTON_DOWN_INTERVAL;
             return true;
         }
 
@@ -243,7 +244,7 @@ public class XBox360Constrol : ControlObject
             mMenuNavigationSuppressTimer = 0;
 
         if (mMenuNavigationSuppressTimer > 0f)
-            mMenuNavigationSuppressTimer -= Time.deltaTime * anDelayIntervall;
+            mMenuNavigationSuppressTimer -= Time.deltaTime;  // anDelayIntervall;
 
         return false;
     }

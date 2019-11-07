@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HighscoreGUIPanel : GUIPanelBase
+public class HighscoreGUIPanel : MenuEnablePanelBase
 {
     private enum ButtonIndex
     {

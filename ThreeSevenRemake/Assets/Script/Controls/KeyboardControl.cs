@@ -55,7 +55,7 @@ public class KeyboardControl : ControlObject
 
         if(KeyPress(aCommand) && mMenuNavigationSuppressTimer <= 0f)
         {
-            mMenuNavigationSuppressTimer = .1f;
+            mMenuNavigationSuppressTimer = anDelayIntervall;//.1f;
             return true;
         }
 
@@ -63,7 +63,7 @@ public class KeyboardControl : ControlObject
             mMenuNavigationSuppressTimer = 0;
 
         if (mMenuNavigationSuppressTimer > 0f)
-            mMenuNavigationSuppressTimer -= Time.deltaTime * anDelayIntervall;
+            mMenuNavigationSuppressTimer -= Time.deltaTime/* * anDelayIntervall*/;
 
         //return KeyPress(aCommand);
         return false;

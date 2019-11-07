@@ -11,12 +11,17 @@ public class SettingSlotBase : MonoBehaviour
     public Sprite SelectedSprite;
     public Sprite UnSelectedSprite;
 
+    public delegate void OnGameplaySettingHaveChange(ref GameplaySettingData aSettingData);
+    public static OnGameplaySettingHaveChange gameplaySettingHaveChange;
+
     protected bool mLockParentInput = false;
     public bool LockParentInput { get { return mLockParentInput; } }
 
     protected CanvasGroup mCG;
     protected Image mSelectingImage;
     protected bool mSlotActivate = true;
+
+    protected GameplaySettingData mGameplaySettingData = new GameplaySettingData();
 
     public virtual void Start()
     {
@@ -29,6 +34,9 @@ public class SettingSlotBase : MonoBehaviour
         if (mSlotActivate)
             Input();
     }
+
+    public virtual void SetSlotValue(GameplaySettingData aData)
+    { }
 
     public virtual void Enter()
     {
@@ -58,8 +66,10 @@ public class SettingSlotBase : MonoBehaviour
         SlotAppearence();
     }
 
-    public virtual void ChangeSetting(ref GameplaySettingData aSettingData)
-    { }
+    protected virtual void ChangeGameplaySetting()
+    {
+        gameplaySettingHaveChange?.Invoke(ref mGameplaySettingData);
+    }
 
     private void SlotAppearence()
     {

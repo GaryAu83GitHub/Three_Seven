@@ -14,16 +14,28 @@ public class SetLimitLineSlot : SettingSlotWithSlider
 
         Slider.value = mLineHeightValue;
         DisplayValue();
+
+        //mSliderScrollingSpeed = 1f;
+        //mSliderMoveIntervall = 1;
     }
-    
-    public override void ChangeSetting(ref GameplaySettingData aSettingData)
+
+    public override void SetSlotValue(GameplaySettingData aData)
     {
-        aSettingData.SelectLimitLineHeight = mLineHeightValue;
+        mLineHeightValue = aData.SelectLimitLineHeight;
+        Slider.value = mLineHeightValue;
+        DisplayValue();
+    }
+
+    protected override void ChangeGameplaySetting()
+    {
+        mGameplaySettingData.SelectLimitLineHeight = mLineHeightValue;
+        base.ChangeGameplaySetting();
     }
 
     protected override void MoveSlider(int aDirection)
     {
         base.MoveSlider(aDirection);
         mLineHeightValue = (int)Slider.value;
+        ChangeGameplaySetting();
     }
 }

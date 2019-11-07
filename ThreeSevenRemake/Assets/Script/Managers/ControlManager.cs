@@ -19,9 +19,6 @@ public class ControlManager
     private static ControlManager mInstance;
 
     private List<ControlObject> mControls = new List<ControlObject>();
-
-    private Dictionary<CommandIndex, KeyCode> mDefaultKeyBoard = new Dictionary<CommandIndex, KeyCode>();
-    private Dictionary<CommandIndex, KeyCode> mKeyBoard = new Dictionary<CommandIndex, KeyCode>();
     
     public ControlManager()
     {

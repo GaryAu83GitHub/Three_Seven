@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Assets.Script.Tools;
 
-public class MainMenu : GUIPanelBase
+public class MainMenu : MenuEnablePanelBase
 {
     public Fading FadingScript;
 

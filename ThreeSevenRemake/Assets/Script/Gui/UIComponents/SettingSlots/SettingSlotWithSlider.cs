@@ -9,6 +9,9 @@ public class SettingSlotWithSlider : SettingSlotBase
     public Slider Slider;
     public TextMeshProUGUI ValueText;
 
+    public float mSliderScrollingSpeed = .1f;
+    public int mSliderMoveIntervall = 1;
+
     public override void Start()
     {
         base.Start();
@@ -16,19 +19,21 @@ public class SettingSlotWithSlider : SettingSlotBase
 
     protected override void Navigation()
     {
-        if (ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_LEFT))
+        if (ControlManager.Ins.MenuNavigationHold(CommandIndex.NAVI_LEFT, mSliderScrollingSpeed))
         {
-            MoveSlider(-1);
+            MoveSlider(-mSliderMoveIntervall);
         }
-        if (ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_RIGHT))
+        if (ControlManager.Ins.MenuNavigationHold(CommandIndex.NAVI_RIGHT, mSliderScrollingSpeed))
         {
-            MoveSlider(1);
+            MoveSlider(mSliderMoveIntervall);
         }
+
+        //Debug.Log("<color=cyan>" + anDelayIntervall + "</color>");
     }
 
     protected virtual void MoveSlider(int aDirection)
     {
-        Slider.value += aDirection;
+        Slider.value += aDirection ;
         DisplayValue();
     }
 

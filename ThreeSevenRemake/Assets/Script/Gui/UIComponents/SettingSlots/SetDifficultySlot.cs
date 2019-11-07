@@ -42,6 +42,14 @@ public class SetDifficultySlot : SettingSlotBase
         SetDifficulty(mSelectedDifficulty);
     }
 
+    public override void SetSlotValue(GameplaySettingData aData)
+    {
+        mSelectedDifficulty = aData.SelectDifficulty;
+        mSelectedCustomize = aData.SelectEnableDigits;
+        SetDifficulty(mSelectedDifficulty);
+        //base.SetSlotValue(aData);
+    }
+
     protected override void Navigation()
     {
         if(ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_LEFT))
@@ -67,6 +75,7 @@ public class SetDifficultySlot : SettingSlotBase
             else if (mIsCostumizeSelected)
                 SwitchCostumizeToggle();
 
+            ChangeGameplaySetting();
         }
         if (ControlManager.Ins.MenuCancelButtonPressed())
         {
@@ -79,36 +88,38 @@ public class SetDifficultySlot : SettingSlotBase
         ActiveCostumizeToggles();
     }
 
-    public override void ChangeSetting(ref GameplaySettingData aSettingData)
+    protected override void ChangeGameplaySetting()
     {
-        aSettingData.SelectDifficulty = mSelectedDifficulty;
+        mGameplaySettingData.SelectDifficulty = mSelectedDifficulty;
         if (mSelectedDifficulty != Difficulties.CUSTOMIZE)
-            aSettingData.EnableDigits = new List<bool>(mSelectedCustomize);
+            mGameplaySettingData.SelectEnableDigits = new List<bool>(mSelectedCustomize);
         else
-            aSettingData.EnableDigits = new List<bool>(mChangedCustomize);
+            mGameplaySettingData.SelectEnableDigits = new List<bool>(mChangedCustomize);
+
+        base.ChangeGameplaySetting();
     }
 
-    private void SelectButton(int anIndex)
+    private void SelectButton(int aDirection)
     {
         if(!mIsCostumizeSelected)
         {
-            if ((mDifficultButtonSelectIndex + anIndex) >= Buttons.Count)
+            if ((mDifficultButtonSelectIndex + aDirection) >= Buttons.Count)
                 mDifficultButtonSelectIndex = (int)Difficulties.EASY;
-            else if ((mDifficultButtonSelectIndex + anIndex) < 0)
+            else if ((mDifficultButtonSelectIndex + aDirection) < 0)
                 mDifficultButtonSelectIndex = (int)Difficulties.CUSTOMIZE;
             else
-                mDifficultButtonSelectIndex += anIndex;
+                mDifficultButtonSelectIndex += aDirection;
 
             SetDifficulty((Difficulties)mDifficultButtonSelectIndex);
         }
         if (mIsCostumizeSelected)
         {
-            if ((mCostumizeToggleSelectIndex + anIndex) >= Costumizes.Count)
+            if ((mCostumizeToggleSelectIndex + aDirection) >= Costumizes.Count)
                 mCostumizeToggleSelectIndex = 0;
-            else if ((mCostumizeToggleSelectIndex + anIndex) < 0)
+            else if ((mCostumizeToggleSelectIndex + aDirection) < 0)
                 mCostumizeToggleSelectIndex = Costumizes.Count - 1;
             else
-                mCostumizeToggleSelectIndex += anIndex;
+                mCostumizeToggleSelectIndex += aDirection;
 
             ToggleAppearance();
         }
@@ -134,18 +145,12 @@ public class SetDifficultySlot : SettingSlotBase
 
     private void SwitchCostumizeToggle()
     {
-        //mSelectedCustomize[mCostumizeToggleSelectIndex] = !mSelectedCustomize[mCostumizeToggleSelectIndex];
-        //bool isThereAnotherOptionEnable = mSelectedCustomize.Contains(true);
-        //if (!isThereAnotherOptionEnable)
-        //    mSelectedCustomize[mCostumizeToggleSelectIndex] = true;
         mChangedCustomize[mCostumizeToggleSelectIndex] = !mChangedCustomize[mCostumizeToggleSelectIndex];
         bool isThereAnotherOptionEnable = mChangedCustomize.Contains(true);
         if (!isThereAnotherOptionEnable)
             mChangedCustomize[mCostumizeToggleSelectIndex] = true;
 
         ToggleState();
-        //else
-        //    Costumizes[mCostumizeToggleSelectIndex].isOn = mSelectedCustomize[mCostumizeToggleSelectIndex];
     }
 
     private void SetDifficulty(Difficulties aDifficulty)
@@ -167,6 +172,7 @@ public class SetDifficultySlot : SettingSlotBase
                 SwapDifficulties(mChangedCustomize.ToArray());
                 break;
         }
+        ChangeGameplaySetting();
     }
 
     private void ButtonAppearance(Difficulties aSelectedDifficulty)

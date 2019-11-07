@@ -6,11 +6,17 @@ using UnityEngine;
 
 public enum MenuPanelIndex
 {
+    // Start Scene
     TITLE_PANEL,
     DIFFICULT_PANEL,
     HIGHSCORE_PANEL,
     OPTION_PANEL,
     QUIT_GAME,
+    // Ingame scene
+    MAIN_GAME_PANEL,
+    PAUSE_PANEL,
+    RESULT_PANEL,
+    BACK_TO_START,
     NONE
 }
 

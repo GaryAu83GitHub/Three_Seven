@@ -28,6 +28,15 @@ public class GameSettings
     private string mPlayerName = "";
     public string PlayerName { get { return mPlayerName; } }
 
+    private Difficulties mDifficulty = Difficulties.EASY;
+    public Difficulties Difficulty { get { return mDifficulty; } set { mDifficulty = value; } }
+
+    public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } }
+    private List<bool> mEnableScoringMethods = new List<bool>() { true, true, false, false };
+
+    private int mStartLevel = 0;
+    public int StartLevel { get { return mStartLevel; } }
+
     private int mLimitRow = Constants.DEFAULT_ROOF_HEIGHT;
     public int LimitHigh { get { return mLimitRow; } }
 
@@ -46,8 +55,6 @@ public class GameSettings
     public bool ActiveGuideBlock { get { return mActiveGuideBlock; } }
     private bool mActiveGuideBlock = true;
 
-    public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } }
-    private List<bool> mEnableScoringMethods = new List<bool>();
 
     private const int mMaxLimitRow = 18;
     private const int mMinLimitRow = 9;
@@ -55,12 +62,26 @@ public class GameSettings
 
     public GameSettings()
     {
-        for(LinkIndexes i = 0; i < (LinkIndexes.MAX); i++)
-        {
-            mEnableScoringMethods.Add(true);
-        }
+        //for(LinkIndexes i = 0; i < (LinkIndexes.MAX); i++)
+        //{
+        //    mEnableScoringMethods.Add(true);
+        //}
+    }
+
+    public void NewGameSettings(GameplaySettingData aData)
+    {
+        mDifficulty = aData.SelectDifficulty;
+        mEnableScoringMethods = aData.SelectEnableDigits;
+        mStartLevel = aData.SelectStartLevel;
+        mLimitRow = Mathf.Clamp(aData.SelectLimitLineHeight, Constants.MIN_CEILING_HIGH, Constants.MAX_CEILING_HIGH);
+        mActiveGuideBlock = aData.SelectActiveGuide;
     }
     
+    public void SetStartLevel(int aStartLevel)
+    {
+        mStartLevel = aStartLevel;
+    }
+
     public void SetPlayerName(string aName)
     {
         mPlayerName = aName;
@@ -105,7 +126,7 @@ public class GameSettings
     /// <returns>Return the row number that had been clamp between the max and min row number</returns>
     public void SetLimitLineLevel(int aLimitLineRow)
     {
-        mLimitRow = Mathf.Clamp(aLimitLineRow, mMinLimitRow, mMaxLimitRow);
+        mLimitRow = Mathf.Clamp(aLimitLineRow, Constants.MIN_CEILING_HIGH, Constants.MAX_CEILING_HIGH);
     }
     
     public void SetInitialValue(int anInitialValue)

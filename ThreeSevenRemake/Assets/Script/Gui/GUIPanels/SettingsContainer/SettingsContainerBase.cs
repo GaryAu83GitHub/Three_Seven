@@ -15,6 +15,7 @@ public class SettingsContainerBase : MonoBehaviour
 
     protected SettingSlotBase mCurrentSelectedSlot = null;
     protected int mCurrentSelectingSlotIndex = 0;
+    protected int mCurrentDisplaySlotsCount = 0;
 
     protected bool mActiveContainer = false;
 
@@ -23,6 +24,7 @@ public class SettingsContainerBase : MonoBehaviour
         BackgroundFrame = GetComponent<Image>();
         CanvasGroup = GetComponent<CanvasGroup>();
         DeselectAllSlots();
+        mCurrentDisplaySlotsCount = SettingSlots.Count;
     }
 
     protected virtual void Update()
@@ -72,6 +74,18 @@ public class SettingsContainerBase : MonoBehaviour
             CanvasGroup.alpha = .5f;
             CanvasGroup.interactable = false;
         }
+    }
+
+    protected void CheckNumberOfActiveSlots()
+    {
+        mCurrentDisplaySlotsCount = 0;
+        for (int i = 0; i < SettingSlots.Count; i++)
+        {
+            if (SettingSlots[i].gameObject.activeInHierarchy)
+                mCurrentDisplaySlotsCount++;
+        }
+
+        //Debug.Log(mCurrentDisplaySlotsCount);
     }
 
     private void DeselectAllSlots()
