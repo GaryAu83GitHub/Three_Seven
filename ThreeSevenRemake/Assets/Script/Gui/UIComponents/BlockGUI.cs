@@ -27,7 +27,7 @@ public class BlockGUI : MonoBehaviour
         DevelopeMainGUI.changeNextBlock += NewNumber;
         GameManager.rewinding += RewindNumber;
 
-        NewNumber();
+        //NewNumber();
     }
 
     private void OnDestroy()
@@ -35,6 +35,12 @@ public class BlockGUI : MonoBehaviour
         Block.swapWithPreviewBlock -= SwapWithOriginalBlock;
         DevelopeMainGUI.changeNextBlock -= NewNumber;
         GameManager.rewinding -= RewindNumber;
+    }
+
+    public void SetNumber(List<int> someNumbers)
+    {
+        mNextNumbers = new List<int>(someNumbers);
+        DisplayBlock();
     }
 
     public void NewNumber()

@@ -27,7 +27,7 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
 
     public override void Start()
     {
-        mPanelIndex = MenuPanelIndex.HIGHSCORE_PANEL;
+        mPanelIndex = GUIPanelIndex.HIGHSCORE_PANEL;
 
         //Buttons[(int)ButtonIndex.EXIT_BUTTON].onClick.AddListener(ExitHighscore);
 
@@ -67,7 +67,7 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
     private void ExitHighscore()
     {
         //gameObject.SetActive(false);
-        MenuManager.Instance.GoTo(MenuPanelIndex.TITLE_PANEL);
+        GUIPanelManager.Instance.GoTo(GUIPanelIndex.TITLE_PANEL);
     }
 
     public void UpdateList()

@@ -108,7 +108,7 @@ public class GenerateScoreCombinationPositions
     {
     }
 
-    public void GenerateCompinationPositions()
+    public void GenerateCombinationPositions()
     {
         mOldScorePosAddons.Clear();
         mScorePosWithCubeAddons.Clear();

@@ -8,6 +8,16 @@ public class MenuEnablePanelBase : GUIPanelBase
     private Animation mAnimation;
     private Button mCurrentSelectedButton;
 
+    public List<Button> Buttons;
+    public List<AnimationClip> AnimationClips;
+
+    public List<Sprite> ButtonStatesSprites;
+    
+    protected int mCurrentSelectButtonIndex = 0;
+    protected int mPreviousSelectedButtonIndex = -1;
+    protected int mButtonCount = 0;
+    protected bool mIsPanelInputsActive = false;
+
     public override void Start()
     {
         mAnimation = GetComponent<Animation>();

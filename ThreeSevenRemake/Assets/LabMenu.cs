@@ -11,6 +11,18 @@ public class LabMenu : MonoBehaviour
     public Image SecondLine;
     public Image MinuteLine;
 
+    public GameObject BlockObject;
+
+    public delegate void OnCreateNewBlock(Block aNewBlock);
+    public static OnCreateNewBlock createNewBlock;
+
+    public delegate void OnSwapTheBlock(Block aNewBlock);
+    public static OnSwapTheBlock swapTheBlock;
+
+    public delegate void OnChangePreviewOrder();
+    public static OnChangePreviewOrder changePreviewOrder;
+
+    private Block mCurrentBlock;
     //private float waitTime = 2.0f;
     //private float timer = 0.0f;
     //private float visualTime = 0.0f;
@@ -26,12 +38,38 @@ public class LabMenu : MonoBehaviour
     //private RectTransform secondLineTransform;
     //private RectTransform minuteLineTransform;
 
+    private bool mDropBlock = false;
+
+    private void Awake()
+    {
+        GenerateScoreCombinationPositions.Instance.GenerateCombinationPositions();
+        TaskManagerNew.Instance.PrepareNewTaskSubjects();
+        TaskManagerNew.Instance.StartFirstSetOfTask();
+    }
     // Start is called before the first frame update
     void Start()
     {
-        MenuManager.Instance.StartWithPanel(MenuPanelIndex.TITLE_PANEL);
         //secondLineTransform = SecondLine.GetComponent<RectTransform>();
         //minuteLineTransform = MinuteLine.GetComponent<RectTransform>();
+        GUIPanelManager.Instance.StartWithPanel(GUIPanelIndex.MAIN_GAME_PANEL/*TITLE_PANEL*/);
+        //CreateNewBlock();
+
+        StartCoroutine(GameStart());
+    }
+
+    private IEnumerator GameStart()
+    {
+        yield return new WaitForSeconds(3f);
+
+        TaskManagerNew.Instance.StartFirstSetOfTask();
+        CreateNewBlock();
+    }
+
+    private IEnumerator DropBlock()
+    {
+        yield return new WaitForSeconds(.5f);
+        CreateNewBlock();
+        //mDropBlock = false;
     }
 
     // Update is called once per frame
@@ -63,8 +101,20 @@ public class LabMenu : MonoBehaviour
         //labText.text = ((int)minute).ToString() + " : " + ((int)second).ToString();
         ////Seconds.fillAmount = (int)timer * sectionValue;
         ////Minutes.fillAmount = minute * sectionValue;
+        if (ControlManager.Ins.DropBlockInstantly() && mCurrentBlock != null)
+        {
+            Destroy(mCurrentBlock.gameObject);
+            StartCoroutine(DropBlock());
+            //mDropBlock = true;
+            //CreateNewBlock();
+        }
+        if (ControlManager.Ins.SwapPreview())
+            swapTheBlock?.Invoke(mCurrentBlock);
+        if (ControlManager.Ins.ChangePreview())
+            changePreviewOrder?.Invoke();
 
-        
+        //if (mDropBlock)
+        //    mCurrentBlock.DropDown();
     }
 
     private void Clock()
@@ -79,5 +129,17 @@ public class LabMenu : MonoBehaviour
         //    minuteLineTransform.Rotate(new Vector3(0, 0, -lineRotateIntervall));
         //    nextMinute++;
         //}
+    }
+
+    private void CreateNewBlock()
+    {
+        GameObject newBlock = Instantiate(BlockObject, Vector3.zero, Quaternion.identity);
+        
+        createNewBlock?.Invoke(newBlock.GetComponent<Block>());
+
+        if (newBlock.GetComponent<Block>() != null)
+        {
+            mCurrentBlock = newBlock.GetComponent<Block>();
+        }
     }
 }

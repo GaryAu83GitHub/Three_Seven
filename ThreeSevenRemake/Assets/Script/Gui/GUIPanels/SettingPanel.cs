@@ -33,7 +33,7 @@ public class SettingPanel : MenuEnablePanelBase
 
     public override void Start()
     {
-        mPanelIndex = MenuPanelIndex.OPTION_PANEL;
+        mPanelIndex = GUIPanelIndex.OPTION_PANEL;
 
         base.Start();
         GameplaySettings.returnToSettingButtonContainer += DeactiveContainer;
@@ -81,7 +81,7 @@ public class SettingPanel : MenuEnablePanelBase
 
     private void NavigateSettingComponent()
     {
-        if (mCurrentSelectedSettingComponent == mCurrentSelectButtonIndex)
+        if ((mCurrentSelectButtonIndex == (int)ButtonIndex.EXIT_BUTTON) || (mCurrentSelectedSettingComponent == mCurrentSelectButtonIndex))
             return;
 
         if(mCurrentSelectedSettingComponent < (int)SettingPanelIndex.MAX_COMPONENT)
@@ -131,6 +131,6 @@ public class SettingPanel : MenuEnablePanelBase
 
     private void ExitButtonOnClick()
     {
-        MenuManager.Instance.GoTo(MenuPanelIndex.TITLE_PANEL);
+        GUIPanelManager.Instance.GoTo(GUIPanelIndex.TITLE_PANEL);
     }    
 }

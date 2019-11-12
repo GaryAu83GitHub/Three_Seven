@@ -17,11 +17,11 @@ public class TittleMenuPanel : MenuEnablePanelBase
         QUIT_BUTTON
     }
     
-    private MenuPanelIndex mGoToIndex = MenuPanelIndex.NONE;
+    private GUIPanelIndex mGoToIndex = GUIPanelIndex.NONE;
 
     public override void Start()
     {
-        mPanelIndex = MenuPanelIndex.TITLE_PANEL;
+        mPanelIndex = GUIPanelIndex.TITLE_PANEL;
 
         Buttons[(int)ButtonIndex.PLAY_BUTTON].onClick.AddListener(PlayGame);
         Buttons[(int)ButtonIndex.HIGHSCORE_BUTTON].onClick.AddListener(DisplayHighscore);
@@ -47,22 +47,22 @@ public class TittleMenuPanel : MenuEnablePanelBase
         switch(mCurrentSelectButtonIndex)
         {
             case (int)ButtonIndex.PLAY_BUTTON:
-                mGoToIndex = MenuPanelIndex.DIFFICULT_PANEL;
+                mGoToIndex = GUIPanelIndex.DIFFICULT_PANEL;
                 break;
             case (int)ButtonIndex.HIGHSCORE_BUTTON:
-                mGoToIndex = MenuPanelIndex.HIGHSCORE_PANEL;
+                mGoToIndex = GUIPanelIndex.HIGHSCORE_PANEL;
                 break;
             case (int)ButtonIndex.OPTION_BUTTON:
-                mGoToIndex = MenuPanelIndex.OPTION_PANEL;
+                mGoToIndex = GUIPanelIndex.OPTION_PANEL;
                 break;
             case (int)ButtonIndex.QUIT_BUTTON:
-                mGoToIndex = MenuPanelIndex.QUIT_GAME;
+                mGoToIndex = GUIPanelIndex.QUIT_GAME;
                 break;
             default:
-                mGoToIndex = MenuPanelIndex.NONE;
+                mGoToIndex = GUIPanelIndex.NONE;
                 break;
         }
-        MenuManager.Instance.GoTo(mGoToIndex);
+        GUIPanelManager.Instance.GoTo(mGoToIndex);
     }
        
     public override void Enter()

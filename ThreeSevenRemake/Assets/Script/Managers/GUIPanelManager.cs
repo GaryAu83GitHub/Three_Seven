@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public enum MenuPanelIndex
+public enum GUIPanelIndex
 {
     // Start Scene
     TITLE_PANEL,
@@ -20,28 +20,28 @@ public enum MenuPanelIndex
     NONE
 }
 
-public class MenuManager
+public class GUIPanelManager
 {
-    public static MenuManager Instance
+    public static GUIPanelManager Instance
     {
         get
         {
             if (mInstance == null)
             {
-                mInstance = new MenuManager();
+                mInstance = new GUIPanelManager();
             }
             return mInstance;
         }
     }
-    private static MenuManager mInstance;
+    private static GUIPanelManager mInstance;
 
-    private Dictionary<MenuPanelIndex, GUIPanelBase> mScenePanels = new Dictionary<MenuPanelIndex, GUIPanelBase>();
+    private Dictionary<GUIPanelIndex, GUIPanelBase> mScenePanels = new Dictionary<GUIPanelIndex, GUIPanelBase>();
 
     private GUIPanelBase mCurrentActiveMenuPanel;
 
-    private MenuPanelIndex mPreviousPanelIndex = MenuPanelIndex.NONE;
+    private GUIPanelIndex mPreviousPanelIndex = GUIPanelIndex.NONE;
 
-    public void AddPanel(MenuPanelIndex aPanelIndex, GUIPanelBase aPanel)
+    public void AddPanel(GUIPanelIndex aPanelIndex, GUIPanelBase aPanel)
     {
         if (mScenePanels.ContainsKey(aPanelIndex))
             return;
@@ -54,11 +54,11 @@ public class MenuManager
         //    mScenePanels[aPanelIndex].Exit();
         if (mScenePanels.Count > 1)
         {
-            mScenePanels = new Dictionary<MenuPanelIndex, GUIPanelBase>(GetSortedPanels());
+            mScenePanels = new Dictionary<GUIPanelIndex, GUIPanelBase>(GetSortedPanels());
         }
     }
 
-    public void StartWithPanel(MenuPanelIndex aPanelIndex)
+    public void StartWithPanel(GUIPanelIndex aPanelIndex)
     {
         if (!mScenePanels.ContainsKey(aPanelIndex))
         {
@@ -69,10 +69,10 @@ public class MenuManager
         mCurrentActiveMenuPanel.Enter();
     }
 
-    public void GoTo(MenuPanelIndex aPanelIndex)
+    public void GoTo(GUIPanelIndex aPanelIndex)
     {
         //Debug.Log(aPanelIndex);
-        if (aPanelIndex == MenuPanelIndex.QUIT_GAME)
+        if (aPanelIndex == GUIPanelIndex.QUIT_GAME)
         {
             Application.Quit();
             return;
@@ -94,11 +94,11 @@ public class MenuManager
         mCurrentActiveMenuPanel.Enter();
     }
 
-    private Dictionary<MenuPanelIndex, GUIPanelBase> GetSortedPanels()
+    private Dictionary<GUIPanelIndex, GUIPanelBase> GetSortedPanels()
     {
-        List<MenuPanelIndex> keys = mScenePanels.Keys.ToList();
+        List<GUIPanelIndex> keys = mScenePanels.Keys.ToList();
         keys.Sort();
-        Dictionary<MenuPanelIndex, GUIPanelBase> result = new Dictionary<MenuPanelIndex, GUIPanelBase>();
+        Dictionary<GUIPanelIndex, GUIPanelBase> result = new Dictionary<GUIPanelIndex, GUIPanelBase>();
         for (int i = 0; i < keys.Count; i++)
             result.Add(keys[i], mScenePanels[keys[i]]);
 

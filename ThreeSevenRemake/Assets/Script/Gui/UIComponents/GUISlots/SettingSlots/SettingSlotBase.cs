@@ -4,10 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class SettingSlotBase : MonoBehaviour
+public class SettingSlotBase : GuiSlotBase
 {
-    public TextMeshProUGUI TitleText;
-
     public Sprite SelectedSprite;
     public Sprite UnSelectedSprite;
 
@@ -17,19 +15,17 @@ public class SettingSlotBase : MonoBehaviour
     protected bool mLockParentInput = false;
     public bool LockParentInput { get { return mLockParentInput; } }
 
-    protected CanvasGroup mCG;
     protected Image mSelectingImage;
-    protected bool mSlotActivate = true;
 
     protected GameplaySettingData mGameplaySettingData = new GameplaySettingData();
 
-    public virtual void Start()
+    public override void Start()
     {
-        mCG = GetComponent<CanvasGroup>();
+        base.Start();
         mSelectingImage = GetComponent<Image>();
     }
 
-    public virtual void Update()
+    public override void Update()
     {
         if (mSlotActivate)
             Input();
@@ -60,9 +56,9 @@ public class SettingSlotBase : MonoBehaviour
     protected virtual void MenuButtonPressed()
     { }
 
-    public virtual void ActivatingSlot(bool isActive)
+    public override void ActivatingSlot(bool isActive)
     {
-        mSlotActivate = isActive;
+        base.ActivatingSlot(isActive);//mSlotActivate = isActive;
         SlotAppearence();
     }
 
