@@ -6,26 +6,31 @@ using System.Threading.Tasks;
 
 public class TaskData
 {
-    public TaskRank Rank { get { return mRank; } }
+    private int mTaskCountNumber = 0;
+    public int TaskCountNumber { get { return mTaskCountNumber; } }
+
     private TaskRank mRank = TaskRank.X1;
+    public TaskRank Rank { get { return mRank; } }
 
-    public int TaskValue { get { return mTaskValue; } }
     private int mTaskValue = 0;
+    public int TaskValue { get { return mTaskValue; } }
 
-    public int LinkedCubes { get { return mTaskLinkedCube; } }
     private int mTaskLinkedCube = 0;
+    public int LinkedCubes { get { return mTaskLinkedCube; } }
 
-    public bool TaskComplete { get { return mTaskComplete; } }
     private bool mTaskComplete = false;
+    public bool TaskComplete { get { return mTaskComplete; } }
 
     public TaskData()
     {
+        mTaskCountNumber = 0;
         mTaskValue = 0;
         mTaskLinkedCube = 0;
     }
 
     public TaskData(TaskData aData)
     {
+        mTaskCountNumber = aData.TaskCountNumber;
         mRank = aData.Rank;
         mTaskValue = aData.TaskValue;
         mTaskLinkedCube = aData.LinkedCubes;
@@ -40,8 +45,18 @@ public class TaskData
         mTaskComplete = false;
     }
 
+    public TaskData(int aTaskCount, TaskRank aRank, int aTaskCubeCount, int aTaskNumber)
+    {
+        mTaskCountNumber = aTaskCount;
+        mRank = aRank;
+        mTaskLinkedCube = aTaskCubeCount;
+        mTaskValue = aTaskNumber;
+        mTaskComplete = false;
+    }
+
     public void SetValue(TaskData aData)
     {
+        mTaskCountNumber = aData.TaskCountNumber;
         mRank = aData.Rank;
         mTaskValue = aData.TaskValue;
         mTaskLinkedCube = aData.LinkedCubes;
