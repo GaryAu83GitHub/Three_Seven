@@ -36,7 +36,7 @@ public class TaskManagerNew
     public List<TaskData> ActiveTask { get { return mActiveTasks; } }
 
     private int mScoringActiveTaskIndex = -1;
-    private readonly bool mUnderDebug = true;
+    private readonly bool mUnderDebug = false;
 
     public TaskManagerNew()
     {

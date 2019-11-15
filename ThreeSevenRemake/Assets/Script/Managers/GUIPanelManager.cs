@@ -65,6 +65,9 @@ public class GUIPanelManager
             Debug.LogError("The panel with index " + aPanelIndex + " is not registrated in MenuManager");
             return;
         }
+        if (mPreviousPanelIndex != GUIPanelIndex.NONE)
+            mPreviousPanelIndex = GUIPanelIndex.NONE;
+
         mCurrentActiveMenuPanel = mScenePanels[aPanelIndex];
         mCurrentActiveMenuPanel.Enter();
     }

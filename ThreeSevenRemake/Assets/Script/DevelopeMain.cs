@@ -128,7 +128,7 @@ public class DevelopeMain : MonoBehaviour
 
         // input for move the block downward one row if the row below is vacant
         // and if the time between each keypress has expired
-        if (ControlManager.Ins.DropBlock(mNextDropTime)/* || Time.time > mNextDropTime*/)
+        if (ControlManager.Ins.DropBlockGradually(mNextDropTime)/* || Time.time > mNextDropTime*/)
         {
             if (!mCurrentBlock.CheckIfCellIsVacantBeneath())
                 RegistrateNewLandedBlock();
@@ -152,7 +152,7 @@ public class DevelopeMain : MonoBehaviour
 
         // input for swaping the cubes value inside the block
         if (ControlManager.Ins.InvertBlock())
-            mCurrentBlock.Swap();
+            mCurrentBlock.InvertBlock();
 
         if (ControlManager.Ins.SwapPreview())
             mCurrentBlock.SwapWithPreviewBlock();

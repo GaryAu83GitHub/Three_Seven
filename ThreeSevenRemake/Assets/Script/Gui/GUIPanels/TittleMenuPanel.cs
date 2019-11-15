@@ -9,6 +9,9 @@ public class TittleMenuPanel : MenuEnablePanelBase
     public Fading FadingScript;
     //public Text tempText;
 
+    public delegate void OnStartTheGame();
+    public static OnStartTheGame startTheGame;
+
     private enum ButtonIndex
     {
         PLAY_BUTTON,
@@ -47,7 +50,8 @@ public class TittleMenuPanel : MenuEnablePanelBase
         switch(mCurrentSelectButtonIndex)
         {
             case (int)ButtonIndex.PLAY_BUTTON:
-                mGoToIndex = GUIPanelIndex.DIFFICULT_PANEL;
+                startTheGame?.Invoke();
+                //mGoToIndex = GUIPanelIndex.DIFFICULT_PANEL;
                 break;
             case (int)ButtonIndex.HIGHSCORE_BUTTON:
                 mGoToIndex = GUIPanelIndex.HIGHSCORE_PANEL;

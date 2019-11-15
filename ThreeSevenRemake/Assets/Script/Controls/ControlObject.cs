@@ -94,7 +94,7 @@ public class ControlObject
         return dir;
     }
 
-    public virtual bool GameDropBlock(float aBlockNextDropTime)
+    public virtual bool GameDropBlockGradually(float aBlockNextDropTime)
     {
         if ((KeyDown(CommandIndex.BLOCK_DROP) && DropButtonTimePassed()) || Time.time > aBlockNextDropTime)
         {

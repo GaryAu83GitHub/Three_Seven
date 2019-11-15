@@ -206,7 +206,7 @@ public class Block : MonoBehaviour
             Destroy(Joint.gameObject);
     }
 
-    public void Swap()
+    public void InvertBlock()
     {
         int rootNumber = RootCube.Number;
         int subNumber = SubCube.Number;

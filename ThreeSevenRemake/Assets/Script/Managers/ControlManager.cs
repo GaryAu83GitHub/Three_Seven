@@ -84,7 +84,7 @@ public class ControlManager
 
     public bool GamePause() { return mControls[0].GamePause(); }
 
-    public bool DropBlock(float aBlockNextDropTime) { return mControls[0].GameDropBlock(aBlockNextDropTime); }
+    public bool DropBlockGradually(float aBlockNextDropTime) { return mControls[0].GameDropBlockGradually(aBlockNextDropTime); }
 
     public bool DropBlockInstantly() { return mControls[0].GameInstantBlockDrop(); }
 
