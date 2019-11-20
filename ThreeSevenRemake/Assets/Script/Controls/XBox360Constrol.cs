@@ -146,7 +146,7 @@ public class XBox360Constrol : ControlObject
     public override bool GameDropBlockGradually(float aBlockNextDropTime)
     {
         float vertical = ((Navigation().x > -1 && Navigation().x < 1) ? Navigation().y : 0f);
-        if ((vertical <= -1f && DropButtonTimePassed()) || Time.time > aBlockNextDropTime)
+        if ((vertical <= -1f && DropButtonTimePassed())/* || Time.time > aBlockNextDropTime*/)
         {
             ResetDropTimer();
             return true;

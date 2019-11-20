@@ -28,13 +28,14 @@ public class MainGamePanel : GUIPanelBase
     public delegate void OnBlockInvert();
     public static OnBlockInvert blockInvert;
 
-    public delegate void OnBlockSwapWithPreview(List<int> givingNumbers, ref List<int> retrieveNumbers);
-    public static OnBlockSwapWithPreview blockSwapWithPreview;
+    public delegate void OnBlockSwaping();
+    public static OnBlockSwaping blockSwaping;
 
     public delegate void OnChangePreviewOrder();
     public static OnChangePreviewOrder changePreviewOrder;
 
     private float mCurrentBlockNextDropTime = 0;
+    private bool mBlockLanded = false;
 
     public override void Start()
     {
@@ -52,7 +53,8 @@ public class MainGamePanel : GUIPanelBase
     public override void Update()
     {
         base.Update();
-        InputHandle();
+        if(!mBlockLanded)
+            InputHandle();
         //if(ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_UP))
         //{
         //    mCurrentTotalScore += 100;
@@ -73,7 +75,7 @@ public class MainGamePanel : GUIPanelBase
     {
         blockMoveHorizontal?.Invoke(ControlManager.Ins.MoveBlockHorizontal());
 
-        if (ControlManager.Ins.DropBlockGradually(mCurrentBlockNextDropTime))
+        if (ControlManager.Ins.DropBlockGradually(0) || mCurrentBlockNextDropTime <= 0f)
             blockDropGradually?.Invoke();
 
         if (ControlManager.Ins.DropBlockInstantly())
@@ -85,8 +87,8 @@ public class MainGamePanel : GUIPanelBase
         if (ControlManager.Ins.InvertBlock())
             blockInvert?.Invoke();
 
-        if(ControlManager.Ins.SwapPreview())
-        { }
+        if (ControlManager.Ins.SwapPreview())
+            blockSwaping?.Invoke();
 
         if (ControlManager.Ins.ChangePreview())
             changePreviewOrder?.Invoke();
@@ -98,5 +100,10 @@ public class MainGamePanel : GUIPanelBase
     private void GetNextDropTime(float aNextDropTime)
     {
         mCurrentBlockNextDropTime = aNextDropTime;
+    }
+
+    private void GetBlockHasLanded(bool hasBlockLanded)
+    {
+        mBlockLanded = hasBlockLanded;
     }
 }

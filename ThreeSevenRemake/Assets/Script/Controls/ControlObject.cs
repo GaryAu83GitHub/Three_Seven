@@ -96,7 +96,7 @@ public class ControlObject
 
     public virtual bool GameDropBlockGradually(float aBlockNextDropTime)
     {
-        if ((KeyDown(CommandIndex.BLOCK_DROP) && DropButtonTimePassed()) || Time.time > aBlockNextDropTime)
+        if ((KeyDown(CommandIndex.BLOCK_DROP) && DropButtonTimePassed())/* || Time.time > aBlockNextDropTime*/)
         {
             ResetDropTimer();
             return true;
@@ -183,7 +183,8 @@ public class ControlObject
     /// </summary>
     protected void ResetDropTimer()
     {
-        mBlockDropButtonDelayTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
+        //mBlockDropButtonDelayTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
+        mBlockDropButtonDelayTime = Constants.BUTTON_DOWN_INTERVAL;
     }
 
     /// <summary>
@@ -192,7 +193,11 @@ public class ControlObject
     /// <returns>return true if the time had passed the delaying time</returns>
     protected bool DropButtonTimePassed()
     {
-        return (Time.time > mBlockDropButtonDelayTime);
+        //return (Time.time > mBlockDropButtonDelayTime);
+        if (mBlockDropButtonDelayTime > 0)
+            mBlockDropButtonDelayTime -= Time.deltaTime;
+
+        return (mBlockDropButtonDelayTime <= 0);
     }
 
     protected void ResetMoveHorizontTimer()

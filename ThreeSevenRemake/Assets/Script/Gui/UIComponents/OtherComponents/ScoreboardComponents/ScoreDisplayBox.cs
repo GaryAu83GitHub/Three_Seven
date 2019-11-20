@@ -15,15 +15,15 @@ public class ScoreDisplayBox : ScoreboardComponentBase
 
     public override void Start()
     {
-        //GameManager.scoreChanging += UpdateScore;
-        MainGamePanel.onAddScore += UpdateScore;
+        GameManager.scoreChanging += UpdateScore;
+        //MainGamePanel.onAddScore += UpdateScore;
         UpdateDisplayScore();
     }
 
     private void OnDestroy()
     {
-        //GameManager.scoreChanging -= UpdateScore;
-        MainGamePanel.onAddScore -= UpdateScore;
+        GameManager.scoreChanging -= UpdateScore;
+        //MainGamePanel.onAddScore -= UpdateScore;
     }
     
     protected override void ComponentsDisplay()

@@ -73,6 +73,8 @@ public class BlockGUI : MonoBehaviour
 
     private void DisplayBlock()
     {
+        if (!mNextNumbers.Any())
+            return;
         // randomize a new number for the root cube
         mRootNumber = mNextNumbers[0];
         RootNumberText.text = RootNumber.ToString();

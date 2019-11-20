@@ -39,6 +39,8 @@ public class BlockManager
     public delegate void OnAchieveScoringFor(ScoringGroupAchieveInfo anInfo, List<Cube> thisGroupsCubes);
     public static OnAchieveScoringFor achieveScoringFor;
 
+    public delegate void OnConsecutiveScoring(bool isScoring);
+    public static OnConsecutiveScoring consecutiveScoring;
 
     public delegate void OnComboOccures(int aComboCount);
     public static OnComboOccures comboOccuring;
@@ -70,7 +72,6 @@ public class BlockManager
 
     private int mComboCount = 0;
 
-    
     /// <summary>
     /// Reset all variabler for a new game
     /// </summary>
@@ -114,6 +115,11 @@ public class BlockManager
         GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
 
         mScoringInfos = GridManager.Instance.GetListOfScoringPositionGroups(aBlock);
+        //if (mScoringInfos.Any())
+        //    mConsecutiveScoringCount++;
+        //else
+        //    mConsecutiveScoringCount = 0;
+        consecutiveScoring?.Invoke(mScoringInfos.Any());
     }
 
     public void ResetCombo()

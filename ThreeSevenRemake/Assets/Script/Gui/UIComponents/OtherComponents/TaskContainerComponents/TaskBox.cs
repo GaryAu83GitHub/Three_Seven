@@ -18,10 +18,18 @@ public class TaskBox : MonoBehaviour
 
     public List<Color> TaskRankColors;
 
+    public delegate void OnCreateNewBlock();
+    public static OnCreateNewBlock createNewBlock;
+
+    private bool mTaskAccomplished = false;
+    public bool TaskAccomplished { get { return mTaskAccomplished; } }
+
     private Animator mAnimator;
     private CanvasGroup mCG;
 
     private int mActiveDigit = 0;
+    private TaskData mDisplayingTaskData = new TaskData();
+    private int mScoringTimes = 0;
 
     private enum TaskRankColorIndex
     {
@@ -39,6 +47,10 @@ public class TaskBox : MonoBehaviour
         mCG = GetComponent<CanvasGroup>();
     }
 
+    private void OnDestroy()
+    {
+    }
+
     void Update()
     {
         //if (Input.GetKeyDown(KeyCode.Space))
@@ -47,10 +59,22 @@ public class TaskBox : MonoBehaviour
         //    mAnimator.SetTrigger("TaskAccomplished");
     }
 
+    public void SetTaskAnimationEvent()
+    {
+        SetUpTask(mDisplayingTaskData);
+    }
+
+    public void CreateNewBlockAnimationEvent()
+    {
+        //createNewBlock?.Invoke();
+    }
+
     public void DisplayScoring(int aTotalScore, List<Cube> someScoringCube)
     {
         DisplayOperatorDigit(someScoringCube);
-
+        mTaskAccomplished = true;
+        mScoringTimes++;
+        ScoringTimesText.text = mScoringTimes.ToString();
         //ScoreText.text = aTotalScore.ToString();
         //FormulaText.text = "";
         //Animation.Play();
@@ -59,11 +83,22 @@ public class TaskBox : MonoBehaviour
 
     public void SetUpTask(TaskData aData)
     {
+        MultiValueOutline.gameObject.SetActive(true);
+
         SetRankCircle(aData.Rank);
 
         DeactivateFormulaNumberBoxes();
         ActiveNewOperativeBox(aData.LinkedCubes);
+        TaskNumberText.text = aData.TaskCountNumber.ToString();
         TaskValueText.text = aData.TaskValue.ToString();
+        mTaskAccomplished = false;
+        mScoringTimes = 0;
+    }
+
+    public void AssignNewTaskData(TaskData aNextTaskData)
+    {
+        mDisplayingTaskData = aNextTaskData;
+        mAnimator.SetTrigger("TaskAccomplished");
     }
 
     public void PlayDigitIdleAnimation()

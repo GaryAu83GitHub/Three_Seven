@@ -7,18 +7,21 @@ public class TimeTextBox : ScoreboardComponentBase
     private float mGameTime = 0f;
     private string mTimeInText = "";
 
+    private bool mTimerIsActive = false;
     public override void Start()
     {
-
+        GameSceneMain.activeTimer += ActiveTheClock;
     }
 
     private void OnDestroy()
     {
+        GameSceneMain.activeTimer -= ActiveTheClock;
     }
 
     protected override void ComponentsDisplay()
     {
-        Clock();
+        if(mTimerIsActive)
+            Clock();
     }
 
     private void Clock()
@@ -35,5 +38,10 @@ public class TimeTextBox : ScoreboardComponentBase
             mTimeInText = string.Format("{0:00}:{1:00}", minutes, seconds);
 
         ValueText.text = mTimeInText;
+    }
+
+    private void ActiveTheClock(bool activeTimer)
+    {
+        mTimerIsActive = activeTimer;
     }
 }

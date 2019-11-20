@@ -30,6 +30,12 @@ public class TaskManagerNew
     public delegate void OnDisplayTaskList(List<TaskData> someDatas);
     public static OnDisplayTaskList displayTaskList;
 
+    public delegate void OnTaskAccomplish(List<TaskData> someNewData);
+    public static OnTaskAccomplish taskAccomplish;
+
+    public delegate void OnCreateNewBlock();
+    public static OnCreateNewBlock createNewBlock;
+
     private TaskSubject mSubject = new TaskSubject();
 
     private List<TaskData> mActiveTasks = new List<TaskData>();
@@ -91,7 +97,10 @@ public class TaskManagerNew
     public void ChangeTask()
     {
         if (!mActiveTasks.Any(x => x.TaskComplete == true))
+        {
+            createNewBlock?.Invoke();
             return;
+        }
 
         for(int i = 0; i < mActiveTasks.Count; i++)
         {
@@ -101,6 +110,7 @@ public class TaskManagerNew
             }
         }
         CubeNumberManager.Instance.GenerateNewUseableCubeNumberFor(mActiveTasks);
+        taskAccomplish?.Invoke(mActiveTasks);
     }
 
     public void PrepareNewTaskSubjects()
@@ -147,7 +157,7 @@ public class TaskManagerNew
     private void SetNewActiveTaskFor(int anIndex)
     {
         mActiveTasks[anIndex].SetValue(mSubject.CreateTask());
-        displayTaskAt?.Invoke(anIndex, mActiveTasks[anIndex]);   
+        //displayTaskAt?.Invoke(anIndex, mActiveTasks[anIndex]);   
     }
 
     private void SetNewActiveTaskFor(int anIndex, int aLink, int aValue)
@@ -171,6 +181,7 @@ public class TaskSubject
 
     private int mTaskValueLimit = 0;
     private int mMaxValue = 0;
+    private int mCreatedTaskCount = 0;
 
     private readonly bool mUnderDebuging = false;
     private readonly int mDebugingValue = 0;
@@ -243,15 +254,19 @@ public class TaskSubject
         int link = mAvailableLinks[Random.Range(0, mAvailableLinks.Count)];
         int task = GetNewTaskValue(link);
         TaskRank rank = mSubjectData[link].GetRankFor(task);
+        mCreatedTaskCount++;
 
-        return new TaskData(rank, link, task);
+        //return new TaskData(rank, link, task);
+        return new TaskData(mCreatedTaskCount, rank, link, task);
     }
 
     public TaskData CreateTask(int aLink, int aTaskValue)
     {
         TaskRank rank = mSubjectData[aLink].GetRankFor(aTaskValue);
+        mCreatedTaskCount++;
 
-        return new TaskData(rank, aLink, aTaskValue);
+        //return new TaskData(rank, aLink, aTaskValue);
+        return new TaskData(mCreatedTaskCount, rank, aLink, aTaskValue);
     }
 
     public TaskData CreateNewTask()

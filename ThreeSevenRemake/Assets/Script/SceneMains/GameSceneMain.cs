@@ -15,13 +15,21 @@ public class GameSceneMain : MonoBehaviour
     public delegate void OnGetNextDropTime(float aNextDropTime);
     public static OnGetNextDropTime getNextDropTime;
 
+    public delegate void OnSwapingWithPreview(Block aCurrentBlock);
+    public static OnSwapingWithPreview swapingWithPreview;
+
+    public delegate void OnActiveTimer(bool activeTimer);
+    public static OnActiveTimer activeTimer;
+
     private Block mCurrentBlock;
     private GuideBlock mGuideBlock;
 
     private int mBlockCount = 0;
     private float mNextDropTime = 0f;
+    private float mBlockDropTimer = 0f;
 
     private bool mBlockLanded = false;
+    private bool mIsAccomplishAnimationPlaying = false;
 
     private void Awake()
     {
@@ -41,7 +49,10 @@ public class GameSceneMain : MonoBehaviour
         MainGamePanel.blockDropInstantly += BlockDropInstantly;
         MainGamePanel.blockRotate += BlockRotate;
         MainGamePanel.blockInvert += BlockInvert;
-        MainGamePanel.blockSwapWithPreview += BlockSwapWithPreview;
+        MainGamePanel.blockSwaping += BlockSwaping;
+
+        TaskManagerNew.createNewBlock += CreateNewBlock;
+        TaskBox.createNewBlock += CreateNewBlock;
 
         LimitLine.transform.position += new Vector3(0f, .625f + (Constants.CUBE_GAP_DISTANCE * GameSettings.Instance.LimitHigh), 0f);
 
@@ -55,7 +66,10 @@ public class GameSceneMain : MonoBehaviour
         MainGamePanel.blockDropInstantly -= BlockDropInstantly;
         MainGamePanel.blockRotate -= BlockRotate;
         MainGamePanel.blockInvert -= BlockInvert;
-        MainGamePanel.blockSwapWithPreview -= BlockSwapWithPreview;
+        MainGamePanel.blockSwaping -= BlockSwaping;
+
+        TaskManagerNew.createNewBlock -= CreateNewBlock;
+        TaskBox.createNewBlock -= CreateNewBlock;
     }
 
     void Update()
@@ -67,13 +81,18 @@ public class GameSceneMain : MonoBehaviour
             CurrentBlockStatus();
             return;
         }
-
         if (BlockManager.Instance.BlockPassedGameOverLine())
             return;
 
         //InputHandle()
         if (mCurrentBlock != null)
         {
+            if (mBlockDropTimer > 0)
+            {
+                mBlockDropTimer -= Time.deltaTime;
+                getNextDropTime?.Invoke(mBlockDropTimer);
+            }
+
             mGuideBlock.SetupGuideBlock(mCurrentBlock);
             mGuideBlock.SetPosition(mCurrentBlock);
         }
@@ -82,13 +101,16 @@ public class GameSceneMain : MonoBehaviour
     private IEnumerator GameStart()
     {
         yield return new WaitForSeconds(3f);
-
         TaskManagerNew.Instance.StartFirstSetOfTask();
+        
         CreateNewBlock();
     }
 
     private void CreateNewBlock()
     {
+        if (mCurrentBlock != null)
+            return;
+
         GameObject newBlock = Instantiate(BlockObject, GridManager.Instance.StartWorldPosition, Quaternion.identity);
         newBlock.name = "FallingBlock";
         mBlockCount++;
@@ -102,14 +124,16 @@ public class GameSceneMain : MonoBehaviour
         GuideBlockObject.SetActive(true);
 
         ControlManager.Ins.ResetButtonPressTimer();
-        mNextDropTime = GameManager.Instance.BlockNextDropTime;//Time.time + GameManager.Instance.DropRate;//mDropRate;
-
+        //mNextDropTime = GameManager.Instance.BlockNextDropTime;//Time.time + GameManager.Instance.DropRate;//mDropRate;
+        mBlockDropTimer = GameManager.Instance.DropRate;
+        getNextDropTime?.Invoke(mBlockDropTimer);
+        activeTimer?.Invoke(true);
         mBlockLanded = false;
     }
 
     private void CurrentBlockStatus()
     {
-        if(mBlockLanded)
+        if (mBlockLanded)
         {
             { // these skall be encaps into the blackmanager
                 if (BlockManager.Instance.AnyBlockPlayingAnimation())
@@ -122,10 +146,12 @@ public class GameSceneMain : MonoBehaviour
                 else
                 {
                     TaskManagerNew.Instance.ChangeTask();
-                    CreateNewBlock();
+                    //CreateNewBlock();
                 }
             }
         }
+        //else
+        //    BlockDropGradually();
     }
 
     // These are the method subscribed to MainGamePanels delegate for navigate the block
@@ -147,7 +173,9 @@ public class GameSceneMain : MonoBehaviour
         else
             mCurrentBlock.DropDown();
 
-        getNextDropTime?.Invoke(GameManager.Instance.BlockNextDropTime);
+        mBlockDropTimer = GameManager.Instance.DropRate;
+        getNextDropTime?.Invoke(mBlockDropTimer);
+        //getNextDropTime?.Invoke(GameManager.Instance.BlockNextDropTime);
     }
 
     private void BlockDropInstantly()
@@ -157,7 +185,8 @@ public class GameSceneMain : MonoBehaviour
 
         mCurrentBlock.InstantDrop();
         RegistrateNewLandedBlock();
-        getNextDropTime?.Invoke(GameManager.Instance.BlockNextDropTime);
+        mBlockDropTimer = GameManager.Instance.DropRate;
+        //getNextDropTime?.Invoke(GameManager.Instance.BlockNextDropTime);
     }
 
     private void BlockRotate()
@@ -176,6 +205,14 @@ public class GameSceneMain : MonoBehaviour
         mCurrentBlock.InvertBlock();
     }
 
+    private void BlockSwaping()
+    {
+        if (mCurrentBlock == null)
+            return;
+
+        swapingWithPreview?.Invoke(mCurrentBlock);
+    }
+
     private void BlockSwapWithPreview(List<int> givenNumbers, ref List<int> retrieveNumbers)
     {
         if (mCurrentBlock == null)
@@ -185,6 +222,10 @@ public class GameSceneMain : MonoBehaviour
         mCurrentBlock.SetCubeNumbers(givenNumbers);
     }
 
+    private void AccomplishAnimationIsPlaying(bool isPlaying)
+    {
+        mIsAccomplishAnimationPlaying = isPlaying;
+    }
 
     private void RegistrateNewLandedBlock()
     {
@@ -195,6 +236,7 @@ public class GameSceneMain : MonoBehaviour
 
         mCurrentBlock = null;
         mBlockLanded = true;
+        activeTimer?.Invoke(false);
         GuideBlockObject.SetActive(GameSettings.Instance.GetGuideBlockVisible(false));
     }
 }

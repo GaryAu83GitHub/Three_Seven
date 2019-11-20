@@ -10,7 +10,7 @@ public class TaskSlot : GuiSlotBase
     public delegate void OnPopupAppear(Vector3 aTargetPosition, List<Cube> someScoringCube, int aDisplayScore);
     public static OnPopupAppear popupAppear;
 
-    int taskboxIndex = 0;
+
     public override void Start()
     {
         base.Start();
@@ -19,6 +19,8 @@ public class TaskSlot : GuiSlotBase
         BlockManager.achieveScoringFor += DisplayScoringFor;
         TaskManagerNew.displayTaskAt += SetTaskNumbersAt;
         TaskManagerNew.displayTaskList += SetTaskNumbersByList;
+
+        TaskManagerNew.taskAccomplish += TaskAccomplish;
     }
 
     private void OnDestroy()
@@ -27,20 +29,22 @@ public class TaskSlot : GuiSlotBase
         BlockManager.achieveScoringFor -= DisplayScoringFor;
         TaskManagerNew.displayTaskAt -= SetTaskNumbersAt;
         TaskManagerNew.displayTaskList -= SetTaskNumbersByList;
+
+        TaskManagerNew.taskAccomplish -= TaskAccomplish;
     }
 
     public override void Update()
     {
         base.Update();
-        if (Input.GetKeyDown(KeyCode.DownArrow) && taskboxIndex < TaskBoxes.Count)
-            taskboxIndex++;
-        if (Input.GetKeyDown(KeyCode.UpArrow) && taskboxIndex >= 0)
-            taskboxIndex--;
+        //if (Input.GetKeyDown(KeyCode.DownArrow) && taskboxIndex < TaskBoxes.Count)
+        //    taskboxIndex++;
+        //if (Input.GetKeyDown(KeyCode.UpArrow) && taskboxIndex >= 0)
+        //    taskboxIndex--;
 
-        if (Input.GetKeyDown(KeyCode.Space))
-            TaskBoxes[taskboxIndex].PlayScoringAnimation();
-        if (Input.GetKeyDown(KeyCode.Return))
-            TaskBoxes[taskboxIndex].PlayAccomplishAnimaiton();
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //    TaskBoxes[taskboxIndex].PlayScoringAnimation();
+        //if (Input.GetKeyDown(KeyCode.Return))
+        //    TaskBoxes[taskboxIndex].PlayAccomplishAnimaiton();
     }
 
     public void SetTaskNumbersByList(List<TaskData> someDatas)
@@ -49,6 +53,15 @@ public class TaskSlot : GuiSlotBase
         {
             TaskBoxes[i].SetUpTask(someDatas[i]);// TaskFrames[i].SetUpTask(someDatas[i]);
             //TaskBoxes[i].gameObject.SetActive(true);
+        }
+    }
+
+    public void TaskAccomplish(List<TaskData> someDatas)
+    {
+        for(int i = 0; i < someDatas.Count; i++)
+        {
+            if (TaskBoxes[i].TaskAccomplished)
+                TaskBoxes[i].AssignNewTaskData(someDatas[i]);
         }
     }
 
