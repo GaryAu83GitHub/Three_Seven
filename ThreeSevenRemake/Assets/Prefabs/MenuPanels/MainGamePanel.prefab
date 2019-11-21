@@ -1740,6 +1740,7 @@ RectTransform:
   m_SizeDelta: {x: 536.9, y: 550}
   m_Pivot: {x: 1, y: 0.5}
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!95 &2028453175
 Animator:
   serializedVersion: 3
@@ -1759,6 +1760,8 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+=======
+>>>>>>> parent of 578f24f... fixed the animation for preview
 =======
 >>>>>>> parent of 578f24f... fixed the animation for preview
 --- !u!114 &1499549019
@@ -2121,6 +2124,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7026492794898876216}
     - target: {fileID: 2980335141825828785, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+<<<<<<< HEAD
         type: 3}
       propertyPath: ComboBar
       value: 
@@ -2162,6 +2166,49 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8629936512329162831, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
         type: 3}
+=======
+        type: 3}
+      propertyPath: ComboBar
+      value: 
+      objectReference: {fileID: 7026492796480734761}
+    - target: {fileID: 8629936511881150961, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+        type: 3}
+      propertyPath: m_Name
+      value: ScoreDisplayBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 8629936510932740459, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.0000059223003
+      objectReference: {fileID: 0}
+    - target: {fileID: 8629936510932740459, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -38.69999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8629936510827281755, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+        type: 3}
+      propertyPath: m_Name
+      value: LevelTermBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 8629936511141500864, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+        type: 3}
+      propertyPath: m_Name
+      value: TimeTextBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 8629936511474563247, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+        type: 3}
+      propertyPath: m_Name
+      value: ComboDisplayBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 8629936511950571279, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8629936512329162831, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+        type: 3}
+>>>>>>> parent of 578f24f... fixed the animation for preview
       propertyPath: m_AnchoredPosition.y
       value: 10
       objectReference: {fileID: 0}
@@ -2172,6 +2219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8, type: 3}
+<<<<<<< HEAD
 <<<<<<< HEAD
 --- !u!114 &7026492794881138815 stripped
 MonoBehaviour:
@@ -2191,6 +2239,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &7026492794895928189 stripped
 MonoBehaviour:
+=======
+--- !u!224 &7026492794840005534 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8629936511967567086, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1603471067790681968}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7026492794812114561 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8629936511881150961, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1603471067790681968}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7026492794895928189 stripped
+MonoBehaviour:
+>>>>>>> parent of 578f24f... fixed the animation for preview
   m_CorrespondingSourceObject: {fileID: 8629936512334212109, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
     type: 3}
   m_PrefabInstance: {fileID: 1603471067790681968}
@@ -2210,6 +2274,9 @@ RectTransform:
 --- !u!114 &7026492795725535564 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8629936510948900412, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+<<<<<<< HEAD
+>>>>>>> parent of 578f24f... fixed the animation for preview
+=======
 >>>>>>> parent of 578f24f... fixed the animation for preview
     type: 3}
   m_PrefabInstance: {fileID: 1603471067790681968}
@@ -2233,9 +2300,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!114 &7026492796505161253 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8629936511795616085, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+=======
+--- !u!1 &7026492796219748528 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8629936511141500864, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1603471067790681968}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7026492795118403141 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8629936512245963061, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+>>>>>>> parent of 578f24f... fixed the animation for preview
 =======
 --- !u!1 &7026492796219748528 stripped
 GameObject:
@@ -2257,9 +2336,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!114 &7026492796310665990 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8629936511593716854, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+=======
+--- !u!114 &7026492795919078061 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8629936510908413405, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+>>>>>>> parent of 578f24f... fixed the animation for preview
 =======
 --- !u!114 &7026492795919078061 stripped
 MonoBehaviour:
@@ -2274,6 +2359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 <<<<<<< HEAD
 --- !u!1 &7026492795847121451 stripped
 GameObject:
@@ -2297,6 +2383,14 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1603471067790681968}
   m_PrefabAsset: {fileID: 0}
+=======
+--- !u!114 &7026492796310665990 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8629936511593716854, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1603471067790681968}
+  m_PrefabAsset: {fileID: 0}
+>>>>>>> parent of 578f24f... fixed the animation for preview
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -2304,6 +2398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7026492796292489183 stripped
+<<<<<<< HEAD
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8629936511474563247, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
     type: 3}
@@ -2323,19 +2418,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7026492794812114561 stripped
+=======
+>>>>>>> parent of 578f24f... fixed the animation for preview
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 8629936511881150961, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+  m_CorrespondingSourceObject: {fileID: 8629936511474563247, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
     type: 3}
   m_PrefabInstance: {fileID: 1603471067790681968}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
 --- !u!114 &7026492796480734761 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8629936511402697049, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+=======
+--- !u!114 &7026492796519471926 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8629936511768722502, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+>>>>>>> parent of 578f24f... fixed the animation for preview
     type: 3}
   m_PrefabInstance: {fileID: 1603471067790681968}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -2364,6 +2467,7 @@ GameObject:
   m_PrefabInstance: {fileID: 1603471067790681968}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &7026492794881138815 stripped
+<<<<<<< HEAD
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8629936511950571279, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
 >>>>>>> parent of 578f24f... fixed the animation for preview
@@ -2379,15 +2483,20 @@ MonoBehaviour:
 --- !u!114 &7026492794898876216 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8629936512329162824, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+=======
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8629936511950571279, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+>>>>>>> parent of 578f24f... fixed the animation for preview
     type: 3}
   m_PrefabInstance: {fileID: 1603471067790681968}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 <<<<<<< HEAD
 --- !u!1 &7026492795742735898 stripped
 GameObject:
@@ -2409,35 +2518,10 @@ MonoBehaviour:
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8629936511402697049, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
 >>>>>>> parent of 578f24f... fixed the animation for preview
-    type: 3}
-  m_PrefabInstance: {fileID: 1603471067790681968}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-<<<<<<< HEAD
---- !u!224 &7026492795725535923 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8629936510948900291, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
-    type: 3}
-  m_PrefabInstance: {fileID: 1603471067790681968}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7026492794895928189 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8629936512334212109, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
 =======
---- !u!1 &7026492795847121451 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8629936510827281755, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
-    type: 3}
-  m_PrefabInstance: {fileID: 1603471067790681968}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7026492794906457958 stripped
+--- !u!114 &7026492794898876216 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8629936512311103510, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+  m_CorrespondingSourceObject: {fileID: 8629936512329162824, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
 >>>>>>> parent of 578f24f... fixed the animation for preview
     type: 3}
   m_PrefabInstance: {fileID: 1603471067790681968}
@@ -2449,9 +2533,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 <<<<<<< HEAD
+<<<<<<< HEAD
+--- !u!224 &7026492795725535923 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8629936510948900291, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1603471067790681968}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7026492794895928189 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8629936512334212109, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+=======
+=======
+--- !u!114 &7026492796480734761 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8629936511402697049, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1603471067790681968}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+>>>>>>> parent of 578f24f... fixed the animation for preview
+--- !u!1 &7026492795847121451 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8629936510827281755, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1603471067790681968}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7026492794906457958 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8629936512311103510, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+<<<<<<< HEAD
+>>>>>>> parent of 578f24f... fixed the animation for preview
+=======
+>>>>>>> parent of 578f24f... fixed the animation for preview
+    type: 3}
+  m_PrefabInstance: {fileID: 1603471067790681968}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+<<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!114 &7026492796604064446 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8629936511819351502, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+=======
+--- !u!114 &7026492796505161253 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8629936511795616085, guid: 09b18e6b8f71d2a4d8227e14cc8b42b8,
+>>>>>>> parent of 578f24f... fixed the animation for preview
 =======
 --- !u!114 &7026492796505161253 stripped
 MonoBehaviour:
@@ -2466,6 +2604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 <<<<<<< HEAD
 --- !u!1 &7026492796292489183 stripped
 GameObject:
@@ -2485,6 +2624,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+=======
+>>>>>>> parent of 578f24f... fixed the animation for preview
 =======
 >>>>>>> parent of 578f24f... fixed the animation for preview
 --- !u!1001 &4318968633125615560
@@ -2941,7 +3082,10 @@ GameObject:
   m_PrefabInstance: {fileID: 5106528352068869677}
   m_PrefabAsset: {fileID: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 578f24f... fixed the animation for preview
 --- !u!114 &7026492795268514367 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2836446993408384018, guid: b69a78fe84e81c049b6368a033ef6168,
@@ -2954,6 +3098,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
+>>>>>>> parent of 578f24f... fixed the animation for preview
+=======
 >>>>>>> parent of 578f24f... fixed the animation for preview
 --- !u!114 &7026492796656205025 stripped
 MonoBehaviour:
@@ -3010,6 +3157,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 5106528352068869677}
   m_PrefabAsset: {fileID: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!114 &7026492795268514367 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2836446993408384018, guid: b69a78fe84e81c049b6368a033ef6168,
@@ -3022,6 +3170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+=======
+>>>>>>> parent of 578f24f... fixed the animation for preview
 =======
 >>>>>>> parent of 578f24f... fixed the animation for preview
 --- !u!1001 &7026492794809480566
