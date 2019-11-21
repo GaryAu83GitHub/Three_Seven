@@ -119,7 +119,7 @@ public class XBox360Constrol : ControlObject
             { CommandIndex.BLOCK_INVERT, new ControlInput(XBoxButton.Y) },
             { CommandIndex.PREVIEW_SWAP, new ControlInput(XBoxButton.B) },
             { CommandIndex.PREVIEW_ROTATE, new ControlInput(XBoxButton.R_SHOULDER) },
-            { CommandIndex.PREVIEW_DUMP, new ControlInput(AxisInput.TRIGGER, XBoxButton.R_TRIGGER, Vector2Int.right) },
+            { CommandIndex.PREVIEW_DUMP, new ControlInput(XBoxButton.L_SHOULDER) },//new ControlInput(AxisInput.TRIGGER, XBoxButton.R_TRIGGER, Vector2Int.right) },
             { CommandIndex.INGAME_PAUSE, new ControlInput(XBoxButton.START) }
         };
 
@@ -154,12 +154,12 @@ public class XBox360Constrol : ControlObject
         return false;
     }
 
-    public override bool GameDumpPreview()
-    {
-        if (Trigger() == mCommands[CommandIndex.PREVIEW_DUMP].Direction.x)
-            return true;
-        return false;
-    }
+    //public override bool GameDumpPreview()
+    //{
+    //    if (Trigger() == mCommands[CommandIndex.PREVIEW_DUMP].Direction.x)
+    //        return true;
+    //    return false;
+    //}
 
     protected override bool HorizontBottomHit(ref Vector3 aDir, float aHorizontValue = 0f)
     {
