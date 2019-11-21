@@ -52,6 +52,11 @@ public class LevelManager
         //mLevelInfos.Add(new LevelData(10, 1f / 10f));
     }
 
+    public void SetCurrentLevel(int aCurrentLevel)
+    {
+        mCurrentLevel = aCurrentLevel;
+    }
+
     /// <summary>
     /// Add in point for level up to gain more score and increase the dropping speed
     /// When a certain amount of points are aquired, the current level increase and

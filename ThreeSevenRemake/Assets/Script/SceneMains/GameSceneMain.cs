@@ -25,7 +25,6 @@ public class GameSceneMain : MonoBehaviour
     private GuideBlock mGuideBlock;
 
     private int mBlockCount = 0;
-    private float mNextDropTime = 0f;
     private float mBlockDropTimer = 0f;
 
     private bool mBlockLanded = false;
