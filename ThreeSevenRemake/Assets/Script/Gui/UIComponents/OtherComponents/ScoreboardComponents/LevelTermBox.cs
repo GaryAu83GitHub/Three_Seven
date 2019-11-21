@@ -9,6 +9,7 @@ public class LevelTermBox : ScoreboardComponentBase
     public Image UpArrowImage;
     public Image DownArrowImage;
 
+    //public Animation LevelUpAnimation;
     private Animator mAnimator;
 
     private int mLevel = 1;
@@ -20,15 +21,14 @@ public class LevelTermBox : ScoreboardComponentBase
 
     public override void Start()
     {
-        mAnimator = GetComponent<Animator>();
+        //MainGamePanel.onAddLevelFilling += FillingBarWith;
         ComboDisplayBox.scoringOccure += ScoringOccure;
         ComboDisplayBox.changeLevel += ChangeLevel;
-
-        mLevel = LevelManager.Instance.CurrentLevel;
     }
 
     private void OnDestroy()
     {
+        //MainGamePanel.onAddLevelFilling -= FillingBarWith;
         ComboDisplayBox.scoringOccure -= ScoringOccure;
         ComboDisplayBox.changeLevel -= ChangeLevel;
     }
@@ -51,20 +51,16 @@ public class LevelTermBox : ScoreboardComponentBase
             // Animation for level go up plays
             if (mLevel < 100)
                 mLevel++;
-            mAnimator.SetTrigger("LevelUp");
+            //mAnimator.SetTrigger("LevelUp");
         }
         else
         {
             // Animation for level go down plays
             if (mLevel > 0)
                 mLevel--;
-            mAnimator.SetTrigger("LevelDown");
+            //mAnimator.SetTrigger("LevelDown");
         }
         mPreviousLevelUpOdds = aNewOdds;
-        LevelManager.Instance.SetCurrentLevel(mLevel);
-
-
-        
     }
 
     private void FillingBarWith(float aFillingValue)

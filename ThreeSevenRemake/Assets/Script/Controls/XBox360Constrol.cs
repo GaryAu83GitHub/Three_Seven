@@ -119,7 +119,6 @@ public class XBox360Constrol : ControlObject
             { CommandIndex.BLOCK_INVERT, new ControlInput(XBoxButton.Y) },
             { CommandIndex.PREVIEW_SWAP, new ControlInput(XBoxButton.B) },
             { CommandIndex.PREVIEW_ROTATE, new ControlInput(XBoxButton.R_SHOULDER) },
-            { CommandIndex.PREVIEW_DUMP, new ControlInput(AxisInput.TRIGGER, XBoxButton.R_TRIGGER, Vector2Int.right) },
             { CommandIndex.INGAME_PAUSE, new ControlInput(XBoxButton.START) }
         };
 
@@ -129,6 +128,7 @@ public class XBox360Constrol : ControlObject
 
     public override bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall = .1f)
     {
+
         if (CheckNaviCommandsWithTimer(mCommands[aCommand], anDelayIntervall))
             return true;
 
@@ -151,13 +151,6 @@ public class XBox360Constrol : ControlObject
             ResetDropTimer();
             return true;
         }
-        return false;
-    }
-
-    public override bool GameDumpPreview()
-    {
-        if (Trigger() == mCommands[CommandIndex.PREVIEW_DUMP].Direction.x)
-            return true;
         return false;
     }
 

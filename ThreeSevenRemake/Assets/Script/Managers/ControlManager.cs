@@ -96,8 +96,6 @@ public class ControlManager
 
     public bool ChangePreview() { return mControls[0].GameRotatePreview(); }
 
-    public bool DumpPreview() { return mControls[0].GameDumpPreview(); }
-
 
     public bool KeyPress(CommandIndex anCommand)
     {

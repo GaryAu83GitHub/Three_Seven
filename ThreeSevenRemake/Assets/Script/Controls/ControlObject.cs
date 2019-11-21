@@ -24,7 +24,6 @@ public enum CommandIndex
     BLOCK_INVERT,
     PREVIEW_SWAP,
     PREVIEW_ROTATE,
-    PREVIEW_DUMP,
     INGAME_PAUSE,
     // last index
     MAX_INPUT
@@ -114,8 +113,6 @@ public class ControlObject
     public virtual bool GameSwapPreview() { return KeyPress(CommandIndex.PREVIEW_SWAP); }
 
     public virtual bool GameRotatePreview() { return KeyPress(CommandIndex.PREVIEW_ROTATE); }
-
-    public virtual bool GameDumpPreview() { return KeyPress(CommandIndex.PREVIEW_DUMP); }
 
     public virtual bool GamePause() { return KeyPress(CommandIndex.INGAME_PAUSE); }
 

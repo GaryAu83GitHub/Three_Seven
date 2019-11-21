@@ -35,7 +35,6 @@ public class KeyboardControl : ControlObject
             { CommandIndex.BLOCK_INVERT, KeyCode.E },
             { CommandIndex.PREVIEW_SWAP, KeyCode.Space },
             { CommandIndex.PREVIEW_ROTATE, KeyCode.UpArrow },
-            { CommandIndex.PREVIEW_DUMP, KeyCode.Delete },
             { CommandIndex.INGAME_PAUSE, KeyCode.Return }
         };
 
