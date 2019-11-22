@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SetStartLevelSlot : SettingSlotWithSlider
 {
-    private int mStartLevel = Constants.MIN_LEVEL;
+    private int mStartLevel = LevelManager.Instance.CurrentLevel;//Constants.MIN_LEVEL;
 
     
     public override void Start()

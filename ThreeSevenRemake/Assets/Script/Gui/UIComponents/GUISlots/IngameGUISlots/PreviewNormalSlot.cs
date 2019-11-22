@@ -23,6 +23,7 @@ public class PreviewNormalSlot : GuiSlotBase
         GameSceneMain.swapingWithPreview += SwapTheBlock;
 
         MainGamePanel.changePreviewOrder += ChangePreviewOrder;
+        MainGamePanel.dumpPreviewBlock += DumbPreviewBlock;
 
         // these delegates are used in the test scene
         LabMenu.createNewBlock += CreateNewBlock;
@@ -48,6 +49,7 @@ public class PreviewNormalSlot : GuiSlotBase
         GameSceneMain.swapingWithPreview -= SwapTheBlock;
 
         MainGamePanel.changePreviewOrder -= ChangePreviewOrder;
+        MainGamePanel.dumpPreviewBlock -= DumbPreviewBlock;
 
         // these are used in the test scene
         LabMenu.createNewBlock -= CreateNewBlock;
@@ -63,6 +65,12 @@ public class PreviewNormalSlot : GuiSlotBase
     }
 
     public void CreateNewEventEnd()
+    {
+        UpdatePreviewList(true);
+        SetBlockNumbers();
+    }
+
+    public void DumpPreviewEvent()
     {
         UpdatePreviewList(true);
         SetBlockNumbers();
@@ -114,6 +122,14 @@ public class PreviewNormalSlot : GuiSlotBase
     private void ChangePreviewOrder()
     {
         ChangeAnimationState("ChangeOrder");
+    }
+
+    private void DumbPreviewBlock()
+    {
+        mPreviewNumbers[3] = new List<int>(GameManager.Instance.GenerateNewCubeNumber());
+
+        SetBlockNumbers();
+        ChangeAnimationState("Dumping");
     }
 
     private void PlayAnimation(int aStateIndex)
