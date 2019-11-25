@@ -19,10 +19,10 @@ public class ControlManager
     private static ControlManager mInstance;
 
     private List<ControlObject> mControls = new List<ControlObject>();
-    
+
     public ControlManager()
     {
-        
+
     }
 
     public void DefaultSetting()
@@ -58,7 +58,7 @@ public class ControlManager
         {
             for (int i = 0; i < temp.Count; i++)
             {
-                if(temp[i].Any())
+                if (temp[i].Any())
                     mControls[0] = new XBox360Constrol();
             }
         }
@@ -66,7 +66,7 @@ public class ControlManager
             c.KeySettings(/*new Dictionary<CommandIndex, KeyCode>()*/);
     }
 
-    public void ResetButtonPressTimer(){ mControls[0].ResetButtonPressTimer(); }
+    public void ResetButtonPressTimer() { mControls[0].ResetButtonPressTimer(); }
 
     public bool MenuNavigationHold(CommandIndex aCommand, float anDelayIntervall = .1f) { return mControls[0].MenuNavigateHold(aCommand, anDelayIntervall); }
 
@@ -95,6 +95,8 @@ public class ControlManager
     public bool SwapPreview() { return mControls[0].GameSwapPreview(); }
 
     public bool ChangePreview() { return mControls[0].GameRotatePreview(); }
+
+    public bool DumpPreview() { return mControls[0].GameDumpPreview(); }
 
 
     public bool KeyPress(CommandIndex anCommand)

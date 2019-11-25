@@ -34,6 +34,9 @@ public class MainGamePanel : GUIPanelBase
     public delegate void OnChangePreviewOrder();
     public static OnChangePreviewOrder changePreviewOrder;
 
+    public delegate void OnDumpPreviewBlock();
+    public static OnDumpPreviewBlock dumpPreviewBlock;
+
     private float mCurrentBlockNextDropTime = 0;
     private bool mBlockLanded = false;
 
@@ -53,7 +56,7 @@ public class MainGamePanel : GUIPanelBase
     public override void Update()
     {
         base.Update();
-        if(!mBlockLanded)
+        if (!mBlockLanded)
             InputHandle();
         //if(ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_UP))
         //{
@@ -92,6 +95,9 @@ public class MainGamePanel : GUIPanelBase
 
         if (ControlManager.Ins.ChangePreview())
             changePreviewOrder?.Invoke();
+
+        //if (ControlManager.Ins.DumpPreview())
+        //    dumpPreviewBlock?.Invoke();
 
         if (ControlManager.Ins.GamePause())
         { }

@@ -13,6 +13,7 @@ public class PreviewNormalSlot : GuiSlotBase
     private List<List<int>> mPreviewNumbers = new List<List<int>>();
 
     private float mSwapCommandTimer = 0;
+    private List<int> mStoredSwapingNumbers = new List<int>();
 
     public override void Start()
     {
@@ -20,7 +21,7 @@ public class PreviewNormalSlot : GuiSlotBase
 
         // thses delegates are for the main game
         GameSceneMain.createNewBlock += CreateNewBlock;
-        GameSceneMain.swapingWithPreview += SwapTheBlock;
+        GameSceneMain.swapingWithPreview += SwapTheBlock;// SwapBlock;
 
         MainGamePanel.changePreviewOrder += ChangePreviewOrder;
         MainGamePanel.dumpPreviewBlock += DumbPreviewBlock;
@@ -46,7 +47,7 @@ public class PreviewNormalSlot : GuiSlotBase
     {
         // thses delegates are for the main game
         GameSceneMain.createNewBlock -= CreateNewBlock;
-        GameSceneMain.swapingWithPreview -= SwapTheBlock;
+        GameSceneMain.swapingWithPreview -= SwapTheBlock;// SwapBlock;
 
         MainGamePanel.changePreviewOrder -= ChangePreviewOrder;
         MainGamePanel.dumpPreviewBlock -= DumbPreviewBlock;
@@ -86,6 +87,12 @@ public class PreviewNormalSlot : GuiSlotBase
         SetBlockNumbers();
     }
 
+    public void SwapBlockEventNew()
+    {
+        mPreviewNumbers[0] = new List<int>(mStoredSwapingNumbers);
+        SetBlockNumbers();
+    }
+
     public void SwapBlockEvent()
     {
         UpdatePreviewList(false);
@@ -104,11 +111,31 @@ public class PreviewNormalSlot : GuiSlotBase
         ChangeAnimationState("CreateNew");
     }
 
+    // this is still under testing, currently using SwapTheBlock
+    private void SwapBlock(Block aSwapingBlock)
+    {
+        if (aSwapingBlock == null || mSwapCommandTimer > 0)
+            return;
+
+        mSwapCommandTimer = .75f;
+
+        mStoredSwapingNumbers = new List<int>(aSwapingBlock.CubeNumbers);
+        aSwapingBlock.SetCubeNumbers(mPreviewNumbers[0]);
+        ChangeAnimationState("SwapBlock");
+
+
+        //Vector3 a = new Vector3(0, 1, 0);
+        //Vector3 b = new Vector3(0, 1, 1);
+        // s = v * t
+        // t = s / v
+        //Vector3 c = Vector3.Lerp(a, b, Vector3.Distance(a, b) / (Time.deltaTime * 1));
+    }
+
     private void SwapTheBlock(Block aSwapingBlock)
     {
         if (aSwapingBlock == null || mSwapCommandTimer > 0)
             return;
-        
+
         mSwapCommandTimer = .75f;
 
         mPreviewNumbers[3] = new List<int>(aSwapingBlock.CubeNumbers);
@@ -117,6 +144,7 @@ public class PreviewNormalSlot : GuiSlotBase
         aSwapingBlock.SetCubeNumbers(mPreviewNumbers[0]);
         SetBlockNumbers();
         ChangeAnimationState("SwapBlock");
+
     }
 
     private void ChangePreviewOrder()
@@ -159,4 +187,6 @@ public class PreviewNormalSlot : GuiSlotBase
         mPreviewNumbers[1] = new List<int>(mPreviewNumbers[2]);
         mPreviewNumbers[2] = new List<int>(mPreviewNumbers[3]);
     }
+
+    
 }

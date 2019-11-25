@@ -24,6 +24,7 @@ public enum CommandIndex
     BLOCK_INVERT,
     PREVIEW_SWAP,
     PREVIEW_ROTATE,
+    PREVIEW_DUMP,
     INGAME_PAUSE,
     // last index
     MAX_INPUT
@@ -78,13 +79,13 @@ public class ControlObject
 
     public virtual bool MenuCancel() { return KeyPress(CommandIndex.CANCEL); }
 
-    public virtual bool MenuConfirm(){ return KeyPress(CommandIndex.CONFIRM); }
+    public virtual bool MenuConfirm() { return KeyPress(CommandIndex.CONFIRM); }
 
-    public virtual bool MenuBack(){ return KeyPress(CommandIndex.BACK); }
+    public virtual bool MenuBack() { return KeyPress(CommandIndex.BACK); }
 
     public Vector3 GameMoveBlockHorizontal()
     {
-        if(!MoveHorizontButtonTimePassed())
+        if (!MoveHorizontButtonTimePassed())
             return Vector3.zero;
 
         Vector3 dir = Vector3.zero;
@@ -105,7 +106,7 @@ public class ControlObject
     }
 
     public virtual bool GameInstantBlockDrop() { return KeyPress(CommandIndex.BLOCK_INSTANT_DROP); }
-    
+
     public virtual bool GameRotateBlock() { return KeyPress(CommandIndex.BLOCK_ROTATE); }
 
     public virtual bool GameInverteBlock() { return KeyPress(CommandIndex.BLOCK_INVERT); }
@@ -113,6 +114,8 @@ public class ControlObject
     public virtual bool GameSwapPreview() { return KeyPress(CommandIndex.PREVIEW_SWAP); }
 
     public virtual bool GameRotatePreview() { return KeyPress(CommandIndex.PREVIEW_ROTATE); }
+
+    public virtual bool GameDumpPreview() { return KeyPress(CommandIndex.PREVIEW_DUMP); }
 
     public virtual bool GamePause() { return KeyPress(CommandIndex.INGAME_PAUSE); }
 
@@ -159,7 +162,7 @@ public class ControlObject
         return false;
         //if (!mKeybindList.ContainsKey(aCommand))
         //    return false;
-        
+
         //return Input.GetKey(mKeybindList[aCommand]);
     }
 
