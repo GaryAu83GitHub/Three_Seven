@@ -10,6 +10,7 @@ public class TaskSlot : GuiSlotBase
     public delegate void OnPopupAppear(Vector3 aTargetPosition, List<Cube> someScoringCube, int aDisplayScore);
     public static OnPopupAppear popupAppear;
 
+    private int mCompletedTaskCount = 0;
 
     public override void Start()
     {
@@ -21,6 +22,8 @@ public class TaskSlot : GuiSlotBase
         TaskManagerNew.displayTaskList += SetTaskNumbersByList;
 
         TaskManagerNew.taskAccomplish += TaskAccomplish;
+
+        MainGamePanel.gatherResultData += GatherResultData;
     }
 
     private void OnDestroy()
@@ -31,6 +34,8 @@ public class TaskSlot : GuiSlotBase
         TaskManagerNew.displayTaskList -= SetTaskNumbersByList;
 
         TaskManagerNew.taskAccomplish -= TaskAccomplish;
+
+        MainGamePanel.gatherResultData -= GatherResultData;
     }
 
     public override void Update()
@@ -61,7 +66,10 @@ public class TaskSlot : GuiSlotBase
         for(int i = 0; i < someDatas.Count; i++)
         {
             if (TaskBoxes[i].TaskAccomplished)
+            {
                 TaskBoxes[i].AssignNewTaskData(someDatas[i]);
+                mCompletedTaskCount++;
+            }
         }
     }
 
@@ -96,5 +104,10 @@ public class TaskSlot : GuiSlotBase
     private Vector3 GetMidPointBetweenScoringCubes(Vector3 firstCubeWorldPos, Vector3 lastCubeWorldPos)
     {
         return Vector3.Lerp(firstCubeWorldPos, lastCubeWorldPos, .5f);
+    }
+
+    private void GatherResultData(ref ResultData aData)
+    {
+        aData.SetCompletedTasks(mCompletedTaskCount);
     }
 }

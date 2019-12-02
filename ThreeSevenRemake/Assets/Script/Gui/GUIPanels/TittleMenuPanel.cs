@@ -22,6 +22,7 @@ public class TittleMenuPanel : MenuEnablePanelBase
     
     private GUIPanelIndex mGoToIndex = GUIPanelIndex.NONE;
 
+
     public override void Start()
     {
         mPanelIndex = GUIPanelIndex.TITLE_PANEL;

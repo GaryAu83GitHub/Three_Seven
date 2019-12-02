@@ -27,6 +27,12 @@ public class HighScoreManager
     private List<RoundResultData> mHighScoreList = new List<RoundResultData>();
     public List<RoundResultData> HighScoreList { get { return mHighScoreList; } }
 
+    /// <summary>
+    /// new score list
+    /// </summary>
+    private List<SavingResultData> mScoreList = new List<SavingResultData>();
+    public List<SavingResultData> ScoreList { get { return mScoreList; } }
+
     public HighScoreManager()
     {
         ScoreTable loadTable = (JsonHelper<ScoreTable>.LoadFromJson(FileIndex.HIGHSCORES) ?? new ScoreTable());
@@ -58,6 +64,17 @@ public class HighScoreManager
         SaveToList();
     }
 
+    public void AddNewScore(string aPlayerName, ResultData aData)
+    {
+        SavingResultData newData = new SavingResultData(aPlayerName, aData);
+        if (mScoreList.Contains(newData))
+            return;
+
+        mScoreList.Add(newData);
+
+        SaveToListNew();
+    }
+
     public List<RoundResultData> GetListSortBy(TableCategory aCategory)
     {
         List<RoundResultData> sortlist = new List<RoundResultData>();
@@ -86,6 +103,12 @@ public class HighScoreManager
         ScoreTable newList = new ScoreTable(mHighScoreList);
         JsonHelper<ScoreTable>.SaveToJson(newList, FileIndex.HIGHSCORES);
     }
+
+    private void SaveToListNew()
+    {
+        HighScoreTable newList = new HighScoreTable(mScoreList);
+        JsonHelper<HighScoreTable>.SaveToJsonNew(newList, FileIndex.HIGHSCORES_NEW);
+    }
 }
 
 [Serializable]
@@ -99,6 +122,57 @@ public class ScoreTable
     public ScoreTable(List<RoundResultData> aScoreList)
     {
         ScoreList = aScoreList ?? throw new ArgumentNullException(nameof(aScoreList));
+    }
+}
+
+[Serializable]
+public class HighScoreTable
+{
+    public List<SavingResultData> ScoreList = new List<SavingResultData>();
+
+    public HighScoreTable()
+    { }
+
+    public HighScoreTable(List<SavingResultData> aScoreList)
+    {
+        ScoreList = aScoreList ?? throw new ArgumentNullException(nameof(aScoreList));
+    }
+}
+
+
+[Serializable]
+public class SavingResultData
+{
+    public string PlayerName = "";
+    public int GainScores = 0;
+    public int LongestChains = 0;
+    public int CompletedTasks = 0;
+    public int ReachedLevels = 0;
+    public float AverageOdds = 0f;
+    public float PlayTime = 0f;
+
+    public SavingResultData() { }
+
+    public SavingResultData(SavingResultData aData)
+    {
+        this.PlayerName = aData.PlayerName;
+        this.GainScores = aData.GainScores;
+        this.LongestChains = aData.LongestChains;
+        this.CompletedTasks = aData.CompletedTasks;
+        this.ReachedLevels = aData.ReachedLevels;
+        this.AverageOdds = aData.AverageOdds;
+        this.PlayTime = aData.PlayTime;
+    }
+
+    public SavingResultData(string aPlayerName, ResultData aData)
+    {
+        this.PlayerName = aPlayerName;
+        this.GainScores = aData.GainScores;
+        this.LongestChains = aData.LongestChains;
+        this.CompletedTasks = aData.CompletedTasks;
+        this.ReachedLevels = aData.ReachedLevels;
+        this.AverageOdds = aData.AverageOdds;
+        this.PlayTime = aData.PlayTime;
     }
 }
 

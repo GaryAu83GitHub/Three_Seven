@@ -10,6 +10,9 @@ public class PreviewNormalSlot : GuiSlotBase
     public List<int> FirstPreviewBlock { get { return mPreviewNumbers[0]; } }
     public List<int> LastPreviewBlock { set { mPreviewNumbers[3] = value; } }
 
+    public delegate void OnEnablePreviewInput(bool anEnable);
+    public static OnEnablePreviewInput enabblePreviewInput;
+
     private List<List<int>> mPreviewNumbers = new List<List<int>>();
 
     private float mSwapCommandTimer = 0;
@@ -69,6 +72,7 @@ public class PreviewNormalSlot : GuiSlotBase
     {
         UpdatePreviewList(true);
         SetBlockNumbers();
+        enabblePreviewInput?.Invoke(true);
     }
 
     public void DumpPreviewEvent()
@@ -85,18 +89,21 @@ public class PreviewNormalSlot : GuiSlotBase
         mPreviewNumbers[2] = new List<int>(tempNumbers);
 
         SetBlockNumbers();
+        enabblePreviewInput?.Invoke(true);
     }
 
     public void SwapBlockEventNew()
     {
         mPreviewNumbers[0] = new List<int>(mStoredSwapingNumbers);
         SetBlockNumbers();
+        enabblePreviewInput?.Invoke(true);
     }
 
     public void SwapBlockEvent()
     {
         UpdatePreviewList(false);
         SetBlockNumbers();
+        enabblePreviewInput?.Invoke(true);
     }
 
     private void CreateNewBlock(Block aNewBlock)
@@ -109,6 +116,7 @@ public class PreviewNormalSlot : GuiSlotBase
 
         SetBlockNumbers();
         ChangeAnimationState("CreateNew");
+        enabblePreviewInput?.Invoke(true);
     }
 
     // this is still under testing, currently using SwapTheBlock

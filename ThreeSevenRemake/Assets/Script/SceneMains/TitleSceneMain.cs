@@ -7,7 +7,8 @@ public class TitleSceneMain : MonoBehaviour
     void Start()
     {
         TittleMenuPanel.startTheGame += StartTheGame;
-        GUIPanelManager.Instance.StartWithPanel(GUIPanelIndex.TITLE_PANEL);
+        //GUIPanelManager.Instance.StartWithPanel(GUIPanelIndex.TITLE_PANEL);
+        StartCoroutine(MenyAppear());
     }
 
     private void OnDestroy()
@@ -30,5 +31,11 @@ public class TitleSceneMain : MonoBehaviour
     {
         yield return new WaitForSeconds(.5f);
         ScreenTransistor.Instance.FadeToSceneWithIndex(1);
+    }
+
+    private IEnumerator MenyAppear()
+    {
+        yield return new WaitForSeconds(1.5f);
+        GUIPanelManager.Instance.StartWithPanel(GUIPanelIndex.TITLE_PANEL);
     }
 }

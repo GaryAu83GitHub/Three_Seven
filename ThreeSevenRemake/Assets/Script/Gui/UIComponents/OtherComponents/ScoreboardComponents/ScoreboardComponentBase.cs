@@ -13,7 +13,14 @@ public class ScoreboardComponentBase : MonoBehaviour
 
     public virtual void Start()
     {
-        
+        MainGamePanel.gatherResultData += GatherResultData;
+
+        ResetStartValue();
+    }
+
+    public virtual void OnDestroy()
+    {
+        MainGamePanel.gatherResultData -= GatherResultData;
     }
 
     public virtual void Update()
@@ -26,4 +33,10 @@ public class ScoreboardComponentBase : MonoBehaviour
     {
 
     }
+
+    protected virtual void GatherResultData(ref ResultData aData)
+    { }
+
+    public virtual void ResetStartValue()
+    { }
 }

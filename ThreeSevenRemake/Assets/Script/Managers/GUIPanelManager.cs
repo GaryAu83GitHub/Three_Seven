@@ -43,10 +43,13 @@ public class GUIPanelManager
 
     public void AddPanel(GUIPanelIndex aPanelIndex, GUIPanelBase aPanel)
     {
-        if (mScenePanels.ContainsKey(aPanelIndex))
+        if (mScenePanels.ContainsKey(aPanelIndex) && mScenePanels[aPanelIndex] != null)
             return;
+        else if (mScenePanels.ContainsKey(aPanelIndex) && mScenePanels[aPanelIndex] == null)
+            mScenePanels[aPanelIndex] = aPanel;
+        else
+            mScenePanels.Add(aPanelIndex, aPanel);
 
-        mScenePanels.Add(aPanelIndex, aPanel);
         mScenePanels[aPanelIndex].Exit();
         //if (mScenePanels.Count == 1)
         //    mCurrentActiveMenuPanel = mScenePanels[aPanelIndex];

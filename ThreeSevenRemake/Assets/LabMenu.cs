@@ -38,13 +38,21 @@ public class LabMenu : MonoBehaviour
     //private RectTransform secondLineTransform;
     //private RectTransform minuteLineTransform;
 
-    private bool mDropBlock = false;
+    //private bool mDropBlock = false;
+
+    private float mLerpValue = 0f;
+    private Gradient mGradient = new Gradient();
+
+    private GradientColorKey[] gck;
+    private GradientAlphaKey[] gak;
 
     private void Awake()
     {
         GenerateScoreCombinationPositions.Instance.GenerateCombinationPositions();
         TaskManagerNew.Instance.PrepareNewTaskSubjects();
         TaskManagerNew.Instance.StartFirstSetOfTask();
+
+        
     }
     // Start is called before the first frame update
     void Start()
@@ -53,6 +61,24 @@ public class LabMenu : MonoBehaviour
         //minuteLineTransform = MinuteLine.GetComponent<RectTransform>();
         GUIPanelManager.Instance.StartWithPanel(GUIPanelIndex.MAIN_GAME_PANEL/*TITLE_PANEL*/);
         //CreateNewBlock();
+
+        gck = new GradientColorKey[3];
+        gck[0].color = Color.red;
+        gck[0].time = 0f;
+        gck[1].color = Color.white;
+        gck[1].time = .5f;
+        gck[2].color = Color.green;
+        gck[2].time = 1f;
+
+        gak = new GradientAlphaKey[3];
+        gak[0].alpha = 1f;
+        gak[0].time = 0f;
+        gak[1].alpha = 1f;
+        gak[1].time = .5f;
+        gak[2].alpha = 1f;
+        gak[2].time = 1f;
+
+        mGradient.SetKeys(gck, gak);
 
         StartCoroutine(GameStart());
     }
@@ -97,6 +123,21 @@ public class LabMenu : MonoBehaviour
         //    minute = 0;
         //    nextMinute = 1;
         //}
+
+        if(Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            mLerpValue += .01f;
+            if (mLerpValue > 1f)
+                mLerpValue = 1f;
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            mLerpValue -= .01f;
+            if (mLerpValue < 0f)
+                mLerpValue = 0f;
+        }
+        labText.text = mLerpValue.ToString();
+        labText.color = mGradient.Evaluate(mLerpValue);//Color.Lerp(Color.white, Color.black,mLerpValue /*Mathf.PingPong(mLerpValue, 1)*/);
 
         //labText.text = ((int)minute).ToString() + " : " + ((int)second).ToString();
         ////Seconds.fillAmount = (int)timer * sectionValue;

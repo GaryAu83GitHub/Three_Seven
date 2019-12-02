@@ -4,17 +4,29 @@ using UnityEngine;
 
 public class TimeTextBox : ScoreboardComponentBase
 {
-    private float mGameTime = 0f;
+    public delegate void OnTimeOver(bool aTimeIsOver);
+    public static OnTimeOver timeOver;
+
+    private float mGameTime = 300f;
     private string mTimeInText = "";
 
     private bool mTimerIsActive = false;
+
+    private const float mGameTimeLimit = 300f;
+
     public override void Start()
     {
+        base.Start();
+        mGameTime = mGameTimeLimit;
+
         GameSceneMain.activeTimer += ActiveTheClock;
+        Clock();
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
+
         GameSceneMain.activeTimer -= ActiveTheClock;
     }
 
@@ -26,7 +38,6 @@ public class TimeTextBox : ScoreboardComponentBase
 
     private void Clock()
     {
-        mGameTime += Time.deltaTime;
 
         int seconds = (int)(mGameTime % 60);
         int minutes = (int)((mGameTime / 60) % 60);
@@ -38,10 +49,19 @@ public class TimeTextBox : ScoreboardComponentBase
             mTimeInText = string.Format("{0:00}:{1:00}", minutes, seconds);
 
         ValueText.text = mTimeInText;
+
+        mGameTime -= Time.deltaTime;
+        if (mGameTime < 0f)
+            timeOver?.Invoke(true);
     }
 
     private void ActiveTheClock(bool activeTimer)
     {
         mTimerIsActive = activeTimer;
+    }
+
+    protected override void GatherResultData(ref ResultData aData)
+    {   
+        aData.SetPlayTime(mGameTime, mGameTimeLimit);
     }
 }

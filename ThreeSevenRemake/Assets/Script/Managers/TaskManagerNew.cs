@@ -36,6 +36,11 @@ public class TaskManagerNew
     public delegate void OnCreateNewBlock();
     public static OnCreateNewBlock createNewBlock;
 
+    public delegate void OnEnablePreviewFunction(bool anEnableFunction);
+    public static OnEnablePreviewFunction enablePreviewFunction;
+
+    public int GetCreatedTaskCount { get { return mSubject.CreatedTaskCount; } }
+
     private TaskSubject mSubject = new TaskSubject();
 
     private List<TaskData> mActiveTasks = new List<TaskData>();
@@ -96,9 +101,11 @@ public class TaskManagerNew
 
     public void ChangeTask()
     {
+        enablePreviewFunction?.Invoke(false);
         if (!mActiveTasks.Any(x => x.TaskComplete == true))
         {
             createNewBlock?.Invoke();
+            
             return;
         }
 
@@ -179,9 +186,11 @@ public class TaskSubject
     private List<int> mAvailableLinks = new List<int>();
     private Dictionary<int, TaskSubjectObject> mSubjectData = new Dictionary<int, TaskSubjectObject>();
 
+    private int mCreatedTaskCount = 0;
+    public int CreatedTaskCount { get { return mCreatedTaskCount; } }
+
     private int mTaskValueLimit = 0;
     private int mMaxValue = 0;
-    private int mCreatedTaskCount = 0;
 
     private readonly bool mUnderDebuging = false;
     private readonly int mDebugingValue = 0;

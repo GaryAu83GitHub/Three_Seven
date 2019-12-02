@@ -207,10 +207,7 @@ public class BlockManager
 
             var sortCubeList = thisGroupScoringCubes.OrderBy(c => c.GridPos.x).ThenByDescending(c => c.GridPos.y).ToList();
 
-
-            //addLevelScore?.Invoke();
             comboOccuring?.Invoke(mComboCount++);
-            //achieveScoring?.Invoke(mScoringInfos[mCurrentScoringGroupIndex].TaskRank, sortCubeList);
             achieveScoringFor?.Invoke(mScoringInfos[mCurrentScoringGroupIndex], sortCubeList);
             LevelManager.Instance.AddLevelScore(1);
             GameManager.Instance.AddScore(ScoreType.LINKING, sortCubeList.Count, thisGroupTaskRank);
@@ -218,11 +215,17 @@ public class BlockManager
         }
         else
         {
+            //mScoringCalculationTimer += Time.deltaTime;
+            //if (mScoringCalculationTimer >= 1f)
+            //{
+            //    mScoringCalculationTimer = mScoringCalculationTimer - 1f;
+
             mScoringCalculationTimer += Time.deltaTime;
-            if (mScoringCalculationTimer >= 1f)
+            if(mScoringCalculationTimer > 1f)
             {
+                mScoringCalculationTimer = 0;
+
                 mCurrentScoringGroupIndex++;
-                mScoringCalculationTimer = mScoringCalculationTimer - 1f;
                 if (mCurrentScoringGroupIndex >= mScoringInfos.Count)
                 {
                     GameManager.Instance.AddScore(ScoreType.COMBO, mScoringInfos.Count - 1);
@@ -342,7 +345,7 @@ public class BlockManager
     /// <summary>
     /// Trigger every blocks useGravity in their rigidbody component
     /// </summary>
-    private void TowerCollapse()
+    public void TowerCollapse()
     {
         displayFinalResult?.Invoke();
 

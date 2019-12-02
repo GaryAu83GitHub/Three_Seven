@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Script.Tools;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,15 +22,28 @@ public class GameSceneMain : MonoBehaviour
     public delegate void OnActiveTimer(bool activeTimer);
     public static OnActiveTimer activeTimer;
 
+    public delegate void OnRoundStart();
+    public static OnRoundStart roundStart;
+
+    public delegate void OnPassingTheTop();
+    public static OnPassingTheTop passingTheTop;
+
+    public delegate void OnGameTimeOver();
+    public static OnGameTimeOver gameTimeOver;
+
+    public delegate void OnGameRoundOver();
+    public static OnGameRoundOver gameRoundOver;
+
     private Block mCurrentBlock;
     private GuideBlock mGuideBlock;
 
     private int mBlockCount = 0;
-    private float mNextDropTime = 0f;
+    //private float mNextDropTime = 0f;
     private float mBlockDropTimer = 0f;
 
     private bool mBlockLanded = false;
     private bool mIsAccomplishAnimationPlaying = false;
+    private bool mTimeOver = false;
 
     private void Awake()
     {
@@ -44,6 +58,7 @@ public class GameSceneMain : MonoBehaviour
     {
         GUIPanelManager.Instance.StartWithPanel(GUIPanelIndex.MAIN_GAME_PANEL);
 
+        MainGamePanel.roundStart += CreateNewBlock;
         MainGamePanel.blockMoveHorizontal += BlockMoveHorizontal;
         MainGamePanel.blockDropGradually += BlockDropGradually;
         MainGamePanel.blockDropInstantly += BlockDropInstantly;
@@ -53,6 +68,8 @@ public class GameSceneMain : MonoBehaviour
 
         TaskManagerNew.createNewBlock += CreateNewBlock;
         TaskBox.createNewBlock += CreateNewBlock;
+        ResultPanel.leaveGameScene += LeaveGameScene;
+        TimeTextBox.timeOver += TimeOver;
 
         LimitLine.transform.position += new Vector3(0f, .625f + (Constants.CUBE_GAP_DISTANCE * GameSettings.Instance.LimitHigh), 0f);
 
@@ -61,6 +78,7 @@ public class GameSceneMain : MonoBehaviour
 
     private void OnDestroy()
     {
+        MainGamePanel.roundStart -= CreateNewBlock;
         MainGamePanel.blockMoveHorizontal -= BlockMoveHorizontal;
         MainGamePanel.blockDropGradually -= BlockDropGradually;
         MainGamePanel.blockDropInstantly -= BlockDropInstantly;
@@ -70,20 +88,35 @@ public class GameSceneMain : MonoBehaviour
 
         TaskManagerNew.createNewBlock -= CreateNewBlock;
         TaskBox.createNewBlock -= CreateNewBlock;
+        ResultPanel.leaveGameScene -= LeaveGameScene;
+        TimeTextBox.timeOver -= TimeOver;
+
+        BlockManager.Instance.ResetBlockList();
+
     }
 
     void Update()
     {
         TableCover.SetActive(PauseMenu.GameIsPause);
 
+        if(mTimeOver)
+        {
+            BlockManager.Instance.TowerCollapse();
+            gameTimeOver?.Invoke();
+            return;
+        }
+
         if (mCurrentBlock == null && !BlockManager.Instance.GameOver)
         {
             CurrentBlockStatus();
             return;
         }
-        if (BlockManager.Instance.BlockPassedGameOverLine())
-            return;
 
+        if (BlockManager.Instance.BlockPassedGameOverLine())
+        {
+            passingTheTop?.Invoke();
+            return;
+        }
         //InputHandle()
         if (mCurrentBlock != null)
         {
@@ -102,8 +135,11 @@ public class GameSceneMain : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         TaskManagerNew.Instance.StartFirstSetOfTask();
-        
-        CreateNewBlock();
+        roundStart?.Invoke();
+
+        mTimeOver = false;
+        GameManager.Instance.Reset();
+        //CreateNewBlock();
     }
 
     private void CreateNewBlock()
@@ -145,7 +181,8 @@ public class GameSceneMain : MonoBehaviour
                     BlockManager.Instance.ScoreCalculationProgression();
                 else
                 {
-                    TaskManagerNew.Instance.ChangeTask();
+                    if(!BlockManager.Instance.GameOver)
+                        TaskManagerNew.Instance.ChangeTask();
                     //CreateNewBlock();
                 }
             }
@@ -238,5 +275,26 @@ public class GameSceneMain : MonoBehaviour
         mBlockLanded = true;
         activeTimer?.Invoke(false);
         GuideBlockObject.SetActive(GameSettings.Instance.GetGuideBlockVisible(false));
+    }
+
+    private void GameRoundOver()
+    {
+        mCurrentBlock = null;
+    }
+
+    private void LeaveGameScene()
+    {
+        StartCoroutine(LeaveGame());
+    }
+
+    private IEnumerator LeaveGame()
+    {
+        yield return new WaitForSeconds(.5f);
+        ScreenTransistor.Instance.FadeToSceneWithIndex(0);
+    }
+
+    private void TimeOver(bool aTimeIsOver)
+    {
+        mTimeOver = aTimeIsOver;
     }
 }

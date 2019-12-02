@@ -8,6 +8,7 @@ public enum FileIndex
 {
     GAMESETTINGS,
     HIGHSCORES,
+    HIGHSCORES_NEW,
 }
 
 public class JsonHelper<T>
@@ -16,6 +17,7 @@ public class JsonHelper<T>
     {
         { FileIndex.GAMESETTINGS, "gamesettings" },
         { FileIndex.HIGHSCORES, "highScores" },
+        { FileIndex.HIGHSCORES_NEW, "highScoresNew" },
     };
 
     public static void CreateNewJsonFile(string aNewFileName, T anObject)
@@ -28,6 +30,12 @@ public class JsonHelper<T>
     {
         string json = JsonUtility.ToJson(anObject, true);
         File.WriteAllText(Application.dataPath + "/TextFiles/" + Files[aFileIndex] + ".json", json);
+    }
+
+    public static void SaveToJsonNew(T anObject, FileIndex aFileIndex)
+    {
+        string json = JsonUtility.ToJson(anObject, true);
+        File.WriteAllText(Application.persistentDataPath + Files[aFileIndex] + ".json", json);
     }
 
     public static T LoadFromJson(FileIndex aFileIndex)

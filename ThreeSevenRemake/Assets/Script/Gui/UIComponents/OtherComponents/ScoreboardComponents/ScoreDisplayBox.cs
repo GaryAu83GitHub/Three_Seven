@@ -15,13 +15,17 @@ public class ScoreDisplayBox : ScoreboardComponentBase
 
     public override void Start()
     {
+        base.Start();
+
         GameManager.scoreChanging += UpdateScore;
         //MainGamePanel.onAddScore += UpdateScore;
         UpdateDisplayScore();
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
+
         GameManager.scoreChanging -= UpdateScore;
         //MainGamePanel.onAddScore -= UpdateScore;
     }
@@ -60,5 +64,10 @@ public class ScoreDisplayBox : ScoreboardComponentBase
             }
         }
         ValueText.text = mCurrentDisplayScore.ToString();
+    }
+
+    protected override void GatherResultData(ref ResultData aData)
+    {
+        aData.SetGainScores(mCurrentTotalScore);
     }
 }
