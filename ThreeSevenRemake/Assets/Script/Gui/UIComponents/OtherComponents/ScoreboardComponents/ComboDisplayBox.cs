@@ -10,6 +10,9 @@ public class ComboDisplayBox : ScoreboardComponentBase
     public delegate void OnChangeLevel(float aNewOdds);
     public static OnChangeLevel changeLevel;
 
+    public delegate void OnChangeBonusTerm(int aNewBonusTerms);
+    public static OnChangeBonusTerm changeBonusTerm;
+
     public CanvasGroup DigitCanvas;
 
     private Animation mComboAnimation;
@@ -50,6 +53,8 @@ public class ComboDisplayBox : ScoreboardComponentBase
     /// </summary>
     private int mNumberOfBlock = 0;
 
+    private int mBonusMultiplyer = 1;
+
     public override void Start()
     {
         base.Start();
@@ -70,6 +75,12 @@ public class ComboDisplayBox : ScoreboardComponentBase
     protected override void ComponentsDisplay()
     {
 
+    }
+
+    protected override void GatherResultData(ref ResultData aData)
+    {
+        aData.SetLongestChain(mLongestChain);
+        aData.SetAverageOdds(mScoringCount, mNumberOfBlock);
     }
 
     private void UpdateCombo(int aComboCount)
@@ -116,6 +127,8 @@ public class ComboDisplayBox : ScoreboardComponentBase
         if (mChainCount < 0)
             mChainCount = 0;
 
+        ChangeBonusTerm();
+
         DigitCanvas.alpha = mChainCount;
         ValueText.text = mChainCount.ToString();
 
@@ -123,9 +136,12 @@ public class ComboDisplayBox : ScoreboardComponentBase
             mLongestChain = mChainCount;
     }
 
-    protected override void GatherResultData(ref ResultData aData)
+    private void ChangeBonusTerm()
     {
-        aData.SetLongestChain(mLongestChain);
-        aData.SetAverageOdds(mScoringCount, mNumberOfBlock);
+        if ((mChainCount % 10) != 0)
+            return;
+
+        mBonusMultiplyer = (1 + (mChainCount / 10));
+        changeBonusTerm?.Invoke(mBonusMultiplyer);        
     }
 }

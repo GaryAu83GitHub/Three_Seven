@@ -13,6 +13,9 @@ public class LabMenu : MonoBehaviour
 
     public GameObject BlockObject;
 
+    public int TopValue = 1;
+    public int DownValue = 1;
+
     public delegate void OnCreateNewBlock(Block aNewBlock);
     public static OnCreateNewBlock createNewBlock;
 
@@ -45,6 +48,9 @@ public class LabMenu : MonoBehaviour
 
     private GradientColorKey[] gck;
     private GradientAlphaKey[] gak;
+
+    private int mLevel = 1;
+    private int mBonus = 1;
 
     private void Awake()
     {
@@ -79,6 +85,8 @@ public class LabMenu : MonoBehaviour
         gak[2].time = 1f;
 
         mGradient.SetKeys(gck, gak);
+
+        labText.text = "Level: " + mLevel.ToString() + "\n Bonus: " + mBonus.ToString();
 
         StartCoroutine(GameStart());
     }
@@ -129,14 +137,22 @@ public class LabMenu : MonoBehaviour
             mLerpValue += .01f;
             if (mLerpValue > 1f)
                 mLerpValue = 1f;
+
+            mLevel++;
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             mLerpValue -= .01f;
             if (mLerpValue < 0f)
                 mLerpValue = 0f;
+
+            mLevel--;
+            if (mLevel < 0)
+                mLevel = 0;
         }
-        labText.text = mLerpValue.ToString();
+        if (mLevel % 10 == 0)
+            mBonus = (1 + (mLevel / 10));
+            labText.text = "Level: " + mLevel.ToString() + "\n Bonus: " + mBonus.ToString();//mLerpValue.ToString();
         labText.color = mGradient.Evaluate(mLerpValue);//Color.Lerp(Color.white, Color.black,mLerpValue /*Mathf.PingPong(mLerpValue, 1)*/);
 
         //labText.text = ((int)minute).ToString() + " : " + ((int)second).ToString();
