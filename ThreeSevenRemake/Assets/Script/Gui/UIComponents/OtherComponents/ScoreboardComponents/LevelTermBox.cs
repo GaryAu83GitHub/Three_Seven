@@ -85,13 +85,20 @@ public class LevelTermBox : ScoreboardComponentBase
     {
         FillingBarWith((float)aScoringCount / 10f);
         LevelBar.color = mGradient.Evaluate(anOdds);
-        Debug.Log(anOdds);
     }
 
     private void ChangeLevel(float aNewOdds)
     {
+        DynamicLeveling(aNewOdds);
+
+        if (mLevel > mHighestLevel)
+            mHighestLevel = mLevel;
+    }
+
+    private void DynamicLeveling(float aNewOdds)
+    {
         // when the odds pass the upgrade threshold odds value
-        if(aNewOdds >= mUpgradeThresholdOdds)
+        if (aNewOdds >= mUpgradeThresholdOdds)
         {
             if (mLevel < 100)
                 mLevel++;
@@ -115,6 +122,9 @@ public class LevelTermBox : ScoreboardComponentBase
                 mDowngradeThresholdOdds = aNewOdds;
         }
     }
+
+    private void LinearLeveling()
+    { }
 
     private void FillingBarWith(float aFillingValue)
     {

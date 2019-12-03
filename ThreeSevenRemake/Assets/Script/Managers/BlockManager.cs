@@ -211,7 +211,7 @@ public class BlockManager
             achieveScoringFor?.Invoke(mScoringInfos[mCurrentScoringGroupIndex], sortCubeList);
             LevelManager.Instance.AddLevelScore(1);
             GameManager.Instance.AddScore(ScoreType.LINKING, sortCubeList.Count, thisGroupTaskRank);
-            mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
+            mCurrentGroupScoreCalcInProgress = true;//!mCurrentGroupScoreCalcInProgress;
         }
         else
         {
@@ -234,7 +234,7 @@ public class BlockManager
                     mCurrentScoringGroupIndex = 0;
                     mCurrentScoringInfo = null;
                 }
-                mCurrentGroupScoreCalcInProgress = !mCurrentGroupScoreCalcInProgress;
+                mCurrentGroupScoreCalcInProgress = false;//!mCurrentGroupScoreCalcInProgress;
             }
         }
     }
