@@ -35,7 +35,7 @@ public class JsonHelper<T>
     public static void SaveToJsonNew(T anObject, FileIndex aFileIndex)
     {
         string json = JsonUtility.ToJson(anObject, true);
-        File.WriteAllText(Application.persistentDataPath + Files[aFileIndex] + ".json", json);
+        File.WriteAllText(Application.persistentDataPath + "/" + Files[aFileIndex] + ".json", json);
     }
 
     public static T LoadFromJson(FileIndex aFileIndex)

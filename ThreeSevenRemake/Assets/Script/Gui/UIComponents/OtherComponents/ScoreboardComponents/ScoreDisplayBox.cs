@@ -7,17 +7,24 @@ using TMPro;
 public class ScoreDisplayBox : ScoreboardComponentBase
 {
     public GameObject ScoreAddOn;
+    public TextMeshProUGUI BonusText;
 
     private int mCurrentDisplayScore = 0;
     private int mCurrentTotalScore = 0;
 
     private bool mUpdateDisplayScore = false;
 
+    private int mScoreMultiplyTerm = 1;
+
     public override void Start()
     {
         base.Start();
 
-        GameManager.scoreChanging += UpdateScore;
+        GamingManager.comboScoring += ComboScoring;
+        GamingManager.linkingCubeScores += LinkingCubeScores;
+        GamingManager.newBlockLandedScores += NewLandedBlockScores;
+
+        ComboDisplayBox.changeBonusTerm += ChangeBonusTerm;
         //MainGamePanel.onAddScore += UpdateScore;
         UpdateDisplayScore();
     }
@@ -26,7 +33,11 @@ public class ScoreDisplayBox : ScoreboardComponentBase
     {
         base.OnDestroy();
 
-        GameManager.scoreChanging -= UpdateScore;
+        GamingManager.comboScoring -= ComboScoring;
+        GamingManager.linkingCubeScores -= LinkingCubeScores;
+        GamingManager.newBlockLandedScores -= NewLandedBlockScores;
+
+        ComboDisplayBox.changeBonusTerm -= ChangeBonusTerm;
         //MainGamePanel.onAddScore -= UpdateScore;
     }
     
@@ -36,14 +47,24 @@ public class ScoreDisplayBox : ScoreboardComponentBase
             UpdateDisplayScore();
     }
 
-    private void UpdateScore(int aNewTotalScore, int anAddOnScore)
+    protected override void GatherResultData(ref ResultData aData)
     {
-        mCurrentTotalScore = aNewTotalScore;
+        aData.SetGainScores(mCurrentTotalScore);
+    }
+
+    private void UpdateScore(/*int aNewTotalScore, */int anAddOnScore)
+    {
+        //mCurrentTotalScore = aNewTotalScore;
 
         ScoreAddOn.GetComponent<Text>().text = "+" + anAddOnScore.ToString();
         ScoreAddOn.GetComponent<Animation>().Play();
 
         mUpdateDisplayScore = true;
+    }
+
+    private void ChangeBonusTerm(int aNewBonusTerms)
+    {
+        mScoreMultiplyTerm = aNewBonusTerms;
     }
 
     private void UpdateDisplayScore()
@@ -66,8 +87,25 @@ public class ScoreDisplayBox : ScoreboardComponentBase
         ValueText.text = mCurrentDisplayScore.ToString();
     }
 
-    protected override void GatherResultData(ref ResultData aData)
+    private void NewLandedBlockScores()
     {
-        aData.SetGainScores(mCurrentTotalScore);
+        int addsOnValue = ScoreCalculatorcs.OriginalBlockLandingScoreCalculation() * mScoreMultiplyTerm;
+        mCurrentTotalScore = addsOnValue;
+        UpdateScore(addsOnValue);
+    }
+
+    private void LinkingCubeScores(int aCubeCount)
+    {
+        //ScoreCalculatorcs.LinkingScoreCalculation(anObjective, anValue);
+        int addsOnValue = aCubeCount * mScoreMultiplyTerm;
+        mCurrentTotalScore = addsOnValue;
+        UpdateScore(addsOnValue);
+    }
+
+    private void ComboScoring(int aComboCount)
+    {
+        int addsOnValue = ScoreCalculatorcs.ComboScoreCalculation(aComboCount) * mScoreMultiplyTerm;
+        mCurrentTotalScore = addsOnValue;
+        UpdateScore(addsOnValue);
     }
 }

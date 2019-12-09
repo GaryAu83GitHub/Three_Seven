@@ -8,11 +8,11 @@ public class TaskBox : MonoBehaviour
 {
     public TextMeshProUGUI TaskValueText;
     public TextMeshProUGUI TaskNumberText;
-    public TextMeshProUGUI MultiValueText;
+    //public TextMeshProUGUI MultiValueText;
     public TextMeshProUGUI ScoringTimesText;
 
-    public Image MultiValueFilling;
-    public Image MultiValueOutline;
+    //public Image MultiValueFilling;
+    //public Image MultiValueOutline;
 
     public List<OperatorBoxBase> OperatorBoxes;
 
@@ -31,15 +31,15 @@ public class TaskBox : MonoBehaviour
     private TaskData mDisplayingTaskData = new TaskData();
     private int mScoringTimes = 0;
 
-    private enum TaskRankColorIndex
-    {
-        X1_OUTLINE_COLOR,
-        X1_INLINE_COLOR,
-        X5_OUTLINE_COLOR,
-        X5_INLINE_COLOR,
-        X10_OUTLINE_COLOR,
-        X10_INLINE_COLOR,
-    }
+    //private enum TaskRankColorIndex
+    //{
+    //    X1_OUTLINE_COLOR,
+    //    X1_INLINE_COLOR,
+    //    X5_OUTLINE_COLOR,
+    //    X5_INLINE_COLOR,
+    //    X10_OUTLINE_COLOR,
+    //    X10_INLINE_COLOR,
+    //}
 
     void Start()
     {
@@ -83,9 +83,9 @@ public class TaskBox : MonoBehaviour
 
     public void SetUpTask(TaskData aData)
     {
-        MultiValueOutline.gameObject.SetActive(true);
+        //MultiValueOutline.gameObject.SetActive(true);
 
-        SetRankCircle(aData.Rank);
+        //SetRankCircle(aData.Rank);
 
         DeactivateFormulaNumberBoxes();
         ActiveNewOperativeBox(aData.LinkedCubes);
@@ -132,18 +132,18 @@ public class TaskBox : MonoBehaviour
         else if (aRank == TaskRank.X10)
             temp = 2;
 
-        MultiValueText.text = aRank.ToString();
+        //MultiValueText.text = aRank.ToString();
 
-        TaskRankColorIndex colorIndex = (TaskRankColorIndex)(aRank + temp);
-        MultiValueOutline.color = TaskRankColors[(int)colorIndex];
-        MultiValueFilling.color = TaskRankColors[(int)(colorIndex + 1)];
+        //TaskRankColorIndex colorIndex = (TaskRankColorIndex)(aRank + temp);
+        //MultiValueOutline.color = TaskRankColors[(int)colorIndex];
+        //MultiValueFilling.color = TaskRankColors[(int)(colorIndex + 1)];
 
     }
 
     private void DeactivateFormulaNumberBoxes()
     {
         for (int i = 0; i < OperatorBoxes.Count; i++)
-            OperatorBoxes[i].DisplayThisBox(false);
+            OperatorBoxes[i].DisplayOff();
     }
 
     private void ActiveNewOperativeBox(int aDigitCount)
@@ -151,7 +151,7 @@ public class TaskBox : MonoBehaviour
         mActiveDigit = aDigitCount;
         for (int i = 0; i < mActiveDigit; i++)
         {
-            OperatorBoxes[i].DisplayThisBox(true);
+            OperatorBoxes[i].DisplayOn(TaskRankColors[mActiveDigit-2]);
             OperatorBoxes[i].SetDigitText("_");
         }
     }

@@ -8253,10 +8253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TaskValueText: {fileID: 756289456}
   TaskNumberText: {fileID: 179108636}
-  MultiValueText: {fileID: 1629722195}
   ScoringTimesText: {fileID: 680406101}
-  MultiValueFilling: {fileID: 1404496435}
-  MultiValueOutline: {fileID: 955509281}
   OperatorBoxes:
   - {fileID: 1248325315}
   - {fileID: 1457582177}

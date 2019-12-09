@@ -17,8 +17,6 @@ public class OperatorBoxBase : MonoBehaviour
         //mAnimation = GetComponent<Animation>();
         mAnimator = GetComponent<Animator>();
         mCG = GetComponent<CanvasGroup>();
-
-        
     }
 
     public virtual void Update()
@@ -30,14 +28,19 @@ public class OperatorBoxBase : MonoBehaviour
     {
         OperatorText.text = OperatorString;
         DigitText.text = aDigitText;
+        
     }
 
-    public void DisplayThisBox(bool isDisplaying)
+    public void DisplayOff()
     {
-        if (isDisplaying)
-            mCG.alpha = 1;
-        else
-            mCG.alpha = 0;
+        mCG.alpha = 0;
+        DigitText.color = Color.clear;
+    }
+
+    public void DisplayOn(Color aDisplayColor)
+    {
+        mCG.alpha = 1;
+        DigitText.color = aDisplayColor;
     }
 
     public void PlayIdleAnimation()

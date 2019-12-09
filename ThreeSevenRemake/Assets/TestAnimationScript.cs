@@ -27,7 +27,7 @@ public class TestAnimationScript : MonoBehaviour
 
         for (int i = 0; i < Blocks.Count; i++)
         {
-            mBlockNumbers.Add(new List<int>(GameManager.Instance.GenerateNewCubeNumber()));
+            mBlockNumbers.Add(new List<int>(GamingManager.Instance.GenerateNewCubeNumber()));
             Blocks[i].SetNumber(mBlockNumbers[i]);
         }
     }
@@ -67,7 +67,7 @@ public class TestAnimationScript : MonoBehaviour
         mBlockNumbers[0] = new List<int>(mBlockNumbers[1]);
         mBlockNumbers[1] = new List<int>(mBlockNumbers[2]);
         mBlockNumbers[2] = new List<int>(mBlockNumbers[3]);
-        mBlockNumbers[3] = new List<int>(GameManager.Instance.GenerateNewCubeNumber());
+        mBlockNumbers[3] = new List<int>(GamingManager.Instance.GenerateNewCubeNumber());
 
         for (int i = 0; i < Blocks.Count; i++)
         {
@@ -93,7 +93,7 @@ public class TestAnimationScript : MonoBehaviour
         mBlockNumbers[0] = new List<int>(mBlockNumbers[1]);
         mBlockNumbers[1] = new List<int>(mBlockNumbers[2]);
         mBlockNumbers[2] = new List<int>(mBlockNumbers[3]);
-        mBlockNumbers[3] = new List<int>(GameManager.Instance.GenerateNewCubeNumber());
+        mBlockNumbers[3] = new List<int>(GamingManager.Instance.GenerateNewCubeNumber());
 
         for (int i = 0; i < Blocks.Count; i++)
         {

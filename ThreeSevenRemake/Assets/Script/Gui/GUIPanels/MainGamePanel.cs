@@ -76,7 +76,7 @@ public class MainGamePanel : GUIPanelBase
         GameSceneMain.passingTheTop += GameOver;
         GameSceneMain.gameTimeOver += GameOver;
 
-        PreviewNormalSlot.enabblePreviewInput += OnPreviewInputEnable;
+        PreviewNormalSlot.enablePreviewInput += OnPreviewInputEnable;
         TaskManagerNew.enablePreviewFunction += OnPreviewInputEnable;
 
     }
@@ -88,7 +88,7 @@ public class MainGamePanel : GUIPanelBase
         GameSceneMain.passingTheTop -= GameOver;
         GameSceneMain.gameTimeOver -= GameOver;
 
-        PreviewNormalSlot.enabblePreviewInput -= OnPreviewInputEnable;
+        PreviewNormalSlot.enablePreviewInput -= OnPreviewInputEnable;
         TaskManagerNew.enablePreviewFunction -= OnPreviewInputEnable;
     }
 
@@ -103,26 +103,26 @@ public class MainGamePanel : GUIPanelBase
     {
         blockMoveHorizontal?.Invoke(ControlManager.Ins.MoveBlockHorizontal());
 
+        if (ControlManager.Ins.DropBlockGradually(0) || mCurrentBlockNextDropTime <= 0f)
+            GivenCommand(CommandIndex.BLOCK_DROP);//blockDropGradually?.Invoke();
+
         if (!mPreviewFunctionEnable)
             return;
 
-        if (ControlManager.Ins.DropBlockGradually(0) || mCurrentBlockNextDropTime <= 0f)
-            blockDropGradually?.Invoke();
-
         if (ControlManager.Ins.DropBlockInstantly())
-            blockDropInstantly?.Invoke();
+            GivenCommand(CommandIndex.BLOCK_INSTANT_DROP);//blockDropInstantly?.Invoke();
 
         if (ControlManager.Ins.RotateBlock())
-            blockRotate?.Invoke();
+            GivenCommand(CommandIndex.BLOCK_ROTATE);//blockRotate?.Invoke();
 
         if (ControlManager.Ins.InvertBlock())
-            blockInvert?.Invoke();
+            GivenCommand(CommandIndex.BLOCK_INVERT);//blockInvert?.Invoke();
 
         if (ControlManager.Ins.SwapPreview())
-            blockSwaping?.Invoke();
+            GivenCommand(CommandIndex.PREVIEW_SWAP);//blockSwaping?.Invoke();
 
         if (ControlManager.Ins.ChangePreview())
-            changePreviewOrder?.Invoke();
+            GivenCommand(CommandIndex.PREVIEW_ROTATE);//changePreviewOrder?.Invoke();
 
         //if (ControlManager.Ins.DumpPreview())
         //    dumpPreviewBlock?.Invoke();
@@ -153,6 +153,35 @@ public class MainGamePanel : GUIPanelBase
     private void OnPreviewInputEnable(bool anEnable)
     {
         mPreviewFunctionEnable = anEnable;
+    }
+
+    private void GivenCommand(CommandIndex aCommand)
+    {
+        switch(aCommand)
+        {
+            case CommandIndex.BLOCK_DROP:
+                blockDropGradually?.Invoke();
+                break;
+            case CommandIndex.BLOCK_ROTATE:
+                blockRotate?.Invoke();
+                break;
+            case CommandIndex.BLOCK_INVERT:
+                blockInvert?.Invoke();
+                break;
+            case CommandIndex.BLOCK_INSTANT_DROP:
+                blockDropInstantly?.Invoke();
+                OnPreviewInputEnable(false);
+                break;
+            case CommandIndex.PREVIEW_SWAP:
+                blockSwaping?.Invoke();
+                OnPreviewInputEnable(false);
+                break;
+            case CommandIndex.PREVIEW_ROTATE:
+                changePreviewOrder?.Invoke();
+                OnPreviewInputEnable(false);
+                break;
+
+        }
     }
 
     private void GuiEnter()

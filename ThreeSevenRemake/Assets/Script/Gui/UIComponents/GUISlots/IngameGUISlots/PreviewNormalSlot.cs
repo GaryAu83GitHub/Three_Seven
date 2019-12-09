@@ -11,7 +11,7 @@ public class PreviewNormalSlot : GuiSlotBase
     public List<int> LastPreviewBlock { set { mPreviewNumbers[3] = value; } }
 
     public delegate void OnEnablePreviewInput(bool anEnable);
-    public static OnEnablePreviewInput enabblePreviewInput;
+    public static OnEnablePreviewInput enablePreviewInput;
 
     private List<List<int>> mPreviewNumbers = new List<List<int>>();
 
@@ -38,7 +38,7 @@ public class PreviewNormalSlot : GuiSlotBase
         {
             if (i < PreviewBlocks.Count - 1)
             {
-                mPreviewNumbers.Add(new List<int>(GameManager.Instance.GenerateNewCubeNumber()));
+                mPreviewNumbers.Add(new List<int>(GamingManager.Instance.GenerateNewCubeNumber()));
                 PreviewBlocks[i].SetNumber(mPreviewNumbers[i]);
             }
             else if (i == PreviewBlocks.Count - 1)
@@ -72,7 +72,7 @@ public class PreviewNormalSlot : GuiSlotBase
     {
         UpdatePreviewList(true);
         SetBlockNumbers();
-        enabblePreviewInput?.Invoke(true);
+        enablePreviewInput?.Invoke(true);
     }
 
     public void DumpPreviewEvent()
@@ -89,21 +89,26 @@ public class PreviewNormalSlot : GuiSlotBase
         mPreviewNumbers[2] = new List<int>(tempNumbers);
 
         SetBlockNumbers();
-        enabblePreviewInput?.Invoke(true);
+        enablePreviewInput?.Invoke(true);
     }
 
     public void SwapBlockEventNew()
     {
         mPreviewNumbers[0] = new List<int>(mStoredSwapingNumbers);
         SetBlockNumbers();
-        enabblePreviewInput?.Invoke(true);
+        enablePreviewInput?.Invoke(true);
     }
 
     public void SwapBlockEvent()
     {
         UpdatePreviewList(false);
         SetBlockNumbers();
-        enabblePreviewInput?.Invoke(true);
+        enablePreviewInput?.Invoke(true);
+    }
+
+    public void PreviewIdleEventBegin()
+    {
+        enablePreviewInput?.Invoke(true);
     }
 
     private void CreateNewBlock(Block aNewBlock)
@@ -112,11 +117,10 @@ public class PreviewNormalSlot : GuiSlotBase
             return;
 
         aNewBlock.SetCubeNumbers(mPreviewNumbers[0]);
-        mPreviewNumbers[3] = new List<int>(GameManager.Instance.GenerateNewCubeNumber());
+        mPreviewNumbers[3] = new List<int>(GamingManager.Instance.GenerateNewCubeNumber());
 
         SetBlockNumbers();
         ChangeAnimationState("CreateNew");
-        enabblePreviewInput?.Invoke(true);
     }
 
     // this is still under testing, currently using SwapTheBlock
@@ -162,7 +166,7 @@ public class PreviewNormalSlot : GuiSlotBase
 
     private void DumbPreviewBlock()
     {
-        mPreviewNumbers[3] = new List<int>(GameManager.Instance.GenerateNewCubeNumber());
+        mPreviewNumbers[3] = new List<int>(GamingManager.Instance.GenerateNewCubeNumber());
 
         SetBlockNumbers();
         ChangeAnimationState("Dumping");
@@ -189,7 +193,7 @@ public class PreviewNormalSlot : GuiSlotBase
     private void UpdatePreviewList(bool isCreatingNewBlock)
     {
         //if(isCreatingNewBlock)
-        //    mPreviewNumbers[3] = new List<int>(GameManager.Instance.GenerateNewCubeNumber());
+        //    mPreviewNumbers[3] = new List<int>(GamingManager.Instance.GenerateNewCubeNumber());
 
         mPreviewNumbers[0] = new List<int>(mPreviewNumbers[1]);
         mPreviewNumbers[1] = new List<int>(mPreviewNumbers[2]);

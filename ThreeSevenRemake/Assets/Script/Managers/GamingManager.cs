@@ -11,18 +11,18 @@ using UnityEngine;
 /// Except storing the score, it'll be storing the current level and increase the level for scoring
 /// and dropping speed
 /// </summary>
-public class GameManager
+public class GamingManager
 {
-    public static GameManager Instance
+    public static GamingManager Instance
     {
         get
         {
             if (mInstance == null)
-                mInstance = new GameManager();
+                mInstance = new GamingManager();
             return mInstance;
         }
     }
-    private static GameManager mInstance;
+    private static GamingManager mInstance;
 
     private int mCurrentScore = 0;
     public int CurrentScore { get { return mCurrentScore; } }
@@ -52,6 +52,15 @@ public class GameManager
     public delegate void OnRewinding();
     public static OnRewinding rewinding;
 
+    public delegate void OnNewBlockLandedScores();
+    public static OnNewBlockLandedScores newBlockLandedScores;
+
+    public delegate void OnLinkingCubeScores(int aCubeCount);
+    public static OnLinkingCubeScores linkingCubeScores;
+
+    public delegate void OnComboScoring(int aComboCount);
+    public static OnComboScoring comboScoring;
+
 
     public List<int> NextCubeNumbers { get { return mNextBlockNumbers; } }
     private List<int> mNextBlockNumbers = new List<int>();
@@ -70,26 +79,29 @@ public class GameManager
     
     public void AddScore(ScoreType anObtainScoreType, int anValue = 0, TaskRank anObjective = TaskRank.X1)
     {
-        int addOn = 0;
+        //int addOn = 0;
 
         switch(anObtainScoreType)
         {
             case ScoreType.LINKING:
-                addOn = ScoreCalculatorcs.LinkingScoreCalculation(anObjective, anValue);
+                //addOn = ScoreCalculatorcs.LinkingScoreCalculation(anObjective, anValue);
+                linkingCubeScores?.Invoke(anValue);
                 break;
             case ScoreType.COMBO:
-                addOn = ScoreCalculatorcs.ComboScoreCalculation(anValue);
+                //addOn = ScoreCalculatorcs.ComboScoreCalculation(anValue);
+                comboScoring?.Invoke(anValue);
                 break;
             default:
-                addOn = ScoreCalculatorcs.OriginalBlockLandingScoreCalculation();
+                //addOn = ScoreCalculatorcs.OriginalBlockLandingScoreCalculation();
+                newBlockLandedScores?.Invoke();
                 break;
         }
 
-        if (addOn > 0)
-        {
-            mCurrentScore += addOn;
-            scoreChanging?.Invoke(mCurrentScore, addOn);
-        }
+        //if (addOn > 0)
+        //{
+        //    mCurrentScore += addOn;
+        //    scoreChanging?.Invoke(mCurrentScore, addOn);
+        //}
     }
 
     public List<int> GenerateNewCubeNumber()

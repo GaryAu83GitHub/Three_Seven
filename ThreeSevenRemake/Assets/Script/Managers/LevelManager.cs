@@ -52,6 +52,11 @@ public class LevelManager
         //mLevelInfos.Add(new LevelData(10, 1f / 10f));
     }
 
+    public void SetCurrentLevel(int aNewLevel)
+    {
+        mCurrentLevel = aNewLevel;
+    }
+
     /// <summary>
     /// Add in point for level up to gain more score and increase the dropping speed
     /// When a certain amount of points are aquired, the current level increase and
@@ -69,7 +74,7 @@ public class LevelManager
         {
             mCurrentLevelScore = 0;
             mCurrentLevel++;
-            GameManager.Instance.UpdateDropRateAtLevelUp(mCurrentLevel);
+            GamingManager.Instance.UpdateDropRateAtLevelUp(mCurrentLevel);
             fillUpTheMain?.Invoke(true);
         }
     }

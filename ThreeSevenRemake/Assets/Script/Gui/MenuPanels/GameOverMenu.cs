@@ -53,7 +53,7 @@ public class GameOverMenu : MonoBehaviour
             ShowResult();
             if(Input.anyKeyDown)
             {
-                mScoreCounter = GameManager.Instance.CurrentScore;
+                mScoreCounter = GamingManager.Instance.CurrentScore;
                 TotalScoreText.text = mScoreCounter.ToString();
             }
 
@@ -65,9 +65,9 @@ public class GameOverMenu : MonoBehaviour
         GameIsOver = true;
         GameOverMenuUI.SetActive(GameIsOver);
         LevelResultText.text = LevelManager.Instance.CurrentLevel.ToString();
-        TimeSpendText.text = GameManager.Instance.GameTimeString;
-        BlockLandedText.text = GameManager.Instance.LandedBlockCount.ToString();
-        MaxComboText.text = GameManager.Instance.MaxCombo.ToString();
+        TimeSpendText.text = GamingManager.Instance.GameTimeString;
+        BlockLandedText.text = GamingManager.Instance.LandedBlockCount.ToString();
+        MaxComboText.text = GamingManager.Instance.MaxCombo.ToString();
         PanelAnimation.Play("GameOverMenuIn");
         StartCoroutine(DisplayResult());
 
@@ -90,7 +90,7 @@ public class GameOverMenu : MonoBehaviour
     {
         if (GameSettings.Instance.PlayerName.Length > 0)
         {
-            HighScoreManager.Instance.Add(GameManager.Instance.GetRoundData());
+            HighScoreManager.Instance.Add(GamingManager.Instance.GetRoundData());
         }
         leaveTheGame?.Invoke();
         GameIsOver = false;
@@ -122,7 +122,7 @@ public class GameOverMenu : MonoBehaviour
 
     private void ShowResult()
     {
-        if (mScoreCounter < GameManager.Instance.CurrentScore)
+        if (mScoreCounter < GamingManager.Instance.CurrentScore)
         {
             mScoreCounter++;
             TotalScoreText.text = mScoreCounter.ToString();

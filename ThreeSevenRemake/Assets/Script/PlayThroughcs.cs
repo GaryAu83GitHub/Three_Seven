@@ -20,10 +20,10 @@ public class PlayThroughcs
     public PlayThroughcs()
     {
         Name = GameSettings.Instance.PlayerName;
-        GameTime = GameManager.Instance.GameTimeString;
+        GameTime = GamingManager.Instance.GameTimeString;
 
         Level = LevelManager.Instance.CurrentLevel;
-        Score = GameManager.Instance.CurrentScore;
+        Score = GamingManager.Instance.CurrentScore;
         InitialValue = GameSettings.Instance.InitialValue;
 
         for (int i = 0; i < (int)LinkIndexes.MAX; i++)

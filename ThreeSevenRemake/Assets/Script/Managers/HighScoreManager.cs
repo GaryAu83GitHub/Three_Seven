@@ -35,11 +35,11 @@ public class HighScoreManager
 
     public HighScoreManager()
     {
-        ScoreTable loadTable = (JsonHelper<ScoreTable>.LoadFromJson(FileIndex.HIGHSCORES) ?? new ScoreTable());
-        foreach(RoundResultData data in loadTable.ScoreList)
-        {
-            mHighScoreList.Add(data);
-        }
+        //ScoreTable loadTable = (JsonHelper<ScoreTable>.LoadFromJson(FileIndex.HIGHSCORES) ?? new ScoreTable());
+        //foreach(RoundResultData data in loadTable.ScoreList)
+        //{
+        //    mHighScoreList.Add(data);
+        //}
     }
 
     public void Add(GameRoundData aRoundData)

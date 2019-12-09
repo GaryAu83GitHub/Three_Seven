@@ -63,33 +63,34 @@ public class ResultPanel : GUIPanelBase
     {
         //if (!NameInput.activeInHierarchy)
         //    return;
-        if (!mTempLeaveButtonEnable)
-            return;
+        //if (!mTempLeaveButtonEnable)
+        //    return;
 
         if (ControlManager.Ins.MenuConfirmButtonPressed())
         {
-            //if(mPlayerName.Length > 0)
-            //{
-            //    mResultData.SetPlayerName(mPlayerName);
-            //    // recording to highscore
-            //    HighScoreManager.Instance.AddNewScore(mPlayerName, mResultData);
-            //}
+            if (mPlayerName.Length > 0)
+            {
+                mResultData.SetPlayerName(mPlayerName);
+                // recording to highscore
+                HighScoreManager.Instance.AddNewScore(mPlayerName, mResultData);
+            }
 
-            //mAnimator.SetTrigger("ExitNameInput");
-            mAnimator.SetBool("LeaveGame", true);
+            mAnimator.SetTrigger("ExitNameInput");
+            //mAnimator.SetBool("LeaveGame", true);
         }
     }
 
     public void ActiveRegistrateButtonsAnimationEvent()
     {
-        //activeRegistrateButtons?.Invoke(true);
+        activeRegistrateButtons?.Invoke(true);
         //mAnimator.SetTrigger("ExitNameInput");
-        mTempLeaveButtonEnable = true;
+        //mTempLeaveButtonEnable = true;
     }
 
     public void LeaveGameSceneAnimationEvent()
     {
         //gameObject.SetActive(false);
+        Container.SetActive(false);
         leaveGameScene?.Invoke();
     }
 
@@ -113,7 +114,7 @@ public class ResultPanel : GUIPanelBase
         ResultSlots[(int)ResultIssues.CHAIN].SetValue(aData.LongestChains.ToString());
         ResultSlots[(int)ResultIssues.TASKS].SetValue(aData.CompletedTasks.ToString());
         ResultSlots[(int)ResultIssues.LEVEL].SetValue(aData.ReachedLevels.ToString());
-        ResultSlots[(int)ResultIssues.ODDS].SetValue(aData.AverageOdds.ToString());
+        ResultSlots[(int)ResultIssues.ODDS].SetValue((Mathf.Round(aData.AverageOdds * 100) / 100f).ToString());
         ResultSlots[(int)ResultIssues.TIME].SetValue(aData.TimeString);
     }
 

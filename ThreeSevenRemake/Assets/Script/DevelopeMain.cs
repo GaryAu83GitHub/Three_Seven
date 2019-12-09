@@ -135,14 +135,14 @@ public class DevelopeMain : MonoBehaviour
             else
                 mCurrentBlock.DropDown();
 
-            mNextDropTime = GameManager.Instance.BlockNextDropTime;//Time.time + GameManager.Instance.DropRate; //mDropRate;
+            mNextDropTime = GamingManager.Instance.BlockNextDropTime;//Time.time + GamingManager.Instance.DropRate; //mDropRate;
         }
 
         if(ControlManager.Ins.DropBlockInstantly())
         {
             mCurrentBlock.InstantDrop();
             RegistrateNewLandedBlock();
-            mNextDropTime = GameManager.Instance.BlockNextDropTime;
+            mNextDropTime = GamingManager.Instance.BlockNextDropTime;
         }
 
         // input for rotate the block clockwise if the column or row of where the block
@@ -202,13 +202,13 @@ public class DevelopeMain : MonoBehaviour
         //mGuideBlock.SetupGuideBlock(mCurrentBlock);
         GuideBlockObject.SetActive(GameSettings.Instance.GetGuideBlockVisible(true));
 
-        // Get the block's droprate of the current level from GameManager
-        //mDropRate = GameManager.Instance.DropRate;//GameManager.Instance.GetCurrentDroppingRate();
+        // Get the block's droprate of the current level from GamingManager
+        //mDropRate = GamingManager.Instance.DropRate;//GamingManager.Instance.GetCurrentDroppingRate();
 
         //mNextVerticalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;//mButtonDownDropRate;
         //mNextHorizontalButtonDownTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
         ControlManager.Ins.ResetButtonPressTimer();
-        mNextDropTime = GameManager.Instance.BlockNextDropTime;//Time.time + GameManager.Instance.DropRate;//mDropRate;
+        mNextDropTime = GamingManager.Instance.BlockNextDropTime;//Time.time + GamingManager.Instance.DropRate;//mDropRate;
 
         mBlockLanded = false;
 
@@ -220,7 +220,7 @@ public class DevelopeMain : MonoBehaviour
         mCurrentBlock.name = "Block " + mBlockCount.ToString();
         RecordingManager.Instance.Record(new TurnData(mCurrentBlock));
         BlockManager.Instance.AddNewOriginalBlock(mCurrentBlock);
-        GameManager.Instance.LandedBlockCount++;
+        GamingManager.Instance.LandedBlockCount++;
         UpdateDebugBoard();
 
         mCurrentBlock = null;
@@ -239,7 +239,7 @@ public class DevelopeMain : MonoBehaviour
     private void ResetGame()
     {
         BlockManager.Instance.Reset();
-        GameManager.Instance.Reset();
+        GamingManager.Instance.Reset();
         GameSettings.Instance.Reset();
     }
 
@@ -277,7 +277,7 @@ public class DevelopeMain : MonoBehaviour
         mCurrentBlock.SetBlockWithRewindData(data.ThisTurnFallingBlock, true);
 
         //GridManager.Instance.SetGridAfterData(data.Blocks);
-        GameManager.Instance.RewindNextNumber(data.ThisTurnNextBlock);
+        GamingManager.Instance.RewindNextNumber(data.ThisTurnNextBlock);
 
         mIsRewinding = true;
     }

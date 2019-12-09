@@ -81,6 +81,11 @@ public class LevelTermBox : ScoreboardComponentBase
         mDowngradeThresholdOdds = .5f;
     }
 
+    protected override void GatherResultData(ref ResultData aData)
+    {
+        aData.SetReachedLevels(mHighestLevel);
+    }
+
     private void ScoringOccure(int aScoringCount, float anOdds)
     {
         FillingBarWith((float)aScoringCount / 10f);
@@ -90,6 +95,8 @@ public class LevelTermBox : ScoreboardComponentBase
     private void ChangeLevel(float aNewOdds)
     {
         DynamicLeveling(aNewOdds);
+
+        LevelManager.Instance.SetCurrentLevel(mLevel);
 
         if (mLevel > mHighestLevel)
             mHighestLevel = mLevel;
@@ -153,8 +160,5 @@ public class LevelTermBox : ScoreboardComponentBase
         LevelBar.fillAmount = mFillupBarValue;
     }
     
-    protected override void GatherResultData(ref ResultData aData)
-    {
-        aData.SetReachedLevels(mHighestLevel);
-    }
+    
 }

@@ -97,6 +97,7 @@ public class BlockManager
     {
         mBlocks.Clear();
         mFloatingBlocks.Clear();
+        mGameOver = false;
     }
 
     /// <summary>
@@ -112,7 +113,7 @@ public class BlockManager
         RegisterBlockCubesToGrid(aBlock);
         aBlock.transform.position = aBlock.transform.position + (Vector3.forward * 5);
 
-        GameManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
+        GamingManager.Instance.AddScore(ScoreType.ORIGINAL_BLOCK_LANDING);
 
         mScoringInfos = GridManager.Instance.GetListOfScoringPositionGroups(aBlock);
         //if (mScoringInfos.Any())
@@ -210,7 +211,7 @@ public class BlockManager
             comboOccuring?.Invoke(mComboCount++);
             achieveScoringFor?.Invoke(mScoringInfos[mCurrentScoringGroupIndex], sortCubeList);
             LevelManager.Instance.AddLevelScore(1);
-            GameManager.Instance.AddScore(ScoreType.LINKING, sortCubeList.Count, thisGroupTaskRank);
+            GamingManager.Instance.AddScore(ScoreType.LINKING, sortCubeList.Count, thisGroupTaskRank);
             mCurrentGroupScoreCalcInProgress = true;//!mCurrentGroupScoreCalcInProgress;
         }
         else
@@ -228,7 +229,7 @@ public class BlockManager
                 mCurrentScoringGroupIndex++;
                 if (mCurrentScoringGroupIndex >= mScoringInfos.Count)
                 {
-                    GameManager.Instance.AddScore(ScoreType.COMBO, mScoringInfos.Count - 1);
+                    GamingManager.Instance.AddScore(ScoreType.COMBO, mScoringInfos.Count - 1);
                     PlayScoringAnimation();
                     mScoringInfos.Clear();
                     mCurrentScoringGroupIndex = 0;

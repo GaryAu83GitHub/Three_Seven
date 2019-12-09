@@ -56,7 +56,7 @@ public class GameSceneMain : MonoBehaviour
 
     void Start()
     {
-        GUIPanelManager.Instance.StartWithPanel(GUIPanelIndex.MAIN_GAME_PANEL);
+        
 
         MainGamePanel.roundStart += CreateNewBlock;
         MainGamePanel.blockMoveHorizontal += BlockMoveHorizontal;
@@ -112,11 +112,11 @@ public class GameSceneMain : MonoBehaviour
             return;
         }
 
-        if (BlockManager.Instance.BlockPassedGameOverLine())
-        {
-            passingTheTop?.Invoke();
-            return;
-        }
+        //if (BlockManager.Instance.BlockPassedGameOverLine())
+        //{
+        //    passingTheTop?.Invoke();
+        //    return;
+        //}
         //InputHandle()
         if (mCurrentBlock != null)
         {
@@ -133,12 +133,13 @@ public class GameSceneMain : MonoBehaviour
 
     private IEnumerator GameStart()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
+        GUIPanelManager.Instance.StartWithPanel(GUIPanelIndex.MAIN_GAME_PANEL);
         TaskManagerNew.Instance.StartFirstSetOfTask();
         roundStart?.Invoke();
 
         mTimeOver = false;
-        GameManager.Instance.Reset();
+        GamingManager.Instance.Reset();
         //CreateNewBlock();
     }
 
@@ -160,8 +161,8 @@ public class GameSceneMain : MonoBehaviour
         GuideBlockObject.SetActive(true);
 
         ControlManager.Ins.ResetButtonPressTimer();
-        //mNextDropTime = GameManager.Instance.BlockNextDropTime;//Time.time + GameManager.Instance.DropRate;//mDropRate;
-        mBlockDropTimer = GameManager.Instance.DropRate;
+        //mNextDropTime = GamingManager.Instance.BlockNextDropTime;//Time.time + GamingManager.Instance.DropRate;//mDropRate;
+        mBlockDropTimer = GamingManager.Instance.DropRate;
         getNextDropTime?.Invoke(mBlockDropTimer);
         activeTimer?.Invoke(true);
         mBlockLanded = false;
@@ -179,12 +180,10 @@ public class GameSceneMain : MonoBehaviour
                     BlockManager.Instance.RearrangeBlock();
                 else if (BlockManager.Instance.IsScoring())
                     BlockManager.Instance.ScoreCalculationProgression();
+                else if(!BlockManager.Instance.BlockPassedGameOverLine())
+                    TaskManagerNew.Instance.ChangeTask();
                 else
-                {
-                    if(!BlockManager.Instance.GameOver)
-                        TaskManagerNew.Instance.ChangeTask();
-                    //CreateNewBlock();
-                }
+                    passingTheTop?.Invoke();
             }
         }
         //else
@@ -210,9 +209,9 @@ public class GameSceneMain : MonoBehaviour
         else
             mCurrentBlock.DropDown();
 
-        mBlockDropTimer = GameManager.Instance.DropRate;
+        mBlockDropTimer = GamingManager.Instance.DropRate;
         getNextDropTime?.Invoke(mBlockDropTimer);
-        //getNextDropTime?.Invoke(GameManager.Instance.BlockNextDropTime);
+        //getNextDropTime?.Invoke(GamingManager.Instance.BlockNextDropTime);
     }
 
     private void BlockDropInstantly()
@@ -222,8 +221,8 @@ public class GameSceneMain : MonoBehaviour
 
         mCurrentBlock.InstantDrop();
         RegistrateNewLandedBlock();
-        mBlockDropTimer = GameManager.Instance.DropRate;
-        //getNextDropTime?.Invoke(GameManager.Instance.BlockNextDropTime);
+        mBlockDropTimer = GamingManager.Instance.DropRate;
+        //getNextDropTime?.Invoke(GamingManager.Instance.BlockNextDropTime);
     }
 
     private void BlockRotate()
@@ -268,7 +267,7 @@ public class GameSceneMain : MonoBehaviour
     {
         mCurrentBlock.name = "Block " + mBlockCount.ToString();
         BlockManager.Instance.AddNewOriginalBlock(mCurrentBlock);
-        GameManager.Instance.LandedBlockCount++;
+        GamingManager.Instance.LandedBlockCount++;
         //UpdateDebugBoard();
 
         mCurrentBlock = null;

@@ -21,6 +21,6 @@ public class TurnData
 
         ThisTurnFallingBlock = new BlockData(thisTurnsBlock);
 
-        ThisTurnNextBlock = new List<int>(GameManager.Instance.NextCubeNumbers);
+        ThisTurnNextBlock = new List<int>(GamingManager.Instance.NextCubeNumbers);
     }
 }

@@ -67,6 +67,9 @@ public class SettingSlotBase : GuiSlotBase
 
     private void SlotAppearence()
     {
+        if (mCG == null)
+            return;
+
         mCG.interactable = mSlotActivate;
         if (mSlotActivate)
         {

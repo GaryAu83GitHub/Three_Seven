@@ -25,7 +25,7 @@ public class BlockGUI : MonoBehaviour
     {
         Block.swapWithPreviewBlock += SwapWithOriginalBlock;
         DevelopeMainGUI.changeNextBlock += NewNumber;
-        GameManager.rewinding += RewindNumber;
+        GamingManager.rewinding += RewindNumber;
 
         //NewNumber();
     }
@@ -34,7 +34,7 @@ public class BlockGUI : MonoBehaviour
     {
         Block.swapWithPreviewBlock -= SwapWithOriginalBlock;
         DevelopeMainGUI.changeNextBlock -= NewNumber;
-        GameManager.rewinding -= RewindNumber;
+        GamingManager.rewinding -= RewindNumber;
     }
 
     public void SetNumber(List<int> someNumbers)
@@ -46,7 +46,7 @@ public class BlockGUI : MonoBehaviour
     public void NewNumber()
     {
         mNextNumbers.Clear();
-        mNextNumbers = new List<int>(GameManager.Instance.GenerateNewCubeNumber());
+        mNextNumbers = new List<int>(GamingManager.Instance.GenerateNewCubeNumber());
 
         DisplayBlock();
     }
@@ -54,7 +54,7 @@ public class BlockGUI : MonoBehaviour
     private void RewindNumber()
     {
         mNextNumbers.Clear();
-        mNextNumbers = new List<int>(GameManager.Instance.NextCubeNumbers);
+        mNextNumbers = new List<int>(GamingManager.Instance.NextCubeNumbers);
 
         DisplayBlock();
     }
@@ -66,7 +66,7 @@ public class BlockGUI : MonoBehaviour
 
         mNextNumbers.Clear();
         mNextNumbers = new List<int>(tempCubeNumbers);
-        GameManager.Instance.SwapWithOriginalNumbers(mNextNumbers);
+        GamingManager.Instance.SwapWithOriginalNumbers(mNextNumbers);
 
         DisplayBlock();
     }

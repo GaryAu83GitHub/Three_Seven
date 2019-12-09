@@ -45,7 +45,7 @@ public class DevelopeMainGUI : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        GameManager.scoreChanging += UpdateScore;
+        GamingManager.scoreChanging += UpdateScore;
 
         DevelopeMain.createNewBlock += TransferNewBlock;
         DevelopeMain.gameIsPlaying += GameIsPlaying;
@@ -62,7 +62,7 @@ public class DevelopeMainGUI : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.scoreChanging -= UpdateScore;
+        GamingManager.scoreChanging -= UpdateScore;
 
         DevelopeMain.createNewBlock -= TransferNewBlock;
         DevelopeMain.gameIsPlaying -= GameIsPlaying;
@@ -111,8 +111,8 @@ public class DevelopeMainGUI : MonoBehaviour
         if (aComboCount < 1)
             return;
 
-        if (aComboCount > GameManager.Instance.MaxCombo)
-            GameManager.Instance.MaxCombo = aComboCount;
+        if (aComboCount > GamingManager.Instance.MaxCombo)
+            GamingManager.Instance.MaxCombo = aComboCount;
 
         ComboCountText.text = aComboCount.ToString();
         mComboAnimation.Play();
@@ -145,7 +145,7 @@ public class DevelopeMainGUI : MonoBehaviour
     public void TransferNewBlock(Block aNewBlock)
     {
         if (aNewBlock != null)
-            aNewBlock.SetCubeNumbers(GameManager.Instance.NextCubeNumbers);
+            aNewBlock.SetCubeNumbers(GamingManager.Instance.NextCubeNumbers);
 
         changeNextBlock?.Invoke();
     }
@@ -181,14 +181,14 @@ public class DevelopeMainGUI : MonoBehaviour
             return;
 
         //mGameTimer += Time.deltaTime;
-        GameManager.Instance.GameTime += Time.deltaTime;
+        GamingManager.Instance.GameTime += Time.deltaTime;
 
-        int seconds = (int)(GameManager.Instance.GameTime % 60);
-        int minutes = (int)((GameManager.Instance.GameTime / 60) % 60);
-        int hours = (int)((GameManager.Instance.GameTime / 3600) % 60);
+        int seconds = (int)(GamingManager.Instance.GameTime % 60);
+        int minutes = (int)((GamingManager.Instance.GameTime / 60) % 60);
+        int hours = (int)((GamingManager.Instance.GameTime / 3600) % 60);
 
-        GameManager.Instance.GameTimeString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
-        TimeText.text = GameManager.Instance.GameTimeString;
+        GamingManager.Instance.GameTimeString = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
+        TimeText.text = GamingManager.Instance.GameTimeString;
     }
 
     //private void ComboTextFading()
@@ -206,6 +206,6 @@ public class DevelopeMainGUI : MonoBehaviour
 
     private void ResetGameTime()
     {
-        GameManager.Instance.GameTime = 0f;
+        GamingManager.Instance.GameTime = 0f;
     }
 }
