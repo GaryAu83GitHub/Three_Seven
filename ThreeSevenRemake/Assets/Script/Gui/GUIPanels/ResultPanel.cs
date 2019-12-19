@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+public enum ResultIssues
+{
+    SCORE,
+    CHAIN,
+    TASKS,
+    LEVEL,
+    TIME,
+    ODDS,
+    NONE,
+}
+
 public class ResultPanel : GUIPanelBase
 {
-    private enum ResultIssues
-    {
-        SCORE,
-        CHAIN,
-        TASKS,
-        LEVEL,
-        ODDS,
-        TIME,
-    }
-
     public List<ResultSlotBase> ResultSlots;
     public GameObject NameInput;
     public TMP_InputField PlayerNameInputField;
@@ -29,7 +30,6 @@ public class ResultPanel : GUIPanelBase
     private ResultData mResultData = new ResultData();
 
     private string mPlayerName = "";
-    private bool mTempLeaveButtonEnable = false;
 
     public override void Start()
     {
@@ -43,8 +43,6 @@ public class ResultPanel : GUIPanelBase
 
         NameInput.SetActive(false);
         PlayerNameInputField.onValueChanged.AddListener(delegate { PlayerNameInputFieldOnValueChange(PlayerNameInputField); });
-
-        mTempLeaveButtonEnable = false;
     }
 
     private void OnDestroy()
@@ -61,11 +59,6 @@ public class ResultPanel : GUIPanelBase
 
     private void ConfirmButtonInput()
     {
-        //if (!NameInput.activeInHierarchy)
-        //    return;
-        //if (!mTempLeaveButtonEnable)
-        //    return;
-
         if (ControlManager.Ins.MenuConfirmButtonPressed())
         {
             if (mPlayerName.Length > 0)
@@ -109,13 +102,15 @@ public class ResultPanel : GUIPanelBase
     private void SetUpResult(ResultData aData)
     {
         mResultData = new ResultData(aData);
+        for (int i = 0; i < ResultSlots.Count; i++)
+            ResultSlots[i].SetResultData(aData);
 
-        ResultSlots[(int)ResultIssues.SCORE].SetValue(aData.GainScores.ToString());
-        ResultSlots[(int)ResultIssues.CHAIN].SetValue(aData.LongestChains.ToString());
-        ResultSlots[(int)ResultIssues.TASKS].SetValue(aData.CompletedTasks.ToString());
-        ResultSlots[(int)ResultIssues.LEVEL].SetValue(aData.ReachedLevels.ToString());
-        ResultSlots[(int)ResultIssues.ODDS].SetValue((Mathf.Round(aData.AverageOdds * 100) / 100f).ToString());
-        ResultSlots[(int)ResultIssues.TIME].SetValue(aData.TimeString);
+        //ResultSlots[(int)ResultIssues.SCORE].SetValue(aData.GainScores.ToString());
+        //ResultSlots[(int)ResultIssues.CHAIN].SetValue(aData.LongestChains.ToString());
+        //ResultSlots[(int)ResultIssues.TASKS].SetValue(aData.CompletedTasks.ToString());
+        //ResultSlots[(int)ResultIssues.LEVEL].SetValue(aData.GainedLevels.ToString());
+        //ResultSlots[(int)ResultIssues.TIME].SetValue(aData.TimeString);
+        //ResultSlots[(int)ResultIssues.ODDS].SetValue((Mathf.Round(aData.AverageOdds * 100) / 100f).ToString());
     }
 
     private void SelectSaveRusultBotton(int aSelectIndex)

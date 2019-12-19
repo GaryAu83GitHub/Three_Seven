@@ -31,11 +31,20 @@ public class GameSettings
     private Difficulties mDifficulty = Difficulties.EASY;
     public Difficulties Difficulty { get { return mDifficulty; } set { mDifficulty = value; } }
 
+    private GameMode mGameMode = GameMode.SURVIVAL;
+    public GameMode GameMode { get { return mGameMode; } set { mGameMode = value; } }
+
+    private LevelUpMode mLevelUpMode = LevelUpMode.DYNAMIC;
+    public LevelUpMode LevelUpMode { get { return mLevelUpMode; } set { mLevelUpMode = value; } }
+
     public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } }
     private List<bool> mEnableScoringMethods = new List<bool>() { true, true, false, false };
 
     private int mStartLevel = 0;
     public int StartLevel { get { return mStartLevel; } }
+
+    private int mTimeLimit = 300;
+    public int TimeLimit { get { return mTimeLimit; } }
 
     private int mLimitRow = Constants.DEFAULT_ROOF_HEIGHT;
     public int LimitHigh { get { return mLimitRow; } }
@@ -73,6 +82,7 @@ public class GameSettings
         mDifficulty = aData.SelectDifficulty;
         mEnableScoringMethods = aData.SelectEnableDigits;
         mStartLevel = aData.SelectStartLevel;
+        mTimeLimit = aData.TimeLimit;
         mLimitRow = Mathf.Clamp(aData.SelectLimitLineHeight, Constants.MIN_CEILING_HIGH, Constants.MAX_CEILING_HIGH);
         mActiveGuideBlock = aData.SelectActiveGuide;
     }
@@ -159,6 +169,6 @@ public class GameSettings
 
     public void Reset()
     {
-        mEnableScoringMethods = new List<bool>() { true, false, false, false };
+        mEnableScoringMethods = new List<bool>() { true, true, false, false };
     }
 }

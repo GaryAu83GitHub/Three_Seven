@@ -38,6 +38,17 @@ public class JsonHelper<T>
         File.WriteAllText(Application.persistentDataPath + "/" + Files[aFileIndex] + ".json", json);
     }
 
+    public static T LoadFromJsonNew(FileIndex aFileIndex)
+    {
+        string filePath = Application.persistentDataPath + "/" + Files[aFileIndex] + ".json";
+        if (!File.Exists(filePath))
+            return default;
+
+        string json = File.ReadAllText(filePath);
+        T obj = JsonUtility.FromJson<T>(json);
+        return obj;
+    }
+
     public static T LoadFromJson(FileIndex aFileIndex)
     {
         string filePath = Application.dataPath + "/TextFiles/" + Files[aFileIndex] + ".json";

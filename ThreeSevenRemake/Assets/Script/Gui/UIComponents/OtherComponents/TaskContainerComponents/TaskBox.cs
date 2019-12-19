@@ -23,13 +23,15 @@ public class TaskBox : MonoBehaviour
 
     private bool mTaskAccomplished = false;
     public bool TaskAccomplished { get { return mTaskAccomplished; } }
+    
+    private int mScoringTimes = 0;
+    public int ScoringTimes { get { return mScoringTimes; } }
 
     private Animator mAnimator;
     private CanvasGroup mCG;
 
     private int mActiveDigit = 0;
     private TaskData mDisplayingTaskData = new TaskData();
-    private int mScoringTimes = 0;
 
     //private enum TaskRankColorIndex
     //{
@@ -126,11 +128,11 @@ public class TaskBox : MonoBehaviour
 
     private void SetRankCircle(TaskRank aRank)
     {
-        int temp = 0;
-        if (aRank == TaskRank.X5)
-            temp = 1;
-        else if (aRank == TaskRank.X10)
-            temp = 2;
+        //int temp = 0;
+        //if (aRank == TaskRank.X5)
+        //    temp = 1;
+        //else if (aRank == TaskRank.X10)
+        //    temp = 2;
 
         //MultiValueText.text = aRank.ToString();
 

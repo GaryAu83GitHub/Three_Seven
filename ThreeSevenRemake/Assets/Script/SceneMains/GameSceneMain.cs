@@ -10,6 +10,12 @@ public class GameSceneMain : MonoBehaviour
     public GameObject LimitLine;
     public GameObject TableCover;
 
+    public delegate void OnSetGameMode(GameMode aMode);
+    public static OnSetGameMode setGameMode;
+
+    public delegate void OnSetLevelUpMode(LevelUpMode aMode);
+    public static OnSetLevelUpMode setLevelUpMode;
+
     public delegate void OnCreateNewBlock(Block aNewBlock);
     public static OnCreateNewBlock createNewBlock;
 
@@ -50,8 +56,9 @@ public class GameSceneMain : MonoBehaviour
         GridManager.Instance.GenerateGrid();
 
         // only for debug purpose
-        GenerateScoreCombinationPositions.Instance.GenerateCombinationPositions();
-        TaskManagerNew.Instance.PrepareNewTaskSubjects();
+        GameRoundManager.Instance.SetUpGameRound(GameMode.SURVIVAL);
+        //GenerateScoreCombinationPositions.Instance.GenerateCombinationPositions();
+        //TaskManagerNew.Instance.PrepareNewTaskSubjects();
     }
 
     void Start()
@@ -134,6 +141,9 @@ public class GameSceneMain : MonoBehaviour
     private IEnumerator GameStart()
     {
         yield return new WaitForSeconds(1f);
+        setGameMode?.Invoke(GameSettings.Instance.GameMode);
+        setLevelUpMode?.Invoke(GameSettings.Instance.LevelUpMode);
+
         GUIPanelManager.Instance.StartWithPanel(GUIPanelIndex.MAIN_GAME_PANEL);
         TaskManagerNew.Instance.StartFirstSetOfTask();
         roundStart?.Invoke();

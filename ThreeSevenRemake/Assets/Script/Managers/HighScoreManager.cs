@@ -40,6 +40,12 @@ public class HighScoreManager
         //{
         //    mHighScoreList.Add(data);
         //}
+
+        HighScoreTable loadTable = (JsonHelper<HighScoreTable>.LoadFromJsonNew(FileIndex.HIGHSCORES_NEW) ?? new HighScoreTable());
+        foreach(SavingResultData data in loadTable.ScoreList)
+        {
+            mScoreList.Add(data);
+        }
     }
 
     public void Add(GameRoundData aRoundData)
@@ -144,34 +150,89 @@ public class HighScoreTable
 public class SavingResultData
 {
     public string PlayerName = "";
-    public int GainScores = 0;
+
+    public int TotalScores = 0;
+    public int BestRoundScore = 0;
+    public int BestBonus = 0;
+    public int BestCombo = 0;
+
     public int LongestChains = 0;
-    public int CompletedTasks = 0;
+    public int BestConsecutiveIncreaseChain = 0;
+    public int WorstConsecutiveDecreaseChain = 0;
+
+    public int CompletedTaskCount = 0;
+    public int BestCompleteCount = 0;
+    public int BestSingleTaskScore = 0;
+
+    public int GainedLevel = 0;
     public int ReachedLevels = 0;
-    public float AverageOdds = 0f;
+    public float HighestThreshold = 0;
+    public float LowestThreshold = 0;
+
     public float PlayTime = 0f;
+
+    public float AverageOdds = 0f;
+    public int ScoreTimes = 0;
+    public int LandedBlocks = 0;
+
 
     public SavingResultData() { }
 
     public SavingResultData(SavingResultData aData)
     {
         this.PlayerName = aData.PlayerName;
-        this.GainScores = aData.GainScores;
+
+        this.TotalScores = aData.TotalScores;
+        this.BestRoundScore = aData.BestRoundScore;
+        this.BestBonus = aData.BestBonus;
+        this.BestCombo = aData.BestCombo;
+
         this.LongestChains = aData.LongestChains;
-        this.CompletedTasks = aData.CompletedTasks;
+        this.BestConsecutiveIncreaseChain = aData.BestConsecutiveIncreaseChain;
+        this.WorstConsecutiveDecreaseChain = aData.WorstConsecutiveDecreaseChain;
+
+        this.CompletedTaskCount = aData.CompletedTaskCount;
+        this.BestCompleteCount = aData.BestCompleteCount;
+        this.BestSingleTaskScore = aData.BestSingleTaskScore;
+
+        this.GainedLevel = aData.GainedLevel;
         this.ReachedLevels = aData.ReachedLevels;
+        this.HighestThreshold = aData.HighestThreshold;
+        this.LowestThreshold = aData.LowestThreshold;
+
         this.AverageOdds = aData.AverageOdds;
+        this.ScoreTimes = aData.ScoreTimes;
+        this.LandedBlocks = aData.LandedBlocks;
+
         this.PlayTime = aData.PlayTime;
     }
 
     public SavingResultData(string aPlayerName, ResultData aData)
     {
         this.PlayerName = aPlayerName;
-        this.GainScores = aData.GainScores;
+
+        this.TotalScores = aData.TotalScores;
+        this.BestRoundScore = aData.BestRoundScores;
+        this.BestBonus = aData.BestBonusTerm;
+        this.BestCombo = aData.BestComboCount;
+
         this.LongestChains = aData.LongestChains;
-        this.CompletedTasks = aData.CompletedTasks;
-        this.ReachedLevels = aData.ReachedLevels;
+        this.BestConsecutiveIncreaseChain = aData.BestConsecutiveIncreaseChain;
+        this.WorstConsecutiveDecreaseChain = aData.WorstConsecutiveDecreaseChain;
+
+        this.CompletedTaskCount = aData.TotalCompletedTaskCount;
+        this.BestCompleteCount = aData.BestCompletedTaskCount;
+        this.BestSingleTaskScore = aData.BestSingleTaskScoringCount;
+
+        this.GainedLevel = aData.GainedLevelCount;
+        this.ReachedLevels = aData.GainedLevelCount;
+        this.HighestThreshold = aData.HighestThreshold;
+        this.LowestThreshold = aData.LowestThreshold;
+
         this.AverageOdds = aData.AverageOdds;
+        this.ScoreTimes = aData.ScoreTimes;
+        this.LandedBlocks = aData.LandedBlocks;
+
         this.PlayTime = aData.PlayTime;
     }
 }

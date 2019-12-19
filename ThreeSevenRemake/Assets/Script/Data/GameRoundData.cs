@@ -19,7 +19,7 @@ public class GameRoundData
     public string PlayerName { get { return mPlayerName; } set { mPlayerName = value; } }
 
     // Game round settings variabler
-    private List<bool> mEnableScoringMethods = new List<bool>() { true, true, false, false };
+    private List<bool> mEnableScoringMethods = new List<bool>() { true, false, false, false };
     public List<bool> EnableScoringMethods { get { return mEnableScoringMethods; } set { mEnableScoringMethods = value; } }
 
     private Difficulties mSelectedDifficulty = Difficulties.EASY;
@@ -33,6 +33,9 @@ public class GameRoundData
 
     private int mCurrentLevel = 0;
     public int CurrentLevel { get { return mCurrentLevel; } set { mCurrentLevel = value; } }
+
+    private float mGameTimeLimit = 300f;
+    public float GameTimeLimit { get { return mGameTimeLimit; } set { mGameTimeLimit = value; } }
 
     private bool mGuideblockActive = true;
     public bool GuideblockActive { get { return mGuideblockActive; } set { mGuideblockActive = value; } }

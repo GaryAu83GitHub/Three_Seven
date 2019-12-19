@@ -23,7 +23,7 @@ public class TitleSceneMain : MonoBehaviour
 
     private void StartTheGame()
     {
-        GameRoundManager.Instance.SetUpGameRound();
+        GameRoundManager.Instance.SetUpGameRound(GameMode.SURVIVAL);
         StartCoroutine(StartGameRound());
     }
 

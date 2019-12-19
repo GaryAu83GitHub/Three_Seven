@@ -78,10 +78,6 @@ public class GameplaySettings : SettingsContainerBase
             mCurrentSelectingSlotIndex += anIncreame;
 
         SwitchSelectingSlot(mCurrentSelectingSlotIndex);
-        //mCurrentSelectedSlot.Exit();
-        //mCurrentSelectedSlot = SettingSlots[mCurrentSelectingSlotIndex];
-        //mCurrentSelectedSlot.Enter();
-        return;
     }
 
     private void ChangeGameplaySetting(ref GameplaySettingData data)
@@ -135,17 +131,23 @@ public class GameplaySettings : SettingsContainerBase
 
 public class GameplaySettingData
 {
-    public Difficulties SelectDifficulty { get { return mDifficulty; } set { mDifficulty = value; } }
     private Difficulties mDifficulty = Difficulties.EASY;
+    public Difficulties SelectDifficulty { get { return mDifficulty; } set { mDifficulty = value; } }
 
-    public List<bool> SelectEnableDigits { get { return mEnableDigits; } set { mEnableDigits = value; } }
+    private LevelUpMode mLevelUpMode = LevelUpMode.DYNAMIC;
+    public LevelUpMode LevelUpMode { get { return mLevelUpMode; } set { mLevelUpMode = value; } }
+
     private List<bool> mEnableDigits = new List<bool>() { true, true, false, false };
+    public List<bool> SelectEnableDigits { get { return mEnableDigits; } set { mEnableDigits = value; } }
 
-    public int SelectLimitLineHeight { get { return mLimitLineHeight; } set { mLimitLineHeight = value; } }
     private int mLimitLineHeight = 0;
+    public int SelectLimitLineHeight { get { return mLimitLineHeight; } set { mLimitLineHeight = value; } }
 
-    public int SelectStartLevel { get { return mStartLevel; } set { mStartLevel = value; } }
     private int mStartLevel = 0;
+    public int SelectStartLevel { get { return mStartLevel; } set { mStartLevel = value; } }
+
+    private int mTimeLimit = 300;
+    public int TimeLimit { get { return mTimeLimit; } set { mTimeLimit = value; } }
 
     public bool SelectActiveGuide { get { return mActiveGuide; } set { mActiveGuide = value; } }
     private bool mActiveGuide = true;
@@ -153,18 +155,22 @@ public class GameplaySettingData
     public GameplaySettingData()
     {
         mDifficulty = GameSettings.Instance.Difficulty; //GameRoundManager.Instance.Data.SelectedDifficulty;
+        mLevelUpMode = GameSettings.Instance.LevelUpMode;
         mEnableDigits = GameSettings.Instance.EnableScoringMethods;
         mLimitLineHeight = GameSettings.Instance.LimitHigh;//GameRoundManager.Instance.Data.RoofHeightValue;
         mStartLevel = GameSettings.Instance.StartLevel;//GameRoundManager.Instance.Data.CurrentLevel;
+        mTimeLimit = GameSettings.Instance.TimeLimit;
         mActiveGuide = GameSettings.Instance.ActiveGuideBlock;//GameRoundManager.Instance.Data.GuideblockActive;
     }
 
     public GameplaySettingData(GameplaySettingData data)
     {
         mDifficulty = data.SelectDifficulty;
+        mLevelUpMode = data.LevelUpMode;
         mEnableDigits = data.SelectEnableDigits;
         mLimitLineHeight = data.SelectLimitLineHeight;
         mStartLevel = data.SelectStartLevel;
+        mTimeLimit = data.TimeLimit;
         mActiveGuide = data.SelectActiveGuide;
     }
 
@@ -176,6 +182,8 @@ public class GameplaySettingData
         {
             GameplaySettingData p = (GameplaySettingData)obj;
             if (p.SelectDifficulty != mDifficulty)
+                return false;
+            if (p.LevelUpMode != mLevelUpMode)
                 return false;
             if (!p.SelectEnableDigits.SequenceEqual(mEnableDigits))
                 return false;

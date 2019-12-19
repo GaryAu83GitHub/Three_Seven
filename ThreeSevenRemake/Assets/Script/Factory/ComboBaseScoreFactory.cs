@@ -17,7 +17,7 @@ public class ComboBaseScoreFactory
     }
     private static ComboBaseScoreFactory mInstance;
 
-    private List<uint> mComboBaseScoreList = new List<uint>() { 50 };
+    private List<uint> mComboBaseScoreList = new List<uint>() { 10 };
 
     /// <summary>
     /// This method is called when cubes scores throught aligning and met up the condition

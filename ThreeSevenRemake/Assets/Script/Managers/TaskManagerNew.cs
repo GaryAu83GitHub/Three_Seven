@@ -236,28 +236,12 @@ public class TaskSubject
     {
         mAvailableLinks.Add(aData.LinkCubes);
         mSubjectData.Add(aData.LinkCubes, aData);
-
-        //mUsedLinks.Add(aData.LinkCubes, false);
-
-        //if(!mUsedTaskNumbers.ContainsKey(aData.LinkCubes) && !mTaskValueLists.ContainsKey(aData.LinkCubes))
-        //{
-        //    mUsedTaskNumbers.Add(aData.LinkCubes, new List<bool>());
-        //    mTaskValueLists.Add(aData.LinkCubes, new List<int>());
-        //}
-
-        //List<int> valueList = aData.GetNumberListForRank(mRank);
-
-        //for(int i = 0; i < valueList.Count; i++)
-        //{
-        //    mTaskValueLists[aData.LinkCubes].Add(valueList[i]);
-        //    if (valueList[i] <= mTaskValueLimit)
-        //        mUsedTaskNumbers[aData.LinkCubes].Add(false);
-        //}
-
-        //mMaxValue = valueList.Last();
-        return;
     }
 
+    /// <summary>
+    /// Create and return a new task by random link
+    /// </summary>
+    /// <returns>Return the new created task</returns>
     public TaskData CreateTask()
     {
         int link = mAvailableLinks[Random.Range(0, mAvailableLinks.Count)];
@@ -265,16 +249,33 @@ public class TaskSubject
         TaskRank rank = mSubjectData[link].GetRankFor(task);
         mCreatedTaskCount++;
 
-        //return new TaskData(rank, link, task);
         return new TaskData(mCreatedTaskCount, rank, link, task);
     }
 
+    /// <summary>
+    /// Create and return a new task by the desired link
+    /// </summary>
+    /// <param name="aLink">Desired link value, the number of digit that 
+    /// will be used for this task</param>
+    /// <returns>Return the new created task</returns>
+    public TaskData CreateTask(int aLink)
+    {
+        int task = GetNewTaskValue(aLink);
+        return new TaskData(mCreatedTaskCount, TaskRank.X1, aLink, task);
+    }
+
+    /// <summary>
+    /// Create and return a new task be the desired link and task value
+    /// </summary>
+    /// <param name="aLink">Desired link value, the number of digit that 
+    /// will be used for this task</param>
+    /// <param name="aTaskValue">Desired task value</param>
+    /// <returns>Return the new created task</returns>
     public TaskData CreateTask(int aLink, int aTaskValue)
     {
         TaskRank rank = mSubjectData[aLink].GetRankFor(aTaskValue);
         mCreatedTaskCount++;
 
-        //return new TaskData(rank, aLink, aTaskValue);
         return new TaskData(mCreatedTaskCount, rank, aLink, aTaskValue);
     }
 
@@ -288,13 +289,6 @@ public class TaskSubject
             linkCount = mDebugingLink;
             taskValue = mDebugingValue;
         }
-
-        //if (mCombinationCountList[aTaskValue] > 500)
-        //    return TaskRank.X10;
-        //else if (mCombinationCountList[aTaskValue] > 50 && mCombinationCountList[aTaskValue] < 500)
-        //    return TaskRank.X5;
-
-        //return TaskRank.X1;
 
         return new TaskData(mRank, linkCount, taskValue);
     }

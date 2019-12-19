@@ -24,6 +24,8 @@ public class GameRoundManager
     }
     private static GameRoundManager mInstance;
 
+    
+
     private GameRoundData mGameRoundData = new GameRoundData();
     public GameRoundData Data { get { return mGameRoundData; } }
 
@@ -32,8 +34,10 @@ public class GameRoundManager
         mGameRoundData = new GameRoundData();
     }
 
-    public void SetUpGameRound()
+    public void SetUpGameRound(GameMode aMode = GameMode.CLASSIC)
     {
+        GameSettings.Instance.GameMode = aMode;
+
         for (int i = 0; i < 4; i++)
             GameSettings.Instance.EnableScoringMethods[i] = mGameRoundData.EnableScoringMethods[i];
 
