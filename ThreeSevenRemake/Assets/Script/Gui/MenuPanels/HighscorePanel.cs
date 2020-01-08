@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// This class is attach to the HighscorePanel from the previous version and will be
+/// replace by HighscoreGUIPanel
+/// </summary>
 public class HighscorePanel : MonoBehaviour
 {
     public List<HighscoreListComponent> ListComponents;
@@ -50,7 +54,7 @@ public class HighscorePanel : MonoBehaviour
     public void UpdateList()
     {
         
-        mHighscores = new List<RoundResultData>(HighScoreManager.Instance.GetListSortBy(TableCategory.SCORE));
+        //mHighscores = new List<RoundResultData>(HighScoreManager.Instance.GetListSortBy(TableCategory.SCORE));
         if (mHighscores.Count > 10)
         {
             ScrollButtonContain.SetActive(true);

@@ -106,7 +106,7 @@ public class GameSceneMain : MonoBehaviour
     {
         TableCover.SetActive(PauseMenu.GameIsPause);
 
-        if(mTimeOver)
+        if(mTimeOver && !BlockManager.Instance.GameOver)
         {
             BlockManager.Instance.TowerCollapse();
             gameTimeOver?.Invoke();

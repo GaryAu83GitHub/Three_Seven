@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using Assets.Script.Tools;
 
+/// <summary>
+/// This class was attached to the original game over menu object, but it'll be replace by the result panel UI class
+/// </summary>
 public class GameOverMenu : MonoBehaviour
 {
     public static bool GameIsOver = false;
@@ -88,10 +91,10 @@ public class GameOverMenu : MonoBehaviour
 
     public void LeaveToMainMenu()
     {
-        if (GameSettings.Instance.PlayerName.Length > 0)
-        {
-            HighScoreManager.Instance.Add(GamingManager.Instance.GetRoundData());
-        }
+        //if (GameSettings.Instance.PlayerName.Length > 0)
+        //{
+        //    HighScoreManager.Instance.Add(GamingManager.Instance.GetRoundData());
+        //}
         leaveTheGame?.Invoke();
         GameIsOver = false;
         LeavePanel.SetActive(false);

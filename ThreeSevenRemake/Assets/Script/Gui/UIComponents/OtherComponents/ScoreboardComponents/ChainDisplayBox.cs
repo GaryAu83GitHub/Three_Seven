@@ -41,10 +41,10 @@ public class ChainDisplayBox : ScoreboardComponentBase
     {
         get
         {
-            if (mNumberOfBlock == 0)
+            if (mTotalLandedBlockCount == 0)
                 return 1f;
 
-            return (float)mScoringCount / (float)mNumberOfBlock;
+            return (float)mTotalScoringAtLandingCount / (float)mTotalLandedBlockCount;
         }
     }
 
@@ -97,6 +97,9 @@ public class ChainDisplayBox : ScoreboardComponentBase
     /// </summary>
     private int mNumberOfBlock = 0;
 
+    private int mTotalLandedBlockCount = 0;
+    private int mTotalScoringAtLandingCount = 0;
+
     public override void Start()
     {
         base.Start();
@@ -122,7 +125,7 @@ public class ChainDisplayBox : ScoreboardComponentBase
     protected override void GatherResultData(ref ResultData aData)
     {
         aData.SetLongestChain(mLongestChain, mHighestConsecutiveIncreaseCount, mLowestConsecutiveDecreaseChain);
-        aData.SetAverageOdds(mScoringCount, mNumberOfBlock);
+        aData.SetAverageOdds(mTotalScoringAtLandingCount, mTotalLandedBlockCount);
     }
 
     private void UpdateCombo(int aComboCount)
@@ -140,9 +143,11 @@ public class ChainDisplayBox : ScoreboardComponentBase
             return;
 
         mNumberOfBlock++;
+        mTotalLandedBlockCount++;
 
         if (isScoring)
         {
+            mTotalScoringAtLandingCount++;
             ConsecutiveNewBlockScoring(1);
             AddScoring();
         }

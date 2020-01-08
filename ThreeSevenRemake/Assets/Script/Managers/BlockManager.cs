@@ -352,6 +352,8 @@ public class BlockManager
 
         foreach (Block b in mBlocks)
             b.GetComponent<Rigidbody>().useGravity = true;
+
+        mGameOver = true;
     }
 
     /// <summary>

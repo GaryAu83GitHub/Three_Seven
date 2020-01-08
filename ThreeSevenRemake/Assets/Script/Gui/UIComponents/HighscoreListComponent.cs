@@ -31,11 +31,15 @@ public class HighscoreListComponent : MonoBehaviour
         LevelText.text = aData.TotalLevel.ToString();
         ComboText.text = aData.TotalMaxCombo.ToString();
 
-        int seconds = (int)(aData.TotalTime % 60);
-        int minutes = (int)((aData.TotalTime / 60) % 60);
-        int hours = (int)((aData.TotalTime / 3600) % 60);
+        //int seconds = (int)(aData.TotalTime % 60);
+        //int minutes = (int)((aData.TotalTime / 60) % 60);
+        //int hours = (int)((aData.TotalTime / 3600) % 60);
 
-        TimeText.text = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
+        //TimeText.text = string.Format("{0:0}:{1:00}:{2:00}", hours, minutes, seconds);
+        TimeText.text = TimeTool.TimeString(aData.TotalTime);
         ScoreText.text = aData.TotalScore.ToString();
     }
+
+    public void SetDataBy(TableCategory aCategory, int aRank, SavingResultData aData)
+    { }
 }

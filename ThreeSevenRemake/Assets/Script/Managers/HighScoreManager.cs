@@ -7,9 +7,12 @@ using UnityEngine;
 public enum TableCategory
 {
     SCORE,
-    COMBO,
+    CHAIN,
+    TASK,
+    LEVEL,
     TIME,
-    USED_BLOCK
+    ODDS,
+    MAX_COUNT,
 };
 public class HighScoreManager
 {
@@ -24,8 +27,8 @@ public class HighScoreManager
     }
     private static HighScoreManager mInstance;
 
-    private List<RoundResultData> mHighScoreList = new List<RoundResultData>();
-    public List<RoundResultData> HighScoreList { get { return mHighScoreList; } }
+    //private List<RoundResultData> mHighScoreList = new List<RoundResultData>();
+    //public List<RoundResultData> HighScoreList { get { return mHighScoreList; } }
 
     /// <summary>
     /// new score list
@@ -48,27 +51,27 @@ public class HighScoreManager
         }
     }
 
-    public void Add(GameRoundData aRoundData)
-    {
-        RoundResultData newData = new RoundResultData(aRoundData);
-        if (mHighScoreList.Contains(newData))
-            return;
+    //public void Add(GameRoundData aRoundData)
+    //{
+    //    RoundResultData newData = new RoundResultData(aRoundData);
+    //    if (mHighScoreList.Contains(newData))
+    //        return;
 
-        mHighScoreList.Add(newData);
+    //    mHighScoreList.Add(newData);
 
-        SaveToList();
-    }
+    //    SaveToList();
+    //}
 
-    public void Add(string aPlayerName, GameRoundData aRoundData)
-    {
-        RoundResultData newData = new RoundResultData(aPlayerName, aRoundData);
-        if (mHighScoreList.Contains(newData))
-            return;
+    //public void Add(string aPlayerName, GameRoundData aRoundData)
+    //{
+    //    RoundResultData newData = new RoundResultData(aPlayerName, aRoundData);
+    //    if (mHighScoreList.Contains(newData))
+    //        return;
 
-        mHighScoreList.Add(newData);
+    //    mHighScoreList.Add(newData);
 
-        SaveToList();
-    }
+    //    SaveToList();
+    //}
 
     public void AddNewScore(string aPlayerName, ResultData aData)
     {
@@ -81,34 +84,75 @@ public class HighScoreManager
         SaveToListNew();
     }
 
-    public List<RoundResultData> GetListSortBy(TableCategory aCategory)
+    //public List<RoundResultData> GetListSortBy(TableCategory aCategory)
+    //{
+    //    List<RoundResultData> sortlist = new List<RoundResultData>();
+
+    //    switch(aCategory)
+    //    {
+    //        case TableCategory.SCORE:
+    //            sortlist = mHighScoreList.OrderByDescending(s => s.TotalScore).ThenBy(s => s.PlayerName).ToList();
+    //            break;
+    //        case TableCategory.COMBO:
+    //            sortlist = mHighScoreList.OrderByDescending(s => s.TotalMaxCombo).ThenBy(s => s.PlayerName).ToList();
+    //            break;
+    //        case TableCategory.TIME:
+    //            sortlist = mHighScoreList.OrderByDescending(s => s.TotalTime).ThenBy(s => s.PlayerName).ToList();
+    //            break;
+    //        case TableCategory.USED_BLOCK:
+    //            sortlist = mHighScoreList.OrderByDescending(s => s.TotalUsedBlock).ThenBy(s => s.PlayerName).ToList();
+    //            break;
+    //    }
+
+    //    return sortlist;
+    //}
+
+    public List<SavingResultData> GetListSortBy(TableCategory aCategory)
     {
-        List<RoundResultData> sortlist = new List<RoundResultData>();
+        List<SavingResultData> sortList = new List<SavingResultData>();
 
         switch(aCategory)
         {
-            case TableCategory.SCORE:
-                sortlist = mHighScoreList.OrderByDescending(s => s.TotalScore).ThenBy(s => s.PlayerName).ToList();
+            case TableCategory.CHAIN:
+                sortList = mScoreList.OrderByDescending(s => s.LongestChains)
+                    .ThenByDescending(s => s.BestConsecutiveIncreaseChain)
+                    .ThenBy(s => s.WorstConsecutiveDecreaseChain).ToList();
                 break;
-            case TableCategory.COMBO:
-                sortlist = mHighScoreList.OrderByDescending(s => s.TotalMaxCombo).ThenBy(s => s.PlayerName).ToList();
+            case TableCategory.TASK:
+                sortList = mScoreList.OrderByDescending(s => s.CompletedTaskCount)
+                    .ThenByDescending(s => s.BestCompleteTaskCount)
+                    .ThenByDescending(s => s.BestSingleTaskScore).ToList();
+                break;
+            case TableCategory.LEVEL:
+                sortList = mScoreList.OrderByDescending(s => s.GainedLevel)
+                    .ThenByDescending(s => s.ReachedLevels)
+                    .ThenByDescending(s => s.HighestLevelUpgradeThreshold)
+                    .ThenByDescending(s => s.LowestLevelDowngradeThreshold).ToList();
                 break;
             case TableCategory.TIME:
-                sortlist = mHighScoreList.OrderByDescending(s => s.TotalTime).ThenBy(s => s.PlayerName).ToList();
+                sortList = mScoreList.OrderByDescending(s => s.PlayTime).ToList();
                 break;
-            case TableCategory.USED_BLOCK:
-                sortlist = mHighScoreList.OrderByDescending(s => s.TotalUsedBlock).ThenBy(s => s.PlayerName).ToList();
+            case TableCategory.ODDS:
+                sortList = mScoreList.OrderByDescending(s => s.AverageOdds)
+                    .ThenByDescending(s => s.ScoreTimes)
+                    .ThenByDescending(s => s.LandedBlocks).ToList();
+                break;
+            default:
+                sortList = mScoreList.OrderByDescending(s => s.TotalScores)
+                    .ThenByDescending(s => s.BestRoundScore)
+                    .ThenByDescending(s => s.BestCombo)
+                    .ThenByDescending(s => s.BestBonus).ToList();
                 break;
         }
 
-        return sortlist;
+        return sortList;
     }
 
-    private void SaveToList()
-    {
-        ScoreTable newList = new ScoreTable(mHighScoreList);
-        JsonHelper<ScoreTable>.SaveToJson(newList, FileIndex.HIGHSCORES);
-    }
+    //private void SaveToList()
+    //{
+    //    ScoreTable newList = new ScoreTable(mHighScoreList);
+    //    JsonHelper<ScoreTable>.SaveToJson(newList, FileIndex.HIGHSCORES);
+    //}
 
     private void SaveToListNew()
     {
@@ -153,21 +197,21 @@ public class SavingResultData
 
     public int TotalScores = 0;
     public int BestRoundScore = 0;
-    public int BestBonus = 0;
     public int BestCombo = 0;
+    public int BestBonus = 0;
 
     public int LongestChains = 0;
     public int BestConsecutiveIncreaseChain = 0;
     public int WorstConsecutiveDecreaseChain = 0;
 
     public int CompletedTaskCount = 0;
-    public int BestCompleteCount = 0;
+    public int BestCompleteTaskCount = 0;
     public int BestSingleTaskScore = 0;
 
     public int GainedLevel = 0;
     public int ReachedLevels = 0;
-    public float HighestThreshold = 0;
-    public float LowestThreshold = 0;
+    public float HighestLevelUpgradeThreshold = 0;
+    public float LowestLevelDowngradeThreshold = 0;
 
     public float PlayTime = 0f;
 
@@ -192,13 +236,13 @@ public class SavingResultData
         this.WorstConsecutiveDecreaseChain = aData.WorstConsecutiveDecreaseChain;
 
         this.CompletedTaskCount = aData.CompletedTaskCount;
-        this.BestCompleteCount = aData.BestCompleteCount;
+        this.BestCompleteTaskCount = aData.BestCompleteTaskCount;
         this.BestSingleTaskScore = aData.BestSingleTaskScore;
 
         this.GainedLevel = aData.GainedLevel;
         this.ReachedLevels = aData.ReachedLevels;
-        this.HighestThreshold = aData.HighestThreshold;
-        this.LowestThreshold = aData.LowestThreshold;
+        this.HighestLevelUpgradeThreshold = aData.HighestLevelUpgradeThreshold;
+        this.LowestLevelDowngradeThreshold = aData.LowestLevelDowngradeThreshold;
 
         this.AverageOdds = aData.AverageOdds;
         this.ScoreTimes = aData.ScoreTimes;
@@ -221,13 +265,13 @@ public class SavingResultData
         this.WorstConsecutiveDecreaseChain = aData.WorstConsecutiveDecreaseChain;
 
         this.CompletedTaskCount = aData.TotalCompletedTaskCount;
-        this.BestCompleteCount = aData.BestCompletedTaskCount;
+        this.BestCompleteTaskCount = aData.BestCompletedTaskCount;
         this.BestSingleTaskScore = aData.BestSingleTaskScoringCount;
 
         this.GainedLevel = aData.GainedLevelCount;
         this.ReachedLevels = aData.GainedLevelCount;
-        this.HighestThreshold = aData.HighestThreshold;
-        this.LowestThreshold = aData.LowestThreshold;
+        this.HighestLevelUpgradeThreshold = aData.HighestThreshold;
+        this.LowestLevelDowngradeThreshold = aData.LowestThreshold;
 
         this.AverageOdds = aData.AverageOdds;
         this.ScoreTimes = aData.ScoreTimes;

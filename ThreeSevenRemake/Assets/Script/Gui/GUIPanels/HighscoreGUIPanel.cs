@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class is attach to the HighscoreGUIPanel
+/// </summary>
 public class HighscoreGUIPanel : MenuEnablePanelBase
 {
     private enum ButtonIndex
@@ -21,7 +24,9 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
     public List<HighscoreListComponent> ListComponents;
 
     //private int mCurrentSortMode = 0;
-    private List<RoundResultData> mHighscores = new List<RoundResultData>();
+    //private List<RoundResultData> mHighscores = new List<RoundResultData>();
+    private List<SavingResultData> mHighScores = new List<SavingResultData>();
+
     private int mCurrentScrollValue = 0;
     private int mMaxScrollValue = 0;
 
@@ -72,11 +77,11 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
 
     public void UpdateList()
     {
-        mHighscores = new List<RoundResultData>(HighScoreManager.Instance.GetListSortBy(TableCategory.SCORE));
-        if (mHighscores.Count > 10)
+        //mHighscores = new List<RoundResultData>(HighScoreManager.Instance.GetListSortBy(TableCategory.SCORE));
+        if (mHighScores.Count > 10)
         {
             //ScrollButtonContain.SetActive(true);
-            mMaxScrollValue = mHighscores.Count - 10;
+            mMaxScrollValue = mHighScores.Count - 10;
         }
 
         mCurrentScrollValue = 0;
@@ -88,10 +93,10 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
 
     private void Display()
     {
-        for (int i = 0; i < ((mHighscores.Count < 10) ? mHighscores.Count : 10); i++)
+        for (int i = 0; i < ((mHighScores.Count < 10) ? mHighScores.Count : 10); i++)
         {
             ListComponents[i].gameObject.SetActive(true);
-            ListComponents[i].SetData(mCurrentScrollValue + (i + 1), mHighscores[mCurrentScrollValue + i]);
+            ListComponents[i].SetDataBy(TableCategory.SCORE, mCurrentScrollValue + (i + 1), mHighScores[mCurrentScrollValue + i]);
         }
     }
 }
