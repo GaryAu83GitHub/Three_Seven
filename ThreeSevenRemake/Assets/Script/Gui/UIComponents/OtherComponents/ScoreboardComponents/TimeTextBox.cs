@@ -47,6 +47,9 @@ public class TimeTextBox : ScoreboardComponentBase
 
         GameSceneMain.setGameMode += SetGameMode;
         GameSceneMain.activeTimer += ActiveTheClock;
+
+        MainGamePanel.gamePause += GamePause;
+
         Clock();
     }
 
@@ -59,6 +62,8 @@ public class TimeTextBox : ScoreboardComponentBase
 
         GameSceneMain.setGameMode -= SetGameMode;
         GameSceneMain.activeTimer -= ActiveTheClock;
+
+        MainGamePanel.gamePause -= GamePause;
     }
 
     /// <summary>
@@ -151,5 +156,10 @@ public class TimeTextBox : ScoreboardComponentBase
     private void SetTimeLimit(float aTimeLimit)
     {
         mGameTimeLimit = aTimeLimit;
+    }
+
+    private void GamePause(bool gameIsPausing)
+    {
+        mTimerIsActive = !gameIsPausing;
     }
 }

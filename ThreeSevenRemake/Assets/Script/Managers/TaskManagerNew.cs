@@ -108,12 +108,14 @@ public class TaskManagerNew
             
             return;
         }
+        
+        mSubject.GetListOfUncompleteTasks(mActiveTasks);
 
-        for(int i = 0; i < mActiveTasks.Count; i++)
+        for (int i = 0; i < mActiveTasks.Count; i++)
         {
             if (mActiveTasks[i].TaskComplete)
             {
-                SetNewActiveTaskFor(i);
+                SetNewActiveTaskAt(i);
             }
         }
         CubeNumberManager.Instance.GenerateNewUseableCubeNumberFor(mActiveTasks);
@@ -149,7 +151,7 @@ public class TaskManagerNew
         {
             for (int i = 0; i < mActiveTasks.Count; i++)
             {
-                SetNewActiveTaskFor(i);
+                SetNewActiveTaskAt(i);
             }
         }
         else
@@ -161,10 +163,9 @@ public class TaskManagerNew
         CubeNumberManager.Instance.GenerateNewUseableCubeNumberFor(mActiveTasks);
     }
 
-    private void SetNewActiveTaskFor(int anIndex)
+    private void SetNewActiveTaskAt(int anIndex)
     {
         mActiveTasks[anIndex].SetValue(mSubject.CreateTask());
-        //displayTaskAt?.Invoke(anIndex, mActiveTasks[anIndex]);   
     }
 
     private void SetNewActiveTaskFor(int anIndex, int aLink, int aValue)
@@ -176,14 +177,12 @@ public class TaskManagerNew
 
 public class TaskSubject
 {
-    public TaskRank Rank { get { return mRank; } }
-    private readonly TaskRank mRank = TaskRank.X1;
-
     private Dictionary<int, bool> mUsedLinks = new Dictionary<int, bool>();
     private Dictionary<int, List<int>> mTaskValueLists = new Dictionary<int, List<int>>();
     private Dictionary<int, List<bool>> mUsedTaskNumbers = new Dictionary<int, List<bool>>();
 
     private List<int> mAvailableLinks = new List<int>();
+    private List<TaskData> mUncompletedTaskDatas = new List<TaskData>();
     private Dictionary<int, TaskSubjectObject> mSubjectData = new Dictionary<int, TaskSubjectObject>();
 
     private int mCreatedTaskCount = 0;
@@ -191,11 +190,11 @@ public class TaskSubject
 
     private int mTaskValueLimit = 0;
     private int mMaxValue = 0;
+    private int mNextTaskLinkIndex = 0;
 
     private readonly bool mUnderDebuging = false;
     private readonly int mDebugingValue = 0;
     private readonly int mDebugingLink = 0;
-
 
     /// <summary>
     /// Default constructor
@@ -205,51 +204,37 @@ public class TaskSubject
 
     }
 
-    /// <summary>
-    /// Previous Default constructor
-    /// </summary>
-    /// <param name="aRank">Task subjects rank</param>
-    /// <param name="aInitialTaskValueLimit">the start task value</param>
-    public TaskSubject(TaskRank aRank, int aInitialTaskValueLimit)
-    {
-        mRank = aRank;
-        mTaskValueLimit = aInitialTaskValueLimit;
-    }
-
-    /// <summary>
-    /// This constructor is called when an Tasksubject is used for debug purpose, with this set the value and link will not change during the game progress
-    /// </summary>
-    /// <param name="aRank">The task rank that want to be use for debug</param>
-    /// <param name="useDebuging">The link use for debug</param>
-    /// <param name="debugingValue">The value use for debug</param>
-    public TaskSubject(TaskRank aRank, int debugingValue, int debugingLink)
-    {
-        mRank = aRank;
-        mTaskValueLimit = Constants.MINIMAL_TASK_VALUE;
-
-        mDebugingLink = debugingLink;
-        mDebugingValue = debugingValue;
-        mUnderDebuging = true;
-    }
-
     public void FillValueListFor(TaskSubjectObject aData)
     {
         mAvailableLinks.Add(aData.LinkCubes);
         mSubjectData.Add(aData.LinkCubes, aData);
     }
 
+    public void GetListOfUncompleteTasks(List<TaskData> someTaskDatas)
+    {
+        mUncompletedTaskDatas.Clear();
+        for(int i = 0; i < someTaskDatas.Count;i++)
+        {
+            if (!someTaskDatas[i].TaskComplete)
+                mUncompletedTaskDatas.Add(someTaskDatas[i]);
+        }
+    }
+
     /// <summary>
-    /// Create and return a new task by random link
+    /// Create and return a new task
     /// </summary>
     /// <returns>Return the new created task</returns>
     public TaskData CreateTask()
     {
-        int link = mAvailableLinks[Random.Range(0, mAvailableLinks.Count)];
+        int link = mAvailableLinks[mNextTaskLinkIndex/*Random.Range(0, mAvailableLinks.Count)*/];
         int task = GetNewTaskValue(link);
-        TaskRank rank = mSubjectData[link].GetRankFor(task);
+        //TaskRank rank = mSubjectData[link].GetRankFor(task);
         mCreatedTaskCount++;
+        mNextTaskLinkIndex++;
+        if (mNextTaskLinkIndex >= mAvailableLinks.Count)
+            mNextTaskLinkIndex = 0;
 
-        return new TaskData(mCreatedTaskCount, rank, link, task);
+        return new TaskData(mCreatedTaskCount/*, rank*/, link, task);
     }
 
     /// <summary>
@@ -261,7 +246,7 @@ public class TaskSubject
     public TaskData CreateTask(int aLink)
     {
         int task = GetNewTaskValue(aLink);
-        return new TaskData(mCreatedTaskCount, TaskRank.X1, aLink, task);
+        return new TaskData(mCreatedTaskCount/*, TaskRank.X1*/, aLink, task);
     }
 
     /// <summary>
@@ -273,10 +258,10 @@ public class TaskSubject
     /// <returns>Return the new created task</returns>
     public TaskData CreateTask(int aLink, int aTaskValue)
     {
-        TaskRank rank = mSubjectData[aLink].GetRankFor(aTaskValue);
+        //TaskRank rank = mSubjectData[aLink].GetRankFor(aTaskValue);
         mCreatedTaskCount++;
 
-        return new TaskData(mCreatedTaskCount, rank, aLink, aTaskValue);
+        return new TaskData(mCreatedTaskCount/*, rank*/, aLink, aTaskValue);
     }
 
     public TaskData CreateNewTask()
@@ -290,7 +275,7 @@ public class TaskSubject
             taskValue = mDebugingValue;
         }
 
-        return new TaskData(mRank, linkCount, taskValue);
+        return new TaskData(taskValue, linkCount);
     }
 
     public void IncreaseTaskValueLimit()
@@ -352,12 +337,19 @@ public class TaskSubject
 
         if (availableValues.Count == 1)
         {
-            mSubjectData[aLink].ResetUsedTaskValue(availableValues[0]);
-            return availableValues[0];
+            List<int> exceptedIndexes = new List<int> { availableValues[0] };
+            for (int i = 0; i < mUncompletedTaskDatas.Count; i++)
+            {
+                if (mUncompletedTaskDatas[i].LinkedCubes == aLink)
+                    exceptedIndexes.Add(mUncompletedTaskDatas[i].TaskValue);
+            }
+            mSubjectData[aLink].ResetUsedTaskValue(exceptedIndexes/*availableValues[0]*/);
+            //return availableValues[0];
+            return exceptedIndexes[0];
         }
 
         int selectedValue = availableValues[Random.Range(0, availableValues.Count)];
-
+        mSubjectData[aLink].SetUsedTaskValue(selectedValue);
         return selectedValue;
     }
 

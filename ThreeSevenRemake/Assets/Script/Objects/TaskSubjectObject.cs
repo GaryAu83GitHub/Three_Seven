@@ -59,7 +59,7 @@ public class TaskSubjectObject
     {
         return mRankNumberList[aRank];
     }
-
+    
     public List<int> GetUnusedTaskValue()
     {
         List<int> unUsedTaskIndexes = new List<int>();
@@ -71,14 +71,30 @@ public class TaskSubjectObject
         }
         return unUsedTaskIndexes;
     }
+    
+    public void SetUsedTaskValue(int aSelectUseValue)
+    {
+        mUsedTaskValue[aSelectUseValue] = true;
+    }
 
-    public void ResetUsedTaskValue(int anExceptedIndex = -1)
+    /// <summary>
+    /// This function is use for reseting the boolian list of used task value when
+    /// the list only have one item in the list that is false.
+    /// Every value in the list will be set to false once this fuction is called
+    /// except the last using index
+    /// </summary>
+    /// <param name="anExceptedIndex">The index of the last usable task value</param>
+    public void ResetUsedTaskValue(List<int> someExceptedIndexes/*int anExceptedIndex = -1*/)
     {
         for (int i = 0; i < mUsedTaskValue.Count; i++)
-            mUsedTaskValue[i] = false;
-
-        if (anExceptedIndex > -1)
-            mUsedTaskValue[anExceptedIndex] = true;
+        {
+            if (!someExceptedIndexes.Contains(i))
+                mUsedTaskValue[i] = false;
+            else
+                mUsedTaskValue[i] = true;
+        }
+        //if (anExceptedIndex > -1)
+        //    mUsedTaskValue[anExceptedIndex] = true;
     }
 
     public TaskRank GetRankFor(int aTaskValue)

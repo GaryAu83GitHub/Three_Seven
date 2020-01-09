@@ -71,8 +71,10 @@ public class TableDebugPanel : MonoBehaviour
     //    }
     //}
 
-    private void GridUpdate(Dictionary<int, List<Cube>> aGrid)
+    public void GridUpdate(Dictionary<int, List<Cube>> aGrid)
     {
+        if(mGrid.Count == 0)
+            GenerateGrid(10, 20);
         //UIText.text = BlockManager.Instance.BlockOrderInString();
         UIText.text = BlockManager.Instance.BlockCount.ToString();
 

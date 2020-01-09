@@ -19,6 +19,9 @@ public class MainGamePanel : GUIPanelBase
     public delegate void OnRoundStart();
     public static OnRoundStart roundStart;
 
+    public delegate void OnGamePause(bool isPausing);
+    public static OnGamePause gamePause;
+
     public delegate void OnSaveResult(ref ResultData aResultData);
     public static OnSaveResult saveResult;
 
@@ -60,6 +63,7 @@ public class MainGamePanel : GUIPanelBase
     private float mCurrentBlockNextDropTime = 0;
     private bool mBlockLanded = false;
     private bool mPreviewFunctionEnable = true;
+    private bool mGamePause = false;
 
     public override void Start()
     {
@@ -129,6 +133,8 @@ public class MainGamePanel : GUIPanelBase
 
         if (ControlManager.Ins.GamePause())
         {
+            mGamePause = !mGamePause;
+            gamePause?.Invoke(mGamePause);
             //GuiExit();
         }
     }

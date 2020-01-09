@@ -9,6 +9,7 @@ public class GameSceneMain : MonoBehaviour
     public GameObject GuideBlockObject;
     public GameObject LimitLine;
     public GameObject TableCover;
+    public GameObject TableDebugPanel;
 
     public delegate void OnSetGameMode(GameMode aMode);
     public static OnSetGameMode setGameMode;
@@ -42,6 +43,7 @@ public class GameSceneMain : MonoBehaviour
 
     private Block mCurrentBlock;
     private GuideBlock mGuideBlock;
+    private TableDebugPanel mDebugTable;
 
     private int mBlockCount = 0;
     //private float mNextDropTime = 0f;
@@ -50,6 +52,7 @@ public class GameSceneMain : MonoBehaviour
     private bool mBlockLanded = false;
     private bool mIsAccomplishAnimationPlaying = false;
     private bool mTimeOver = false;
+    private bool mGameIsPausing = false;
 
     private void Awake()
     {
@@ -63,8 +66,6 @@ public class GameSceneMain : MonoBehaviour
 
     void Start()
     {
-        
-
         MainGamePanel.roundStart += CreateNewBlock;
         MainGamePanel.blockMoveHorizontal += BlockMoveHorizontal;
         MainGamePanel.blockDropGradually += BlockDropGradually;
@@ -72,6 +73,7 @@ public class GameSceneMain : MonoBehaviour
         MainGamePanel.blockRotate += BlockRotate;
         MainGamePanel.blockInvert += BlockInvert;
         MainGamePanel.blockSwaping += BlockSwaping;
+        MainGamePanel.gamePause += GamePause;
 
         TaskManagerNew.createNewBlock += CreateNewBlock;
         TaskBox.createNewBlock += CreateNewBlock;
@@ -79,6 +81,8 @@ public class GameSceneMain : MonoBehaviour
         TimeTextBox.timeOver += TimeOver;
 
         LimitLine.transform.position += new Vector3(0f, .625f + (Constants.CUBE_GAP_DISTANCE * GameSettings.Instance.LimitHigh), 0f);
+
+        mDebugTable = TableDebugPanel.GetComponent<TableDebugPanel>();
 
         StartCoroutine(GameStart());
     }
@@ -92,6 +96,7 @@ public class GameSceneMain : MonoBehaviour
         MainGamePanel.blockRotate -= BlockRotate;
         MainGamePanel.blockInvert -= BlockInvert;
         MainGamePanel.blockSwaping -= BlockSwaping;
+        MainGamePanel.gamePause += GamePause;
 
         TaskManagerNew.createNewBlock -= CreateNewBlock;
         TaskBox.createNewBlock -= CreateNewBlock;
@@ -104,7 +109,16 @@ public class GameSceneMain : MonoBehaviour
 
     void Update()
     {
-        TableCover.SetActive(PauseMenu.GameIsPause);
+        TableCover.SetActive(mGameIsPausing/*PauseMenu.GameIsPause*/);
+        if (mGameIsPausing)
+        {
+            if(Input.GetKeyDown(KeyCode.F4))
+            {
+                TableDebugPanel.SetActive(true);
+                mDebugTable.GridUpdate(GridManager.Instance.Grid);
+            }
+            return;
+        }
 
         if(mTimeOver && !BlockManager.Instance.GameOver)
         {
@@ -257,6 +271,13 @@ public class GameSceneMain : MonoBehaviour
             return;
 
         swapingWithPreview?.Invoke(mCurrentBlock);
+    }
+
+    private void GamePause(bool isGamePausing)
+    {
+        mGameIsPausing = isGamePausing;
+        if (!mGameIsPausing)
+            TableDebugPanel.SetActive(false);
     }
 
     private void BlockSwapWithPreview(List<int> givenNumbers, ref List<int> retrieveNumbers)

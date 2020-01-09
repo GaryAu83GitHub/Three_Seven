@@ -117,7 +117,9 @@ public class ControlObject
 
     public virtual bool GameDumpPreview() { return KeyPress(CommandIndex.PREVIEW_DUMP); }
 
-    public virtual bool GamePause() { return KeyPress(CommandIndex.INGAME_PAUSE); }
+    public virtual bool GamePause() {
+        return KeyPress(CommandIndex.INGAME_PAUSE);
+    }
 
     protected virtual bool HorizontBottomHit(ref Vector3 aDir, float aHorizontValue = 0f)
     {

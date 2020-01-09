@@ -37,6 +37,13 @@ public class TaskData
         mTaskComplete = false;
     }
 
+    public TaskData(int aTaskValue, int aTaskLinkedCount)
+    {
+        mTaskLinkedCube = aTaskLinkedCount;
+        mTaskValue = aTaskValue;
+        mTaskComplete = false;
+    }
+
     public TaskData(TaskRank aRank, int aTaskCubeCount, int aTaskNumber)
     {
         mRank = aRank;
@@ -45,10 +52,10 @@ public class TaskData
         mTaskComplete = false;
     }
 
-    public TaskData(int aTaskCount, TaskRank aRank, int aTaskCubeCount, int aTaskNumber)
+    public TaskData(int aTaskCount/*, TaskRank aRank*/, int aTaskCubeCount, int aTaskNumber)
     {
         mTaskCountNumber = aTaskCount;
-        mRank = aRank;
+        //mRank = aRank;
         mTaskLinkedCube = aTaskCubeCount;
         mTaskValue = aTaskNumber;
         mTaskComplete = false;
