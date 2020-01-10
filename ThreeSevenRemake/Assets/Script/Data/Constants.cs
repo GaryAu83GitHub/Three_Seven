@@ -14,7 +14,7 @@ public static class Constants
     public const float MINIMAL_DROPRATE = .1f;
     public const float MAXIMAL_DROPRATE = 1f;
     public const double DROPPING_INITIAL_SPEED = 1f;
-    public const double DROPPING_COEFFICIENT = -0.035f;
+    public const double DROPPING_COEFFICIENT = -0.025f;
 
     public const int MINIMAL_TASK_VALUE = 18;
 

@@ -8,8 +8,8 @@ public class GameplaySettings : SettingsContainerBase
     private enum SettingIndex
     {
         DIFFICULTY,
-        LIMIT_LINE,
-        DROPPING_SPEED,
+        //LIMIT_LINE,
+        START_LEVEL,
         ACTIVE_GUIDE,
         CONFIRM_BUTTON,
     }

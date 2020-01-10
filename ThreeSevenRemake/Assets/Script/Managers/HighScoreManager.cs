@@ -126,8 +126,8 @@ public class HighScoreManager
             case TableCategory.LEVEL:
                 sortList = mScoreList.OrderByDescending(s => s.GainedLevel)
                     .ThenByDescending(s => s.ReachedLevels)
-                    .ThenByDescending(s => s.HighestLevelUpgradeThreshold)
-                    .ThenByDescending(s => s.LowestLevelDowngradeThreshold).ToList();
+                    .ThenByDescending(s => s.HighestLevelUpgradeThreshold).ToList();
+                    //.ThenByDescending(s => s.LowestLevelDowngradeThreshold)
                 break;
             case TableCategory.TIME:
                 sortList = mScoreList.OrderByDescending(s => s.PlayTime).ToList();
@@ -211,7 +211,7 @@ public class SavingResultData
     public int GainedLevel = 0;
     public int ReachedLevels = 0;
     public float HighestLevelUpgradeThreshold = 0;
-    public float LowestLevelDowngradeThreshold = 0;
+    //public float LowestLevelDowngradeThreshold = 0;
 
     public float PlayTime = 0f;
 
@@ -242,7 +242,7 @@ public class SavingResultData
         this.GainedLevel = aData.GainedLevel;
         this.ReachedLevels = aData.ReachedLevels;
         this.HighestLevelUpgradeThreshold = aData.HighestLevelUpgradeThreshold;
-        this.LowestLevelDowngradeThreshold = aData.LowestLevelDowngradeThreshold;
+        //this.LowestLevelDowngradeThreshold = aData.LowestLevelDowngradeThreshold;
 
         this.AverageOdds = aData.AverageOdds;
         this.ScoreTimes = aData.ScoreTimes;
@@ -271,7 +271,7 @@ public class SavingResultData
         this.GainedLevel = aData.GainedLevelCount;
         this.ReachedLevels = aData.GainedLevelCount;
         this.HighestLevelUpgradeThreshold = aData.HighestThreshold;
-        this.LowestLevelDowngradeThreshold = aData.LowestThreshold;
+        //this.LowestLevelDowngradeThreshold = aData.LowestThreshold;
 
         this.AverageOdds = aData.AverageOdds;
         this.ScoreTimes = aData.ScoreTimes;

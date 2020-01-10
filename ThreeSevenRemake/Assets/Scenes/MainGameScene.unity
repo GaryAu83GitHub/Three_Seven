@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -3982,11 +3982,37 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7566316758433163071, guid: ffb9213ded802ef4e8ce50432f94c653,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000030517578
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566316758433163071, guid: ffb9213ded802ef4e8ce50432f94c653,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401128614901032037, guid: ffb9213ded802ef4e8ce50432f94c653,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -34.999996
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401128614901032037, guid: ffb9213ded802ef4e8ce50432f94c653,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 480
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ffb9213ded802ef4e8ce50432f94c653, type: 3}
 --- !u!224 &84633236 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7026492794900723101, guid: ffb9213ded802ef4e8ce50432f94c653,
+    type: 3}
+  m_PrefabInstance: {fileID: 84633235}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &84633237 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5549777152378733946, guid: ffb9213ded802ef4e8ce50432f94c653,
     type: 3}
   m_PrefabInstance: {fileID: 84633235}
   m_PrefabAsset: {fileID: 0}
@@ -9014,6 +9040,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &505372972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 505372973}
+  m_Layer: 5
+  m_Name: PowerUpContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &505372973
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 505372972}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 84633237}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 536.9, y: 165}
+  m_Pivot: {x: 1, y: 0}
 --- !u!1 &515586220
 GameObject:
   m_ObjectHideFlags: 0

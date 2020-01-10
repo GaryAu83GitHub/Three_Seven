@@ -59,7 +59,7 @@ public class GameSceneMain : MonoBehaviour
         GridManager.Instance.GenerateGrid();
 
         // only for debug purpose
-        GameRoundManager.Instance.SetUpGameRound(GameMode.SURVIVAL);
+        //GameRoundManager.Instance.SetUpGameRound(GameMode.SURVIVAL);
         //GenerateScoreCombinationPositions.Instance.GenerateCombinationPositions();
         //TaskManagerNew.Instance.PrepareNewTaskSubjects();
     }

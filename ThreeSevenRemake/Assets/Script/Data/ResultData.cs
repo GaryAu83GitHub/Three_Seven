@@ -131,8 +131,8 @@ public class ResultData
     /// Sub issue for Level result
     /// The lowest odds value on threshold bar had ever fall during the play throught
     /// </summary>
-    private float mLowestThresholdOdds = 0f;
-    public float LowestThreshold { get { return mLowestThresholdOdds; } }
+    //private float mLowestThresholdOdds = 0f;
+    //public float LowestThreshold { get { return mLowestThresholdOdds; } }
     /// <summary>
     /// Set up result data for Level 
     /// </summary>
@@ -140,12 +140,12 @@ public class ResultData
     /// <param name="aHighestLevel">Best level had reached</param>
     /// <param name="aHighestOdds">Highest threshold odds value</param>
     /// <param name="aLowestOdds">Lowest threshold odds value</param>
-    public void SetGainedLevels(int aGainedLevelCount, int aHighestLevel, float aHighestOdds, float aLowestOdds)
+    public void SetGainedLevels(int aGainedLevelCount, int aHighestLevel, float aHighestOdds/*, float aLowestOdds*/)
     {
         mLevelCount = aGainedLevelCount;
         mHighestLevel = aHighestLevel;
         mHighestThresholdOdds = aHighestOdds;
-        mLowestThresholdOdds = aLowestOdds;
+        //mLowestThresholdOdds = aLowestOdds;
     }
 
     /// <summary>
@@ -244,7 +244,7 @@ public class ResultData
         mLevelCount = 0;
         mHighestLevel = 0;
         mHighestThresholdOdds = 0f;
-        mLowestThresholdOdds = 0f;
+        //mLowestThresholdOdds = 0f;
 
         mTime = 0;
 
@@ -274,7 +274,7 @@ public class ResultData
         mLevelCount = aData.GainedLevelCount;
         mHighestLevel = aData.HighestReachedLevel;
         mHighestThresholdOdds = aData.HighestThreshold;
-        mLowestThresholdOdds = aData.LowestThreshold;
+        //mLowestThresholdOdds = aData.LowestThreshold;
 
         mTime = aData.PlayTime;
 

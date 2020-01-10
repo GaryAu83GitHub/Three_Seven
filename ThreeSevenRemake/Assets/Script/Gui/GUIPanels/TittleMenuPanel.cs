@@ -52,7 +52,7 @@ public class TittleMenuPanel : MenuEnablePanelBase
         {
             case (int)ButtonIndex.PLAY_BUTTON:
                 startTheGame?.Invoke();
-                //mGoToIndex = GUIPanelIndex.DIFFICULT_PANEL;
+                mGoToIndex = GUIPanelIndex.NONE;
                 break;
             case (int)ButtonIndex.HIGHSCORE_BUTTON:
                 mGoToIndex = GUIPanelIndex.HIGHSCORE_PANEL;

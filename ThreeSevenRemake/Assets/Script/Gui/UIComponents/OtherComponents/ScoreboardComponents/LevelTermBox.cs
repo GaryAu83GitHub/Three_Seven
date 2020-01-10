@@ -62,6 +62,7 @@ public class LevelTermBox : ScoreboardComponentBase
     /// The current threshold odds value for increase the level value
     /// </summary>
     private float mCurrentUpgradeThresholdOdds = .5f;
+
     /// <summary>
     /// The best threshold odds had ever reached, changed when the odds is larger than the
     /// current upgrade threhold odds value
@@ -72,13 +73,14 @@ public class LevelTermBox : ScoreboardComponentBase
     /// <summary>
     /// The current threshold odds value for decreasing the level value
     /// </summary>
-    private float mCurrentDowngradeThresholdOdds = .5f;
+    //private float mCurrentDowngradeThresholdOdds = .5f;
+
     /// <summary>
     /// the worst threshold odds had ever fall, changed when the odds is smaller than the
     /// current downgrade threshold odds value
     /// This will be set to Result Data
     /// </summary>
-    private float mWorstThresholdOdds = .5f;
+    //private float mWorstThresholdOdds = .5f;
 
     /// <summary>
     /// The default center value for the up and downgrade threshold odds value
@@ -106,7 +108,9 @@ public class LevelTermBox : ScoreboardComponentBase
             StatusGradientTimes.ToArray());
 
         mGradient = GradientContent.Instance.GetGradientBy("LevelBarGradient");
-        return;
+
+        mCurrentLevel = LevelManager.Instance.CurrentLevel;
+        ComponentsDisplay();
     }
 
     public override void OnDestroy()
@@ -126,13 +130,13 @@ public class LevelTermBox : ScoreboardComponentBase
     public override void ResetStartValue()
     {
         mGainedLevelCount = 0;
-        mCurrentUpgradeThresholdOdds = .5f;
-        mCurrentDowngradeThresholdOdds = .5f;
+        mCurrentUpgradeThresholdOdds = 0f;//.5f;
+        //mCurrentDowngradeThresholdOdds = .5f;
     }
 
     protected override void GatherResultData(ref ResultData aData)
     {
-        aData.SetGainedLevels(mGainedLevelCount, mHighestLevel, mBestThresholdOdds, mWorstThresholdOdds);
+        aData.SetGainedLevels(mGainedLevelCount, mHighestLevel, mBestThresholdOdds/*, mWorstThresholdOdds*/);
     }
 
     private void ScoringOccure(int aScoringCount, float anOdds)
@@ -169,22 +173,22 @@ public class LevelTermBox : ScoreboardComponentBase
                 mBestThresholdOdds = mCurrentUpgradeThresholdOdds;
         }
         // when the odds pass the downgrade threshold odds value
-        else if (aNewOdds <= mCurrentDowngradeThresholdOdds)
-        {
-            if (mCurrentLevel > 0)
-                mCurrentLevel--;
-            //mAnimator.SetTrigger("LevelDown");
-            mCurrentDowngradeThresholdOdds = aNewOdds;
-            if (mCurrentDowngradeThresholdOdds < mWorstThresholdOdds)
-                mWorstThresholdOdds = mCurrentDowngradeThresholdOdds;
-        }
+        //else if (aNewOdds <= mCurrentDowngradeThresholdOdds)
+        //{
+        //    if (mCurrentLevel > 0)
+        //        mCurrentLevel--;
+        //    //mAnimator.SetTrigger("LevelDown");
+        //    mCurrentDowngradeThresholdOdds = aNewOdds;
+        //    if (mCurrentDowngradeThresholdOdds < mWorstThresholdOdds)
+        //        mWorstThresholdOdds = mCurrentDowngradeThresholdOdds;
+        //}
         // when the odds is between the threshold of upgrade and downgrade
         else
         {
-            if (aNewOdds < mCurrentUpgradeThresholdOdds && aNewOdds > mMiddleOddsValue)
+            if (aNewOdds < mCurrentUpgradeThresholdOdds/* && aNewOdds > mMiddleOddsValue*/)
                 mCurrentUpgradeThresholdOdds = aNewOdds;
-            else if (aNewOdds > mCurrentDowngradeThresholdOdds && aNewOdds < mMiddleOddsValue)
-                mCurrentDowngradeThresholdOdds = aNewOdds;
+            //else if (aNewOdds > mCurrentDowngradeThresholdOdds && aNewOdds < mMiddleOddsValue)
+            //    mCurrentDowngradeThresholdOdds = aNewOdds;
         }
     }
 

@@ -87,6 +87,8 @@ public class GUIPanelManager
             return;
 
         mPreviousPanelIndex = mCurrentActiveMenuPanel.PanelIndex;
+        if (aPanelIndex == GUIPanelIndex.NONE)
+            return;
 
         mCurrentActiveMenuPanel.Exit();
         mCurrentActiveMenuPanel = mScenePanels[aPanelIndex];

@@ -38,9 +38,9 @@ public class GameRoundManager
     {
         GameSettings.Instance.GameMode = aMode;
 
-        for (int i = 0; i < 4; i++)
-            GameSettings.Instance.EnableScoringMethods[i] = mGameRoundData.EnableScoringMethods[i];
-
+        //for (int i = 0; i < 4; i++)
+        //    GameSettings.Instance.EnableScoringMethods[i] = mGameRoundData.EnableScoringMethods[i];
+        LevelManager.Instance.SetCurrentLevel(GameSettings.Instance.StartLevel);
         GenerateScoreCombinationPositions.Instance.GenerateCombinationPositions();
         TaskManagerNew.Instance.PrepareNewTaskSubjects();
     }

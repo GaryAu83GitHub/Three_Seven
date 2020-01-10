@@ -169,7 +169,11 @@ public class ScoreDisplayBox : ScoreboardComponentBase
     {
         if(mCurrentDisplayScore < mCurrentTotalScore)
         {
-            if ((mCurrentTotalScore - mCurrentDisplayScore) > 1000)
+            if ((mCurrentTotalScore - mCurrentDisplayScore) > 100000)
+                mCurrentDisplayScore += 10001;
+            else if ((mCurrentTotalScore - mCurrentDisplayScore) > 10000)
+                mCurrentDisplayScore += 1001;
+            else if ((mCurrentTotalScore - mCurrentDisplayScore) > 1000)
                 mCurrentDisplayScore += 101;
             else if ((mCurrentTotalScore - mCurrentDisplayScore) > 100)
                 mCurrentDisplayScore += 11;

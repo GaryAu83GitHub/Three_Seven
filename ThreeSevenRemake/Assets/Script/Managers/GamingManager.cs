@@ -35,6 +35,7 @@ public class GamingManager
 
     private float mCurrentDropRate = (float)Constants.DROPPING_INITIAL_SPEED;
     public float DropRate { get { return (float)MathTools.ExponentialFormula(Constants.DROPPING_INITIAL_SPEED, Constants.DROPPING_COEFFICIENT, (double)LevelManager.Instance.CurrentLevel);/*mCurrentDropRate*/; } }
+    // this should not be used anymore
     public float BlockNextDropTime { get { return Time.time + DropRate; } }
 
     public float GameTime { get; set; }
@@ -72,7 +73,7 @@ public class GamingManager
         mCurrentMaxCombo = 0;
         mLandedBlockCount = 0;
         GameTime = 0;
-        LevelManager.Instance.Reset();
+        //LevelManager.Instance.Reset();
 
         GenerateNewCubeNumber();
     }

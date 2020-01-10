@@ -7234,15 +7234,12 @@ MonoBehaviour:
   DownArrowImage: {fileID: 7026492796519471926}
   StatusColors:
   - {r: 1, g: 0.45377132, b: 0.3411765, a: 1}
-  - {r: 1, g: 0.78039217, b: 0.34117648, a: 1}
-  - {r: 0.6736722, g: 1, b: 0.3411765, a: 1}
+  - {r: 0.6745098, g: 1, b: 0.34117648, a: 1}
   StatusGradientAlphas:
-  - 1
   - 1
   - 1
   StatusGradientTimes:
   - 0
-  - 0.5
   - 1
 --- !u!1 &7026492796115583372
 GameObject:
