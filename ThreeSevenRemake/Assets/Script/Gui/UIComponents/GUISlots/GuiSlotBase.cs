@@ -10,6 +10,11 @@ public class GuiSlotBase : MonoBehaviour
     protected CanvasGroup mCG;
     protected bool mSlotActivate = true;
 
+    public virtual void Awake()
+    {
+
+    }
+
     public virtual void Start()
     {
         mCG = GetComponent<CanvasGroup>();

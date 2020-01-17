@@ -22,6 +22,7 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
     }
 
     public List<HighscoreListComponent> ListComponents;
+    public List<HighScoreListObjectSlot> SlotComponents;
 
     //private int mCurrentSortMode = 0;
     //private List<RoundResultData> mHighscores = new List<RoundResultData>();
@@ -35,7 +36,7 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
         mPanelIndex = GUIPanelIndex.HIGHSCORE_PANEL;
 
         //Buttons[(int)ButtonIndex.EXIT_BUTTON].onClick.AddListener(ExitHighscore);
-
+        mHighScores = HighScoreManager.Instance.GetListSortBy(TableCategory.SCORE);
         base.Start();
 
         UpdateList();

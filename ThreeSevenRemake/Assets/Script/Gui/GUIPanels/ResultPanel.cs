@@ -31,15 +31,20 @@ public class ResultPanel : GUIPanelBase
 
     private string mPlayerName = "";
 
-    public override void Start()
+    public override void Awake()
     {
-        mPanelIndex = GUIPanelIndex.RESULT_PANEL;
-        base.Start();
+        base.Awake();
 
         MainGamePanel.sendingResultData += SetUpResult;
         SaveResultButtonsSlot.selectSaveRusultBotton += SelectSaveRusultBotton;
 
         mAnimator = GetComponent<Animator>();
+    }
+
+    public override void Start()
+    {
+        mPanelIndex = GUIPanelIndex.RESULT_PANEL;
+        base.Start();
 
         NameInput.SetActive(false);
         PlayerNameInputField.onValueChanged.AddListener(delegate { PlayerNameInputFieldOnValueChange(PlayerNameInputField); });
@@ -63,7 +68,8 @@ public class ResultPanel : GUIPanelBase
         {
             if (mPlayerName.Length > 0)
             {
-                mResultData.SetPlayerName(mPlayerName);
+                mResultData.SetPlayerNameTheme(mPlayerName);
+                mResultData.SetEnableDigits(GameSettings.Instance.EnableScoringMethods.ToArray());
                 // recording to highscore
                 HighScoreManager.Instance.AddNewScore(mPlayerName, mResultData);
             }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ScoreResultSlot : ResultSlotBase
 {
+    public override void Awake() { base.Awake(); }
+
     public override void Start()
     {
         mResultIssue = ResultIssues.SCORE;

@@ -18,9 +18,14 @@ public class MenuEnablePanelBase : GUIPanelBase
     protected int mButtonCount = 0;
     protected bool mIsPanelInputsActive = false;
 
+    public override void Awake()
+    {
+        base.Awake();
+        mAnimation = GetComponent<Animation>();
+    }
+
     public override void Start()
     {
-        mAnimation = GetComponent<Animation>();
         mButtonCount = Buttons.Count;
         if (mButtonCount > 0)
         {

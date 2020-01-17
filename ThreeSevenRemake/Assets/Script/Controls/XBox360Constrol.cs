@@ -40,7 +40,7 @@ public class XBox360Constrol : ControlObject
     private readonly List<string> mAxisNames;
     private readonly Dictionary<XBoxButton, string> mButtonIndex = new Dictionary<XBoxButton, string>();
     private readonly Dictionary<CommandIndex, ControlInput> mCommands = new Dictionary<CommandIndex, ControlInput>();
-    private Dictionary<AxisInput, bool> mEnableNavigationSticks = new Dictionary<AxisInput, bool>();
+    private readonly Dictionary<AxisInput, bool> mEnableNavigationSticks = new Dictionary<AxisInput, bool>();
 
     private Vector2Int mCurrentMenuNavigateDireciton = Vector2Int.zero;
     private Vector2Int mLastNavigateAxisDirection = Vector2Int.zero;

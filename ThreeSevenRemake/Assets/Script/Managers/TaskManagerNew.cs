@@ -178,7 +178,7 @@ public class TaskManagerNew
 public class TaskSubject
 {
     private Dictionary<int, bool> mUsedLinks = new Dictionary<int, bool>();
-    private Dictionary<int, List<int>> mTaskValueLists = new Dictionary<int, List<int>>();
+    private readonly Dictionary<int, List<int>> mTaskValueLists = new Dictionary<int, List<int>>();
     private Dictionary<int, List<bool>> mUsedTaskNumbers = new Dictionary<int, List<bool>>();
 
     private List<int> mAvailableLinks = new List<int>();
@@ -189,7 +189,7 @@ public class TaskSubject
     public int CreatedTaskCount { get { return mCreatedTaskCount; } }
 
     private int mTaskValueLimit = 0;
-    private int mMaxValue = 0;
+    private readonly int mMaxValue = 0;
     private int mNextTaskLinkIndex = 0;
 
     private readonly bool mUnderDebuging = false;

@@ -195,6 +195,11 @@ public class SavingResultData
 {
     public string PlayerName = "";
 
+    public bool EnableDigit2 = false;
+    public bool EnableDigit3 = false;
+    public bool EnableDigit4 = false;
+    public bool EnableDigit5 = false;
+
     public int TotalScores = 0;
     public int BestRoundScore = 0;
     public int BestCombo = 0;
@@ -226,6 +231,11 @@ public class SavingResultData
     {
         this.PlayerName = aData.PlayerName;
 
+        this.EnableDigit2 = aData.EnableDigit2;
+        this.EnableDigit3 = aData.EnableDigit3;
+        this.EnableDigit4 = aData.EnableDigit4;
+        this.EnableDigit5 = aData.EnableDigit5;
+
         this.TotalScores = aData.TotalScores;
         this.BestRoundScore = aData.BestRoundScore;
         this.BestBonus = aData.BestBonus;
@@ -254,6 +264,11 @@ public class SavingResultData
     public SavingResultData(string aPlayerName, ResultData aData)
     {
         this.PlayerName = aPlayerName;
+
+        this.EnableDigit2 = aData.EnableDigits[0];
+        this.EnableDigit3 = aData.EnableDigits[1];
+        this.EnableDigit4 = aData.EnableDigits[2];
+        this.EnableDigit5 = aData.EnableDigits[3];
 
         this.TotalScores = aData.TotalScores;
         this.BestRoundScore = aData.BestRoundScores;

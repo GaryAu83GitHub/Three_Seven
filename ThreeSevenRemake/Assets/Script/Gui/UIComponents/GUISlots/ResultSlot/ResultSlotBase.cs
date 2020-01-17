@@ -33,11 +33,13 @@ public class ResultSlotBase : MonoBehaviour
 
     protected Dictionary<MedalRank, int> mRankScoreThresholds = new Dictionary<MedalRank, int>();
 
-    public virtual void Start()
+    public virtual void Awake()
     {
         for (int i = 0; i < ThresholdValues.Count; i++)
             mRankScoreThresholds.Add((MedalRank)i, ThresholdValues[i]);
     }
+
+    public virtual void Start() { }
 
     public virtual void Update() { }
 

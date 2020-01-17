@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ChainResultSlot : ResultSlotBase
 {
+    public override void Awake() { base.Awake(); }
+
     public override void Start()
     {
         mResultIssue = ResultIssues.CHAIN;

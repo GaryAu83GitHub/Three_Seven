@@ -15,12 +15,15 @@ public class SaveResultButtonsSlot : ResultSlotBase
     private int mSelectedButtonIndex = 0;
     private bool mActiveRegrateButton = false;
 
+    public override void Awake()
+    {
+        ResultPanel.activeRegistrateButtons += ActiveRegistrateButtons;
+        base.Awake();
+    }
+
     public override void Start()
     {
         base.Start();
-
-        ResultPanel.activeRegistrateButtons += ActiveRegistrateButtons;
-
         mActiveRegrateButton = false;
     }
 

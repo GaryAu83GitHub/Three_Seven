@@ -65,14 +65,9 @@ public class MainGamePanel : GUIPanelBase
     private bool mPreviewFunctionEnable = true;
     private bool mGamePause = false;
 
-    public override void Start()
+    public override void Awake()
     {
-        mPanelIndex = GUIPanelIndex.MAIN_GAME_PANEL;
-        base.Start();
-
-        LeftContainer.SetActive(false);
-        RightContainer.SetActive(false);
-
+        base.Awake();
         mAnimator = GetComponent<Animator>();
 
         GameSceneMain.roundStart += GuiEnter;
@@ -82,7 +77,15 @@ public class MainGamePanel : GUIPanelBase
 
         PreviewNormalSlot.enablePreviewInput += OnPreviewInputEnable;
         TaskManagerNew.enablePreviewFunction += OnPreviewInputEnable;
+    }
 
+    public override void Start()
+    {
+        mPanelIndex = GUIPanelIndex.MAIN_GAME_PANEL;
+        base.Start();
+
+        LeftContainer.SetActive(false);
+        RightContainer.SetActive(false);
     }
 
     private void OnDestroy()

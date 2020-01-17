@@ -220,7 +220,15 @@ public class ResultData
 
     private string mName = "";
     public string PlayerName { get { return mName; } }
-    public void SetPlayerName(string aPlayerName) { mName = aPlayerName; }
+    public void SetPlayerNameTheme(string aPlayerName) { mName = aPlayerName; }
+
+    private readonly bool[] mEnableDigits = new bool[4] { false, false, false, false };
+    public bool[] EnableDigits { get { return mEnableDigits; } }
+    public void SetEnableDigits(bool[] someEnableDigits)
+    {
+        for (int i = 0; i < someEnableDigits.Length; i++)
+            mEnableDigits[i] = someEnableDigits[i];
+    }
 
     private GameMode mMode = GameMode.CLASSIC;
     public GameMode SelectedMode { get { return mMode; } }
@@ -253,6 +261,7 @@ public class ResultData
         mLandedBlocksCount = 0;
 
         mName = "";
+        mEnableDigits = new bool[4] { false, false, false, false };
         mMode = GameMode.CLASSIC;
     }
 
@@ -283,6 +292,7 @@ public class ResultData
         mLandedBlocksCount = aData.LandedBlocks;
 
         mName = aData.PlayerName;
+        mEnableDigits = aData.EnableDigits;
         mMode = aData.SelectedMode;
     }
 }

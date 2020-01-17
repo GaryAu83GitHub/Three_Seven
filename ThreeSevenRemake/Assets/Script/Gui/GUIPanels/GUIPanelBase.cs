@@ -17,7 +17,7 @@ public class GUIPanelBase : MonoBehaviour
     public GUIPanelIndex PanelIndex { get { return mPanelIndex; } }
     protected GUIPanelIndex mPanelIndex = GUIPanelIndex.NONE;
 
-    private void Awake()
+    public virtual void Awake()
     {
         ControlManager.Ins.DefaultSetting();
     }

@@ -43,10 +43,8 @@ public class TaskSlot : GuiSlotBase
     /// </summary>
     private int mHighestSingleTaskScoringCount = 0;
 
-    public override void Start()
+    public override void Awake()
     {
-        base.Start();
-
         BlockManager.achieveScoring += DisplayScoring;
         BlockManager.achieveScoringFor += DisplayScoringFor;
         TaskManagerNew.displayTaskAt += SetTaskNumbersAt;
@@ -55,6 +53,21 @@ public class TaskSlot : GuiSlotBase
         TaskManagerNew.taskAccomplish += TaskAccomplish;
 
         MainGamePanel.gatherResultData += GatherResultData;
+        base.Awake();
+    }
+
+    public override void Start()
+    {
+        base.Start();
+
+        //BlockManager.achieveScoring += DisplayScoring;
+        //BlockManager.achieveScoringFor += DisplayScoringFor;
+        //TaskManagerNew.displayTaskAt += SetTaskNumbersAt;
+        //TaskManagerNew.displayTaskList += SetTaskNumbersByList;
+
+        //TaskManagerNew.taskAccomplish += TaskAccomplish;
+
+        //MainGamePanel.gatherResultData += GatherResultData;
     }
 
     private void OnDestroy()

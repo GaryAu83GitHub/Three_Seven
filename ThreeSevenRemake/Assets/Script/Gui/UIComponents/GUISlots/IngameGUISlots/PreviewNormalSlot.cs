@@ -18,11 +18,8 @@ public class PreviewNormalSlot : GuiSlotBase
     private float mSwapCommandTimer = 0;
     private List<int> mStoredSwapingNumbers = new List<int>();
 
-    public override void Start()
+    public override void Awake()
     {
-        base.Start();
-
-        // thses delegates are for the main game
         GameSceneMain.createNewBlock += CreateNewBlock;
         GameSceneMain.swapingWithPreview += SwapTheBlock;// SwapBlock;
 
@@ -33,6 +30,24 @@ public class PreviewNormalSlot : GuiSlotBase
         LabMenu.createNewBlock += CreateNewBlock;
         LabMenu.swapTheBlock += SwapTheBlock;
         LabMenu.changePreviewOrder += ChangePreviewOrder;
+        base.Awake();
+    }
+
+    public override void Start()
+    {
+        base.Start();
+
+        // thses delegates are for the main game
+        //GameSceneMain.createNewBlock += CreateNewBlock;
+        //GameSceneMain.swapingWithPreview += SwapTheBlock;// SwapBlock;
+
+        //MainGamePanel.changePreviewOrder += ChangePreviewOrder;
+        //MainGamePanel.dumpPreviewBlock += DumbPreviewBlock;
+
+        //// these delegates are used in the test scene
+        //LabMenu.createNewBlock += CreateNewBlock;
+        //LabMenu.swapTheBlock += SwapTheBlock;
+        //LabMenu.changePreviewOrder += ChangePreviewOrder;
 
         for (int i = 0; i < PreviewBlocks.Count; i++)
         {

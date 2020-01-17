@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BonusDisplayBox : ScoreboardComponentBase
 {
     public Image BarFillingImage;
-    public List<BonusDisplayObject> BonusDisplayObjects;
+    public List<GameObject> BonusDisplayObjects;
 
     public int ModulosValue = 1;
 
@@ -15,6 +15,7 @@ public class BonusDisplayBox : ScoreboardComponentBase
 
     private Rect mBarImageRect;
 
+    private List<BonusDisplayObject> mBonusDisplayObjects = new List<BonusDisplayObject>();
     private int mBonus = 1;
 
     private float mHeightInterval = 0f;
@@ -34,12 +35,26 @@ public class BonusDisplayBox : ScoreboardComponentBase
         float bonusObjectActiveValueFragment = (1f / 9f);
         mBarFillingIntervalValue = (bonusObjectActiveValueFragment / ModulosValue);
 
-        BonusDisplayObjects[0].SetupBonusObject(new Vector2(0, 0), 1, 0f);
+        mBonusDisplayObjects.Clear();
 
-        for (int i = 1; i < 9; i++)
-            BonusDisplayObjects[i].SetupBonusObject(new Vector2(0, (i * mHeightInterval)), i + 1, i * bonusObjectActiveValueFragment);
+        for(int i = 0; i < BonusDisplayObjects.Count; i++)
+        {
+            mBonusDisplayObjects.Add(BonusDisplayObjects[i].GetComponent<BonusDisplayObject>());
 
-        BonusDisplayObjects[9].SetupBonusObject(new Vector2(0, mBarImageRect.height), 10, 9 * bonusObjectActiveValueFragment);
+            if(i==0)
+                mBonusDisplayObjects[i].SetupBonusObject(new Vector2(0, 0), 1, 0f);
+            else if(i==9)
+                mBonusDisplayObjects[i].SetupBonusObject(new Vector2(0, mBarImageRect.height), 10, 9 * bonusObjectActiveValueFragment);
+            else
+                mBonusDisplayObjects[i].SetupBonusObject(new Vector2(0, (i * mHeightInterval)), i + 1, i * bonusObjectActiveValueFragment);
+        }
+
+        //mBonusDisplayObjects[0].SetupBonusObject(new Vector2(0, 0), 1, 0f);
+
+        //for (int i = 1; i < 9; i++)
+        //    mBonusDisplayObjects[i].SetupBonusObject(new Vector2(0, (i * mHeightInterval)), i + 1, i * bonusObjectActiveValueFragment);
+
+        //mBonusDisplayObjects[9].SetupBonusObject(new Vector2(0, mBarImageRect.height), 10, 9 * bonusObjectActiveValueFragment);
 
         ActiveBonusObjects();
     }
@@ -94,7 +109,7 @@ public class BonusDisplayBox : ScoreboardComponentBase
 
     private void ActiveBonusObjects()
     {
-        for (int i = 1; i < BonusDisplayObjects.Count; i++)
-            BonusDisplayObjects[i].ActiveBonus(mBarCurrentAmountValue);
+        for (int i = 1; i < mBonusDisplayObjects.Count; i++)
+            mBonusDisplayObjects[i].ActiveBonus(mBarCurrentAmountValue);
     }
 }

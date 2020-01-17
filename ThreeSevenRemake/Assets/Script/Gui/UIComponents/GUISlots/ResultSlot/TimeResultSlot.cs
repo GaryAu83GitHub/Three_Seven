@@ -6,13 +6,19 @@ public class TimeResultSlot : ResultSlotBase
 {
     public List<int> ClassicModeThresholdValues;
 
+    public override void Awake()
+    {
+        GameSceneMain.setGameMode += SetGameMode;
+        base.Awake();
+    }
+
     public override void Start()
     {
         mResultIssue = ResultIssues.TIME;
 
-        GameSceneMain.setGameMode += SetGameMode;
+        //GameSceneMain.setGameMode += SetGameMode;
 
-        //base.Start();
+        base.Start();
     }
 
     private void OnDestroy()

@@ -11,11 +11,19 @@ public class BonusDisplayObject : MonoBehaviour
     private CanvasGroup mCG;
 
     private float mActiveValue = 0;
-    // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
         mRT = GetComponent<RectTransform>();
         mCG = GetComponent<CanvasGroup>();
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        if(mRT == null)
+            mRT = GetComponent<RectTransform>();
+        if(mCG == null)
+            mCG = GetComponent<CanvasGroup>();
     }
 
     public void ActiveBonus(float aCurrentFillingValue)
