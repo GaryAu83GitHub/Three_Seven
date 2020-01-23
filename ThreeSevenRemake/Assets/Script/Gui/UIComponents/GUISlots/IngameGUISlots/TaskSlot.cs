@@ -82,27 +82,12 @@ public class TaskSlot : GuiSlotBase
         MainGamePanel.gatherResultData -= GatherResultData;
     }
 
-    public override void Update()
-    {
-        base.Update();
-        //if (Input.GetKeyDown(KeyCode.DownArrow) && taskboxIndex < TaskBoxes.Count)
-        //    taskboxIndex++;
-        //if (Input.GetKeyDown(KeyCode.UpArrow) && taskboxIndex >= 0)
-        //    taskboxIndex--;
-
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //    TaskBoxes[taskboxIndex].PlayScoringAnimation();
-        //if (Input.GetKeyDown(KeyCode.Return))
-        //    TaskBoxes[taskboxIndex].PlayAccomplishAnimaiton();
-    }
+    public override void Update() { base.Update(); }
 
     public void SetTaskNumbersByList(List<TaskData> someDatas)
     {
         for (int i = 0; i < someDatas.Count; i++)
-        {
-            TaskBoxes[i].SetUpTask(someDatas[i]);// TaskFrames[i].SetUpTask(someDatas[i]);
-            //TaskBoxes[i].gameObject.SetActive(true);
-        }
+            TaskBoxes[i].SetUpTask(someDatas[i]);
     }
 
     public void TaskAccomplish(List<TaskData> someDatas)
@@ -129,7 +114,6 @@ public class TaskSlot : GuiSlotBase
 
     public void SetTaskNumbersAt(int aTaskIndex, TaskData aData)
     {
-        //TaskFrames[aTaskIndex].SetUpTask(aData);
         TaskBoxes[aTaskIndex].SetUpTask(aData);
     }
 
@@ -140,7 +124,6 @@ public class TaskSlot : GuiSlotBase
         Vector3 midPos = GetMidPointBetweenScoringCubes(someScoringCube[0].transform.position, someScoringCube[someScoringCube.Count - 1].transform.position);
         popupAppear?.Invoke(midPos, someScoringCube, totalScore);
 
-        //TaskFrames[(int)anObjective].DisplayScoring(totalScore, someScoringCube);
         TaskBoxes[(int)anObjective].DisplayScoring(totalScore, someScoringCube);
     }
 
@@ -151,7 +134,6 @@ public class TaskSlot : GuiSlotBase
         Vector3 midPos = GetMidPointBetweenScoringCubes(someScoringCube[0].transform.position, someScoringCube[someScoringCube.Count - 1].transform.position);
         popupAppear?.Invoke(midPos, someScoringCube, totalScore);
 
-        //TaskFrames[anInfo.TaskSlotIndex].DisplayScoring(totalScore, someScoringCube);
         TaskBoxes[anInfo.TaskSlotIndex].DisplayScoring(totalScore, someScoringCube);
     }
 

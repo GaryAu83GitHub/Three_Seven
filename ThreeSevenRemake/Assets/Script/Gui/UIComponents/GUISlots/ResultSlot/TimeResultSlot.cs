@@ -36,7 +36,8 @@ public class TimeResultSlot : ResultSlotBase
 
     private void SetGameMode(GameMode aMode)
     {
-        if(aMode == GameMode.CLASSIC)
+        mRankScoreThresholds.Clear();
+        if (aMode == GameMode.CLASSIC)
         {
             for (int i = 0; i < ClassicModeThresholdValues.Count; i++)
                 mRankScoreThresholds.Add((MedalRank)i, ClassicModeThresholdValues[i]);

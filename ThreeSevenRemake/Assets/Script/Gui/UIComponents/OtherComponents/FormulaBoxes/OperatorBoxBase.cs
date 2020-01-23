@@ -12,23 +12,20 @@ public class OperatorBoxBase : MonoBehaviour
     private Animator mAnimator;
     private CanvasGroup mCG;
 
-    public virtual void Start()
+    public virtual void Awake()
     {
-        //mAnimation = GetComponent<Animation>();
         mAnimator = GetComponent<Animator>();
         mCG = GetComponent<CanvasGroup>();
     }
 
-    public virtual void Update()
-    {
-        
-    }
+    public virtual void Start() { }
+
+    public virtual void Update() { }
 
     public void SetDigitText(string aDigitText)
     {
         OperatorText.text = OperatorString;
         DigitText.text = aDigitText;
-        
     }
 
     public void DisplayOff()

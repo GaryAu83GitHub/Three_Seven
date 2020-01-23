@@ -224,10 +224,22 @@ public class ResultData
 
     private readonly bool[] mEnableDigits = new bool[4] { false, false, false, false };
     public bool[] EnableDigits { get { return mEnableDigits; } }
+    private int mEnableDigitInterger = 0;
+    public int EnambleDigitInterger { get { return mEnableDigitInterger; } }
     public void SetEnableDigits(bool[] someEnableDigits)
     {
         for (int i = 0; i < someEnableDigits.Length; i++)
+        {
             mEnableDigits[i] = someEnableDigits[i];
+            if (i == 0 && mEnableDigits[i])
+                mEnableDigitInterger += 1;
+            else if (i == 1 && mEnableDigits[i])
+                mEnableDigitInterger += 2;
+            else if (i == 2 && mEnableDigits[i])
+                mEnableDigitInterger += 4;
+            else if (i == 3 && mEnableDigits[i])
+                mEnableDigitInterger += 8;
+        }
     }
 
     private GameMode mMode = GameMode.CLASSIC;

@@ -16,8 +16,20 @@ public class HighScoreListObjectSlot : GuiSlotBase
 
     public List<Image> DigitImages;
 
+    public Sprite HighlightSprite;
+    public Sprite DefaultSprite;
+
+    private Image mBG;
+
     private bool mIsSelected = false;
     private string mDisplayName = "";
+
+    public override void Awake()
+    {
+        base.Awake();
+        mBG = GetComponent<Image>();
+        mBG.sprite = DefaultSprite;
+    }
 
     public override void Start()
     {
@@ -39,12 +51,30 @@ public class HighScoreListObjectSlot : GuiSlotBase
         TaskText.text = aData.CompletedTaskCount.ToString();
         LevelText.text = aData.GainedLevel.ToString();
         TimeText.text = TimeTool.TimeString(aData.PlayTime);
-        OddsText.text = aData.AverageOdds.ToString();
+        float oddsProcent = (Mathf.Round(aData.AverageOdds * 1000) / 1000f);
+        OddsText.text = (oddsProcent * 100).ToString(); //aData.AverageOdds.ToString();
         ScoreText.text = aData.TotalScores.ToString();
+
+        DigitImages[0].gameObject.SetActive(aData.EnableDigit2);
+        DigitImages[1].gameObject.SetActive(aData.EnableDigit3);
+        DigitImages[2].gameObject.SetActive(aData.EnableDigit4);
+        DigitImages[3].gameObject.SetActive(aData.EnableDigit5);
     }
 
     public void SetAsSelected(bool isSelected)
     {
         mIsSelected = isSelected;
+        mBG.sprite = DefaultSprite;
+
+        if (mIsSelected)
+            mBG.sprite = HighlightSprite;        
+    }
+
+    public void SlotVisible(bool isVisible)
+    {
+        mCG.alpha = 1f;
+
+        if (!isVisible)
+            mCG.alpha = 0f;
     }
 }

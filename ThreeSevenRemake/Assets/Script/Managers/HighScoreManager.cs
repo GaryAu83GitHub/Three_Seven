@@ -7,6 +7,7 @@ using UnityEngine;
 public enum TableCategory
 {
     SCORE,
+    DIGIT,
     CHAIN,
     TASK,
     LEVEL,
@@ -36,42 +37,15 @@ public class HighScoreManager
     private List<SavingResultData> mScoreList = new List<SavingResultData>();
     public List<SavingResultData> ScoreList { get { return mScoreList; } }
 
+    public List<int> EnableDigitsList { get { return mEnableDigitsList; } }
+    private List<int> mEnableDigitsList = new List<int>();
+
+    private List<SavingResultData> mMainActiveList = new List<SavingResultData>();
+
     public HighScoreManager()
     {
-        //ScoreTable loadTable = (JsonHelper<ScoreTable>.LoadFromJson(FileIndex.HIGHSCORES) ?? new ScoreTable());
-        //foreach(RoundResultData data in loadTable.ScoreList)
-        //{
-        //    mHighScoreList.Add(data);
-        //}
-
-        HighScoreTable loadTable = (JsonHelper<HighScoreTable>.LoadFromJsonNew(FileIndex.HIGHSCORES_NEW) ?? new HighScoreTable());
-        foreach(SavingResultData data in loadTable.ScoreList)
-        {
-            mScoreList.Add(data);
-        }
+        
     }
-
-    //public void Add(GameRoundData aRoundData)
-    //{
-    //    RoundResultData newData = new RoundResultData(aRoundData);
-    //    if (mHighScoreList.Contains(newData))
-    //        return;
-
-    //    mHighScoreList.Add(newData);
-
-    //    SaveToList();
-    //}
-
-    //public void Add(string aPlayerName, GameRoundData aRoundData)
-    //{
-    //    RoundResultData newData = new RoundResultData(aPlayerName, aRoundData);
-    //    if (mHighScoreList.Contains(newData))
-    //        return;
-
-    //    mHighScoreList.Add(newData);
-
-    //    SaveToList();
-    //}
 
     public void AddNewScore(string aPlayerName, ResultData aData)
     {
@@ -81,38 +55,59 @@ public class HighScoreManager
 
         mScoreList.Add(newData);
 
-        SaveToListNew();
+        //SaveToListNew();
+        if (GameSettings.Instance.GameMode == GameMode.CLASSIC)
+            SaveToListOf(FileIndex.CLASSIC_LIST);
+        else if (GameSettings.Instance.GameMode == GameMode.SURVIVAL)
+            SaveToListOf(FileIndex.SURVIVE_LIST);
+
     }
 
-    //public List<RoundResultData> GetListSortBy(TableCategory aCategory)
-    //{
-    //    List<RoundResultData> sortlist = new List<RoundResultData>();
+    public void SetActiveList(GameMode aMode = GameMode.CLASSIC)
+    {
+        FileIndex file = FileIndex.CLASSIC_LIST;
+        switch(aMode)
+        {
+            case GameMode.SURVIVAL:
+                file = FileIndex.SURVIVE_LIST;
+                break;
+            case GameMode.TIME_ATTACK:
+                break;
+            default:
+                file = FileIndex.CLASSIC_LIST;
+                break;
+        }
+        LoadListFrom(file);
+    }
 
-    //    switch(aCategory)
-    //    {
-    //        case TableCategory.SCORE:
-    //            sortlist = mHighScoreList.OrderByDescending(s => s.TotalScore).ThenBy(s => s.PlayerName).ToList();
-    //            break;
-    //        case TableCategory.COMBO:
-    //            sortlist = mHighScoreList.OrderByDescending(s => s.TotalMaxCombo).ThenBy(s => s.PlayerName).ToList();
-    //            break;
-    //        case TableCategory.TIME:
-    //            sortlist = mHighScoreList.OrderByDescending(s => s.TotalTime).ThenBy(s => s.PlayerName).ToList();
-    //            break;
-    //        case TableCategory.USED_BLOCK:
-    //            sortlist = mHighScoreList.OrderByDescending(s => s.TotalUsedBlock).ThenBy(s => s.PlayerName).ToList();
-    //            break;
-    //    }
+    public List<SavingResultData> GetListOfEnableDigit(int aEnableDigitBinary)
+    {
+        mScoreList.Clear();
 
-    //    return sortlist;
-    //}
+        if (aEnableDigitBinary > 0)
+        {
+            for (int i = 0; i < mMainActiveList.Count; i++)
+            {
+                if (mMainActiveList[i].EnableDigitInterger == aEnableDigitBinary)
+                    mScoreList.Add(mMainActiveList[i]);
+            }
+        }
+        else
+            mScoreList = new List<SavingResultData>(mMainActiveList);
 
+        return GetListSortBy(TableCategory.SCORE);
+    }
+    
     public List<SavingResultData> GetListSortBy(TableCategory aCategory)
     {
         List<SavingResultData> sortList = new List<SavingResultData>();
 
         switch(aCategory)
         {
+            case TableCategory.DIGIT:
+                sortList = mScoreList.OrderBy(s => s.EnableDigitInterger)
+                    .ThenByDescending(s => s.TotalScores).ToList();
+                break;
             case TableCategory.CHAIN:
                 sortList = mScoreList.OrderByDescending(s => s.LongestChains)
                     .ThenByDescending(s => s.BestConsecutiveIncreaseChain)
@@ -127,7 +122,6 @@ public class HighScoreManager
                 sortList = mScoreList.OrderByDescending(s => s.GainedLevel)
                     .ThenByDescending(s => s.ReachedLevels)
                     .ThenByDescending(s => s.HighestLevelUpgradeThreshold).ToList();
-                    //.ThenByDescending(s => s.LowestLevelDowngradeThreshold)
                 break;
             case TableCategory.TIME:
                 sortList = mScoreList.OrderByDescending(s => s.PlayTime).ToList();
@@ -148,16 +142,29 @@ public class HighScoreManager
         return sortList;
     }
 
-    //private void SaveToList()
-    //{
-    //    ScoreTable newList = new ScoreTable(mHighScoreList);
-    //    JsonHelper<ScoreTable>.SaveToJson(newList, FileIndex.HIGHSCORES);
-    //}
-
-    private void SaveToListNew()
+    private void SaveToListOf(FileIndex aFileIndex)
     {
         HighScoreTable newList = new HighScoreTable(mScoreList);
-        JsonHelper<HighScoreTable>.SaveToJsonNew(newList, FileIndex.HIGHSCORES_NEW);
+        JsonHelper<HighScoreTable>.SaveToJson(newList, aFileIndex);
+    }
+
+    private void LoadListFrom(FileIndex aFileIndex)
+    {
+        mMainActiveList.Clear();
+        mScoreList.Clear();
+        mEnableDigitsList.Clear();
+
+        mEnableDigitsList.Add(0);
+
+        HighScoreTable loadTable = (JsonHelper<HighScoreTable>.LoadFromJson(aFileIndex) ?? new HighScoreTable());
+        foreach (SavingResultData data in loadTable.ScoreList)
+        {
+            mMainActiveList.Add(data);
+            if (!mEnableDigitsList.Contains(data.EnableDigitInterger))
+                mEnableDigitsList.Add(data.EnableDigitInterger);
+        }
+
+        mScoreList = new List<SavingResultData>(mMainActiveList);
     }
 }
 
@@ -199,6 +206,7 @@ public class SavingResultData
     public bool EnableDigit3 = false;
     public bool EnableDigit4 = false;
     public bool EnableDigit5 = false;
+    public int EnableDigitInterger = 0;
 
     public int TotalScores = 0;
     public int BestRoundScore = 0;
@@ -235,6 +243,18 @@ public class SavingResultData
         this.EnableDigit3 = aData.EnableDigit3;
         this.EnableDigit4 = aData.EnableDigit4;
         this.EnableDigit5 = aData.EnableDigit5;
+        this.EnableDigitInterger = aData.EnableDigitInterger;
+        if(this.EnableDigitInterger == 0)
+        {
+            if (aData.EnableDigit2)
+                this.EnableDigitInterger += 1;
+            else if (aData.EnableDigit3)
+                this.EnableDigitInterger += 2;
+            else if (aData.EnableDigit4)
+                this.EnableDigitInterger += 4;
+            else if (aData.EnableDigit5)
+                this.EnableDigitInterger += 8;
+        }
 
         this.TotalScores = aData.TotalScores;
         this.BestRoundScore = aData.BestRoundScore;
@@ -269,6 +289,7 @@ public class SavingResultData
         this.EnableDigit3 = aData.EnableDigits[1];
         this.EnableDigit4 = aData.EnableDigits[2];
         this.EnableDigit5 = aData.EnableDigits[3];
+        this.EnableDigitInterger = aData.EnambleDigitInterger;
 
         this.TotalScores = aData.TotalScores;
         this.BestRoundScore = aData.BestRoundScores;
