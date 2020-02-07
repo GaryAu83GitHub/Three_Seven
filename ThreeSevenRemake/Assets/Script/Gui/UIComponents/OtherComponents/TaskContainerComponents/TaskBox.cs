@@ -8,11 +8,7 @@ public class TaskBox : MonoBehaviour
 {
     public TextMeshProUGUI TaskValueText;
     public TextMeshProUGUI TaskNumberText;
-    //public TextMeshProUGUI MultiValueText;
     public TextMeshProUGUI ScoringTimesText;
-
-    //public Image MultiValueFilling;
-    //public Image MultiValueOutline;
 
     public List<OperatorBoxBase> OperatorBoxes;
 
@@ -33,16 +29,6 @@ public class TaskBox : MonoBehaviour
     private int mActiveDigit = 0;
     private TaskData mDisplayingTaskData = new TaskData();
 
-    //private enum TaskRankColorIndex
-    //{
-    //    X1_OUTLINE_COLOR,
-    //    X1_INLINE_COLOR,
-    //    X5_OUTLINE_COLOR,
-    //    X5_INLINE_COLOR,
-    //    X10_OUTLINE_COLOR,
-    //    X10_INLINE_COLOR,
-    //}
-
     void Start()
     {
         mAnimator = GetComponent<Animator>();
@@ -55,10 +41,6 @@ public class TaskBox : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //    mAnimator.SetTrigger("TaskScoring");
-        //if (Input.GetKeyDown(KeyCode.Return))
-        //    mAnimator.SetTrigger("TaskAccomplished");
     }
 
     public void SetTaskAnimationEvent()
@@ -68,7 +50,7 @@ public class TaskBox : MonoBehaviour
 
     public void CreateNewBlockAnimationEvent()
     {
-        //createNewBlock?.Invoke();
+        TaskManagerNew.Instance.TaskIsChanging = false;
     }
 
     public void DisplayScoring(int aTotalScore, List<Cube> someScoringCube)
@@ -77,22 +59,18 @@ public class TaskBox : MonoBehaviour
         mTaskAccomplished = true;
         mScoringTimes++;
         ScoringTimesText.text = mScoringTimes.ToString();
-        //ScoreText.text = aTotalScore.ToString();
-        //FormulaText.text = "";
-        //Animation.Play();
         mAnimator.SetTrigger("TaskScoring");
     }
 
     public void SetUpTask(TaskData aData)
     {
-        //MultiValueOutline.gameObject.SetActive(true);
-
-        //SetRankCircle(aData.Rank);
+        if (!mDisplayingTaskData.Equals(aData))
+            mDisplayingTaskData = new TaskData(aData);
 
         DeactivateFormulaNumberBoxes();
-        ActiveNewOperativeBox(aData.LinkedCubes);
-        TaskNumberText.text = aData.TaskCountNumber.ToString();
-        TaskValueText.text = aData.TaskValue.ToString();
+        ActiveNewOperativeBox(mDisplayingTaskData.LinkedCubes);
+        TaskNumberText.text = mDisplayingTaskData.TaskCountNumber.ToString();
+        TaskValueText.text = mDisplayingTaskData.TaskValue.ToString();
         mTaskAccomplished = false;
         mScoringTimes = 0;
     }
@@ -126,22 +104,6 @@ public class TaskBox : MonoBehaviour
         mAnimator.SetTrigger("TaskAccomplished");
     }
 
-    private void SetRankCircle(TaskRank aRank)
-    {
-        //int temp = 0;
-        //if (aRank == TaskRank.X5)
-        //    temp = 1;
-        //else if (aRank == TaskRank.X10)
-        //    temp = 2;
-
-        //MultiValueText.text = aRank.ToString();
-
-        //TaskRankColorIndex colorIndex = (TaskRankColorIndex)(aRank + temp);
-        //MultiValueOutline.color = TaskRankColors[(int)colorIndex];
-        //MultiValueFilling.color = TaskRankColors[(int)(colorIndex + 1)];
-
-    }
-
     private void DeactivateFormulaNumberBoxes()
     {
         for (int i = 0; i < OperatorBoxes.Count; i++)
@@ -161,9 +123,6 @@ public class TaskBox : MonoBehaviour
     private void DisplayOperatorDigit(List<Cube> someScoringCube)
     {
         for (int i = 0; i < someScoringCube.Count; i++)
-        {
-            //OperatorBoxes[i].gameObject.SetActive(true);
             OperatorBoxes[i].SetDigitText(someScoringCube[i].Number.ToString());
-        }
     }
 }

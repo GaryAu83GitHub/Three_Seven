@@ -118,7 +118,9 @@ public class XBox360Constrol : ControlObject
             { CommandIndex.BLOCK_INSTANT_DROP, new ControlInput(XBoxButton.A) },
             { CommandIndex.BLOCK_ROTATE, new ControlInput(XBoxButton.X) },
             { CommandIndex.BLOCK_INVERT, new ControlInput(XBoxButton.Y) },
-            { CommandIndex.PREVIEW_SWAP, new ControlInput(XBoxButton.B) },
+            { CommandIndex.POWER_UP_USE, new ControlInput(XBoxButton.B) },//{ CommandIndex.PREVIEW_SWAP, new ControlInput(XBoxButton.B) },
+            { CommandIndex.POWER_UP_NAVI_LEFT, new ControlInput(AxisInput.R_STICK, XBoxButton.R_THUMB_LEFT, Vector2Int.left) },
+            { CommandIndex.POWER_UP_NAVI_RIGHT, new ControlInput(AxisInput.R_STICK, XBoxButton.R_THUMB_RIGHT, Vector2Int.right) },
             { CommandIndex.PREVIEW_ROTATE, new ControlInput(XBoxButton.R_SHOULDER) },
             { CommandIndex.PREVIEW_DUMP, new ControlInput(XBoxButton.L_SHOULDER) },//new ControlInput(AxisInput.TRIGGER, XBoxButton.R_TRIGGER, Vector2Int.right) },
             { CommandIndex.INGAME_PAUSE, new ControlInput(XBoxButton.START) }
@@ -155,35 +157,8 @@ public class XBox360Constrol : ControlObject
         return false;
     }
 
-    //public override bool GameDumpPreview()
-    //{
-    //    if (Trigger() == mCommands[CommandIndex.PREVIEW_DUMP].Direction.x)
-    //        return true;
-    //    return false;
-    //}
-
     protected override bool HorizontBottomHit(ref Vector3 aDir, float aHorizontValue = 0f)
     {
-        //Vector2Int navi = Navigation();
-        //if ((navi.x <= -1 || navi.x >= 1))
-        //{
-        //    if (!SupressHorizontMove())
-        //        aDir = new Vector3(navi.x, 0, 0);
-        //    else
-        //        aDir = Vector3.zero;
-
-        //    if(mCurrentHorizontDirection != (int)navi.x)
-        //    {
-        //        mCurrentHorizontDirection = (int)navi.x;
-        //        mHorizontSurpressTimer = 0f;
-        //    }
-
-
-        //    mHorizontSurpressTimer += Time.deltaTime * mIncreaseDeltaTimeConst;
-        //    return true;
-        //}
-
-
         return base.HorizontBottomHit(ref aDir, Navigation().x);
     }
 
@@ -322,11 +297,7 @@ public class XBox360Constrol : ControlObject
     private bool CheckAxisEnableToMove(AxisInput anAxis, Vector2Int theCheckingStick)
     {
         if (mEnableNavigationSticks[anAxis])
-        {
-            //if (theCheckingStick.x <= -1 || theCheckingStick.y <= -1 || theCheckingStick.x >= 1 || theCheckingStick.y >= 1)
-            //    return true;
             return CheckThisStickMoves(theCheckingStick);
-        }
 
         return false;
     }

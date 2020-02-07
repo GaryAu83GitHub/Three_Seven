@@ -61,6 +61,25 @@ public class TaskData
         mTaskComplete = false;
     }
 
+    public bool Equals(TaskData obj)
+    {
+        if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            return false;
+        else
+        {
+            TaskData p = (TaskData)obj;
+            if (p.TaskCountNumber != mTaskCountNumber)
+                return false;
+            if (p.TaskValue != mTaskValue)
+                return false;
+            if (p.LinkedCubes != mTaskLinkedCube)
+                return false;
+            if (p.TaskComplete != mTaskComplete)
+                return false;
+        }
+        return true;
+    }
+
     public void SetValue(TaskData aData)
     {
         mTaskCountNumber = aData.TaskCountNumber;

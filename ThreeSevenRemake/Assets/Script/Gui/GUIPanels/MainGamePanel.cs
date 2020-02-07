@@ -43,6 +43,9 @@ public class MainGamePanel : GUIPanelBase
     public delegate void OnBlockSwaping();
     public static OnBlockSwaping blockSwaping;
 
+    public delegate void OnUseItem();
+    public static OnUseItem useItem;
+
     public delegate void OnChangePreviewOrder();
     public static OnChangePreviewOrder changePreviewOrder;
 
@@ -111,25 +114,34 @@ public class MainGamePanel : GUIPanelBase
         blockMoveHorizontal?.Invoke(ControlManager.Ins.MoveBlockHorizontal());
 
         if (ControlManager.Ins.DropBlockGradually(0) || mCurrentBlockNextDropTime <= 0f)
-            GivenCommand(CommandIndex.BLOCK_DROP);//blockDropGradually?.Invoke();
+            GivenCommand(CommandIndex.BLOCK_DROP);
 
         if (!mPreviewFunctionEnable)
             return;
 
         if (ControlManager.Ins.DropBlockInstantly())
-            GivenCommand(CommandIndex.BLOCK_INSTANT_DROP);//blockDropInstantly?.Invoke();
+            GivenCommand(CommandIndex.BLOCK_INSTANT_DROP);
 
         if (ControlManager.Ins.RotateBlock())
-            GivenCommand(CommandIndex.BLOCK_ROTATE);//blockRotate?.Invoke();
+            GivenCommand(CommandIndex.BLOCK_ROTATE);
 
         if (ControlManager.Ins.InvertBlock())
-            GivenCommand(CommandIndex.BLOCK_INVERT);//blockInvert?.Invoke();
+            GivenCommand(CommandIndex.BLOCK_INVERT);
 
-        if (ControlManager.Ins.SwapPreview())
-            GivenCommand(CommandIndex.PREVIEW_SWAP);//blockSwaping?.Invoke();
+        if (ControlManager.Ins.PowerUpUse())
+            GivenCommand(CommandIndex.POWER_UP_USE);
+
+        if (ControlManager.Ins.PowerUpSelectLeft())
+            GivenCommand(CommandIndex.POWER_UP_NAVI_LEFT);
+
+        if (ControlManager.Ins.PowerUpSelectRight())
+            GivenCommand(CommandIndex.POWER_UP_NAVI_RIGHT);
+
+        //if (ControlManager.Ins.SwapPreview())
+        //    GivenCommand(CommandIndex.PREVIEW_SWAP);
 
         if (ControlManager.Ins.ChangePreview())
-            GivenCommand(CommandIndex.PREVIEW_ROTATE);//changePreviewOrder?.Invoke();
+            GivenCommand(CommandIndex.PREVIEW_ROTATE);
 
         //if (ControlManager.Ins.DumpPreview())
         //    dumpPreviewBlock?.Invoke();
@@ -181,9 +193,12 @@ public class MainGamePanel : GUIPanelBase
                 blockDropInstantly?.Invoke();
                 OnPreviewInputEnable(false);
                 break;
-            case CommandIndex.PREVIEW_SWAP:
-                blockSwaping?.Invoke();
-                OnPreviewInputEnable(false);
+            //case CommandIndex.PREVIEW_SWAP:
+            //    blockSwaping?.Invoke();
+            //    OnPreviewInputEnable(false);
+            //    break;
+            case CommandIndex.POWER_UP_USE:
+                useItem?.Invoke();
                 break;
             case CommandIndex.PREVIEW_ROTATE:
                 changePreviewOrder?.Invoke();

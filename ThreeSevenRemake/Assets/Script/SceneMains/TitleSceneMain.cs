@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class TitleSceneMain : MonoBehaviour
 {
+    private void Awake()
+    {
+        HighScoreManager.Instance.FillAllList();
+        TittleMenuPanel.startTheGame += StartTheGame;
+    }
+
     void Start()
     {
-        TittleMenuPanel.startTheGame += StartTheGame;
         //GUIPanelManager.Instance.StartWithPanel(GUIPanelIndex.TITLE_PANEL);
         StartCoroutine(MenyAppear());
     }

@@ -82,6 +82,8 @@ public class ControlManager
 
     public Vector3 MoveBlockHorizontal() { return mControls[0].GameMoveBlockHorizontal(); }
 
+    public int PowerUpSelection() { return 0; }
+
     public bool GamePause() { return mControls[0].GamePause(); }
 
     public bool DropBlockGradually(float aBlockNextDropTime) { return mControls[0].GameDropBlockGradually(aBlockNextDropTime); }
@@ -91,6 +93,12 @@ public class ControlManager
     public bool RotateBlock() { return mControls[0].GameRotateBlock(); }
 
     public bool InvertBlock() { return mControls[0].GameInverteBlock(); }
+
+    public bool PowerUpUse() { return mControls[0].GameUsePowerUp(); }
+
+    public bool PowerUpSelectLeft() { return mControls[0].GameMovePowerUpSelectLeft(); }
+
+    public bool PowerUpSelectRight() { return mControls[0].GameMovePowerUpSelectRight(); }
 
     public bool SwapPreview() { return mControls[0].GameSwapPreview(); }
 

@@ -7,7 +7,7 @@ public class SettingSlotWithToggles : SettingSlotBase
 {
     public List<Toggle> Toggles;
 
-    private int mCurrentSelectToggleIndex = 0;
+    protected int mCurrentSelectToggleIndex = 0;
 
     public override void Start()
     {

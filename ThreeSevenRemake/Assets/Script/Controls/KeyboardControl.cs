@@ -33,7 +33,7 @@ public class KeyboardControl : ControlObject
             { CommandIndex.BLOCK_INSTANT_DROP, KeyCode.X },
             { CommandIndex.BLOCK_ROTATE, KeyCode.W },
             { CommandIndex.BLOCK_INVERT, KeyCode.E },
-            { CommandIndex.PREVIEW_SWAP, KeyCode.Space },
+            { CommandIndex.POWER_UP_USE, KeyCode.Space },//{ CommandIndex.PREVIEW_SWAP, KeyCode.Space },
             { CommandIndex.PREVIEW_ROTATE, KeyCode.UpArrow },
             { CommandIndex.INGAME_PAUSE, KeyCode.Return }
         };

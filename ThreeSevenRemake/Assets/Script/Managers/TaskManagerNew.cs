@@ -33,6 +33,9 @@ public class TaskManagerNew
     public delegate void OnTaskAccomplish(List<TaskData> someNewData);
     public static OnTaskAccomplish taskAccomplish;
 
+    public delegate void OnRefreshPreviewBlocks();
+    public static OnRefreshPreviewBlocks refreshPreviewBlocks;
+
     public delegate void OnCreateNewBlock();
     public static OnCreateNewBlock createNewBlock;
 
@@ -40,6 +43,9 @@ public class TaskManagerNew
     public static OnEnablePreviewFunction enablePreviewFunction;
 
     public int GetCreatedTaskCount { get { return mSubject.CreatedTaskCount; } }
+
+    public bool TaskIsChanging { set { mTaskIsChanging = value; } }
+    private bool mTaskIsChanging = false;
 
     private TaskSubject mSubject = new TaskSubject();
 
@@ -99,15 +105,25 @@ public class TaskManagerNew
         mActiveTasks[mScoringActiveTaskIndex].TaskCompleted();
     }
 
-    public void ChangeTask()
+    /// <summary>
+    /// Check for if any of the task objects in the active task list have any completed
+    /// task.
+    /// If it does, it'll call för the task slot GUI component to play the task changing
+    /// animation and change the task value of those completed one.
+    /// It's from here where new blocks are created either if there were or not any
+    /// completed task in the active task list.
+    /// </summary>
+    public void CheckForCompletedTasks()
     {
         enablePreviewFunction?.Invoke(false);
-        if (!mActiveTasks.Any(x => x.TaskComplete == true))
+        if (!mActiveTasks.Any(x => x.TaskComplete == true) && !mTaskIsChanging)
         {
             createNewBlock?.Invoke();
-            
+
             return;
         }
+        else if (mTaskIsChanging)
+            return;
         
         mSubject.GetListOfUncompleteTasks(mActiveTasks);
 
@@ -118,8 +134,10 @@ public class TaskManagerNew
                 SetNewActiveTaskAt(i);
             }
         }
+        mTaskIsChanging = true;
         CubeNumberManager.Instance.GenerateNewUseableCubeNumberFor(mActiveTasks);
         taskAccomplish?.Invoke(mActiveTasks);
+        refreshPreviewBlocks?.Invoke();
     }
 
     public void PrepareNewTaskSubjects()
@@ -161,6 +179,11 @@ public class TaskManagerNew
             SetNewActiveTaskFor(2, 2, 0);
         }
         CubeNumberManager.Instance.GenerateNewUseableCubeNumberFor(mActiveTasks);
+    }
+
+    public void LevelUp(int aCurrentGainedLevel)
+    {
+        mSubject.ExpandTaskValueAtLevelUp(aCurrentGainedLevel);
     }
 
     private void SetNewActiveTaskAt(int anIndex)
@@ -258,10 +281,15 @@ public class TaskSubject
     /// <returns>Return the new created task</returns>
     public TaskData CreateTask(int aLink, int aTaskValue)
     {
-        //TaskRank rank = mSubjectData[aLink].GetRankFor(aTaskValue);
         mCreatedTaskCount++;
 
-        return new TaskData(mCreatedTaskCount/*, rank*/, aLink, aTaskValue);
+        return new TaskData(mCreatedTaskCount, aLink, aTaskValue);
+    }
+
+    public void ExpandTaskValueAtLevelUp(int aCurrentLevel)
+    {
+        foreach (int key in mSubjectData.Keys)
+            mSubjectData[key].ChangeTaskValue(aCurrentLevel);
     }
 
     public TaskData CreateNewTask()

@@ -109,52 +109,6 @@ public class CubeNumberManager
         return;
     }
 
-    // this method will be replace by GenerateNewUseableCubeNumberFor
-    public void GenerateNewCubeNumberOdds(List<TaskData> someTaskDatas)
-    {   
-        ClearNumberOddsList();
-
-        List<float> odds = new List<float>();
-        LinkIndexes key = LinkIndexes.MAX;
-        int taskValue = 0;
-
-        foreach (TaskData data in someTaskDatas)
-        {
-            key = (LinkIndexes)data.LinkedCubes - 2;
-            taskValue = data.TaskValue;
-            List<float> thisDataNumberOdds = new List<float>(mNumberGenerators[key].GetNumberOddsForTaskValue(taskValue));
-
-            for(int i = 0; i < thisDataNumberOdds.Count; i++)
-            {
-                float oddValue = thisDataNumberOdds[i];
-
-                if (i < odds.Count)
-                    odds[i] += oddValue;
-                else
-                    odds.Add(oddValue);
-            }
-        }
-
-        float totalSumOfOdds = OddSummary(odds);
-        for(int i = 0; i < odds.Count; i++)
-        {
-            float temp = odds[i];
-            odds[i] = Mathf.RoundToInt((temp / totalSumOfOdds) * 100f);
-        }
-
-        for(int i = 0; i < odds.Count; i++)
-        {
-            if (i == 0)
-                mNumberOddsIntervall[0] = 0f;
-            else
-            {
-                mNumberOddsIntervall[i] = (mNumberOddsIntervall[i - 1] + odds[i - 1]);
-            }
-        }
-        
-        return;
-    }
-
     private int GetNewCubeNumberFor(ref List<bool> someUsedNumber)
     {
         int newNumber = GetRandomUnusedNumberFrom(ref someUsedNumber);
@@ -172,7 +126,7 @@ public class CubeNumberManager
     private int GetNewCubeNumber()
     {
         Dictionary<int, float> intervall = GenerateNumbersInterval();
-        //int newNumber = GetCubeNumberRecrusive(0, Random.Range(0, 100));
+
         int keyNumber = GetCubeNumberRecrusiveOf(intervall, 0, Random.Range(0, 100));
         if (mCurrentNumberCounts[keyNumber] > 0)
             mCurrentNumberCounts[keyNumber]--;

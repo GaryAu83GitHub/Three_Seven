@@ -41,7 +41,6 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
     public Sprite SortButtonDeselectedStateSprite;
     public List<Button> SortButtons;
 
-    //public List<HighscoreListComponent> ListComponents;
     public List<HighScoreListObjectSlot> SlotComponents;
 
     private List<SavingResultData> mHighScores = new List<SavingResultData>();
@@ -54,6 +53,7 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
     private int mCurrentHighlightSlotIndex = 0;
     
     private bool mListIsDisplaying = false;
+    private bool mSortCurrentListDescending = true;
 
     private SortMode mSortButtonCurrentIndex = SortMode.BY_SCORE;
 
@@ -61,20 +61,16 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
     {
         mPanelIndex = GUIPanelIndex.HIGHSCORE_PANEL;
 
-        //Buttons[(int)ButtonIndex.EXIT_BUTTON].onClick.AddListener(ExitHighscore);
-        //mHighScores = HighScoreManager.Instance.GetListSortBy(TableCategory.SCORE);
         base.Start();
-
-        //UpdateList();
     }
 
     public override void Enter()
     {
         base.Enter();
         mListIsDisplaying = false;
-        
         TablePanelDisplay();
         SetSelectedButton(0);
+        AllSlotInvisible();
     }
 
     protected override void NavigateMenuButtons(CommandIndex theIncreaseCommand = CommandIndex.NAVI_DOWN, CommandIndex theDecreaseCommand = CommandIndex.NAVI_UP)
@@ -126,6 +122,12 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
             AllSlotInvisible();
             UpdateList();
         }
+        else
+        {
+            mHighScores = GetSortedList();
+            AllSlotInvisible();
+            UpdateList();
+        }
     }
     
     private void TablePanelDisplay()
@@ -158,12 +160,14 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
 
     private void NavigateTableSlots(int aDirection)
     {
-        SlotComponents[mCurrentHighlightSlotIndex].SetAsSelected(false);
+        if (mCurrentHighlightSlotIndex != -1)
+            SlotComponents[mCurrentHighlightSlotIndex].SetAsSelected(false);
+
         mCurrentHighlightSlotIndex += aDirection;
         if(mCurrentHighlightSlotIndex < 0)
             mCurrentHighlightSlotIndex = 0;
-        else if (mCurrentHighlightSlotIndex > mDisplayingSlotCount)
-            mCurrentHighlightSlotIndex = mDisplayingSlotCount;
+        else if (mCurrentHighlightSlotIndex >= mDisplayingSlotCount)
+            mCurrentHighlightSlotIndex = mDisplayingSlotCount-1;
 
         SlotComponents[mCurrentHighlightSlotIndex].SetAsSelected(true);
 
@@ -205,11 +209,12 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
         else if(mSortButtonCurrentIndex < SortMode.BY_DIGIT)
             mSortButtonCurrentIndex = SortMode.BY_SCORE;
 
-        mHighScores = GetSortedList();
-
         SortButtonDisplay();
 
+        DeselectCurrentSelectedSlot();
         UpdateList();
+
+        //AllSlotInvisible();
     }
 
     /// <summary>
@@ -218,6 +223,8 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
     private void ExitHighscore()
     {
         mListIsDisplaying = false;
+        DeselectCurrentSelectedSlot();
+
         TablePanelDisplay();
     }
 
@@ -281,6 +288,18 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
     {
         for (int i = 0; i < SlotComponents.Count; i++)
             SlotComponents[i].SlotVisible(false);
+        mCurrentHighlightSlotIndex = -1;
+    }
+
+    /// <summary>
+    /// Reset the current selected slot object to unselected appearence and change
+    /// the highlight slot index to -1 so no slot object will be highlighted
+    /// </summary>
+    private void DeselectCurrentSelectedSlot()
+    {
+        if (mCurrentHighlightSlotIndex != -1)
+            SlotComponents[mCurrentHighlightSlotIndex].SetAsSelected(false);
+        mCurrentHighlightSlotIndex = -1;
     }
 
     /// <summary>
@@ -312,7 +331,9 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
                 sortBy = TableCategory.SCORE;
                 break;
         }
-        return HighScoreManager.Instance.GetListSortBy(sortBy);
+        mSortCurrentListDescending = !mSortCurrentListDescending;
+
+        return HighScoreManager.Instance.GetListSortBy(sortBy, mSortCurrentListDescending);
     }
 
     /// <summary>
@@ -328,5 +349,7 @@ public class HighscoreGUIPanel : MenuEnablePanelBase
             if (i == (int)mSortButtonCurrentIndex)
                 SortButtons[i].image.sprite = SortButtonSelectedStateSprite;
         }
+
+        mSortCurrentListDescending = true;
     }
 }

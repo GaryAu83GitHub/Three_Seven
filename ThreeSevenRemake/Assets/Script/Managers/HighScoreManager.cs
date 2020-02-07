@@ -28,9 +28,6 @@ public class HighScoreManager
     }
     private static HighScoreManager mInstance;
 
-    //private List<RoundResultData> mHighScoreList = new List<RoundResultData>();
-    //public List<RoundResultData> HighScoreList { get { return mHighScoreList; } }
-
     /// <summary>
     /// new score list
     /// </summary>
@@ -41,6 +38,8 @@ public class HighScoreManager
     private List<int> mEnableDigitsList = new List<int>();
 
     private List<SavingResultData> mMainActiveList = new List<SavingResultData>();
+    private List<SavingResultData> mSurviveList = new List<SavingResultData>();
+    private List<SavingResultData> mClassicList = new List<SavingResultData>();
 
     public HighScoreManager()
     {
@@ -53,14 +52,23 @@ public class HighScoreManager
         if (mScoreList.Contains(newData))
             return;
 
+        mScoreList.Clear();
+
+        FileIndex listFileIndex = FileIndex.CLASSIC_LIST;
+        switch(GameSettings.Instance.GameMode)
+        {
+            case GameMode.SURVIVAL:
+                listFileIndex = FileIndex.SURVIVE_LIST;
+                mScoreList = new List<SavingResultData>(mSurviveList);
+                break;
+            default:
+                listFileIndex = FileIndex.CLASSIC_LIST;
+                mScoreList = new List<SavingResultData>(mClassicList);
+                break;
+        }
+
         mScoreList.Add(newData);
-
-        //SaveToListNew();
-        if (GameSettings.Instance.GameMode == GameMode.CLASSIC)
-            SaveToListOf(FileIndex.CLASSIC_LIST);
-        else if (GameSettings.Instance.GameMode == GameMode.SURVIVAL)
-            SaveToListOf(FileIndex.SURVIVE_LIST);
-
+        SaveToListOf(listFileIndex);
     }
 
     public void SetActiveList(GameMode aMode = GameMode.CLASSIC)
@@ -98,11 +106,33 @@ public class HighScoreManager
         return GetListSortBy(TableCategory.SCORE);
     }
     
-    public List<SavingResultData> GetListSortBy(TableCategory aCategory)
+    public List<SavingResultData> GetListSortBy(TableCategory aCategory, bool sortByDescending = true)
+    {
+        if (!sortByDescending)
+            return SortListAscending(aCategory);
+
+        return SortListDescending(aCategory);
+    }
+
+    public void FillAllList()
+    {
+        mClassicList.Clear();
+        mSurviveList.Clear();
+        HighScoreTable classicTable = (JsonHelper<HighScoreTable>.LoadFromJson(FileIndex.CLASSIC_LIST) ?? new HighScoreTable());
+        foreach (SavingResultData data in classicTable.ScoreList)
+            mClassicList.Add(data);
+
+        HighScoreTable surviveTable = (JsonHelper<HighScoreTable>.LoadFromJson(FileIndex.SURVIVE_LIST) ?? new HighScoreTable());
+        foreach (SavingResultData data in surviveTable.ScoreList)
+            mSurviveList.Add(data);
+        return;
+    }
+
+    private List<SavingResultData> SortListDescending(TableCategory aCategory)
     {
         List<SavingResultData> sortList = new List<SavingResultData>();
 
-        switch(aCategory)
+        switch (aCategory)
         {
             case TableCategory.DIGIT:
                 sortList = mScoreList.OrderBy(s => s.EnableDigitInterger)
@@ -142,6 +172,50 @@ public class HighScoreManager
         return sortList;
     }
 
+    private List<SavingResultData> SortListAscending(TableCategory aCategory)
+    {
+        List<SavingResultData> sortList = new List<SavingResultData>();
+
+        switch (aCategory)
+        {
+            case TableCategory.DIGIT:
+                sortList = mScoreList.OrderBy(s => s.EnableDigitInterger)
+                    .ThenByDescending(s => s.TotalScores).ToList();
+                break;
+            case TableCategory.CHAIN:
+                sortList = mScoreList.OrderBy(s => s.LongestChains)
+                    .ThenBy(s => s.BestConsecutiveIncreaseChain)
+                    .ThenByDescending(s => s.WorstConsecutiveDecreaseChain).ToList();
+                break;
+            case TableCategory.TASK:
+                sortList = mScoreList.OrderBy(s => s.CompletedTaskCount)
+                    .ThenBy(s => s.BestCompleteTaskCount)
+                    .ThenBy(s => s.BestSingleTaskScore).ToList();
+                break;
+            case TableCategory.LEVEL:
+                sortList = mScoreList.OrderBy(s => s.GainedLevel)
+                    .ThenBy(s => s.ReachedLevels)
+                    .ThenBy(s => s.HighestLevelUpgradeThreshold).ToList();
+                break;
+            case TableCategory.TIME:
+                sortList = mScoreList.OrderBy(s => s.PlayTime).ToList();
+                break;
+            case TableCategory.ODDS:
+                sortList = mScoreList.OrderBy(s => s.AverageOdds)
+                    .ThenBy(s => s.ScoreTimes)
+                    .ThenBy(s => s.LandedBlocks).ToList();
+                break;
+            default:
+                sortList = mScoreList.OrderBy(s => s.TotalScores)
+                    .ThenBy(s => s.BestRoundScore)
+                    .ThenBy(s => s.BestCombo)
+                    .ThenBy(s => s.BestBonus).ToList();
+                break;
+        }
+
+        return sortList;
+    }
+
     private void SaveToListOf(FileIndex aFileIndex)
     {
         HighScoreTable newList = new HighScoreTable(mScoreList);
@@ -156,11 +230,21 @@ public class HighScoreManager
 
         mEnableDigitsList.Add(0);
 
-        HighScoreTable loadTable = (JsonHelper<HighScoreTable>.LoadFromJson(aFileIndex) ?? new HighScoreTable());
-        foreach (SavingResultData data in loadTable.ScoreList)
+        //HighScoreTable loadTable = (JsonHelper<HighScoreTable>.LoadFromJson(aFileIndex) ?? new HighScoreTable());
+        //foreach (SavingResultData data in loadTable.ScoreList)
+        //{
+        //    mMainActiveList.Add(data);
+        //    if (!mEnableDigitsList.Contains(data.EnableDigitInterger))
+        //        mEnableDigitsList.Add(data.EnableDigitInterger);
+        //}
+        if (aFileIndex == FileIndex.CLASSIC_LIST)
+            mMainActiveList = new List<SavingResultData>(mClassicList);
+        else if (aFileIndex == FileIndex.SURVIVE_LIST)
+            mMainActiveList = new List<SavingResultData>(mSurviveList);
+
+        foreach(SavingResultData data in mMainActiveList)
         {
-            mMainActiveList.Add(data);
-            if (!mEnableDigitsList.Contains(data.EnableDigitInterger))
+            if (!EnableDigitsList.Contains(data.EnableDigitInterger))
                 mEnableDigitsList.Add(data.EnableDigitInterger);
         }
 

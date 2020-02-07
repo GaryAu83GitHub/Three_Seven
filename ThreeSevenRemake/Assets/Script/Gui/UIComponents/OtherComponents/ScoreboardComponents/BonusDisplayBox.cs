@@ -8,32 +8,37 @@ public class BonusDisplayBox : ScoreboardComponentBase
     public Image BarFillingImage;
     public List<GameObject> BonusDisplayObjects;
 
-    public int ModulosValue = 1;
-
     public delegate void OnChangeBonusTerm(int aNewBonusTerms);
     public static OnChangeBonusTerm changeBonusTerm;
 
     private Rect mBarImageRect;
 
     private List<BonusDisplayObject> mBonusDisplayObjects = new List<BonusDisplayObject>();
+
     private int mBonus = 1;
+    private int mModulosValue = 1;
 
     private float mHeightInterval = 0f;
-
     private float mBarFillingIntervalValue = 0;
     private float mBarCurrentAmountValue = 0;
+
     private bool mFillTheBar = false;
+
+    private void Awake()
+    {
+        ChainDisplayBox.updateChainCount += UpdateBonusBar;        
+    }
 
     public override void Start()
     {
         base.Start();
 
-        ChainDisplayBox.updateChainCount += UpdateBonusBar;
+        SetModulusValue();
 
         mBarImageRect = BarFillingImage.rectTransform.rect;
         mHeightInterval = (mBarImageRect.height / 9);
         float bonusObjectActiveValueFragment = (1f / 9f);
-        mBarFillingIntervalValue = (bonusObjectActiveValueFragment / ModulosValue);
+        mBarFillingIntervalValue = (bonusObjectActiveValueFragment / mModulosValue);
 
         mBonusDisplayObjects.Clear();
 
@@ -48,13 +53,6 @@ public class BonusDisplayBox : ScoreboardComponentBase
             else
                 mBonusDisplayObjects[i].SetupBonusObject(new Vector2(0, (i * mHeightInterval)), i + 1, i * bonusObjectActiveValueFragment);
         }
-
-        //mBonusDisplayObjects[0].SetupBonusObject(new Vector2(0, 0), 1, 0f);
-
-        //for (int i = 1; i < 9; i++)
-        //    mBonusDisplayObjects[i].SetupBonusObject(new Vector2(0, (i * mHeightInterval)), i + 1, i * bonusObjectActiveValueFragment);
-
-        //mBonusDisplayObjects[9].SetupBonusObject(new Vector2(0, mBarImageRect.height), 10, 9 * bonusObjectActiveValueFragment);
 
         ActiveBonusObjects();
     }
@@ -88,6 +86,22 @@ public class BonusDisplayBox : ScoreboardComponentBase
         }
     }
 
+    private void SetModulusValue()
+    {
+        switch(GameSettings.Instance.Difficulty)
+        {
+            case Difficulties.EASY:
+                mModulosValue = 3;
+                break;
+            case Difficulties.NORMAL:
+                mModulosValue = 6;
+                break;
+            case Difficulties.HARD:
+                mModulosValue = 9;
+                break;
+        }
+    }
+
     private void UpdateBonusBar(int aCurrentChainCount)
     {
         mBarCurrentAmountValue = aCurrentChainCount * mBarFillingIntervalValue;
@@ -97,12 +111,11 @@ public class BonusDisplayBox : ScoreboardComponentBase
             return;
         else
             mFillTheBar = true;
-
         
-        if ((aCurrentChainCount % ModulosValue) != 0)
+        if ((aCurrentChainCount % mModulosValue) != 0)
             return;
 
-        mBonus = (1 + (aCurrentChainCount / ModulosValue));
+        mBonus = (1 + (aCurrentChainCount / mModulosValue));
         changeBonusTerm?.Invoke(mBonus);
 
     }

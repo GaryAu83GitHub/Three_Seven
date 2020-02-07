@@ -98,7 +98,7 @@ public class DevelopeMain : MonoBehaviour
                     BlockManager.Instance.ScoreCalculationProgression();
                 else
                 {
-                    TaskManagerNew.Instance.ChangeTask();
+                    TaskManagerNew.Instance.CheckForCompletedTasks();
                     CreateNewBlock();                    
                 }
             }

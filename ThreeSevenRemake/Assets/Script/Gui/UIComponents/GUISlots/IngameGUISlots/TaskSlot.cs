@@ -59,15 +59,6 @@ public class TaskSlot : GuiSlotBase
     public override void Start()
     {
         base.Start();
-
-        //BlockManager.achieveScoring += DisplayScoring;
-        //BlockManager.achieveScoringFor += DisplayScoringFor;
-        //TaskManagerNew.displayTaskAt += SetTaskNumbersAt;
-        //TaskManagerNew.displayTaskList += SetTaskNumbersByList;
-
-        //TaskManagerNew.taskAccomplish += TaskAccomplish;
-
-        //MainGamePanel.gatherResultData += GatherResultData;
     }
 
     private void OnDestroy()

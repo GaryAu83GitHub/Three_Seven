@@ -130,8 +130,7 @@ public class LevelTermBox : ScoreboardComponentBase
     public override void ResetStartValue()
     {
         mGainedLevelCount = 0;
-        mCurrentUpgradeThresholdOdds = 0f;//.5f;
-        //mCurrentDowngradeThresholdOdds = .5f;
+        mCurrentUpgradeThresholdOdds = 0f;
     }
 
     protected override void GatherResultData(ref ResultData aData)
@@ -157,6 +156,8 @@ public class LevelTermBox : ScoreboardComponentBase
             mGainedLevelCount++;
             if (mGainedLevelCount > mHighestGainedLevelCount)
                 mHighestGainedLevelCount = mGainedLevelCount;
+
+            TaskManagerNew.Instance.LevelUp(mGainedLevelCount);
         }
     }
 
@@ -168,7 +169,7 @@ public class LevelTermBox : ScoreboardComponentBase
             if (mCurrentLevel < 100)
                 mCurrentLevel++;
             //mAnimator.SetTrigger("LevelUp");
-            mCurrentUpgradeThresholdOdds = aNewOdds;
+            mCurrentUpgradeThresholdOdds = (aNewOdds * .5f);
             if (mCurrentUpgradeThresholdOdds > mBestThresholdOdds)
                 mBestThresholdOdds = mCurrentUpgradeThresholdOdds;
         }

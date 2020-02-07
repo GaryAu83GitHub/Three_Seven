@@ -20,34 +20,20 @@ public class PreviewNormalSlot : GuiSlotBase
 
     public override void Awake()
     {
+        TaskManagerNew.refreshPreviewBlocks += RemoveUnnecessaryCubes;
+
         GameSceneMain.createNewBlock += CreateNewBlock;
-        GameSceneMain.swapingWithPreview += SwapTheBlock;// SwapBlock;
+        GameSceneMain.swapingWithPreview += SwapTheBlock;
 
         MainGamePanel.changePreviewOrder += ChangePreviewOrder;
         MainGamePanel.dumpPreviewBlock += DumbPreviewBlock;
 
-        // these delegates are used in the test scene
-        LabMenu.createNewBlock += CreateNewBlock;
-        LabMenu.swapTheBlock += SwapTheBlock;
-        LabMenu.changePreviewOrder += ChangePreviewOrder;
         base.Awake();
     }
 
     public override void Start()
     {
         base.Start();
-
-        // thses delegates are for the main game
-        //GameSceneMain.createNewBlock += CreateNewBlock;
-        //GameSceneMain.swapingWithPreview += SwapTheBlock;// SwapBlock;
-
-        //MainGamePanel.changePreviewOrder += ChangePreviewOrder;
-        //MainGamePanel.dumpPreviewBlock += DumbPreviewBlock;
-
-        //// these delegates are used in the test scene
-        //LabMenu.createNewBlock += CreateNewBlock;
-        //LabMenu.swapTheBlock += SwapTheBlock;
-        //LabMenu.changePreviewOrder += ChangePreviewOrder;
 
         for (int i = 0; i < PreviewBlocks.Count; i++)
         {
@@ -64,16 +50,13 @@ public class PreviewNormalSlot : GuiSlotBase
     private void OnDestroy()
     {
         // thses delegates are for the main game
+        TaskManagerNew.refreshPreviewBlocks -= RemoveUnnecessaryCubes;
+
         GameSceneMain.createNewBlock -= CreateNewBlock;
-        GameSceneMain.swapingWithPreview -= SwapTheBlock;// SwapBlock;
+        GameSceneMain.swapingWithPreview -= SwapTheBlock;
 
         MainGamePanel.changePreviewOrder -= ChangePreviewOrder;
         MainGamePanel.dumpPreviewBlock -= DumbPreviewBlock;
-
-        // these are used in the test scene
-        LabMenu.createNewBlock -= CreateNewBlock;
-        LabMenu.swapTheBlock -= SwapTheBlock;
-        LabMenu.changePreviewOrder -= ChangePreviewOrder;
     }
 
     public override void Update()
@@ -195,6 +178,18 @@ public class PreviewNormalSlot : GuiSlotBase
     private void ChangeAnimationState(string aStateName)
     {
         Animator.SetTrigger(aStateName);
+    }
+
+    private void RemoveUnnecessaryCubes()
+    {
+        for (int i = 0; i < mPreviewNumbers.Count; i++)
+        {
+            if (!CubeNumberManager.Instance.CurrentNumberCounts.ContainsKey(mPreviewNumbers[i][0]))
+                mPreviewNumbers[i][0] = CubeNumberManager.Instance.GetNewRootNumber;
+            if (!CubeNumberManager.Instance.CurrentNumberCounts.ContainsKey(mPreviewNumbers[i][1]))
+                mPreviewNumbers[i][1] = CubeNumberManager.Instance.GetNewSubNumber;
+        }
+        SetBlockNumbers();
     }
 
     private void SetBlockNumbers()

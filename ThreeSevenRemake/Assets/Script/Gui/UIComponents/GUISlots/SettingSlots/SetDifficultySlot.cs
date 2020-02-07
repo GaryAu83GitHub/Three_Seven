@@ -92,9 +92,9 @@ public class SetDifficultySlot : SettingSlotBase
     {
         mGameplaySettingData.SelectDifficulty = mSelectedDifficulty;
         if (mSelectedDifficulty != Difficulties.CUSTOMIZE)
-            mGameplaySettingData.SelectEnableDigits = new List<bool>(mSelectedCustomize);
+            mGameplaySettingData.SetChallengeDigit(mSelectedCustomize);//SelectEnableDigits = new List<bool>(mSelectedCustomize);
         else
-            mGameplaySettingData.SelectEnableDigits = new List<bool>(mChangedCustomize);
+            mGameplaySettingData.SetChallengeDigit(mChangedCustomize);//SelectEnableDigits = new List<bool>(mChangedCustomize);
 
         base.ChangeGameplaySetting();
     }

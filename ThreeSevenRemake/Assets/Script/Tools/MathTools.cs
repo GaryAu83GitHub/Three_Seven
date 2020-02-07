@@ -18,6 +18,11 @@ public class MathTools
         return aDefaultValue * Math.Exp(aConstant * aTime);
     }
 
+    public static bool Modulus(int aDividend, int aDevisor)
+    {
+        return ((aDividend % aDevisor) == 0 ? true : false);
+    }
+
     public static List<List<int>> GetPermutationList(int aMinValue, int aMaxValue, int aLenght)
     {
         IEnumerable<IEnumerable<int>> result = GetPermutationsWithRept(Enumerable.Range(aMinValue, aMaxValue), aLenght);

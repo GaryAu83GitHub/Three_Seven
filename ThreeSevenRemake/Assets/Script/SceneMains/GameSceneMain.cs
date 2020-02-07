@@ -205,7 +205,7 @@ public class GameSceneMain : MonoBehaviour
                 else if (BlockManager.Instance.IsScoring())
                     BlockManager.Instance.ScoreCalculationProgression();
                 else if(!BlockManager.Instance.BlockPassedGameOverLine())
-                    TaskManagerNew.Instance.ChangeTask();
+                    TaskManagerNew.Instance.CheckForCompletedTasks();
                 else
                     passingTheTop?.Invoke();
             }

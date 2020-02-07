@@ -8,7 +8,7 @@ public class GameplaySettings : SettingsContainerBase
     private enum SettingIndex
     {
         DIFFICULTY,
-        //LIMIT_LINE,
+        CHALLENGE,
         START_LEVEL,
         ACTIVE_GUIDE,
         CONFIRM_BUTTON,
@@ -21,18 +21,20 @@ public class GameplaySettings : SettingsContainerBase
     private GameplaySettingData mNewSettings = new GameplaySettingData();
 
     private bool SettingHasBeenChanged { get { return mOriginalSettings.Equals(mNewSettings); } }
- 
-    // Start is called before the first frame update
+
+    private void Awake()
+    {
+        SettingSlotBase.gameplaySettingHaveChange += ChangeGameplaySetting;
+
+        SetGameplayConfirmSlot.applyButtonPressed += ApplySettings;
+        SetGameplayConfirmSlot.resetButtonPressed += ResetSettings;
+    }
+
     protected override void Start()
     {
         base.Start();
         SettingSlots[(int)SettingIndex.CONFIRM_BUTTON].gameObject.SetActive(!SettingHasBeenChanged);
         CheckNumberOfActiveSlots();
-
-        SettingSlotBase.gameplaySettingHaveChange += ChangeGameplaySetting;
-
-        SetGameplayConfirmSlot.applyButtonPressed += ApplySettings;
-        SetGameplayConfirmSlot.resetButtonPressed += ResetSettings;
     }
 
     private void OnDestroy()
@@ -129,6 +131,11 @@ public class GameplaySettings : SettingsContainerBase
     }
 }
 
+/// <summary>
+/// This is a data assembling class that temporary store the gameplay data and it
+/// use for compareing the gameplay setting with the previous setting and the player 
+/// just made
+/// </summary>
 public class GameplaySettingData
 {
     private Difficulties mDifficulty = Difficulties.EASY;
@@ -137,9 +144,20 @@ public class GameplaySettingData
     private LevelUpMode mLevelUpMode = LevelUpMode.DYNAMIC;
     public LevelUpMode LevelUpMode { get { return mLevelUpMode; } set { mLevelUpMode = value; } }
 
-    private List<bool> mEnableDigits = new List<bool>() { true, true, false, false };
-    public List<bool> SelectEnableDigits { get { return mEnableDigits; } set { mEnableDigits = value; } }
+    public List<bool> SelectEnableDigits { get { return new List<bool>() { EnableDigit2, EnableDigit3, EnableDigit4, EnableDigit5 }; } }
 
+    private bool mEnableDigit2 = true;
+    public bool EnableDigit2 { get { return mEnableDigit2; } }
+
+    private bool mEnableDigit3 = true;
+    public bool EnableDigit3 { get { return mEnableDigit3; } }
+
+    private bool mEnableDigit4 = false;
+    public bool EnableDigit4 { get { return mEnableDigit4; } }
+
+    private bool mEnableDigit5 = false;
+    public bool EnableDigit5 { get { return mEnableDigit5; } }
+    
     private int mLimitLineHeight = 0;
     public int SelectLimitLineHeight { get { return mLimitLineHeight; } set { mLimitLineHeight = value; } }
 
@@ -152,28 +170,42 @@ public class GameplaySettingData
     public bool SelectActiveGuide { get { return mActiveGuide; } set { mActiveGuide = value; } }
     private bool mActiveGuide = true;
 
+    /// <summary>
+    /// This is the default constructor that set the data with the game presetting data
+    /// </summary>
     public GameplaySettingData()
     {
-        mDifficulty = GameSettings.Instance.Difficulty; //GameRoundManager.Instance.Data.SelectedDifficulty;
+        mDifficulty = GameSettings.Instance.Difficulty;
         mLevelUpMode = GameSettings.Instance.LevelUpMode;
-        mEnableDigits = GameSettings.Instance.EnableScoringMethods;
-        mLimitLineHeight = GameSettings.Instance.LimitHigh;//GameRoundManager.Instance.Data.RoofHeightValue;
-        mStartLevel = GameSettings.Instance.StartLevel;//GameRoundManager.Instance.Data.CurrentLevel;
+        mLimitLineHeight = GameSettings.Instance.LimitHigh;
+        mStartLevel = GameSettings.Instance.StartLevel;
         mTimeLimit = GameSettings.Instance.TimeLimit;
-        mActiveGuide = GameSettings.Instance.ActiveGuideBlock;//GameRoundManager.Instance.Data.GuideblockActive;
+        mActiveGuide = GameSettings.Instance.ActiveGuideBlock;
+
+        SetChallengeDigit(GameSettings.Instance.EnableScoringMethods);
     }
 
+    /// <summary>
+    /// This is the constructor of recieving new setting data
+    /// </summary>
+    /// <param name="data">new recieving data</param>
     public GameplaySettingData(GameplaySettingData data)
     {
         mDifficulty = data.SelectDifficulty;
         mLevelUpMode = data.LevelUpMode;
-        mEnableDigits = data.SelectEnableDigits;
         mLimitLineHeight = data.SelectLimitLineHeight;
         mStartLevel = data.SelectStartLevel;
         mTimeLimit = data.TimeLimit;
         mActiveGuide = data.SelectActiveGuide;
+
+        SetChallengeDigit(data.SelectEnableDigits);
     }
 
+    /// <summary>
+    /// Check if the compareing setting data is equal to the original data
+    /// </summary>
+    /// <param name="obj">comparing data</param>
+    /// <returns>result of the comparing data. Return false if any data is not equal</returns>
     public bool Equals(GameplaySettingData obj)
     {
         if ((obj == null) || !this.GetType().Equals(obj.GetType()))
@@ -183,9 +215,15 @@ public class GameplaySettingData
             GameplaySettingData p = (GameplaySettingData)obj;
             if (p.SelectDifficulty != mDifficulty)
                 return false;
-            if (p.LevelUpMode != mLevelUpMode)
+            //if (p.LevelUpMode != mLevelUpMode)
+            //    return false;
+            if (p.EnableDigit2 != mEnableDigit2)
                 return false;
-            if (!p.SelectEnableDigits.SequenceEqual(mEnableDigits))
+            if (p.EnableDigit3 != mEnableDigit3)
+                return false;
+            if (p.EnableDigit4 != mEnableDigit4)
+                return false;
+            if (p.EnableDigit5 != mEnableDigit5)
                 return false;
             if (p.SelectLimitLineHeight != mLimitLineHeight)
                 return false;
@@ -195,5 +233,18 @@ public class GameplaySettingData
                 return false;
         }
         return true;
+    }
+
+    /// <summary>
+    /// fill the boolian variable of challenge digit settings
+    /// </summary>
+    /// <param name="someEnableDigits">boolians of the new setting of the 
+    /// challenge</param>
+    public void SetChallengeDigit(List<bool> someEnableDigits)
+    {
+        mEnableDigit2 = someEnableDigits[0];
+        mEnableDigit3 = someEnableDigits[1];
+        mEnableDigit4 = someEnableDigits[2];
+        mEnableDigit5 = someEnableDigits[3];
     }
 }  

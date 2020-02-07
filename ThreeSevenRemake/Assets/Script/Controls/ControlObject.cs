@@ -22,6 +22,9 @@ public enum CommandIndex
     BLOCK_INSTANT_DROP,
     BLOCK_ROTATE,
     BLOCK_INVERT,
+    POWER_UP_USE,
+    POWER_UP_NAVI_LEFT,
+    POWER_UP_NAVI_RIGHT,
     PREVIEW_SWAP,
     PREVIEW_ROTATE,
     PREVIEW_DUMP,
@@ -95,6 +98,11 @@ public class ControlObject
         return dir;
     }
 
+    public int GamePowerUpSelection()
+    {
+        return 0;
+    }
+
     public virtual bool GameDropBlockGradually(float aBlockNextDropTime)
     {
         if ((KeyDown(CommandIndex.BLOCK_DROP) && DropButtonTimePassed())/* || Time.time > aBlockNextDropTime*/)
@@ -110,6 +118,12 @@ public class ControlObject
     public virtual bool GameRotateBlock() { return KeyPress(CommandIndex.BLOCK_ROTATE); }
 
     public virtual bool GameInverteBlock() { return KeyPress(CommandIndex.BLOCK_INVERT); }
+
+    public virtual bool GameUsePowerUp() { return KeyPress(CommandIndex.POWER_UP_USE); }
+
+    public virtual bool GameMovePowerUpSelectLeft() { return KeyPress(CommandIndex.POWER_UP_NAVI_LEFT); }
+
+    public virtual bool GameMovePowerUpSelectRight() { return KeyPress(CommandIndex.POWER_UP_NAVI_RIGHT); }
 
     public virtual bool GameSwapPreview() { return KeyPress(CommandIndex.PREVIEW_SWAP); }
 
