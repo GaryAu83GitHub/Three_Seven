@@ -98,9 +98,16 @@ public class ControlObject
         return dir;
     }
 
-    public int GamePowerUpSelection()
+    public virtual int GameMovePowerUpSelection()
     {
-        return 0;
+        int diretion = 0;
+
+        if (KeyPress(CommandIndex.POWER_UP_NAVI_LEFT))
+            diretion = -1;
+        if (KeyPress(CommandIndex.POWER_UP_NAVI_RIGHT))
+            diretion = 1;
+
+        return diretion;
     }
 
     public virtual bool GameDropBlockGradually(float aBlockNextDropTime)
@@ -131,9 +138,7 @@ public class ControlObject
 
     public virtual bool GameDumpPreview() { return KeyPress(CommandIndex.PREVIEW_DUMP); }
 
-    public virtual bool GamePause() {
-        return KeyPress(CommandIndex.INGAME_PAUSE);
-    }
+    public virtual bool GamePause() { return KeyPress(CommandIndex.INGAME_PAUSE); }
 
     protected virtual bool HorizontBottomHit(ref Vector3 aDir, float aHorizontValue = 0f)
     {
@@ -221,12 +226,17 @@ public class ControlObject
 
     protected void ResetMoveHorizontTimer()
     {
-        mBlockMoveHorizontButtonDelayTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
+        //mBlockMoveHorizontButtonDelayTime = Time.time + Constants.BUTTON_DOWN_INTERVAL;
+        mBlockMoveHorizontButtonDelayTime = Constants.BUTTON_DOWN_INTERVAL;
     }
 
     protected bool MoveHorizontButtonTimePassed()
     {
-        return (Time.time > mBlockMoveHorizontButtonDelayTime);
+        if(mBlockMoveHorizontButtonDelayTime > 0)
+            mBlockMoveHorizontButtonDelayTime -= Time.deltaTime;
+
+        return (mBlockMoveHorizontButtonDelayTime <= 0f);
+        //return (Time.time > mBlockMoveHorizontButtonDelayTime);
     }
 
     protected bool SupressHorizontMove()

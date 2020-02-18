@@ -79,6 +79,10 @@ public class TaskSlot : GuiSlotBase
     {
         for (int i = 0; i < someDatas.Count; i++)
             TaskBoxes[i].SetUpTask(someDatas[i]);
+
+        Debug.Log("<color=red>" + someDatas[0].TaskValue + "</color>");
+        Debug.Log("<color=green>" + someDatas[1].TaskValue + "</color>");
+        Debug.Log("<color=blue>" + someDatas[2].TaskValue + "</color>");
     }
 
     public void TaskAccomplish(List<TaskData> someDatas)
@@ -101,6 +105,10 @@ public class TaskSlot : GuiSlotBase
 
         if (mRoundCompletedTaskCount > mHighestRoundCompleteTaskCount)
             mHighestRoundCompleteTaskCount = mRoundCompletedTaskCount;
+
+        Debug.Log("<color=red>" + someDatas[0].TaskValue + "</color>");
+        Debug.Log("<color=green>" + someDatas[1].TaskValue + "</color>");
+        Debug.Log("<color=blue>" + someDatas[2].TaskValue + "</color>");
     }
 
     public void SetTaskNumbersAt(int aTaskIndex, TaskData aData)

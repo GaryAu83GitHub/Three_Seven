@@ -44,7 +44,10 @@ public class MainGamePanel : GUIPanelBase
     public static OnBlockSwaping blockSwaping;
 
     public delegate void OnUseItem();
-    public static OnUseItem useItem;
+    public static OnUseItem usePowerUp;
+
+    public delegate void OnNavigatePowerUps(int aDir);
+    public static OnNavigatePowerUps navigatePowerUps;
 
     public delegate void OnChangePreviewOrder();
     public static OnChangePreviewOrder changePreviewOrder;
@@ -113,6 +116,8 @@ public class MainGamePanel : GUIPanelBase
     {
         blockMoveHorizontal?.Invoke(ControlManager.Ins.MoveBlockHorizontal());
 
+        navigatePowerUps?.Invoke(ControlManager.Ins.PowerUpSelection());
+
         if (ControlManager.Ins.DropBlockGradually(0) || mCurrentBlockNextDropTime <= 0f)
             GivenCommand(CommandIndex.BLOCK_DROP);
 
@@ -131,11 +136,11 @@ public class MainGamePanel : GUIPanelBase
         if (ControlManager.Ins.PowerUpUse())
             GivenCommand(CommandIndex.POWER_UP_USE);
 
-        if (ControlManager.Ins.PowerUpSelectLeft())
-            GivenCommand(CommandIndex.POWER_UP_NAVI_LEFT);
+        //if (ControlManager.Ins.PowerUpSelectLeft())
+        //    GivenCommand(CommandIndex.POWER_UP_NAVI_LEFT);
 
-        if (ControlManager.Ins.PowerUpSelectRight())
-            GivenCommand(CommandIndex.POWER_UP_NAVI_RIGHT);
+        //if (ControlManager.Ins.PowerUpSelectRight())
+        //    GivenCommand(CommandIndex.POWER_UP_NAVI_RIGHT);
 
         //if (ControlManager.Ins.SwapPreview())
         //    GivenCommand(CommandIndex.PREVIEW_SWAP);
@@ -198,7 +203,7 @@ public class MainGamePanel : GUIPanelBase
             //    OnPreviewInputEnable(false);
             //    break;
             case CommandIndex.POWER_UP_USE:
-                useItem?.Invoke();
+                usePowerUp?.Invoke();
                 break;
             case CommandIndex.PREVIEW_ROTATE:
                 changePreviewOrder?.Invoke();

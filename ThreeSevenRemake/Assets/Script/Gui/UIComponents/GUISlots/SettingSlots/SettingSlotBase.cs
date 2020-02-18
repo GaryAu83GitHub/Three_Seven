@@ -26,7 +26,7 @@ public class SettingSlotBase : GuiSlotBase
     public override void Update()
     {
         if (mSlotActivate)
-            Input();
+            InputHandler();
     }
 
     public virtual void SetSlotValue(GameplaySettingData aData)
@@ -42,7 +42,7 @@ public class SettingSlotBase : GuiSlotBase
         ActivatingSlot(false);
     }
 
-    protected virtual void Input()
+    protected virtual void InputHandler()
     {
         Navigation();
         MenuButtonPressed();
@@ -56,7 +56,7 @@ public class SettingSlotBase : GuiSlotBase
 
     public override void ActivatingSlot(bool isActive)
     {
-        base.ActivatingSlot(isActive);//mSlotActivate = isActive;
+        base.ActivatingSlot(isActive);
         SlotAppearence();
     }
 

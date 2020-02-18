@@ -17,6 +17,12 @@ public class SettingSlotWithButtons : SettingSlotBase
         SelectButton();
     }
 
+    public override void Enter()
+    {
+        SelectButton();
+        base.Enter();
+    }
+
     public override void Exit()
     {
         SelectButton();
@@ -35,7 +41,7 @@ public class SettingSlotWithButtons : SettingSlotBase
         }
     }
     
-    private void NavigateButtons(int aDirection)
+    protected virtual void NavigateButtons(int aDirection)
     {
         if ((mCurrectSelectedButton + aDirection) >= Buttons.Count)
             mCurrectSelectedButton = 0;
@@ -49,19 +55,21 @@ public class SettingSlotWithButtons : SettingSlotBase
 
     protected void SelectButton()
     {
-        //if ((mCurrectSelectedButton + aDirection) >= Buttons.Count)
-        //    mCurrectSelectedButton = 0;
-        //else if ((mCurrectSelectedButton + aDirection) < 0)
-        //    mCurrectSelectedButton = Buttons.Count - 1;
-        //else
-        //    mCurrectSelectedButton += aDirection;
-
         for (int i = 0; i < Buttons.Count; i++)
         {
             if(i != mCurrectSelectedButton)
                 ButtonState(i, true);
             else
                 ButtonState(i, false);
+        }
+    }
+
+    protected void AllButtonUnInteractable()
+    {
+        for (int i = 0; i < Buttons.Count; i++)
+        {
+            Buttons[i].GetComponentInChildren<TextMeshProUGUI>().color = new Color(1f, 1f, 1f, 1f);
+            Buttons[i].image.sprite = UnSelectedSprite;
         }
     }
 

@@ -41,17 +41,37 @@ public class SettingsContainerBase : MonoBehaviour
     protected virtual void Input()
     { }
 
+    protected virtual void ApplySettings()
+    {
+        if (!mActiveContainer)
+            return;
+
+        mCurrentSelectingSlotIndex = 0;
+        SwitchSelectingSlot(mCurrentSelectingSlotIndex);
+    }
+
+    protected virtual void ResetSettings()
+    {
+        if (!mActiveContainer)
+            return;
+
+        mCurrentSelectingSlotIndex = 0;
+        SwitchSelectingSlot(mCurrentSelectingSlotIndex);
+    }
+
     public virtual void Enter()
     {
         ActiveContainer(true);
         DeselectAllSlots();
         mCurrentSelectedSlot = SettingSlots[mCurrentSelectingSlotIndex];
+        mCurrentSelectedSlot.Enter();
         mCurrentSelectedSlot.ActivatingSlot(true);
     }
 
     public virtual void Exit()
     {
         ActiveContainer(false);
+        mCurrentSelectedSlot.Exit();
         DeselectAllSlots();
     }
 
@@ -92,5 +112,12 @@ public class SettingsContainerBase : MonoBehaviour
     {
         for (int i = 0; i < SettingSlots.Count; i++)
             SettingSlots[i].ActivatingSlot(false);
+    }
+
+    private void SwitchSelectingSlot(int aNewSelectingSlotIndex)
+    {
+        mCurrentSelectedSlot.Exit();
+        mCurrentSelectedSlot = SettingSlots[aNewSelectingSlotIndex];
+        mCurrentSelectedSlot.Enter();
     }
 }

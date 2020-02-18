@@ -18,6 +18,9 @@ public class ScoreDisplayBox : ScoreboardComponentBase
     public GameObject ScoreAddOn;
     public GameObject BonusAddOn;
 
+    public delegate void OnPowerUpCharging();
+    public static OnPowerUpCharging powerUpCharging;
+
     /// <summary>
     /// The score that is displaying, updating when the total score is changed, it'll be recieving
     /// the total score value after the update if it become greater than the total score
@@ -212,6 +215,7 @@ public class ScoreDisplayBox : ScoreboardComponentBase
     private void LinkingCubeScores(int aCubeCount)
     {
         mComboCount++;
+        powerUpCharging?.Invoke();
 
         int addsOnValue = aCubeCount * mCurrentBonusTerm;
         UpdateScore(addsOnValue, aCubeCount);

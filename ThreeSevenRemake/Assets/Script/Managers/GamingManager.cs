@@ -78,31 +78,25 @@ public class GamingManager
         GenerateNewCubeNumber();
     }
     
-    public void AddScore(ScoreType anObtainScoreType, int anValue = 0, TaskRank anObjective = TaskRank.X1)
+    /// <summary>
+    /// Add the score according to which type of scoring was achieves
+    /// </summary>
+    /// <param name="anObtainScoreType">Achieved scoring type</param>
+    /// <param name="anValue">Score value</param>
+    public void AddScore(ScoreType anObtainScoreType, int anValue = 0)
     {
-        //int addOn = 0;
-
         switch(anObtainScoreType)
         {
             case ScoreType.LINKING:
-                //addOn = ScoreCalculatorcs.LinkingScoreCalculation(anObjective, anValue);
                 linkingCubeScores?.Invoke(anValue);
                 break;
             case ScoreType.COMBO:
-                //addOn = ScoreCalculatorcs.ComboScoreCalculation(anValue);
                 comboScoring?.Invoke(anValue);
                 break;
             default:
-                //addOn = ScoreCalculatorcs.OriginalBlockLandingScoreCalculation();
                 newBlockLandedScores?.Invoke();
                 break;
         }
-
-        //if (addOn > 0)
-        //{
-        //    mCurrentScore += addOn;
-        //    scoreChanging?.Invoke(mCurrentScore, addOn);
-        //}
     }
 
     public List<int> GenerateNewCubeNumber()

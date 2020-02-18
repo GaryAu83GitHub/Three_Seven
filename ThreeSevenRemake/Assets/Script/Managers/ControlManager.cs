@@ -18,7 +18,10 @@ public class ControlManager
     }
     private static ControlManager mInstance;
 
+    public List<ControlObject> Controls { get { return mControls; } }
     private List<ControlObject> mControls = new List<ControlObject>();
+
+    private ControlObject mActiveControls = new ControlObject();
 
     public ControlManager()
     {
@@ -47,75 +50,72 @@ public class ControlManager
         //mKeyBoard = new Dictionary<CommandIndex, KeyCode>(mDefaultKeyBoard);
 
         mControls.Add(new KeyboardControl());
+        mActiveControls = mControls[0];
+
         List<string> temp = Input.GetJoystickNames().ToList();
-        //for (int i = 0; i < temp.Count; i++)
-        //{
-        //    if (!temp[i].Any())
-        //        continue;
-        //    //mControls.Add(new KeyboardControl());
-        //}
         if (temp.Any())
         {
+            mControls.Add(new XBox360Constrol());
             for (int i = 0; i < temp.Count; i++)
             {
                 if (temp[i].Any())
-                    mControls[0] = new XBox360Constrol();
+                    mActiveControls = mControls[1];
             }
         }
         foreach (ControlObject c in mControls)
             c.KeySettings(/*new Dictionary<CommandIndex, KeyCode>()*/);
     }
 
-    public void ResetButtonPressTimer() { mControls[0].ResetButtonPressTimer(); }
+    public void ResetButtonPressTimer() { mActiveControls.ResetButtonPressTimer(); }
 
-    public bool MenuNavigationHold(CommandIndex aCommand, float anDelayIntervall = .1f) { return mControls[0].MenuNavigateHold(aCommand, anDelayIntervall); }
+    public bool MenuNavigationHold(CommandIndex aCommand, float anDelayIntervall = .1f) { return mActiveControls.MenuNavigateHold(aCommand, anDelayIntervall); }
 
-    public bool MenuNavigationPress(CommandIndex aCommand) { return mControls[0].MenuNavigatePress(aCommand); }
+    public bool MenuNavigationPress(CommandIndex aCommand) { return mActiveControls.MenuNavigatePress(aCommand); }
 
-    public bool MenuConfirmButtonPressed() { return mControls[0].MenuConfirm(); }
+    public bool MenuConfirmButtonPressed() { return mActiveControls.MenuConfirm(); }
 
-    public bool MenuSelectButtonPressed() { return mControls[0].MenuSelect(); }
+    public bool MenuSelectButtonPressed() { return mActiveControls.MenuSelect(); }
 
-    public bool MenuCancelButtonPressed() { return mControls[0].MenuCancel(); }
+    public bool MenuCancelButtonPressed() { return mActiveControls.MenuCancel(); }
 
-    public bool MenuBackButtonPressed() { return mControls[0].MenuBack(); }
+    public bool MenuBackButtonPressed() { return mActiveControls.MenuBack(); }
 
-    public Vector3 MoveBlockHorizontal() { return mControls[0].GameMoveBlockHorizontal(); }
+    public Vector3 MoveBlockHorizontal() { return mActiveControls.GameMoveBlockHorizontal(); }
 
-    public int PowerUpSelection() { return 0; }
+    public int PowerUpSelection() { return mActiveControls.GameMovePowerUpSelection(); }
 
-    public bool GamePause() { return mControls[0].GamePause(); }
+    public bool GamePause() { return mActiveControls.GamePause(); }
 
-    public bool DropBlockGradually(float aBlockNextDropTime) { return mControls[0].GameDropBlockGradually(aBlockNextDropTime); }
+    public bool DropBlockGradually(float aBlockNextDropTime) { return mActiveControls.GameDropBlockGradually(aBlockNextDropTime); }
 
-    public bool DropBlockInstantly() { return mControls[0].GameInstantBlockDrop(); }
+    public bool DropBlockInstantly() { return mActiveControls.GameInstantBlockDrop(); }
 
-    public bool RotateBlock() { return mControls[0].GameRotateBlock(); }
+    public bool RotateBlock() { return mActiveControls.GameRotateBlock(); }
 
-    public bool InvertBlock() { return mControls[0].GameInverteBlock(); }
+    public bool InvertBlock() { return mActiveControls.GameInverteBlock(); }
 
-    public bool PowerUpUse() { return mControls[0].GameUsePowerUp(); }
+    public bool PowerUpUse() { return mActiveControls.GameUsePowerUp(); }
 
-    public bool PowerUpSelectLeft() { return mControls[0].GameMovePowerUpSelectLeft(); }
+    public bool PowerUpSelectLeft() { return mActiveControls.GameMovePowerUpSelectLeft(); }
 
-    public bool PowerUpSelectRight() { return mControls[0].GameMovePowerUpSelectRight(); }
+    public bool PowerUpSelectRight() { return mActiveControls.GameMovePowerUpSelectRight(); }
 
-    public bool SwapPreview() { return mControls[0].GameSwapPreview(); }
+    public bool SwapPreview() { return mActiveControls.GameSwapPreview(); }
 
-    public bool ChangePreview() { return mControls[0].GameRotatePreview(); }
+    public bool ChangePreview() { return mActiveControls.GameRotatePreview(); }
 
-    public bool DumpPreview() { return mControls[0].GameDumpPreview(); }
+    public bool DumpPreview() { return mActiveControls.GameDumpPreview(); }
 
 
     public bool KeyPress(CommandIndex anCommand)
     {
-        return mControls[0].KeyPress(anCommand);
+        return mActiveControls.KeyPress(anCommand);
         //return Input.GetKey(mKeyBoard[anCommand]);
     }
 
     public bool KeyDown(CommandIndex anCommand)
     {
-        return mControls[0].KeyDown(anCommand);
+        return mActiveControls.KeyDown(anCommand);
         //return Input.GetKeyDown(mKeyBoard[anCommand]);
     }
 }

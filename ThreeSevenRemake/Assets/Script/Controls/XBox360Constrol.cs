@@ -36,7 +36,21 @@ public class XBox360Constrol : ControlObject
 {
     //private readonly AxisInput mNavigation = AxisInput.L_STICK;
 
-    private readonly List<string> mButtonNames;
+    private delegate Vector2Int OnGUINavigation();
+    private event OnGUINavigation guiNavigation;
+
+    private delegate Vector2Int OnGameBlockNavigation();
+    private event OnGameBlockNavigation gameBlockNavigation;
+
+    private delegate Vector2Int OnGamePowerUpNavigation();
+    private event OnGamePowerUpNavigation gamePowerUpNavigation;
+
+    private delegate Vector2Int OnGameEnableAnalogNavigator();
+    private event OnGameEnableAnalogNavigator enableAnalogNavigator;
+
+    private readonly List<string> mButtonNames = new List<string>();
+    public static List<string> XboxButtonNames = new List<string>();
+
     private readonly List<string> mAxisNames;
     private readonly Dictionary<XBoxButton, string> mButtonIndex = new Dictionary<XBoxButton, string>();
     private readonly Dictionary<CommandIndex, ControlInput> mCommands = new Dictionary<CommandIndex, ControlInput>();
@@ -45,6 +59,8 @@ public class XBox360Constrol : ControlObject
     private Vector2Int mCurrentMenuNavigateDireciton = Vector2Int.zero;
     private Vector2Int mLastNavigateAxisDirection = Vector2Int.zero;
     private float mMenuNavigationSuppressTimer = 0f;
+
+    private bool mPowerUpNavigateIsUsed = false;
 
     private ControlInput mLastInput = null;
     //private int mCurrentHorizontDirection = 0;
@@ -65,6 +81,9 @@ public class XBox360Constrol : ControlObject
             "L_Thumb_Button",
             "R_Thumb_Button",
         };
+        for (int i = 0; i < mButtonNames.Count; i++)
+            XboxButtonNames.Add(mButtonNames[i]);
+
         mAxisNames = new List<string>()
         {
             "L_Stick_Hori_Axis",
@@ -96,6 +115,18 @@ public class XBox360Constrol : ControlObject
             { AxisInput.R_STICK, false },
             { AxisInput.D_PAD, true }
         };
+
+        guiNavigation += LeftStick;
+        //guiNavigation += DPad;
+
+        //System.Delegate[] test = guiNavigation.GetInvocationList();
+        //test[0].Method.Name;
+
+        gameBlockNavigation += LeftStick;
+        gameBlockNavigation += DPad;
+
+
+        gamePowerUpNavigation += RightStick;
     }
 
     public override void KeySettings(/*Dictionary<CommandIndex, object> someSetting*/)
@@ -118,16 +149,48 @@ public class XBox360Constrol : ControlObject
             { CommandIndex.BLOCK_INSTANT_DROP, new ControlInput(XBoxButton.A) },
             { CommandIndex.BLOCK_ROTATE, new ControlInput(XBoxButton.X) },
             { CommandIndex.BLOCK_INVERT, new ControlInput(XBoxButton.Y) },
-            { CommandIndex.POWER_UP_USE, new ControlInput(XBoxButton.B) },//{ CommandIndex.PREVIEW_SWAP, new ControlInput(XBoxButton.B) },
+            { CommandIndex.POWER_UP_USE, new ControlInput(XBoxButton.B) },
             { CommandIndex.POWER_UP_NAVI_LEFT, new ControlInput(AxisInput.R_STICK, XBoxButton.R_THUMB_LEFT, Vector2Int.left) },
             { CommandIndex.POWER_UP_NAVI_RIGHT, new ControlInput(AxisInput.R_STICK, XBoxButton.R_THUMB_RIGHT, Vector2Int.right) },
             { CommandIndex.PREVIEW_ROTATE, new ControlInput(XBoxButton.R_SHOULDER) },
-            { CommandIndex.PREVIEW_DUMP, new ControlInput(XBoxButton.L_SHOULDER) },//new ControlInput(AxisInput.TRIGGER, XBoxButton.R_TRIGGER, Vector2Int.right) },
             { CommandIndex.INGAME_PAUSE, new ControlInput(XBoxButton.START) }
         };
 
+
+        if(enableAnalogNavigator != null)
+        {
+            System.Delegate[] clientList = enableAnalogNavigator.GetInvocationList();
+            foreach (var d in clientList)
+                enableAnalogNavigator -= (d as OnGameEnableAnalogNavigator);
+        }
+
         foreach (CommandIndex com in defaultSets.Keys)
+        {
             mCommands[com] = (ControlInput)defaultSets[com];
+            if(mCommands[com].AxisType != AxisInput.NONE)
+            {
+                if (enableAnalogNavigator != null)
+                {
+                    if (enableAnalogNavigator.GetInvocationList().ToList().Any(x => x.Method.Name == mCommands[com].AxisName))//;.Method.Name == mCommands[com].AxisName)
+                        continue;
+                }
+                switch (mCommands[com].AxisType)
+                {
+                    case AxisInput.L_STICK:
+                        enableAnalogNavigator += LeftStick;
+                        break;
+                    case AxisInput.TRIGGER:
+                        enableAnalogNavigator += Trigger;
+                        break;
+                    case AxisInput.R_STICK:
+                        enableAnalogNavigator += RightStick;
+                        break;
+                    case AxisInput.D_PAD:
+                        enableAnalogNavigator += DPad;
+                        break;
+                }
+            }
+        }
     }
 
     public override bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall = .1f)
@@ -149,7 +212,7 @@ public class XBox360Constrol : ControlObject
     public override bool GameDropBlockGradually(float aBlockNextDropTime)
     {
         float vertical = ((Navigation().x > -1 && Navigation().x < 1) ? Navigation().y : 0f);
-        if ((vertical <= -1f && DropButtonTimePassed())/* || Time.time > aBlockNextDropTime*/)
+        if ((vertical <= -1f && DropButtonTimePassed()))
         {
             ResetDropTimer();
             return true;
@@ -165,6 +228,50 @@ public class XBox360Constrol : ControlObject
     public override bool KeyDown(CommandIndex aCommand) { return ButtonDown(aCommand); }
 
     public override bool KeyPress(CommandIndex aCommand) { return ButtonPressed(aCommand); }
+
+    public override int GameMovePowerUpSelection()
+    {
+        Vector2Int? dir = gamePowerUpNavigation?.Invoke();
+        if (mPowerUpNavigateIsUsed)
+        {
+            if (dir.Value.x != 1 && dir.Value.x != -1)
+                mPowerUpNavigateIsUsed = false;
+            return 0;
+        }
+
+        if (dir.Value.x == 1 || dir.Value.x == -1)
+            mPowerUpNavigateIsUsed = true;
+
+        return dir.Value.x;
+    }
+
+    public void GetButtonFor(CommandIndex aCommand, ref XBoxButton aButton)
+    {
+        aButton = mCommands[aCommand].Button;
+    }
+
+    public XBoxButton GetButtonInput()
+    {
+        XBoxButton button = XBoxButton.NONE;
+        if (Input.GetButtonDown(mButtonNames[0]))
+            button = XBoxButton.A;
+        if (Input.GetButtonDown(mButtonNames[1]))
+            button = XBoxButton.B;
+        if (Input.GetButtonDown(mButtonNames[2]))
+            button = XBoxButton.X;
+        if (Input.GetButtonDown(mButtonNames[3]))
+            button = XBoxButton.Y;
+        if (Input.GetButtonDown(mButtonNames[4]))
+            button = XBoxButton.L_SHOULDER;
+        if (Input.GetButtonDown(mButtonNames[5]))
+            button = XBoxButton.R_SHOULDER;
+        if (Input.GetButtonDown(mButtonNames[8]))
+            button = XBoxButton.L_THUMB_PRESSED;
+        if (Input.GetButtonDown(mButtonNames[9]))
+            button = XBoxButton.R_THUMB_PRESSED;
+
+        return button;
+    }
 
     private Vector2Int Navigation()
     {
@@ -204,6 +311,7 @@ public class XBox360Constrol : ControlObject
         return Input.GetButton(buttonName);
     }
 
+    // This will be updateed with AxisInput
     private bool GetAxisAsButton(CommandIndex aCommand)
     {
         if (AxisSwitch(aCommand) == mCommands[aCommand].Direction)
@@ -212,31 +320,42 @@ public class XBox360Constrol : ControlObject
         return false;
     }
 
+    private bool AxisButtonHit(CommandIndex aCommand)
+    {
+        //Vector2Int? dir = enableAnalogNavigator?.Invoke();
+        //enableAnalogNavigator.GetInvocationList()
+        //if(dir.HasValue)
+
+        //enableAnalogNavigator.GetInvocationList()[0].Method.Name
+        return false;
+    }
+
     private bool CheckNaviCommandsWithTimer(ControlInput anInput, float anDelayIntervall)
     {
-        if (GetAxisInput(anInput.AxisType) &&
-            (GetDirectionFromAxis(anInput.AxisType) == anInput.Direction) &&
+        mCurrentMenuNavigateDireciton = guiNavigation.Invoke();
+        if ((mCurrentMenuNavigateDireciton == anInput.Direction) && 
             mMenuNavigationSuppressTimer <= 0f)
         {
-            mCurrentMenuNavigateDireciton = anInput.Direction;
-            mMenuNavigationSuppressTimer = anDelayIntervall;//.1f;//Constants.BUTTON_DOWN_INTERVAL;
+            mMenuNavigationSuppressTimer = anDelayIntervall;
             return true;
         }
 
-        if (GetDirectionFromAxis(anInput.AxisType) == Vector2Int.zero)
+        if(mCurrentMenuNavigateDireciton == Vector2Int.zero)
             mMenuNavigationSuppressTimer = 0;
 
         if (mMenuNavigationSuppressTimer > 0f)
-            mMenuNavigationSuppressTimer -= Time.deltaTime;  // anDelayIntervall;
+            mMenuNavigationSuppressTimer -= Time.deltaTime;
 
         return false;
     }
 
     private bool CheckNaviCommandsWithPreviousDirection(ControlInput anInput)
     {
-        mCurrentMenuNavigateDireciton = GetDirectionFromAxis(anInput.AxisType);
-        //Debug.Log(anInput.Button);
-        if (GetAxisInput(anInput.AxisType))
+        Vector2Int? navi = guiNavigation?.Invoke();
+        if (navi.HasValue)
+            mCurrentMenuNavigateDireciton = (Vector2Int)navi;
+        //mCurrentMenuNavigateDireciton = GetDirectionFromAxis(anInput.AxisType);
+        if (CheckThisStickMoves(mCurrentMenuNavigateDireciton)/*GetAxisInput(anInput.AxisType)*/)
         {
             if ((mLastInput != null) && (mCurrentMenuNavigateDireciton == mLastInput.Direction))
                 return false;
@@ -246,16 +365,6 @@ public class XBox360Constrol : ControlObject
                 return true;
             }
         }
-        //if (GetAxisInput(anInput.AxisType) && (mCurrentMenuNavigateDireciton == mLastNavigateAxisDirection))
-        //{
-        //    return false;
-        //}
-        //else if (GetAxisInput(anInput.AxisType) && (mCurrentMenuNavigateDireciton == anInput.Direction))
-        //{
-        //    mLastNavigateAxisDirection = mCurrentMenuNavigateDireciton;
-        //    return true;
-        //}
-
         mLastInput = null;
 
         return false;
@@ -271,7 +380,7 @@ public class XBox360Constrol : ControlObject
                 dir = LeftStick();
                 break;
             case AxisInput.TRIGGER:
-                dir.x = Trigger();
+                dir = Trigger();
                 break;
             case AxisInput.R_STICK:
                 dir = RightStick();
@@ -283,6 +392,22 @@ public class XBox360Constrol : ControlObject
         return Vector2Int.zero;
     }
 
+    /// <summary>
+    /// Currently is for test if the guiNavigation delegate works
+    /// </summary>
+    /// <returns>If any of the subscribed delegate had moved</returns>
+    private bool GuiNavigatorMoved(ref Vector2Int aDir)
+    {
+        Vector2Int? navi = guiNavigation?.Invoke();
+        if (navi.HasValue)
+            aDir = (Vector2Int)navi;
+        if (aDir.x <= -1 || aDir.y <= -1 || aDir.x >= 1 || aDir.y >= 1)
+            return true;
+        return false;
+    }
+
+    // this might be removed later and replace by each type of navigat moved method
+    // It'll be used for a moment
     private bool GetAxisInput(AxisInput theCheckingAxis)
     {
         if (theCheckingAxis == AxisInput.L_STICK)
@@ -315,7 +440,7 @@ public class XBox360Constrol : ControlObject
         switch (aSelectedAxis)
         {
             case AxisInput.TRIGGER:
-                returnDirection = new Vector2Int(Trigger(), 0);
+                returnDirection = Trigger();//new Vector2Int(Trigger(), 0);
                 break;
             case AxisInput.R_STICK:
                 returnDirection = RightStick();
@@ -332,7 +457,7 @@ public class XBox360Constrol : ControlObject
 
     private Vector2Int LeftStick() { return new Vector2Int((int)Input.GetAxis(mAxisNames[0]), (int)Input.GetAxis(mAxisNames[1])); }
 
-    private int Trigger() { return (int)Input.GetAxis(mAxisNames[2]); }
+    private Vector2Int Trigger() { return new Vector2Int((int)Input.GetAxis(mAxisNames[2]), 0); }
 
     private Vector2Int RightStick() { return new Vector2Int((int)Input.GetAxis(mAxisNames[3]), (int)Input.GetAxis(mAxisNames[4])); }
 
@@ -353,6 +478,9 @@ public class ControlInput
     private readonly Vector2Int mAxisDirection = Vector2Int.zero;
     public Vector2Int Direction { get { return mAxisDirection; } }
 
+    private readonly string mAxisName = "";
+    public string AxisName { get { return mAxisName; } }
+
     public ControlInput(XBoxButton anIndex)
     {
         mInputType = GP_InputType.BUTTON;
@@ -365,6 +493,22 @@ public class ControlInput
         mAxisType = anAxis;
         mButtonIndex = anIndex;
         mAxisDirection = aDirection;
+
+        switch(anAxis)
+        {
+            case AxisInput.L_STICK:
+                mAxisName = "LeftStick";
+                break;
+            case AxisInput.R_STICK:
+                mAxisName = "RightStick";
+                break;
+            case AxisInput.TRIGGER:
+                mAxisName = "Trigger";
+                break;
+            case AxisInput.D_PAD:
+                mAxisName = "DPad";
+                break;
+        }
     }
 
     public bool AxisMatched(AxisInput theAxis, Vector2Int aDirection)

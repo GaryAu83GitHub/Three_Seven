@@ -211,16 +211,11 @@ public class BlockManager
             comboOccuring?.Invoke(mComboCount++);
             achieveScoringFor?.Invoke(mScoringInfos[mCurrentScoringGroupIndex], sortCubeList);
             LevelManager.Instance.AddLevelScore(1);
-            GamingManager.Instance.AddScore(ScoreType.LINKING, sortCubeList.Count, thisGroupTaskRank);
-            mCurrentGroupScoreCalcInProgress = true;//!mCurrentGroupScoreCalcInProgress;
+            GamingManager.Instance.AddScore(ScoreType.LINKING, sortCubeList.Count);
+            mCurrentGroupScoreCalcInProgress = true;
         }
         else
         {
-            //mScoringCalculationTimer += Time.deltaTime;
-            //if (mScoringCalculationTimer >= 1f)
-            //{
-            //    mScoringCalculationTimer = mScoringCalculationTimer - 1f;
-
             mScoringCalculationTimer += Time.deltaTime;
             if(mScoringCalculationTimer > 1f)
             {

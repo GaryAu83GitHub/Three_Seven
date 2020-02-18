@@ -24,10 +24,18 @@ public class PowerUpObject : MonoBehaviour
     /// </summary>
     public int ChargeTimes;
 
+    public bool PowerUpUseable { get { return (mCurrentCharges == ChargeTimes); } }
+
     /// <summary>
     /// The uncharged power up icon image component
     /// </summary>
     private Image BaseIconImage;
+
+    /// <summary>
+    /// The instance for the CanvasGroup component, use for the object appearence
+    /// when been selected or not
+    /// </summary>
+    private CanvasGroup mCG;
 
     /// <summary>
     /// The value of how much the image is filling
@@ -61,8 +69,8 @@ public class PowerUpObject : MonoBehaviour
     /// </summary>
     private bool mIsDischarging = false;
 
-    private const float CHARGING_SPEED = .05f;
-    private const float DISCHARGE_SPEED = .1f;
+    private const float CHARGING_SPEED = .01f;
+    private const float DISCHARGE_SPEED = .05f;
 
     void Awake()
     {
@@ -71,7 +79,9 @@ public class PowerUpObject : MonoBehaviour
 
     void Start()
     {
-        BaseIconImage = GetComponent<Image>();    
+        BaseIconImage = GetComponent<Image>();
+        mCG = GetComponent<CanvasGroup>();
+        Reset();
     }
 
     void Update()
@@ -80,6 +90,30 @@ public class PowerUpObject : MonoBehaviour
         DepleteIcon();
     }
 
+    /// <summary>
+    /// Reset this objects changeable value
+    /// </summary>
+    public void Reset()
+    {
+        mCurrentFillingValue = 0;
+        mCurrentCharges = 0;
+        Selected(false);
+        IconFilling();
+    }
+
+    public void Selected(bool isSelected)
+    {
+        if (!isSelected)
+            mCG.alpha = .5f;
+        else
+            mCG.alpha = 1f;
+    }
+
+    /// <summary>
+    /// Increase this object's charging count value and active the charging trigger.
+    /// If the charge count surpass the max number of charge times this item has, the 
+    /// current charges will be equal to the max charge number 
+    /// </summary>
     public void Charging()
     {
         mCurrentCharges++;
@@ -92,17 +126,27 @@ public class PowerUpObject : MonoBehaviour
         mIsCharging = true;
     }
 
-    public void Discharge()
+    /// <summary>
+    /// Active the discharge trigger and return the type of this item
+    /// </summary>
+    public PowerUpType Discharge()
     {
         mIsDischarging = true;
+        mCurrentCharges = 0;
+        return Type;
     }
 
+    /// <summary>
+    /// Change the filling value with the filling constant value when the trigger for
+    /// charging is active. The trigger will deactive once the filling value pass over
+    /// the current fillup value.
+    /// </summary>
     private void FillingIcon()
     {
         if (!mIsCharging)
             return;
 
-        if (mCurrentFillingValue > mFillUpValue)
+        if (mCurrentFillingValue >= mFillUpValue)
         {
             mCurrentFillingValue = mFillUpValue;
             mIsCharging = false;
@@ -113,12 +157,17 @@ public class PowerUpObject : MonoBehaviour
         IconFilling();
     }
 
+    /// <summary>
+    /// Change the filling value with the deplete constant value when the trigger for 
+    /// discharge is active. The trigger will deactive once the filling value falls 
+    /// till equal or below 0.
+    /// </summary>
     private void DepleteIcon()
     {
         if (!mIsDischarging)
             return;
 
-        if (mCurrentFillingValue < 0f)
+        if (mCurrentFillingValue <= 0f)
         {
             mCurrentFillingValue = 0f;
             mIsDischarging = false;
@@ -129,6 +178,9 @@ public class PowerUpObject : MonoBehaviour
         IconFilling();
     }
 
+    /// <summary>
+    /// Fill the Filling icon image with the current filling value
+    /// </summary>
     private void IconFilling()
     {
         IconFillingImage.fillAmount = mCurrentFillingValue;

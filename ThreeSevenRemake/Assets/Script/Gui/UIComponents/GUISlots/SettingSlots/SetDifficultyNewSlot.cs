@@ -3,34 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// This class is attach to the SetDifficultyNewSlot prefab from the game which will be
+/// replacing the previous SetDifficultSlot that had difficulty buttons and challenge
+/// digit check boxes in one.
+/// This object is simple storing which gameflow the player will play the game until
+/// the player apply the changing and send it to the game setting data
+/// </summary>
 public class SetDifficultyNewSlot : SettingSlotWithButtons
 {
     private Difficulties mSelectedDifficulty = GameRoundManager.Instance.Data.SelectedDifficulty;
-    private int mDifficultButtonSelectIndex = 0;
-
+    
     public override void Start()
     {
         base.Start();
-        ButtonAppearance(mSelectedDifficulty);
-        //SetDifficulty(mSelectedDifficulty);
+        ButtonAppearance();
     }
 
     public override void SetSlotValue(GameplaySettingData aData)
     {
         mSelectedDifficulty = aData.SelectDifficulty;
-        //base.SetSlotValue(aData);
+        mCurrectSelectedButton = (int)mSelectedDifficulty;
+        SelectButton();
+        base.SetSlotValue(aData);
     }
 
-    protected override void Navigation()
+    //protected override void Navigation()
+    //{
+    //    //if (ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_LEFT))
+    //    //    SelectButton(-1);
+    //    //if (ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_RIGHT))
+    //    //    SelectButton(1);
+    //    base.Navigation();
+
+    //}
+
+    protected override void NavigateButtons(int aDirection)
     {
-        if (ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_LEFT))
-        {
-            SelectButton(-1);
-        }
-        if (ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_RIGHT))
-        {
-            SelectButton(1);
-        }
+        base.NavigateButtons(aDirection);
+        SetDifficulty((Difficulties)mCurrectSelectedButton);
     }
 
     protected override void ChangeGameplaySetting()
@@ -39,33 +50,34 @@ public class SetDifficultyNewSlot : SettingSlotWithButtons
         base.ChangeGameplaySetting();
     }
 
-    private void SelectButton(int aDirection)
-    {
-        if ((mDifficultButtonSelectIndex + aDirection) >= Buttons.Count)
-            mDifficultButtonSelectIndex = (int)Difficulties.EASY;
-        else if ((mDifficultButtonSelectIndex + aDirection) < 0)
-            mDifficultButtonSelectIndex = (int)Difficulties.CUSTOMIZE;
-        else
-            mDifficultButtonSelectIndex += aDirection;
+    //private void SelectButton(int aDirection)
+    //{
+    //    if ((mCurrectSelectedButton + aDirection) >= Buttons.Count)
+    //        mCurrectSelectedButton = (int)Difficulties.EASY;
+    //    else if ((mCurrectSelectedButton + aDirection) < 0)
+    //        mCurrectSelectedButton = (int)Difficulties.HARD;
+    //    else
+    //        mCurrectSelectedButton += aDirection;
 
-        SetDifficulty((Difficulties)mDifficultButtonSelectIndex);
-
-    }
+    //    SetDifficulty((Difficulties)mCurrectSelectedButton);
+        
+    //}
 
     private void SetDifficulty(Difficulties aDifficulty)
     {
-        ButtonAppearance(aDifficulty);
+        mSelectedDifficulty = aDifficulty;
+        //ButtonAppearance();
         ChangeGameplaySetting();
     }
 
-    private void ButtonAppearance(Difficulties aSelectedDifficulty)
+    private void ButtonAppearance()
     {
-        mSelectedDifficulty = aSelectedDifficulty;
+        
         bool isInteractable = false;
 
         for (int i = 0; i < Buttons.Count; i++)
         {
-            if (i == (int)aSelectedDifficulty)
+            if (i == (int)mSelectedDifficulty)
                 isInteractable = false;
             else
                 isInteractable = true;

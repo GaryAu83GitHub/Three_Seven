@@ -26,8 +26,8 @@ public class GameplaySettings : SettingsContainerBase
     {
         SettingSlotBase.gameplaySettingHaveChange += ChangeGameplaySetting;
 
-        SetGameplayConfirmSlot.applyButtonPressed += ApplySettings;
-        SetGameplayConfirmSlot.resetButtonPressed += ResetSettings;
+        SetSettingsConfirmSlot.applyButtonPressed += ApplySettings;
+        SetSettingsConfirmSlot.resetButtonPressed += ResetSettings;
     }
 
     protected override void Start()
@@ -41,8 +41,8 @@ public class GameplaySettings : SettingsContainerBase
     {
         SettingSlotBase.gameplaySettingHaveChange -= ChangeGameplaySetting;
 
-        SetGameplayConfirmSlot.applyButtonPressed -= ApplySettings;
-        SetGameplayConfirmSlot.resetButtonPressed -= ResetSettings;
+        SetSettingsConfirmSlot.applyButtonPressed -= ApplySettings;
+        SetSettingsConfirmSlot.resetButtonPressed -= ResetSettings;
     }
 
     protected override void Input()
@@ -75,7 +75,7 @@ public class GameplaySettings : SettingsContainerBase
         if ((mCurrentSelectingSlotIndex + anIncreame) >= mCurrentDisplaySlotsCount)
             mCurrentSelectingSlotIndex = 0;
         else if ((mCurrentSelectingSlotIndex + anIncreame) < 0)
-            mCurrentSelectingSlotIndex = mCurrentDisplaySlotsCount;
+            mCurrentSelectingSlotIndex = mCurrentDisplaySlotsCount - 1;
         else
             mCurrentSelectingSlotIndex += anIncreame;
 
@@ -88,24 +88,32 @@ public class GameplaySettings : SettingsContainerBase
         ConfirmButtonsDisplay();
     }
 
-    private void ApplySettings()
+    protected override void ApplySettings()
     {
+        //if (!mActiveContainer)
+        //    return;
+
+        //mCurrentSelectingSlotIndex = 0;
+        //SwitchSelectingSlot(mCurrentSelectingSlotIndex);
+        base.ApplySettings();
+
         mOriginalSettings = new GameplaySettingData(mNewSettings);
-        mCurrentSelectingSlotIndex = 0;
-        SwitchSelectingSlot(mCurrentSelectingSlotIndex);
         ConfirmButtonsDisplay();
         GameSettings.Instance.NewGameSettings(mOriginalSettings);
     }
 
-    private void ResetSettings()
+    protected override void ResetSettings()
     {
+        //if (!mActiveContainer)
+        //    return;
+
+        //mCurrentSelectingSlotIndex = 0;
+        //SwitchSelectingSlot(mCurrentSelectingSlotIndex);
+        base.ResetSettings();
+
         mNewSettings = new GameplaySettingData(mOriginalSettings);
         SetSlotsValue(mNewSettings);
-        mCurrentSelectingSlotIndex = 0;
-        SwitchSelectingSlot(mCurrentSelectingSlotIndex);
         ConfirmButtonsDisplay();
-        //mCurrentSelectedSlot = SettingSlots[mCurrentSelectingSlotIndex];
-        //mCurrentSelectedSlot.ActivatingSlot(true);
     }
 
     private void SetSlotsValue(GameplaySettingData valueData)

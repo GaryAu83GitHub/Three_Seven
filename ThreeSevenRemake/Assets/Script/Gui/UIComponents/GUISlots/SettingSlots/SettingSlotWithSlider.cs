@@ -9,7 +9,7 @@ public class SettingSlotWithSlider : SettingSlotBase
     public Slider Slider;
     public TextMeshProUGUI ValueText;
 
-    public float mSliderScrollingSpeed = .1f;
+    public float mSliderScrollingSpeed = .9f;
     public int mSliderMoveIntervall = 1;
 
     public override void Start()

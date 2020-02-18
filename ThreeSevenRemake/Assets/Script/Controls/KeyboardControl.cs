@@ -33,7 +33,7 @@ public class KeyboardControl : ControlObject
             { CommandIndex.BLOCK_INSTANT_DROP, KeyCode.X },
             { CommandIndex.BLOCK_ROTATE, KeyCode.W },
             { CommandIndex.BLOCK_INVERT, KeyCode.E },
-            { CommandIndex.POWER_UP_USE, KeyCode.Space },//{ CommandIndex.PREVIEW_SWAP, KeyCode.Space },
+            { CommandIndex.POWER_UP_USE, KeyCode.Space },
             { CommandIndex.PREVIEW_ROTATE, KeyCode.UpArrow },
             { CommandIndex.INGAME_PAUSE, KeyCode.Return }
         };
@@ -85,39 +85,14 @@ public class KeyboardControl : ControlObject
         return Input.GetKeyDown(mCommands[aCommand]);
     }
 
-    //public override Vector3 GameMoveBlockHorizontal()
-    //{
-    //    if(!MoveHorizontButtonTimePassed())
-    //        return base.GameMoveBlockHorizontal();
-
-    //    Vector3 dir = Vector3.zero;
-    //    if (HorizontBottomHit(ref dir))
-    //        ResetMoveHorizontTimer();
-
-    //    return dir;
-    //}
-
     protected override bool HorizontBottomHit(ref Vector3 aDir, float aHorizontValue = 0f)
     {
-        //float horizontal = HorizontNavigation();
-        //if ((horizontal <= -1 || horizontal >= 1))
-        //{
-        //    if (!SupressHorizontMove())
-        //        aDir = new Vector3(horizontal, 0, 0);
-        //    else
-        //        aDir = Vector3.zero;
-
-        //    if(mCurrentHorizontDirection != (int)horizontal)
-        //    {
-        //        mCurrentHorizontDirection = (int)horizontal;
-        //        mHorizontSurpressTimer = 0f;
-        //    }
-
-        //    mHorizontSurpressTimer += Time.deltaTime * mIncreaseDeltaTimeConst;
-        //    return true;
-        //}
-
         return base.HorizontBottomHit(ref aDir, HorizontNavigation());
+    }
+
+    public void GetKeyCodeFor(CommandIndex aCommand, ref KeyCode aKeyCode)
+    {
+        aKeyCode = mCommands[aCommand];
     }
 
     private float HorizontNavigation()

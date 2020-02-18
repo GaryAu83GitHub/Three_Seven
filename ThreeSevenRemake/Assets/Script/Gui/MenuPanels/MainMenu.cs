@@ -29,8 +29,9 @@ public class MainMenu : MenuEnablePanelBase
     public delegate void OnOpenHighscorePanel();
     public static OnOpenHighscorePanel openHighscorePanel;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         ControlManager.Ins.DefaultSetting();   
     }
     

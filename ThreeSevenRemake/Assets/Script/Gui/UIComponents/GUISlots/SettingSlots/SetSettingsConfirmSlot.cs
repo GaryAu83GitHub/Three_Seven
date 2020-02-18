@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SetGameplayConfirmSlot : SettingSlotWithButtons
+public class SetSettingsConfirmSlot : SettingSlotWithButtons
 {
-    private enum ButtonIndex
+    protected enum ButtonIndex
     {
         APPLY,
         RESET,
@@ -20,9 +20,19 @@ public class SetGameplayConfirmSlot : SettingSlotWithButtons
         base.Start();
     }
 
+    public override void Update()
+    {
+        if (mSlotActivate)
+            SelectButton();
+        else
+            AllButtonUnInteractable();
+
+        base.Update();
+    }
+
     public override void Exit()
     {
-        mCurrectSelectedButton = (int)ButtonIndex.APPLY;
+        //mCurrectSelectedButton = (int)ButtonIndex.APPLY;
         base.Exit();
     }
 

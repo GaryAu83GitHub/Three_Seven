@@ -72,8 +72,9 @@ public class GameSceneMain : MonoBehaviour
         MainGamePanel.blockDropInstantly += BlockDropInstantly;
         MainGamePanel.blockRotate += BlockRotate;
         MainGamePanel.blockInvert += BlockInvert;
-        MainGamePanel.blockSwaping += BlockSwaping;
         MainGamePanel.gamePause += GamePause;
+
+        PowerUpSlot.usePowerUp += UsePowerUp;
 
         TaskManagerNew.createNewBlock += CreateNewBlock;
         TaskBox.createNewBlock += CreateNewBlock;
@@ -95,8 +96,9 @@ public class GameSceneMain : MonoBehaviour
         MainGamePanel.blockDropInstantly -= BlockDropInstantly;
         MainGamePanel.blockRotate -= BlockRotate;
         MainGamePanel.blockInvert -= BlockInvert;
-        MainGamePanel.blockSwaping -= BlockSwaping;
-        MainGamePanel.gamePause += GamePause;
+        MainGamePanel.gamePause -= GamePause;
+
+        PowerUpSlot.usePowerUp -= UsePowerUp;
 
         TaskManagerNew.createNewBlock -= CreateNewBlock;
         TaskBox.createNewBlock -= CreateNewBlock;
@@ -109,7 +111,7 @@ public class GameSceneMain : MonoBehaviour
 
     void Update()
     {
-        TableCover.SetActive(mGameIsPausing/*PauseMenu.GameIsPause*/);
+        TableCover.SetActive(mGameIsPausing);
         if (mGameIsPausing)
         {
             if(Input.GetKeyDown(KeyCode.F4))
@@ -133,12 +135,6 @@ public class GameSceneMain : MonoBehaviour
             return;
         }
 
-        //if (BlockManager.Instance.BlockPassedGameOverLine())
-        //{
-        //    passingTheTop?.Invoke();
-        //    return;
-        //}
-        //InputHandle()
         if (mCurrentBlock != null)
         {
             if (mBlockDropTimer > 0)
@@ -263,6 +259,16 @@ public class GameSceneMain : MonoBehaviour
             return;
 
         mCurrentBlock.InvertBlock();
+    }
+
+    private void UsePowerUp(PowerUpType aPowerUpType)
+    {
+        switch(aPowerUpType)
+        {
+            case PowerUpType.SWAP_BLOCK:
+                BlockSwaping();
+                break;
+        }
     }
 
     private void BlockSwaping()
