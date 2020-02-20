@@ -65,11 +65,6 @@ public class GameplaySettings : SettingsContainerBase
         base.Enter();
     }
 
-    public override void Exit()
-    {
-        base.Exit();
-    }
-
     private void SelectingSlot(int anIncreame)
     {
         if ((mCurrentSelectingSlotIndex + anIncreame) >= mCurrentDisplaySlotsCount)

@@ -1,8 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System;
 
 public class SetKeybindSlot : SettingSlotBase
 {
@@ -11,7 +11,7 @@ public class SetKeybindSlot : SettingSlotBase
 
     public CommandIndex KeybindCommand;
 
-    public delegate void OnKeybindingSettingHaveChange(ref CommandIndex aCommand, ref KeybindData aNewKeybindingData);
+    public delegate void OnKeybindingSettingHaveChange(CommandIndex aCommand, KeybindData aNewKeybindingData);
     public static OnKeybindingSettingHaveChange keybindingSettingHaveChange;
 
     private KeybindData mKeybindingData = new KeybindData();
@@ -65,7 +65,7 @@ public class SetKeybindSlot : SettingSlotBase
             {
                 mKeybindingData.ChangeBindingKeyCode(kcode);
                 Display();
-                keybindingSettingHaveChange?.Invoke(ref KeybindCommand, ref mKeybindingData);
+                keybindingSettingHaveChange?.Invoke(KeybindCommand, mKeybindingData);
                 return;
             }
         }
@@ -95,6 +95,6 @@ public class SetKeybindSlot : SettingSlotBase
     {
         mKeybindingData.ChangeXBoxBotton(aButtonCode);
         Display();
-        keybindingSettingHaveChange?.Invoke(ref KeybindCommand, ref mKeybindingData);
+        keybindingSettingHaveChange?.Invoke(KeybindCommand, mKeybindingData);
     }
 }

@@ -17,7 +17,8 @@ public class SetDifficultyNewSlot : SettingSlotWithButtons
     public override void Start()
     {
         base.Start();
-        ButtonAppearance();
+        SelectButton();
+        //ButtonAppearance();
     }
 
     public override void SetSlotValue(GameplaySettingData aData)
@@ -27,16 +28,6 @@ public class SetDifficultyNewSlot : SettingSlotWithButtons
         SelectButton();
         base.SetSlotValue(aData);
     }
-
-    //protected override void Navigation()
-    //{
-    //    //if (ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_LEFT))
-    //    //    SelectButton(-1);
-    //    //if (ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_RIGHT))
-    //    //    SelectButton(1);
-    //    base.Navigation();
-
-    //}
 
     protected override void NavigateButtons(int aDirection)
     {
@@ -49,20 +40,7 @@ public class SetDifficultyNewSlot : SettingSlotWithButtons
         mGameplaySettingData.SelectDifficulty = mSelectedDifficulty;
         base.ChangeGameplaySetting();
     }
-
-    //private void SelectButton(int aDirection)
-    //{
-    //    if ((mCurrectSelectedButton + aDirection) >= Buttons.Count)
-    //        mCurrectSelectedButton = (int)Difficulties.EASY;
-    //    else if ((mCurrectSelectedButton + aDirection) < 0)
-    //        mCurrectSelectedButton = (int)Difficulties.HARD;
-    //    else
-    //        mCurrectSelectedButton += aDirection;
-
-    //    SetDifficulty((Difficulties)mCurrectSelectedButton);
-        
-    //}
-
+    
     private void SetDifficulty(Difficulties aDifficulty)
     {
         mSelectedDifficulty = aDifficulty;
@@ -70,6 +48,8 @@ public class SetDifficultyNewSlot : SettingSlotWithButtons
         ChangeGameplaySetting();
     }
 
+    // all belowe here will be removed since these function was already declared
+    // on the superior class
     private void ButtonAppearance()
     {
         

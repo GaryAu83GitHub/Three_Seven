@@ -100,20 +100,34 @@ public class KeybindingSettings : SettingsContainerBase
         SwitchSelectingSlot(mCurrentSelectingSlotIndex);
     }
 
-    private void ChangeKeybindingSetting(ref CommandIndex aCommand, ref KeybindData aKeybindData)
+    private void ChangeKeybindingSetting(CommandIndex aCommand, KeybindData aKeybindData)
     {
-        mNewBindings[aCommand] = new KeybindData(aKeybindData);
+        // put a function here to check if any of the commandindex already has the key
+        // in binding
+        // if it does. then call the function for swaping the commands with the keys by
+        // swaping the old command recieve the bind from the changing command index,
+        // and the changing command index get the new binding.
+        if(!DuplicateKeyOccured(aCommand, aKeybindData))
+            mNewBindings[aCommand] = new KeybindData(aKeybindData);
+
         ConfirmButtonDisplay();
     }
 
     protected override void ApplySettings()
     {
-        base.ApplySettings();        
+        base.ApplySettings();
+
+        mOriginalBindings = new Dictionary<CommandIndex, KeybindData>(mNewBindings);
+        ConfirmButtonDisplay();
     }
 
     protected override void ResetSettings()
     {
         base.ResetSettings();
+
+        mNewBindings = new Dictionary<CommandIndex, KeybindData>(mOriginalBindings);
+        DisplaySlots();
+        ConfirmButtonDisplay();
     }
 
     private void BackButtonPressed()
@@ -151,6 +165,41 @@ public class KeybindingSettings : SettingsContainerBase
                 return false;
         }
         return true;
+    }
+
+    private bool DuplicateKeyOccured(CommandIndex aCommand, KeybindData aData)
+    {
+        foreach(CommandIndex com in mNewBindings.Keys)
+        {
+            if (com == aCommand)
+                continue;
+
+            if (mNewBindings[com].BindingKeyCode == aData.BindingKeyCode)
+            {
+                KeyCode tempKeycode = mNewBindings[aCommand].BindingKeyCode;
+                mNewBindings[com].ChangeBindingKeyCode(tempKeycode);
+                mNewBindings[aCommand].ChangeBindingKeyCode(aData.BindingKeyCode);
+
+                return true;
+            }
+            else if (mNewBindings[com].BindingXBoxBotton == aData.BindingXBoxBotton)
+            {
+                XBoxButton tempKeycode = mNewBindings[aCommand].BindingXBoxBotton;
+                mNewBindings[com].ChangeXBoxBotton(tempKeycode);
+                mNewBindings[aCommand].ChangeXBoxBotton(aData.BindingXBoxBotton);
+
+                return true;
+            }
+            else if (aData.BindingAxis != AxisInput.NONE && mNewBindings[com].BindingAxis == aData.BindingAxis)
+            {
+                return true;
+            }
+            //else if(mNewBindings[com].BindingKeyCodes.Any() && aData.BindingKeyCodes.Any())
+            //{
+            //    var temp = mNewBindings[com].BindingKeyCodes.FirstOrDefault(o => o == aData)
+            //}
+        }
+        return false;
     }
 }
 

@@ -35,7 +35,6 @@ public class SetKeybindConfirmSlot : SetSettingsConfirmSlot
                 backButtonPressed?.Invoke();
         }
         else
-            base.MenuButtonPressed();
-            
+            base.MenuButtonPressed();            
     }
 }

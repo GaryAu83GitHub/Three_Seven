@@ -33,6 +33,13 @@ public enum CommandIndex
     MAX_INPUT
 }
 
+public enum NavigatorType
+{
+    BLOCK_NAVIGATOR,
+    POWER_UP_NAVIGATOR,
+    NONE
+}
+
 public enum ControlType
 {
     KEYBOARD,
