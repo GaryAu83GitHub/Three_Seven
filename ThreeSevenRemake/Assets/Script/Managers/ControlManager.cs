@@ -23,6 +23,8 @@ public class ControlManager
 
     private ControlObject mActiveControls = new ControlObject();
 
+    private bool mDefaultControlsAreRegistrated = false;
+
     public ControlManager()
     {
 
@@ -30,6 +32,8 @@ public class ControlManager
 
     public void DefaultSetting()
     {
+        if (mDefaultControlsAreRegistrated)
+            return;
         //// navigation
         //mDefaultKeyBoard.Add(CommandIndex.NAVI_LEFT, KeyCode.LeftArrow);
         //mDefaultKeyBoard.Add(CommandIndex.NAVI_RIGHT, KeyCode.RightArrow);
@@ -64,6 +68,8 @@ public class ControlManager
         }
         foreach (ControlObject c in mControls)
             c.KeySettings(/*new Dictionary<CommandIndex, KeyCode>()*/);
+
+        mDefaultControlsAreRegistrated = true;
     }
 
     public void ResetButtonPressTimer() { mActiveControls.ResetButtonPressTimer(); }

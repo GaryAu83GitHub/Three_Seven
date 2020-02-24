@@ -95,6 +95,22 @@ public class KeyboardControl : ControlObject
         aKeyCode = mCommands[aCommand];
     }
 
+    public void GetNavigatorCodesFor(NavigatorType aType, ref List<KeyCode> someCodes)
+    {
+        someCodes.Clear();
+        if(aType == NavigatorType.BLOCK_NAVIGATOR)
+        {
+            someCodes.Add(mCommands[CommandIndex.BLOCK_MOVE_LEFT]);
+            someCodes.Add(mCommands[CommandIndex.BLOCK_MOVE_RIGHT]);
+            someCodes.Add(mCommands[CommandIndex.BLOCK_DROP]);
+        }
+        else if(aType == NavigatorType.POWER_UP_NAVIGATOR)
+        {
+            someCodes.Add(mCommands[CommandIndex.POWER_UP_NAVI_LEFT]);
+            someCodes.Add(mCommands[CommandIndex.POWER_UP_NAVI_RIGHT]);
+        }
+    }
+
     private float HorizontNavigation()
     {
         float navi = 0;

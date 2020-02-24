@@ -6,47 +6,68 @@ using TMPro;
 
 public class SetKeybindSlot : SettingSlotBase
 {
+    public CommandIndex KeybindCommand;
+
+    public GameObject KeybindContainer;
+
     public TextMeshProUGUI KeyboardBindText;
     public TextMeshProUGUI GamepadBindText;
-
-    public CommandIndex KeybindCommand;
 
     public delegate void OnKeybindingSettingHaveChange(CommandIndex aCommand, KeybindData aNewKeybindingData);
     public static OnKeybindingSettingHaveChange keybindingSettingHaveChange;
 
+    private CanvasGroup mBindContainerMG;
+
     private KeybindData mKeybindingData = new KeybindData();
-    private bool mChangeBindingEnable = false;
+    private bool mChangeModeOn = false;
+
+    private float mChangeModeSuspendCountdown = 0f;
+    private const float mChangeModeSuspendTime = .05f;
 
     public override void Start()
     {
         base.Start();
+        if(KeybindContainer != null)
+            mBindContainerMG = KeybindContainer.GetComponent<CanvasGroup>();
+        ActiveChangeMode(false);
     }
 
     public override void Update()
     {
-        if (mChangeBindingEnable)
+        base.Update();
+
+        if (mChangeModeSuspendCountdown > 0)
+            mChangeModeSuspendCountdown -= Time.deltaTime;
+
+        if (mChangeModeOn && mChangeModeSuspendCountdown <= 0f)
         {
             CheckForKeyboardInput();
             CheckForXboxBottonInput();
         }
     }
 
-    public void SetKey(KeybindData aData)
-    {
-        mKeybindingData = new KeybindData(aData);
-        Display();
-    }
-
     public override void Enter()
     {
         base.Enter();
-        mChangeBindingEnable = true;
+        ActiveChangeMode(false);
     }
 
     public override void Exit()
     {
         base.Exit();
-        mChangeBindingEnable = false;
+        ActiveChangeMode(false);
+    }
+
+    protected override void MenuButtonPressed()
+    {
+        if(ControlManager.Ins.MenuSelectButtonPressed() && !mChangeModeOn)
+            ActiveChangeMode(true);
+    }
+
+    public void SetKey(KeybindData aData)
+    {
+        mKeybindingData = new KeybindData(aData);
+        Display();
     }
 
     private void Display()
@@ -66,6 +87,7 @@ public class SetKeybindSlot : SettingSlotBase
                 mKeybindingData.ChangeBindingKeyCode(kcode);
                 Display();
                 keybindingSettingHaveChange?.Invoke(KeybindCommand, mKeybindingData);
+                ActiveChangeMode(false);
                 return;
             }
         }
@@ -96,5 +118,19 @@ public class SetKeybindSlot : SettingSlotBase
         mKeybindingData.ChangeXBoxBotton(aButtonCode);
         Display();
         keybindingSettingHaveChange?.Invoke(KeybindCommand, mKeybindingData);
+        ActiveChangeMode(false);
+    }
+
+    private void ActiveChangeMode(bool isChangeModeOn)
+    {
+        if (KeybindContainer == null)
+            return;
+
+
+        mChangeModeOn = isChangeModeOn;
+        mLockParentInput = mChangeModeOn;
+
+        mChangeModeSuspendCountdown = (isChangeModeOn) ? mChangeModeSuspendTime : 0f;
+        mBindContainerMG.alpha = (mChangeModeOn ? 1f : .5f);
     }
 }

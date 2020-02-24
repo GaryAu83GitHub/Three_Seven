@@ -250,6 +250,14 @@ public class XBox360Constrol : ControlObject
         aButton = mCommands[aCommand].Button;
     }
 
+    public void GetNavigationSticksFor(NavigatorType aType, ref AxisInput anAxis)
+    {
+        if (aType == NavigatorType.BLOCK_NAVIGATOR)
+            anAxis = mCommands[CommandIndex.BLOCK_DROP].AxisType;
+        else if (aType == NavigatorType.POWER_UP_NAVIGATOR)
+            anAxis = mCommands[CommandIndex.POWER_UP_NAVI_LEFT].AxisType;
+    }
+
     public XBoxButton GetButtonInput()
     {
         XBoxButton button = XBoxButton.NONE;

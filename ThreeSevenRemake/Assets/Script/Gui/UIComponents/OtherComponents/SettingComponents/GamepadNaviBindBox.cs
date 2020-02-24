@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class GamepadNaviBindBox : MonoBehaviour
 {
+    public AxisInput AxisType;
+
     public Image IconImage;
     public Toggle Toggle;    
 
@@ -18,9 +20,9 @@ public class GamepadNaviBindBox : MonoBehaviour
         BackgroundImage = GetComponent<Image>();
     }
 
-    public void BindingTrigger(bool isChecked)
+    public void BindingTrigger(AxisInput aCurrentSelectAxis)
     {
-        Toggle.isOn = isChecked;
+        Toggle.isOn = (aCurrentSelectAxis == AxisType);
     }
 
     public void BoxSelected(bool isSelected)
