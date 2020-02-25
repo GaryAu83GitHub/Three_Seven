@@ -74,9 +74,15 @@ public class ControlManager
 
     public void ResetButtonPressTimer() { mActiveControls.ResetButtonPressTimer(); }
 
-    public bool MenuNavigationHold(CommandIndex aCommand, float anDelayIntervall = .1f) { return mActiveControls.MenuNavigateHold(aCommand, anDelayIntervall); }
+    public bool MenuNavigationHold(CommandIndex aCommand, float aDelayIntervall = .1f)
+    {
+        return mActiveControls.MenuNavigateHold(aCommand, aDelayIntervall);
+    }
 
-    public bool MenuNavigationPress(CommandIndex aCommand) { return mActiveControls.MenuNavigatePress(aCommand); }
+    public bool MenuNavigationPress(CommandIndex aCommand)
+    {
+        return mActiveControls.MenuNavigatePress(aCommand);
+    }
 
     public bool MenuConfirmButtonPressed() { return mActiveControls.MenuConfirm(); }
 
@@ -86,6 +92,8 @@ public class ControlManager
 
     public bool MenuBackButtonPressed() { return mActiveControls.MenuBack(); }
 
+
+    // these are for in game mode
     public Vector3 MoveBlockHorizontal() { return mActiveControls.GameMoveBlockHorizontal(); }
 
     public int PowerUpSelection() { return mActiveControls.GameMovePowerUpSelection(); }
@@ -123,5 +131,38 @@ public class ControlManager
     {
         return mActiveControls.KeyDown(anCommand);
         //return Input.GetKeyDown(mKeyBoard[anCommand]);
+    }
+
+    public void SetActiveControl(ControlType aControlType)
+    {
+        mActiveControls = mControls.First(c => c.Type == aControlType);
+    }
+
+    private bool MultiControlButton(CommandIndex aCommand)
+    {
+        for(int i = 0; i < mControls.Count; i++)
+        {
+            if (aCommand == CommandIndex.CONFIRM)
+                return mControls[i].MenuConfirm();
+            if (aCommand == CommandIndex.SELECT)
+                return mControls[i].MenuSelect();
+            if (aCommand == CommandIndex.CANCEL)
+                return mControls[i].MenuCancel();
+            if (aCommand == CommandIndex.BACK)
+                return mControls[i].MenuBack();
+        }
+        return false;
+    }
+
+    private bool MultiControlNavigation(CommandIndex aCommand, float anDelayIntervall = 0f)
+    {
+        for (int i = 0; i < mControls.Count; i++)
+        {
+            if(anDelayIntervall != 0f && mControls[i].MenuNavigateHold(aCommand, anDelayIntervall)) 
+                return true;
+            else if(mControls[i].MenuNavigatePress(aCommand))
+                return true;
+        }
+        return false;
     }
 }
