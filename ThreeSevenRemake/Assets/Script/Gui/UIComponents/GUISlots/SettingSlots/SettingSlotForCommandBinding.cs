@@ -9,7 +9,7 @@ public class SettingSlotForCommandBinding : SettingSlotBase
 
     private CanvasGroup mBindContainerMG;
 
-    private KeybindData mKeybindingData = new KeybindData();
+    protected KeybindData mKeybindingData = new KeybindData();
 
     private bool mChangeModeOn = false;
 
@@ -63,16 +63,16 @@ public class SettingSlotForCommandBinding : SettingSlotBase
     protected virtual void CheckForGamepadInput()
     { }
 
-    protected virtual void Dispaly()
+    protected virtual void Display()
     { }
 
     public void SetKey(KeybindData aData)
     {
         mKeybindingData = new KeybindData(aData);
-        Dispaly();
+        Display();
     }
 
-    private void ActiveChangeMode(bool isChangeModeOn)
+    protected void ActiveChangeMode(bool isChangeModeOn)
     {
         if (KeybindContainer == null)
             return;
