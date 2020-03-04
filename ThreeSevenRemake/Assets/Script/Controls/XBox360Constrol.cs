@@ -193,6 +193,23 @@ public class XBox360Constrol : ControlObject
         }
     }
 
+    public override void SetNewCommandoBinding(Dictionary<CommandIndex, KeybindData> someNewBinding)
+    {
+        foreach (CommandIndex com in someNewBinding.Keys)
+            mCommands[com] = new ControlInput(someNewBinding[com].BindingXBoxBotton);
+    }
+
+    public override void SetNewNavgateBinding(Dictionary<NavigatorType, KeybindData> someNewBinding)
+    {
+        foreach(NavigatorType navi in someNewBinding.Keys)
+        {
+            if(navi == NavigatorType.BLOCK_NAVIGATOR)
+            { }
+            if(navi == NavigatorType.POWER_UP_NAVIGATOR)
+            { }
+        }
+    }
+
     public override bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall = .1f)
     {
         if (CheckNaviCommandsWithTimer(mCommands[aCommand], anDelayIntervall))
@@ -281,6 +298,13 @@ public class XBox360Constrol : ControlObject
         return button;
     }
 
+    /// <summary>
+    /// Return the vector value after have checked any of the stick is enable
+    /// The new Navigation method will be using delegate method to subscribe
+    /// the navigate sticks method, so this Navigation method might be replace
+    /// in the future
+    /// </summary>
+    /// <returns></returns>
     private Vector2Int Navigation()
     {
         Vector2Int navi = Vector2Int.zero;
@@ -293,6 +317,14 @@ public class XBox360Constrol : ControlObject
             navi = DPad();
 
         return navi;
+    }
+
+    private Vector2Int NavigationNew()
+    {
+        Vector2Int? navi = gamePowerUpNavigation?.Invoke();
+
+
+        return navi.Value;
     }
 
     private bool ButtonPressed(CommandIndex aCommand)

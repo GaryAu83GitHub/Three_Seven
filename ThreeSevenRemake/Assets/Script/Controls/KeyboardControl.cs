@@ -34,6 +34,8 @@ public class KeyboardControl : ControlObject
             { CommandIndex.BLOCK_ROTATE, KeyCode.W },
             { CommandIndex.BLOCK_INVERT, KeyCode.E },
             { CommandIndex.POWER_UP_USE, KeyCode.Space },
+            { CommandIndex.POWER_UP_NAVI_LEFT, KeyCode.LeftArrow },
+            { CommandIndex.POWER_UP_NAVI_RIGHT, KeyCode.RightArrow },
             { CommandIndex.PREVIEW_ROTATE, KeyCode.UpArrow },
             { CommandIndex.INGAME_PAUSE, KeyCode.Return }
         };
@@ -42,20 +44,35 @@ public class KeyboardControl : ControlObject
             mCommands[com] = (KeyCode)defaultSets[com];
     }
 
+    public override void SetNewCommandoBinding(Dictionary<CommandIndex, KeybindData> someNewBinding)
+    {
+        foreach(CommandIndex com in someNewBinding.Keys)
+            mCommands[com] = someNewBinding[com].BindingKeyCode;
+    }
+
+    public override void SetNewNavgateBinding(Dictionary<NavigatorType, KeybindData> someNewBinding)
+    {
+        foreach(NavigatorType navi in someNewBinding.Keys)
+        {
+            if(navi == NavigatorType.BLOCK_NAVIGATOR)
+            {
+                mCommands[CommandIndex.BLOCK_MOVE_LEFT] = someNewBinding[navi].BindingKeyCodes[0];
+                mCommands[CommandIndex.BLOCK_MOVE_RIGHT] = someNewBinding[navi].BindingKeyCodes[1];
+                mCommands[CommandIndex.BLOCK_DROP] = someNewBinding[navi].BindingKeyCodes[2];
+            }
+            if(navi == NavigatorType.POWER_UP_NAVIGATOR)
+            {
+                mCommands[CommandIndex.POWER_UP_NAVI_LEFT] = someNewBinding[navi].BindingKeyCodes[0];
+                mCommands[CommandIndex.POWER_UP_NAVI_RIGHT] = someNewBinding[navi].BindingKeyCodes[1];
+            }
+        }
+    }
+
     public override bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall = .1f)
     {
-        //if (KeyDown(CommandIndex.NAVI_DOWN))
-        //    return Vector2Int.down;
-        //if (KeyDown(CommandIndex.NAVI_LEFT))
-        //    return Vector2Int.left;
-        //if (KeyDown(CommandIndex.NAVI_RIGHT))
-        //    return Vector2Int.right;
-        //if (KeyDown(CommandIndex.NAVI_UP))
-        //    return Vector2Int.up;
-
         if(KeyPress(aCommand) && mMenuNavigationSuppressTimer <= 0f)
         {
-            mMenuNavigationSuppressTimer = anDelayIntervall;//.1f;
+            mMenuNavigationSuppressTimer = anDelayIntervall;
             return true;
         }
 
@@ -63,10 +80,17 @@ public class KeyboardControl : ControlObject
             mMenuNavigationSuppressTimer = 0;
 
         if (mMenuNavigationSuppressTimer > 0f)
-            mMenuNavigationSuppressTimer -= Time.deltaTime/* * anDelayIntervall*/;
+            mMenuNavigationSuppressTimer -= Time.deltaTime;
 
         //return KeyPress(aCommand);
         return false;
+    }
+
+    public override bool MenuNavigatePress(CommandIndex aCommand)
+    {
+        if (KeyPress(aCommand))
+            return true;
+        return base.MenuNavigatePress(aCommand);
     }
 
     public override bool KeyDown(CommandIndex aCommand)
@@ -88,7 +112,7 @@ public class KeyboardControl : ControlObject
     protected override bool HorizontBottomHit(ref Vector3 aDir, float aHorizontValue = 0f)
     {
         return base.HorizontBottomHit(ref aDir, HorizontNavigation());
-    }
+    }   
 
     public void GetKeyCodeFor(CommandIndex aCommand, ref KeyCode aKeyCode)
     {

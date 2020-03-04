@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class SettingSlotForCommandBinding : SettingSlotBase
 {
-    public CommandIndex KeybindCommand;
+    
     public GameObject KeybindContainer;
+
+    public delegate void OnSetDisplayControlType(ControlType aDisplayingType);
+    public static OnSetDisplayControlType setDisplayControlType;
 
     private CanvasGroup mBindContainerMG;
 
+    protected ControlType mDisplayControlType = ControlType.XBOX_360;
     protected KeybindData mKeybindingData = new KeybindData();
 
     private bool mChangeModeOn = false;
@@ -34,8 +38,10 @@ public class SettingSlotForCommandBinding : SettingSlotBase
 
         if(mChangeModeOn && mChangeModeSuspendCountdown <= 0f)
         {
-            CheckForKeyboardInput();
-            CheckForGamepadInput();
+            if(mDisplayControlType == ControlType.KEYBOARD)
+                CheckForKeyboardInput();
+            else if(mDisplayControlType == ControlType.XBOX_360)
+                CheckForGamepadInput();
         }
     }
 
@@ -66,13 +72,7 @@ public class SettingSlotForCommandBinding : SettingSlotBase
     protected virtual void Display()
     { }
 
-    public void SetKey(KeybindData aData)
-    {
-        mKeybindingData = new KeybindData(aData);
-        Display();
-    }
-
-    protected void ActiveChangeMode(bool isChangeModeOn)
+    protected virtual void ActiveChangeMode(bool isChangeModeOn)
     {
         if (KeybindContainer == null)
             return;
@@ -83,4 +83,12 @@ public class SettingSlotForCommandBinding : SettingSlotBase
         mChangeModeSuspendCountdown = (isChangeModeOn) ? mChangeModeSuspendTime : 0f;
         mBindContainerMG.alpha = (mChangeModeOn ? 1f : .5f);
     }
+
+    public virtual void SetKey(ControlType aDisplayControlType, KeybindData aData)
+    {
+        mDisplayControlType = aDisplayControlType;
+        mKeybindingData = new KeybindData(aData);
+        Display();
+    }
+
 }

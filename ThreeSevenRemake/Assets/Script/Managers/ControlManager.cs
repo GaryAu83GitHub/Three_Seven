@@ -18,10 +18,12 @@ public class ControlManager
     }
     private static ControlManager mInstance;
 
+    public ControlType ActiveControlType { get { return mActiveControl.Type; } }
+
     public List<ControlObject> Controls { get { return mControls; } }
     private List<ControlObject> mControls = new List<ControlObject>();
 
-    private ControlObject mActiveControls = new ControlObject();
+    private ControlObject mActiveControl = new ControlObject();
 
     private bool mDefaultControlsAreRegistrated = false;
 
@@ -54,16 +56,19 @@ public class ControlManager
         //mKeyBoard = new Dictionary<CommandIndex, KeyCode>(mDefaultKeyBoard);
 
         mControls.Add(new KeyboardControl());
-        mActiveControls = mControls[0];
+        mActiveControl = mControls[0];
 
         List<string> temp = Input.GetJoystickNames().ToList();
         if (temp.Any())
         {
-            mControls.Add(new XBox360Constrol());
+            //mControls.Add(new XBox360Constrol());
             for (int i = 0; i < temp.Count; i++)
             {
                 if (temp[i].Any())
-                    mActiveControls = mControls[1];
+                {
+                    mControls.Add(new XBox360Constrol());
+                    mActiveControl = mControls[1];
+                }
             }
         }
         foreach (ControlObject c in mControls)
@@ -72,70 +77,87 @@ public class ControlManager
         mDefaultControlsAreRegistrated = true;
     }
 
-    public void ResetButtonPressTimer() { mActiveControls.ResetButtonPressTimer(); }
+    public void NewBinding(Dictionary<CommandIndex, KeybindData> someCommandoBindings, Dictionary<NavigatorType, KeybindData> someNavigateBindings)
+    {
+        foreach(CommandIndex com in someCommandoBindings.Keys)
+        {
+
+        }
+
+        foreach(NavigatorType navi in someNavigateBindings.Keys)
+        {
+        }
+    }
+
+    public void ResetButtonPressTimer() { mActiveControl.ResetButtonPressTimer(); }
 
     public bool MenuNavigationHold(CommandIndex aCommand, float aDelayIntervall = .1f)
     {
-        return mActiveControls.MenuNavigateHold(aCommand, aDelayIntervall);
+        return mActiveControl.MenuNavigateHold(aCommand, aDelayIntervall);
     }
 
     public bool MenuNavigationPress(CommandIndex aCommand)
     {
-        return mActiveControls.MenuNavigatePress(aCommand);
+        return mActiveControl.MenuNavigatePress(aCommand);
     }
 
-    public bool MenuConfirmButtonPressed() { return mActiveControls.MenuConfirm(); }
+    public bool MenuConfirmButtonPressed() { return mActiveControl.MenuConfirm(); }
 
-    public bool MenuSelectButtonPressed() { return mActiveControls.MenuSelect(); }
+    public bool MenuSelectButtonPressed() { return mActiveControl.MenuSelect(); }
 
-    public bool MenuCancelButtonPressed() { return mActiveControls.MenuCancel(); }
+    public bool MenuCancelButtonPressed() { return mActiveControl.MenuCancel(); }
 
-    public bool MenuBackButtonPressed() { return mActiveControls.MenuBack(); }
+    public bool MenuBackButtonPressed() { return mActiveControl.MenuBack(); }
 
 
     // these are for in game mode
-    public Vector3 MoveBlockHorizontal() { return mActiveControls.GameMoveBlockHorizontal(); }
+    public Vector3 MoveBlockHorizontal() { return mActiveControl.GameMoveBlockHorizontal(); }
 
-    public int PowerUpSelection() { return mActiveControls.GameMovePowerUpSelection(); }
+    public int PowerUpSelection() { return mActiveControl.GameMovePowerUpSelection(); }
 
-    public bool GamePause() { return mActiveControls.GamePause(); }
+    public bool GamePause() { return mActiveControl.GamePause(); }
 
-    public bool DropBlockGradually(float aBlockNextDropTime) { return mActiveControls.GameDropBlockGradually(aBlockNextDropTime); }
+    public bool DropBlockGradually(float aBlockNextDropTime) { return mActiveControl.GameDropBlockGradually(aBlockNextDropTime); }
 
-    public bool DropBlockInstantly() { return mActiveControls.GameInstantBlockDrop(); }
+    public bool DropBlockInstantly() { return mActiveControl.GameInstantBlockDrop(); }
 
-    public bool RotateBlock() { return mActiveControls.GameRotateBlock(); }
+    public bool RotateBlock() { return mActiveControl.GameRotateBlock(); }
 
-    public bool InvertBlock() { return mActiveControls.GameInverteBlock(); }
+    public bool InvertBlock() { return mActiveControl.GameInverteBlock(); }
 
-    public bool PowerUpUse() { return mActiveControls.GameUsePowerUp(); }
+    public bool PowerUpUse() { return mActiveControl.GameUsePowerUp(); }
 
-    public bool PowerUpSelectLeft() { return mActiveControls.GameMovePowerUpSelectLeft(); }
+    public bool PowerUpSelectLeft() { return mActiveControl.GameMovePowerUpSelectLeft(); }
 
-    public bool PowerUpSelectRight() { return mActiveControls.GameMovePowerUpSelectRight(); }
+    public bool PowerUpSelectRight() { return mActiveControl.GameMovePowerUpSelectRight(); }
 
-    public bool SwapPreview() { return mActiveControls.GameSwapPreview(); }
+    public bool SwapPreview() { return mActiveControl.GameSwapPreview(); }
 
-    public bool ChangePreview() { return mActiveControls.GameRotatePreview(); }
+    public bool ChangePreview() { return mActiveControl.GameRotatePreview(); }
 
-    public bool DumpPreview() { return mActiveControls.GameDumpPreview(); }
+    public bool DumpPreview() { return mActiveControl.GameDumpPreview(); }
 
 
     public bool KeyPress(CommandIndex anCommand)
     {
-        return mActiveControls.KeyPress(anCommand);
+        return mActiveControl.KeyPress(anCommand);
         //return Input.GetKey(mKeyBoard[anCommand]);
     }
 
     public bool KeyDown(CommandIndex anCommand)
     {
-        return mActiveControls.KeyDown(anCommand);
+        return mActiveControl.KeyDown(anCommand);
         //return Input.GetKeyDown(mKeyBoard[anCommand]);
     }
 
     public void SetActiveControl(ControlType aControlType)
     {
-        mActiveControls = mControls.First(c => c.Type == aControlType);
+        mActiveControl = mControls.First(c => c.Type == aControlType);
+    }
+
+    public bool CheckHaveControlOf(ControlType aSeekingType)
+    {
+        return mControls.Any(c => c.Type == aSeekingType);
     }
 
     private bool MultiControlButton(CommandIndex aCommand)

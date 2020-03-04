@@ -44,7 +44,7 @@ public enum ControlType
 {
     KEYBOARD,
     XBOX_360,
-    PS4_DUALSHOCK
+    //PS4_DUALSHOCK
 }
 
 public class ControlObject
@@ -74,6 +74,12 @@ public class ControlObject
     {
         //mKeybindList = new Dictionary<CommandIndex, object>(someSetting);
     }
+
+    public virtual void SetNewCommandoBinding(Dictionary<CommandIndex, KeybindData> someNewBinding)
+    { }
+
+    public virtual void SetNewNavgateBinding(Dictionary<NavigatorType, KeybindData> someNewBinding)
+    { }
 
     public virtual bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall)
     {

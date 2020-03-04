@@ -25,10 +25,13 @@ public class GamepadNaviBindBox : MonoBehaviour
         Toggle.isOn = (aCurrentSelectAxis == AxisType);
     }
 
-    public void BoxSelected(bool isSelected)
+    public void BoxSelected(ref AxisInput aSelectAxis, bool isSelected)
     {
         if (isSelected)
+        {
             BackgroundImage.sprite = SelectedSprite;
+            aSelectAxis = AxisType;
+        }
         else
             BackgroundImage.sprite = UnSelectedSprite;
     }
