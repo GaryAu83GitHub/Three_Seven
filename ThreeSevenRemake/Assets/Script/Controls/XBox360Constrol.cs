@@ -39,10 +39,10 @@ public class XBox360Constrol : ControlObject
     private delegate Vector2Int OnGUINavigation();
     private event OnGUINavigation guiNavigation;
 
-    private delegate Vector2Int OnGameBlockNavigation();
+    private delegate Vector2Int OnGameBlockNavigation(NavigatorType aType = NavigatorType.BLOCK_NAVIGATOR);
     private event OnGameBlockNavigation gameBlockNavigation;
 
-    private delegate Vector2Int OnGamePowerUpNavigation();
+    private delegate Vector2Int OnGamePowerUpNavigation(NavigatorType aType = NavigatorType.POWER_UP_NAVIGATOR);
     private event OnGamePowerUpNavigation gamePowerUpNavigation;
 
     private delegate Vector2Int OnGameEnableAnalogNavigator();
@@ -58,6 +58,19 @@ public class XBox360Constrol : ControlObject
 
     private Vector2Int mCurrentMenuNavigateDireciton = Vector2Int.zero;
     private Vector2Int mLastNavigateAxisDirection = Vector2Int.zero;
+
+    private readonly Dictionary<NavigatorType, Vector2Int> mCurrentActiveNavigation = new Dictionary<NavigatorType, Vector2Int>
+    {
+        {NavigatorType.BLOCK_NAVIGATOR, Vector2Int.zero },
+        {NavigatorType.POWER_UP_NAVIGATOR, Vector2Int.zero },
+    };
+
+    private readonly Dictionary<NavigatorType, AxisInput> mLastPulledAxis = new Dictionary<NavigatorType, AxisInput>
+    {
+        {NavigatorType.BLOCK_NAVIGATOR, AxisInput.NONE },
+        {NavigatorType.POWER_UP_NAVIGATOR, AxisInput.NONE },
+    };
+
     private float mMenuNavigationSuppressTimer = 0f;
 
     private bool mPowerUpNavigateIsUsed = false;
@@ -122,11 +135,14 @@ public class XBox360Constrol : ControlObject
         //System.Delegate[] test = guiNavigation.GetInvocationList();
         //test[0].Method.Name;
 
-        gameBlockNavigation += LeftStick;
-        gameBlockNavigation += DPad;
+        gameBlockNavigation += LeftStickNew;
+        gameBlockNavigation += DPadNew;
+        //gameBlockNavigation += TriggerNew;
 
 
-        gamePowerUpNavigation += RightStick;
+        //gamePowerUpNavigation += RightStickNew;
+        gamePowerUpNavigation += TriggerNew;
+
     }
 
     public override void KeySettings(/*Dictionary<CommandIndex, object> someSetting*/)
@@ -203,10 +219,51 @@ public class XBox360Constrol : ControlObject
     {
         foreach(NavigatorType navi in someNewBinding.Keys)
         {
-            if(navi == NavigatorType.BLOCK_NAVIGATOR)
-            { }
+            if (navi == NavigatorType.BLOCK_NAVIGATOR)
+            {
+                if (gameBlockNavigation.GetInvocationList().Count() > 0)
+                {
+                    System.Delegate[] clientList = gameBlockNavigation.GetInvocationList();
+                    foreach (var d in clientList)
+                        gameBlockNavigation -= (d as OnGameBlockNavigation);
+                }
+
+                switch(someNewBinding[navi].BindingAxis)
+                {
+                    case AxisInput.L_STICK:
+                        gameBlockNavigation += LeftStickNew;
+                        break;
+                    case AxisInput.R_STICK:
+                        gameBlockNavigation += RightStickNew;
+                        break;
+                    case AxisInput.D_PAD:
+                        gameBlockNavigation += DPadNew;
+                        break;
+                }
+
+            }
             if(navi == NavigatorType.POWER_UP_NAVIGATOR)
-            { }
+            {
+                if (gamePowerUpNavigation.GetInvocationList().Count() > 0)
+                {
+                    System.Delegate[] clientList = gamePowerUpNavigation.GetInvocationList();
+                    foreach (var d in clientList)
+                        gamePowerUpNavigation -= (d as OnGamePowerUpNavigation);
+                }
+
+                switch (someNewBinding[navi].BindingAxis)
+                {
+                    case AxisInput.L_STICK:
+                        gamePowerUpNavigation += LeftStickNew;
+                        break;
+                    case AxisInput.R_STICK:
+                        gamePowerUpNavigation += RightStickNew;
+                        break;
+                    case AxisInput.D_PAD:
+                        gamePowerUpNavigation += DPadNew;
+                        break;
+                }
+            }
         }
     }
 
@@ -228,7 +285,8 @@ public class XBox360Constrol : ControlObject
 
     public override bool GameDropBlockGradually(float aBlockNextDropTime)
     {
-        float vertical = ((Navigation().x > -1 && Navigation().x < 1) ? Navigation().y : 0f);
+        //float vertical = ((Navigation().x > -1 && Navigation().x < 1) ? Navigation().y : 0f);
+        float vertical = ((NavigationNew().x > -1 && NavigationNew().x < 1) ? NavigationNew().y : 0f);
         if ((vertical <= -1f && DropButtonTimePassed()))
         {
             ResetDropTimer();
@@ -239,7 +297,8 @@ public class XBox360Constrol : ControlObject
 
     protected override bool HorizontBottomHit(ref Vector3 aDir, float aHorizontValue = 0f)
     {
-        return base.HorizontBottomHit(ref aDir, Navigation().x);
+        //return base.HorizontBottomHit(ref aDir, Navigation().x);
+        return base.HorizontBottomHit(ref aDir, NavigationNew().x);
     }
 
     public override bool KeyDown(CommandIndex aCommand) { return ButtonDown(aCommand); }
@@ -248,7 +307,7 @@ public class XBox360Constrol : ControlObject
 
     public override int GameMovePowerUpSelection()
     {
-        Vector2Int? dir = gamePowerUpNavigation?.Invoke();
+        Vector2Int? dir = gamePowerUpNavigation?.Invoke(NavigatorType.POWER_UP_NAVIGATOR);
         if (mPowerUpNavigateIsUsed)
         {
             if (dir.Value.x != 1 && dir.Value.x != -1)
@@ -321,9 +380,7 @@ public class XBox360Constrol : ControlObject
 
     private Vector2Int NavigationNew()
     {
-        Vector2Int? navi = gamePowerUpNavigation?.Invoke();
-
-
+        Vector2Int? navi = gameBlockNavigation?.Invoke();
         return navi.Value;
     }
 
@@ -502,6 +559,105 @@ public class XBox360Constrol : ControlObject
     private Vector2Int RightStick() { return new Vector2Int((int)Input.GetAxis(mAxisNames[3]), (int)Input.GetAxis(mAxisNames[4])); }
 
     private Vector2Int DPad() { return new Vector2Int(Mathf.RoundToInt(Input.GetAxis(mAxisNames[5])), Mathf.RoundToInt(Input.GetAxis(mAxisNames[6]))); }
+
+    /// <summary>
+    /// Test for the subscribtion of the analogue controls of left stick
+    /// Might replace the four function from above
+    /// </summary>
+    /// <param name="aType">Requesting of navigatetype</param>
+    /// <returns>return the navigation value</returns>
+    private Vector2Int LeftStickNew(NavigatorType aType)
+    {
+        Vector2Int returnVector = new Vector2Int((int)Input.GetAxis(mAxisNames[0]), (int)Input.GetAxis(mAxisNames[1]));
+        SetLastNavigationTo(aType, AxisInput.L_STICK, ref returnVector);
+        return returnVector;
+    }
+
+    /// <summary>
+    /// Test for the subscribtion of the analogue controls of triggers
+    /// Might replace the four function from above
+    /// </summary>
+    /// <param name="aType">Requesting of navigatetype</param>
+    /// <returns>return the navigation value</returns>
+    private Vector2Int TriggerNew(NavigatorType aType)
+    {
+        Vector2Int returnVector = new Vector2Int((int)Input.GetAxis(mAxisNames[2]), 0);
+        SetLastNavigationTo(aType, AxisInput.TRIGGER, ref returnVector);
+        return returnVector;
+    }
+
+    /// <summary>
+    /// Test for the subscribtion of the analogue controls of right stick
+    /// Might replace the four function from above
+    /// </summary>
+    /// <param name="aType">Requesting of navigatetype</param>
+    /// <returns>return the navigation value</returns>
+    private Vector2Int RightStickNew(NavigatorType aType)
+    {
+        Vector2Int returnVector = new Vector2Int((int)Input.GetAxis(mAxisNames[3]), (int)Input.GetAxis(mAxisNames[4]));
+        SetLastNavigationTo(aType, AxisInput.R_STICK, ref returnVector);
+        return returnVector;
+    }
+
+    /// <summary>
+    /// Test for the subscribtion of the analogue controls of dpad
+    /// Might replace the four function from above
+    /// </summary>
+    /// <param name="aType">Requesting of navigatetype</param>
+    /// <returns>return the navigation value</returns>
+    private Vector2Int DPadNew(NavigatorType aType)
+    {
+        Vector2Int returnVector = new Vector2Int(Mathf.RoundToInt(Input.GetAxis(mAxisNames[5])), Mathf.RoundToInt(Input.GetAxis(mAxisNames[6])));
+        SetLastNavigationTo(aType, AxisInput.D_PAD, ref returnVector);
+        return returnVector;
+    }
+
+    private void SetLastNavigationTo(NavigatorType aType, AxisInput aPullingAxis,  ref Vector2Int aVector)
+    {
+        if (mLastPulledAxis[aType] == aPullingAxis && aVector == Vector2Int.zero)
+        {
+            mCurrentActiveNavigation[aType] = Vector2Int.zero;
+            mLastPulledAxis[aType] = AxisInput.NONE;
+        }
+        else if (mCurrentActiveNavigation[aType] != Vector2Int.zero)
+            aVector = mCurrentActiveNavigation[aType];
+        else
+        {
+            mCurrentActiveNavigation[aType] = aVector;
+            mLastPulledAxis[aType] = aPullingAxis;
+        }
+
+        //if (aType == NavigatorType.BLOCK_NAVIGATOR)
+        //{
+        //    if (mLastPulledBlockNavigateAxis == aPullingAxis && aVector == Vector2Int.zero)
+        //    {
+        //        mCurrentBlockNavigation = Vector2Int.zero;
+        //        mLastPulledBlockNavigateAxis = AxisInput.NONE;
+        //    }
+        //    else if (mCurrentBlockNavigation != Vector2Int.zero)
+        //        aVector = mCurrentBlockNavigation;
+        //    else
+        //    {
+        //        mCurrentBlockNavigation = aVector;
+        //        mLastPulledBlockNavigateAxis = aPullingAxis;
+        //    }
+        //}
+        //else if (aType == NavigatorType.POWER_UP_NAVIGATOR)
+        //{
+        //    if (mLastPulledPowerSelectNavigateAxis == aPullingAxis && aVector == Vector2Int.zero)
+        //    {
+        //        mCurrentPowerUpNavigation = Vector2Int.zero;
+        //        mLastPulledPowerSelectNavigateAxis = AxisInput.NONE;
+        //    }
+        //    else if (mCurrentPowerUpNavigation != Vector2Int.zero)
+        //        aVector = mCurrentPowerUpNavigation;
+        //    else
+        //    {
+        //        mCurrentPowerUpNavigation = aVector;
+        //        mLastPulledPowerSelectNavigateAxis = aPullingAxis;
+        //    }
+        //}
+    }
 }
 
 public class ControlInput
