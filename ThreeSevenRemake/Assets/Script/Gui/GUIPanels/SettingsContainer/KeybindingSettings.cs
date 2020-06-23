@@ -371,8 +371,11 @@ public class KeybindData
     public void ChangeXBoxBotton(XBoxButton aBotton) { mBindingXBoxBotton = aBotton; }
 
     private AxisInput mBindingAxis = AxisInput.NONE;
+    private Vector2Int mAxisCommandDirection = Vector2Int.zero;
     public AxisInput BindingAxis { get { return mBindingAxis; } }
+    public Vector2Int AxisCommandDirection { get { return mAxisCommandDirection; } }
     public void ChangeAxis(AxisInput anAxis) { mBindingAxis = anAxis; }
+    public void ChangeAxisCommand(AxisInput anAxis, Vector2Int aCommandDireciton) { mBindingAxis = anAxis; mAxisCommandDirection = aCommandDireciton; }
 
     /// <summary>
     /// Default constructor for an empty data object
@@ -442,6 +445,8 @@ public class KeybindData
             if (mBindingXBoxBotton != p.mBindingXBoxBotton)
                 return false;
             if (mBindingAxis != p.mBindingAxis)
+                return false;
+            if (mAxisCommandDirection != p.mAxisCommandDirection)
                 return false;
             if (mBindingKeyCodes.Any() && p.BindingKeyCodes.Any())
             {

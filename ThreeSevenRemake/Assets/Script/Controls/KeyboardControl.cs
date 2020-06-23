@@ -23,7 +23,7 @@ public class KeyboardControl : ControlObject
             { CommandIndex.NAVI_DOWN, KeyCode.DownArrow },
             { CommandIndex.NAVI_UP, KeyCode.UpArrow },
             { CommandIndex.SELECT, KeyCode.Space },
-            { CommandIndex.CANCEL, KeyCode.LeftAlt },
+            { CommandIndex.CANCEL, KeyCode.Backspace },
             { CommandIndex.CONFIRM, KeyCode.Return },
             { CommandIndex.BACK, KeyCode.Backspace },
             // gameplay

@@ -79,13 +79,10 @@ public class ControlManager
 
     public void NewBinding(Dictionary<CommandIndex, KeybindData> someCommandoBindings, Dictionary<NavigatorType, KeybindData> someNavigateBindings)
     {
-        foreach(CommandIndex com in someCommandoBindings.Keys)
+        for (int i = 0; i < mControls.Count; i++)
         {
-
-        }
-
-        foreach(NavigatorType navi in someNavigateBindings.Keys)
-        {
+            mControls[i].SetNewCommandoBinding(someCommandoBindings);
+            mControls[i].SetNewNavgateBinding(someNavigateBindings);
         }
     }
 

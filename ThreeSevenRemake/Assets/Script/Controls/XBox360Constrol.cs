@@ -52,6 +52,7 @@ public class XBox360Constrol : ControlObject
     public static List<string> XboxButtonNames = new List<string>();
 
     private readonly List<string> mAxisNames;
+    public static List<string> XboxAxisNames = new List<string>();
     private readonly Dictionary<XBoxButton, string> mButtonIndex = new Dictionary<XBoxButton, string>();
     private readonly Dictionary<CommandIndex, ControlInput> mCommands = new Dictionary<CommandIndex, ControlInput>();
     private readonly Dictionary<AxisInput, bool> mEnableNavigationSticks = new Dictionary<AxisInput, bool>();
@@ -107,6 +108,8 @@ public class XBox360Constrol : ControlObject
             "DPad_Hori_Axis",
             "DPad_Vert_Axis",
         };
+        for (int i = 0; i < mAxisNames.Count; i++)
+            XboxAxisNames.Add(mAxisNames[i]);
 
         mButtonIndex = new Dictionary<XBoxButton, string>()
         {
@@ -452,7 +455,7 @@ public class XBox360Constrol : ControlObject
         if (navi.HasValue)
             mCurrentMenuNavigateDireciton = (Vector2Int)navi;
         //mCurrentMenuNavigateDireciton = GetDirectionFromAxis(anInput.AxisType);
-        if (CheckThisStickMoves(mCurrentMenuNavigateDireciton)/*GetAxisInput(anInput.AxisType)*/)
+        if (CheckThisMovesMoves(mCurrentMenuNavigateDireciton)/*GetAxisInput(anInput.AxisType)*/)
         {
             if ((mLastInput != null) && (mCurrentMenuNavigateDireciton == mLastInput.Direction))
                 return false;
@@ -508,25 +511,25 @@ public class XBox360Constrol : ControlObject
     private bool GetAxisInput(AxisInput theCheckingAxis)
     {
         if (theCheckingAxis == AxisInput.L_STICK)
-            return CheckThisStickMoves(LeftStick());
+            return CheckThisMovesMoves(LeftStick());
         else if (theCheckingAxis == AxisInput.R_STICK)
-            return CheckThisStickMoves(RightStick());
+            return CheckThisMovesMoves(RightStick());
         else if (theCheckingAxis == AxisInput.D_PAD)
-            return CheckThisStickMoves(DPad());
+            return CheckThisMovesMoves(DPad());
         return false;
     }
 
     private bool CheckAxisEnableToMove(AxisInput anAxis, Vector2Int theCheckingStick)
     {
         if (mEnableNavigationSticks[anAxis])
-            return CheckThisStickMoves(theCheckingStick);
+            return CheckThisMovesMoves(theCheckingStick);
 
         return false;
     }
 
-    private bool CheckThisStickMoves(Vector2Int theCheckStick)
+    private bool CheckThisMovesMoves(Vector2Int checkingAxisVector)
     {
-        if (theCheckStick.x <= -1 || theCheckStick.y <= -1 || theCheckStick.x >= 1 || theCheckStick.y >= 1)
+        if (checkingAxisVector.x <= -1 || checkingAxisVector.y <= -1 || checkingAxisVector.x >= 1 || checkingAxisVector.y >= 1)
             return true;
         return false;
     }
@@ -612,6 +615,12 @@ public class XBox360Constrol : ControlObject
         return returnVector;
     }
 
+    /// <summary>
+    /// Store the last navigation stick been pulled and reset when condition of the stick is zero
+    /// </summary>
+    /// <param name="aType">Reqeusting checking navigation type from the dictionary with stored the last pulled axisInput</param>
+    /// <param name="aPullingAxis">The current pulled axisInput</param>
+    /// <param name="aVector">returning vector value of the pulling axisInput that been pulled</param>
     private void SetLastNavigationTo(NavigatorType aType, AxisInput aPullingAxis,  ref Vector2Int aVector)
     {
         if (mLastPulledAxis[aType] == aPullingAxis && aVector == Vector2Int.zero)

@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class is currently attached to the Canvas object in the MainGameScene, and
+/// is the core of the game play.
+/// It'll hold the function for start a game round, and function for the gameplay function
+/// which will be subscribed with the control delegates in the ManGamePanel
+/// </summary>
 public class GameSceneMain : MonoBehaviour
 {
     public GameObject BlockObject;
