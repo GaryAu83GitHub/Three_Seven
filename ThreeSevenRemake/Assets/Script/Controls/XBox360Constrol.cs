@@ -6,13 +6,13 @@ using UnityEngine;
 public enum XBoxButton
 {
     A, B, X, Y,
-    L_SHOULDER, R_SHOULDER,
-    BACK, START,
-    L_THUMB_PRESSED, R_THUMB_PRESSED,
-    L_THUMB_UP, L_THUMB_RIGHT, L_THUMB_DOWN, L_THUMB_LEFT,
-    L_TRIGGER, R_TRIGGER,
-    R_THUMB_UP, R_THUMB_RIGHT, R_THUMB_DOWN, R_THUMB_LEFT,
-    DPAD_UP, DPAD_RIGHT, DPAD_DOWN, DPAD_LEFT,
+    L_Shoulder, R_Shoulder,
+    Back, Start,
+    L_Thumb, R_Thumb,
+    L_Thumb_Up, L_Thumb_Right, L_Thumb_Down, L_Thumb_Left,
+    L_Trigger, R_Trigger,
+    R_Thumb_Up, R_Thumb_Right, R_Thumb_Down, R_Thumb_Left,
+    DPad_Up, DPad_Right, DPad_Down, DPad_Left,
     NONE,
 }
 
@@ -117,12 +117,12 @@ public class XBox360Constrol : ControlObject
             { XBoxButton.B, mButtonNames[(int)XBoxButton.B] },
             { XBoxButton.X, mButtonNames[(int)XBoxButton.X] },
             { XBoxButton.Y, mButtonNames[(int)XBoxButton.Y] },
-            { XBoxButton.L_SHOULDER, mButtonNames[(int)XBoxButton.L_SHOULDER] },
-            { XBoxButton.R_SHOULDER, mButtonNames[(int)XBoxButton.R_SHOULDER] },
-            { XBoxButton.BACK, mButtonNames[(int)XBoxButton.BACK] },
-            { XBoxButton.START, mButtonNames[(int)XBoxButton.START] },
-            { XBoxButton.L_THUMB_PRESSED, mButtonNames[(int)XBoxButton.L_THUMB_PRESSED] },
-            { XBoxButton.R_THUMB_PRESSED, mButtonNames[(int)XBoxButton.R_THUMB_PRESSED] },
+            { XBoxButton.L_Shoulder, mButtonNames[(int)XBoxButton.L_Shoulder] },
+            { XBoxButton.R_Shoulder, mButtonNames[(int)XBoxButton.R_Shoulder] },
+            { XBoxButton.Back, mButtonNames[(int)XBoxButton.Back] },
+            { XBoxButton.Start, mButtonNames[(int)XBoxButton.Start] },
+            { XBoxButton.L_Thumb, mButtonNames[(int)XBoxButton.L_Thumb] },
+            { XBoxButton.R_Thumb, mButtonNames[(int)XBoxButton.R_Thumb] },
         };
 
         mEnableNavigationSticks = new Dictionary<AxisInput, bool>()
@@ -153,26 +153,26 @@ public class XBox360Constrol : ControlObject
         Dictionary<CommandIndex, ControlInput> defaultSets = new Dictionary<CommandIndex, ControlInput>
         {
             // navigation
-            { CommandIndex.NAVI_LEFT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_THUMB_LEFT, Vector2Int.left) },
-            { CommandIndex.NAVI_RIGHT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_THUMB_RIGHT, Vector2Int.right) },
-            { CommandIndex.NAVI_DOWN, new ControlInput(AxisInput.L_STICK, XBoxButton.L_THUMB_DOWN, Vector2Int.down) },
-            { CommandIndex.NAVI_UP, new ControlInput(AxisInput.L_STICK, XBoxButton.L_THUMB_UP, Vector2Int.up) },
+            { CommandIndex.NAVI_LEFT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Left, Vector2Int.left) },
+            { CommandIndex.NAVI_RIGHT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Right, Vector2Int.right) },
+            { CommandIndex.NAVI_DOWN, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Down, Vector2Int.down) },
+            { CommandIndex.NAVI_UP, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Up, Vector2Int.up) },
             { CommandIndex.SELECT, new ControlInput(XBoxButton.A) },
             { CommandIndex.CANCEL, new ControlInput(XBoxButton.B) },
-            { CommandIndex.CONFIRM, new ControlInput(XBoxButton.START) },
-            { CommandIndex.BACK, new ControlInput(XBoxButton.BACK) },
+            { CommandIndex.CONFIRM, new ControlInput(XBoxButton.Start) },
+            { CommandIndex.BACK, new ControlInput(XBoxButton.Back) },
             // gameplay
-            { CommandIndex.BLOCK_MOVE_LEFT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_THUMB_LEFT, Vector2Int.left) },
-            { CommandIndex.BLOCK_MOVE_RIGHT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_THUMB_RIGHT, Vector2Int.right) },
-            { CommandIndex.BLOCK_DROP, new ControlInput(AxisInput.L_STICK, XBoxButton.L_THUMB_DOWN, Vector2Int.down) },
+            { CommandIndex.BLOCK_MOVE_LEFT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Left, Vector2Int.left) },
+            { CommandIndex.BLOCK_MOVE_RIGHT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Right, Vector2Int.right) },
+            { CommandIndex.BLOCK_DROP, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Down, Vector2Int.down) },
             { CommandIndex.BLOCK_INSTANT_DROP, new ControlInput(XBoxButton.A) },
             { CommandIndex.BLOCK_ROTATE, new ControlInput(XBoxButton.X) },
             { CommandIndex.BLOCK_INVERT, new ControlInput(XBoxButton.Y) },
             { CommandIndex.POWER_UP_USE, new ControlInput(XBoxButton.B) },
-            { CommandIndex.POWER_UP_NAVI_LEFT, new ControlInput(AxisInput.R_STICK, XBoxButton.R_THUMB_LEFT, Vector2Int.left) },
-            { CommandIndex.POWER_UP_NAVI_RIGHT, new ControlInput(AxisInput.R_STICK, XBoxButton.R_THUMB_RIGHT, Vector2Int.right) },
-            { CommandIndex.PREVIEW_ROTATE, new ControlInput(XBoxButton.R_SHOULDER) },
-            { CommandIndex.INGAME_PAUSE, new ControlInput(XBoxButton.START) }
+            { CommandIndex.POWER_UP_NAVI_LEFT, new ControlInput(AxisInput.R_STICK, XBoxButton.R_Thumb_Left, Vector2Int.left) },
+            { CommandIndex.POWER_UP_NAVI_RIGHT, new ControlInput(AxisInput.R_STICK, XBoxButton.R_Thumb_Right, Vector2Int.right) },
+            { CommandIndex.PREVIEW_ROTATE, new ControlInput(XBoxButton.R_Shoulder) },
+            { CommandIndex.INGAME_PAUSE, new ControlInput(XBoxButton.Start) }
         };
 
 
@@ -349,13 +349,13 @@ public class XBox360Constrol : ControlObject
         if (Input.GetButtonDown(mButtonNames[3]))
             button = XBoxButton.Y;
         if (Input.GetButtonDown(mButtonNames[4]))
-            button = XBoxButton.L_SHOULDER;
+            button = XBoxButton.L_Shoulder;
         if (Input.GetButtonDown(mButtonNames[5]))
-            button = XBoxButton.R_SHOULDER;
+            button = XBoxButton.R_Shoulder;
         if (Input.GetButtonDown(mButtonNames[8]))
-            button = XBoxButton.L_THUMB_PRESSED;
+            button = XBoxButton.L_Thumb;
         if (Input.GetButtonDown(mButtonNames[9]))
-            button = XBoxButton.R_THUMB_PRESSED;
+            button = XBoxButton.R_Thumb;
 
         return button;
     }

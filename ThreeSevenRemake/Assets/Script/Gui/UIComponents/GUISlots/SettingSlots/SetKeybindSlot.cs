@@ -85,17 +85,17 @@ public class SetKeybindSlot : SettingSlotForCommandBinding//SettingSlotBase
         if (UnityEngine.Input.GetButtonDown(XBox360Constrol.XboxButtonNames[3]))
             SetXboxButtonCodeToData(XBoxButton.Y);
         if (UnityEngine.Input.GetButtonDown(XBox360Constrol.XboxButtonNames[4]))
-            SetXboxButtonCodeToData(XBoxButton.L_SHOULDER);
+            SetXboxButtonCodeToData(XBoxButton.L_Shoulder);
         if (UnityEngine.Input.GetButtonDown(XBox360Constrol.XboxButtonNames[5]))
-            SetXboxButtonCodeToData(XBoxButton.R_SHOULDER);
+            SetXboxButtonCodeToData(XBoxButton.R_Shoulder);
         if (UnityEngine.Input.GetButtonDown(XBox360Constrol.XboxButtonNames[6]))
-            SetXboxButtonCodeToData(XBoxButton.BACK);
+            SetXboxButtonCodeToData(XBoxButton.Back);
         if (UnityEngine.Input.GetButtonDown(XBox360Constrol.XboxButtonNames[7]))
-            SetXboxButtonCodeToData(XBoxButton.START);
+            SetXboxButtonCodeToData(XBoxButton.Start);
         if (UnityEngine.Input.GetButtonDown(XBox360Constrol.XboxButtonNames[8]))
-            SetXboxButtonCodeToData(XBoxButton.L_THUMB_PRESSED);
+            SetXboxButtonCodeToData(XBoxButton.L_Thumb);
         if (UnityEngine.Input.GetButtonDown(XBox360Constrol.XboxButtonNames[9]))
-            SetXboxButtonCodeToData(XBoxButton.R_THUMB_PRESSED);
+            SetXboxButtonCodeToData(XBoxButton.R_Thumb);
     }
 
     private void SetXboxButtonCodeToData(XBoxButton aButtonCode)
