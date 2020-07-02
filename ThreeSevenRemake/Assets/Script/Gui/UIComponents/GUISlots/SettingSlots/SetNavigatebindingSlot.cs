@@ -11,7 +11,6 @@ public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotB
 
     public List<GameObject> BinderContainers;
 
-    //public List<CommandIndex> CommandIndexes;
     public List<NaviInputBindBox> NaviInputBindBoxes;
 
     public delegate void OnKeybindingSettingHaveChange(CommandIndex aCommand, KeybindData aNewKeybindingData);
@@ -21,20 +20,21 @@ public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotB
     public static OnNavigatorSettingHaveChange navigatorSettingHaveChange;
     
     private int mCurrentInputIndex = -1;
-    private int mCurrentSelectToggleIndex = 0;
-    private AxisInput mSelectAxisInput = AxisInput.L_STICK;
 
-    private Dictionary<CommandIndex, Sprite> mDisplayingSprites = new Dictionary<CommandIndex, Sprite>()
-    {
-
-    };
+    private Dictionary<CommandIndex, Sprite> mDisplayingSprites = new Dictionary<CommandIndex, Sprite>();
 
     private bool mSlotIsActive = false;
 
     public override void Awake()
     {
         base.Awake();
-
+        if (mDisplayingSprites.Count == 0)
+        {
+            for (int i = 0; i < CommandIndexes.Count; i++)
+            {
+                mDisplayingSprites.Add(CommandIndexes[i], InputSpritesManager.Instance.GetKeyboard(KeyCode.Return));
+            }
+        }
     }
 
     public override void Start()
@@ -45,19 +45,6 @@ public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotB
     
     protected override void Display()
     {
-        DisplayBindingContain();
-
-        //for (int i = 0; i < NaviInputBindBoxes.Count; i++)
-        //{
-        //    //NaviInputBindBoxes[i].SetBindingText(mKeybindingData.BindingKeyCodes[i].ToString());
-        //    if (mDisplayControlType == ControlType.KEYBOARD)
-        //        NaviInputBindBoxes[i].SetBindingSprite(InputSpritesManager.Instance.GetKeyboard(mKeybindingData.BindingKeyCodes[i]));
-        //    else if(mDisplayControlType == ControlType.XBOX_360)
-        //        NaviInputBindBoxes[i].SetBindingSprite(InputSpritesManager.Instance.GetXboxButton(mKeybindingData.BindingXboxButtons[i]));
-        //}
-        //for(int i = 0; i < GamepadbindBoxes.Count; i++)
-        //    GamepadbindBoxes[i].BindingTrigger(mKeybindingData.BindingAxis);
-
         for(int i = 0; i < CommandIndexes.Count; i++)
         {
             if (mDisplayControlType == ControlType.KEYBOARD)
@@ -76,8 +63,6 @@ public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotB
             if (Input.GetKeyDown(kcode))
             {
                 CommandIndex command = CommandIndexes[mCurrentInputIndex];
-                //mKeybindingData.BindingKeyCodes[mCurrentInputIndex] = kcode;
-                //navigatorSettingHaveChange?.Invoke(NavigatorType, mKeybindingData);
                 mKeybindingDatas[command].ChangeBindingKeyCode(kcode);
 
                 KeyboardbindBoxAppearence();
@@ -86,23 +71,6 @@ public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotB
                 return;
             }
         }
-    }
-
-    protected override void CheckForGamepadInput()
-    {
-        //if (ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_LEFT))
-        //    SelectNavigateToggles(-1);
-        //if (ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_RIGHT))
-        //    SelectNavigateToggles(1);
-
-        //if (ControlManager.Ins.MenuSelectButtonPressed())
-        //{
-        //    //ActiveSelectedToggle();
-        //    //ActiveChangeMode(false);
-        //}
-        //if (ControlManager.Ins.MenuCancelButtonPressed() || ControlManager.Ins.MenuBackButtonPressed())
-        //    ActiveChangeMode(false);
-
     }
 
     protected override void ActiveChangeMode(bool isChangeModeOn)
@@ -114,6 +82,19 @@ public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotB
             mCurrentInputIndex = 0;
             ActiveKeyboardBox();
         }
+    }
+
+    protected override void SetXboxButtonCodeToData(XBoxButton aButtonCode)
+    {
+        //base.SetXboxButtonCodeToData(aButtonCode);
+
+        CommandIndex command = CommandIndexes[mCurrentInputIndex];
+        mKeybindingDatas[command].ChangeXBoxBotton(aButtonCode);
+
+        mDisplayingSprites[command] = InputSpritesManager.Instance.GetXboxButton(aButtonCode);
+        keybindingSettingHaveChange?.Invoke(command, mKeybindingDatas[command]);
+        KeyboardbindBoxAppearence();
+        Display();
     }
 
     public override void SetKey(ControlType aDisplayControlType, KeybindData aData)
@@ -148,50 +129,4 @@ public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotB
             NaviInputBindBoxes[i].BoxSelected(isSelected);
         }
     }
-
-    /// <summary>
-    /// Set active to the display binding container and deactive the rest
-    /// </summary>
-    private void DisplayBindingContain()
-    {
-        for(int i = 0; i < BinderContainers.Count; i++)
-        {
-            BinderContainers[i].SetActive(false);
-            if(i == (int)mDisplayControlType)
-                BinderContainers[i].SetActive(true);
-        }
-    }
-
-    /// <summary>
-    /// Navigate the selection of the gamepadbindBoxes
-    /// </summary>
-    /// <param name="aDirection">The direction to where the selecting box moves</param>
-    private void SelectNavigateToggles(int aDirection)
-    {
-        //if (mCurrentSelectToggleIndex + aDirection >= GamepadbindBoxes.Count)
-        //    mCurrentSelectToggleIndex = 0;
-        //else if (mCurrentSelectToggleIndex + aDirection < 0)
-        //    mCurrentSelectToggleIndex = GamepadbindBoxes.Count - 1;
-        //else
-        //    mCurrentSelectToggleIndex += aDirection;
-
-        //SetSelectedGamepadbindBox();
-    }
-
-    /// <summary>
-    /// Check on the bindingbox toggle to that has the same axistype as the selected axis
-    /// and check off the rest
-    /// </summary>
-    //private void ActiveSelectedToggle()
-    //{
-    //    GamepadbindBoxes.ForEach(b => b.BindingTrigger(mSelectAxisInput));
-    //    mKeybindingData.ChangeAxis(mSelectAxisInput);
-    //    navigatorSettingHaveChange?.Invoke(NavigatorType, mKeybindingData);
-    //}
-
-    //private void SetSelectedGamepadbindBox()
-    //{
-    //    for (int i = 0; i < GamepadbindBoxes.Count; i++)
-    //        GamepadbindBoxes[i].BoxSelected(ref mSelectAxisInput, (i == mCurrentSelectToggleIndex) ? true : false);
-    //}
 }
