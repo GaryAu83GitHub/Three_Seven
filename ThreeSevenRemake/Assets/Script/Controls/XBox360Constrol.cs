@@ -215,7 +215,7 @@ public class XBox360Constrol : ControlObject
     public override void SetNewCommandoBinding(Dictionary<CommandIndex, KeybindData> someNewBinding)
     {
         foreach (CommandIndex com in someNewBinding.Keys)
-            mCommands[com] = new ControlInput(someNewBinding[com].BindingXBoxBotton);
+            mCommands[com] = new ControlInput(someNewBinding[com].BindingXBoxButton);
     }
 
     public override void SetNewNavgateBinding(Dictionary<NavigatorType, KeybindData> someNewBinding)

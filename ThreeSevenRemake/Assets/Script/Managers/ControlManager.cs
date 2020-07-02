@@ -36,24 +36,6 @@ public class ControlManager
     {
         if (mDefaultControlsAreRegistrated)
             return;
-        //// navigation
-        //mDefaultKeyBoard.Add(CommandIndex.NAVI_LEFT, KeyCode.LeftArrow);
-        //mDefaultKeyBoard.Add(CommandIndex.NAVI_RIGHT, KeyCode.RightArrow);
-        //mDefaultKeyBoard.Add(CommandIndex.NAVI_DOWN, KeyCode.DownArrow);
-        //mDefaultKeyBoard.Add(CommandIndex.NAVI_UP, KeyCode.UpArrow);
-        //mDefaultKeyBoard.Add(CommandIndex.CONFIRM, KeyCode.Return);
-        //mDefaultKeyBoard.Add(CommandIndex.BACK, KeyCode.Backspace);
-        //// gameplay
-        //mDefaultKeyBoard.Add(CommandIndex.BLOCK_MOVE_LEFT, KeyCode.A);
-        //mDefaultKeyBoard.Add(CommandIndex.BLOCK_MOVE_RIGHT, KeyCode.D);
-        //mDefaultKeyBoard.Add(CommandIndex.BLOCK_DROP, KeyCode.S);
-        //mDefaultKeyBoard.Add(CommandIndex.BLOCK_ROTATE, KeyCode.W);
-        //mDefaultKeyBoard.Add(CommandIndex.BLOCK_INVERT, KeyCode.E);
-        //mDefaultKeyBoard.Add(CommandIndex.PREVIEW_SWAP, KeyCode.Space);
-        //mDefaultKeyBoard.Add(CommandIndex.PREVIEW_ROTATE, KeyCode.UpArrow);
-        //mDefaultKeyBoard.Add(CommandIndex.INGAME_PAUSE, KeyCode.Return);
-
-        //mKeyBoard = new Dictionary<CommandIndex, KeyCode>(mDefaultKeyBoard);
 
         mControls.Add(new KeyboardControl());
         mActiveControl = mControls[0];
@@ -61,7 +43,6 @@ public class ControlManager
         List<string> temp = Input.GetJoystickNames().ToList();
         if (temp.Any())
         {
-            //mControls.Add(new XBox360Constrol());
             for (int i = 0; i < temp.Count; i++)
             {
                 if (temp[i].Any())
@@ -72,7 +53,7 @@ public class ControlManager
             }
         }
         foreach (ControlObject c in mControls)
-            c.KeySettings(/*new Dictionary<CommandIndex, KeyCode>()*/);
+            c.KeySettings();
 
         mDefaultControlsAreRegistrated = true;
     }

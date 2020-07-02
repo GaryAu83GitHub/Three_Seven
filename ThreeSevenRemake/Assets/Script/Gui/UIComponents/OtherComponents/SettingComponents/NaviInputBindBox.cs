@@ -4,16 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class KeyboardNaviBindBox : MonoBehaviour
+public class NaviInputBindBox : MonoBehaviour
 {
     public TextMeshProUGUI BindText;
     public Image IconImage;
+    public Image InputImage;
 
     public Sprite SelectedSprite;
     public Sprite UnSelectedSprite;
 
     private Image mBackgroundImage;
-
 
     void Start()
     {
@@ -23,6 +23,11 @@ public class KeyboardNaviBindBox : MonoBehaviour
     public void SetBindingText(string aBindingText)
     {
         BindText.text = aBindingText;
+    }
+
+    public void SetBindingSprite(Sprite aSprite)
+    {
+        InputImage.sprite = aSprite;
     }
 
     public void BoxSelected(bool isSelected)

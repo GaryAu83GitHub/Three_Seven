@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SettingSlotForCommandBinding : SettingSlotBase
 {
-    
+    public List<CommandIndex> CommandIndexes;
+
     public GameObject KeybindContainer;
 
     public delegate void OnSetDisplayControlType(ControlType aDisplayingType);
@@ -14,12 +15,24 @@ public class SettingSlotForCommandBinding : SettingSlotBase
 
     protected ControlType mDisplayControlType = ControlType.XBOX_360;
     protected KeybindData mKeybindingData = new KeybindData();
+    protected Dictionary<CommandIndex, KeybindData> mKeybindingDatas = new Dictionary<CommandIndex, KeybindData>();
 
     private bool mChangeModeOn = false;
 
     private float mChangeModeSuspendCountdown = 0f;
 
     private const float mChangeModeSuspendTime = .05f;
+
+    public override void Awake()
+    {
+        base.Awake();
+
+        foreach (CommandIndex com in CommandIndexes)
+        {
+            if (!mKeybindingDatas.ContainsKey(com))
+                mKeybindingDatas.Add(com, new KeybindData());
+        }
+    }
 
     public override void Start()
     {
@@ -87,8 +100,15 @@ public class SettingSlotForCommandBinding : SettingSlotBase
     public virtual void SetKey(ControlType aDisplayControlType, KeybindData aData)
     {
         mDisplayControlType = aDisplayControlType;
-        mKeybindingData = new KeybindData(aData);
-        Display();
+        if(CommandIndexes.Count == 1)
+            mKeybindingData = new KeybindData(aData);
+        else
+        {
+            if (CommandIndexes.Contains(aData.Command))
+                mKeybindingDatas[aData.Command] = new KeybindData(aData);
+        }
+        
+        //Display();
     }
 
 }
