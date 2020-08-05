@@ -16,25 +16,7 @@ public class InputSpriteContainer : MonoBehaviour
 
     private void Awake()
     {
-        SetKeybindSlot.changeKeyboardSprite += GetKeyboadKeyFor;
-        SetKeybindSlot.changeXBoxControlSprite += GetXBoxButtonFor;
         InputSpritesManager.Instance.LoadKeyboardSprites(KeyboardKeys);
         InputSpritesManager.Instance.LoadXBoxSprites(XboxButtons);
-    }
-
-    private void OnDestroy()
-    {
-        SetKeybindSlot.changeKeyboardSprite -= GetKeyboadKeyFor;
-        SetKeybindSlot.changeXBoxControlSprite -= GetXBoxButtonFor;
-    }
-
-    private void GetKeyboadKeyFor(KeyCode aKeyCode, ref Sprite aKeySprite)
-    {
-        
-    }
-
-    private void GetXBoxButtonFor(XBoxButton aButton, ref Sprite aButtonSprite)
-    {
-
     }
 }

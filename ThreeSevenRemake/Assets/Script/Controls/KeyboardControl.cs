@@ -119,6 +119,11 @@ public class KeyboardControl : ControlObject
         aKeyCode = mCommands[aCommand];
     }
 
+    public void GetCodeFor(CommandIndex aCommand, ref KeybindData aBindData)
+    {
+        aBindData.ChangeBindingKeyCode(mCommands[aCommand]);
+    }
+
     public void GetNavigatorCodesFor(NavigatorType aType, ref List<KeyCode> someCodes)
     {
         someCodes.Clear();

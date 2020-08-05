@@ -121,7 +121,7 @@ public class SetKeybindSlot : SettingSlotForCommandBinding//SettingSlotBase
 
     protected override void SetXboxButtonCodeToData(XBoxButton aButtonCode)
     {
-        mKeybindingData.ChangeXBoxBotton(aButtonCode);
+        mKeybindingData.ChangeXBoxButton(aButtonCode);
         //DisplayInputImage.sprite = XBoxButtonSprites[(int)mKeybindingData.BindingXBoxBotton];
         mDisplayingSprite = InputSpritesManager.Instance.GetXboxButton(aButtonCode);
         Display();

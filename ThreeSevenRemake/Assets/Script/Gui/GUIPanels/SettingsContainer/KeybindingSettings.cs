@@ -28,7 +28,6 @@ public class KeybindingSettings : SettingsContainerBase
         SetActiveControllSlot.displaySelectControlBinds += DisplaySelectedControlbinds;
         SetKeybindSlot.keybindingSettingHaveChange += ChangeKeybindingSetting;
         SetNavigatebindingSlot.keybindingSettingHaveChange += ChangeKeybindingSetting;
-        //SetNavigatebindingSlot.navigatorSettingHaveChange += ChangeNavigatorBindSetting;
         SetKeybindConfirmSlot.applyButtonPressed += ApplySettings;
         SetKeybindConfirmSlot.resetButtonPressed += ResetSettings;
         SetKeybindConfirmSlot.backButtonPressed += BackButtonPressed;
@@ -37,35 +36,9 @@ public class KeybindingSettings : SettingsContainerBase
     protected override void Start()
     {
         base.Start();
+
         foreach (SettingSlotBase slot in SettingSlots)
         {
-            //if (slot.GetType() == typeof(SetKeybindSlot))
-            //{
-            //    CommandIndex command = (slot as SetKeybindSlot).CommandIndexes[0];
-            //    if (!mOriginalCommandsBindings.ContainsKey(command))
-            //    {
-            //        mOriginalCommandsBindings.Add(command, new KeybindData(command));
-            //        mNewCommandsBindings.Add(command, new KeybindData(mOriginalCommandsBindings[command])/*mOriginalCommandsBindings[command]*/);
-            //    }
-            //}
-            //if(slot.GetType() == typeof(SetNavigatebindingSlot))
-            //{
-            //    NavigatorType naviType = (slot as SetNavigatebindingSlot).NavigatorType;
-            //    if(!mOriginalNavigateBindings.ContainsKey(naviType))
-            //    {
-            //        mOriginalNavigateBindings.Add(naviType, new KeybindData(naviType));
-            //        mNewNavigateBindings.Add(naviType, new KeybindData(mOriginalNavigateBindings[naviType])/*mOriginalNavigateBindings[naviType]*/);
-            //    }
-            //    for(int i= 0; i < (slot as SetNavigatebindingSlot).CommandIndexes.Count; i++)
-            //    {
-            //        CommandIndex command = (slot as SetNavigatebindingSlot).CommandIndexes[i];
-            //        if (!mOriginalCommandsBindings.ContainsKey(command))
-            //        {
-            //            mOriginalCommandsBindings.Add(command, new KeybindData(command));
-            //            mNewCommandsBindings.Add(command, new KeybindData(mOriginalCommandsBindings[command]));
-            //        }
-            //    }
-            //}
             SettingSlotForCommandBinding tempSlot = (slot as SettingSlotForCommandBinding);
             if (tempSlot == null)
             {
@@ -86,11 +59,8 @@ public class KeybindingSettings : SettingsContainerBase
         }
         GetKeybindConfirmSlot.BackAndApplyButtonsSwap(SettingHasBeenChanged());
 
-        //mActiveControlType = ControlManager.Ins.ActiveControlType;
-        //GetActiveControlSlot.SetSelectedControlType(mActiveControlType);
         GetActiveControlSlot.SetupSelectiveToggles(ref mActiveControlType);
         mCurrentDisplayType = mActiveControlType;
-        //DisplaySlots();
     }
 
     private void OnDestroy()
@@ -99,7 +69,6 @@ public class KeybindingSettings : SettingsContainerBase
         SetActiveControllSlot.displaySelectControlBinds -= DisplaySelectedControlbinds;
         SetKeybindSlot.keybindingSettingHaveChange -= ChangeKeybindingSetting;
         SetNavigatebindingSlot.keybindingSettingHaveChange -= ChangeKeybindingSetting;
-        //SetNavigatebindingSlot.navigatorSettingHaveChange -= ChangeNavigatorBindSetting;
         SetKeybindConfirmSlot.applyButtonPressed -= ApplySettings;
         SetKeybindConfirmSlot.resetButtonPressed -= ResetSettings;
         SetKeybindConfirmSlot.backButtonPressed -= BackButtonPressed;
@@ -111,9 +80,6 @@ public class KeybindingSettings : SettingsContainerBase
             SelectingSlot(1);
         else if (ControlManager.Ins.MenuNavigationPress(CommandIndex.NAVI_UP))
             SelectingSlot(-1);
-
-        //if (ControlManager.Ins.MenuBackButtonPressed() || ControlManager.Ins.MenuCancelButtonPressed())
-        //    returnToSettingButtonContainer?.Invoke();
 
         DisplaySlots();
         base.Input();
@@ -168,14 +134,6 @@ public class KeybindingSettings : SettingsContainerBase
         DisplaySlots();
         ConfirmButtonDisplay();
     }
-
-    //private void ChangeNavigatorBindSetting(NavigatorType aNavigator, KeybindData aKeybindData)
-    //{
-    //    if(!DuplicateKeyOccured(aNavigator, aKeybindData))
-    //        mNewNavigateBindings[aNavigator] = new KeybindData(aKeybindData);
-    //    DisplaySlots();
-    //    ConfirmButtonDisplay();
-    //}
 
     protected override void ApplySettings()
     {
@@ -291,31 +249,13 @@ public class KeybindingSettings : SettingsContainerBase
             else if (mActiveControlType == ControlType.XBOX_360 && mNewCommandsBindings[com].BindingXBoxButton == aData.BindingXBoxButton)
             {
                 XBoxButton tempKeycode = mNewCommandsBindings[aCommand].BindingXBoxButton;
-                mNewCommandsBindings[com].ChangeXBoxBotton(tempKeycode);
-                mNewCommandsBindings[aCommand].ChangeXBoxBotton(aData.BindingXBoxButton);
+                mNewCommandsBindings[com].ChangeXBoxButton(tempKeycode);
+                mNewCommandsBindings[aCommand].ChangeXBoxButton(aData.BindingXBoxButton);
 
                 return true;
             }
         }
-
-        //// look for each navi type in the navigatebindings dictionary
-        //foreach(NavigatorType navi in mNewNavigateBindings.Keys)
-        //{
-        //    // check if the data's keycode list in the current key in the navigate binding dictionary
-        //    // contain the binding keycode from the checking data
-        //    if(mNewNavigateBindings[navi].BindingKeyCodes.Contains(aData.BindingKeyCode))
-        //    {
-        //        // get the index of the item that have the dublicate keycode
-        //        int dublicateKeycodeIndex = mNewNavigateBindings[navi].BindingKeyCodes.IndexOf(aData.BindingKeyCode);
-        //        // temporary store the keycode from the checking command data
-        //        KeyCode tempKeycode = mNewCommandsBindings[aCommand].BindingKeyCode;
-        //        // change the requesting command data keycode with the one store
-        //        // in the dublicateKeycodeIndex item of the current checking data
-        //        mNewNavigateBindings[navi].ChangeBindingCodesAt(dublicateKeycodeIndex, tempKeycode);
-        //        mNewCommandsBindings[aCommand].ChangeBindingKeyCode(aData.BindingKeyCode);
-        //        return true;
-        //    }
-        //}
+        
         return false;
     }
 
@@ -393,7 +333,7 @@ public class KeybindingSettings : SettingsContainerBase
 
 public class KeybindData
 {
-    private CommandIndex mCommand = CommandIndex.MAX_INPUT;
+    private readonly CommandIndex mCommand = CommandIndex.MAX_INPUT;
     public CommandIndex Command { get { return mCommand; } }
 
     private KeyCode mBindingKeyCode = KeyCode.None;
@@ -412,21 +352,33 @@ public class KeybindData
         mBindingKeyCodes[anIndex] = aKeyCode;
     }
 
+    private GP_InputType mGamePadInputType = GP_InputType.NONE;
+    public GP_InputType GamePadInputType { get { return mGamePadInputType; } }
+
     private XBoxButton mBindingXBoxButton = XBoxButton.NONE;
     public XBoxButton BindingXBoxButton { get { return mBindingXBoxButton; } }
-    public void ChangeXBoxBotton(XBoxButton aBotton) { mBindingXBoxButton = aBotton; }
+    public void ChangeXBoxButton(XBoxButton aBotton)
+    {
+        mGamePadInputType = GP_InputType.BUTTON;
+        mBindingXBoxButton = aBotton;
+    }
+    public void ChangeXBoxAnaloge(XBoxButton aButton)
+    {
+        mGamePadInputType = GP_InputType.AXIS;
+        mBindingXBoxButton = aButton;
+    }
 
-    private List<XBoxButton> mBindingXboxButtons = new List<XBoxButton>();
-    public List<XBoxButton> BindingXboxButtons { get { return mBindingXboxButtons; } }
-    public void ChangeBindingXboxButtons(List<XBoxButton> someXboxButtons)
-    {
-        mBindingXboxButtons.Clear();
-        mBindingXboxButtons = new List<XBoxButton>(someXboxButtons);
-    }
-    public void ChangeBindingXboxButtonAt(int anIndex, XBoxButton aButton)
-    {
-        mBindingXboxButtons[anIndex] = aButton;
-    }
+    //private List<XBoxButton> mBindingXboxButtons = new List<XBoxButton>();
+    //public List<XBoxButton> BindingXboxButtons { get { return mBindingXboxButtons; } }
+    //public void ChangeBindingXboxButtons(List<XBoxButton> someXboxButtons)
+    //{
+    //    mBindingXboxButtons.Clear();
+    //    mBindingXboxButtons = new List<XBoxButton>(someXboxButtons);
+    //}
+    //public void ChangeBindingXboxButtonAt(int anIndex, XBoxButton aButton)
+    //{
+    //    mBindingXboxButtons[anIndex] = aButton;
+    //}
 
     private AxisInput mBindingAxis = AxisInput.NONE;
     private Vector2Int mAxisCommandDirection = Vector2Int.zero;

@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SettingSlotForCommandBinding : SettingSlotBase
@@ -17,14 +19,24 @@ public class SettingSlotForCommandBinding : SettingSlotBase
     protected KeybindData mKeybindingData = new KeybindData();
     protected Dictionary<CommandIndex, KeybindData> mKeybindingDatas = new Dictionary<CommandIndex, KeybindData>();
 
+    private enum AxisName
+    {
+        L_STICK_HORI,
+        L_STICK_VERT,
+        TRIGGERS,
+        R_STICK_HORI,
+        R_STICK_VERT,
+        D_PAD_HORI,
+        D_PAD_VERT,
+        NONE
+    }
+
     private bool mChangeModeOn = false;
 
     private float mChangeModeSuspendCountdown = 0f;
 
     private int mXboxStickValue = 0;
-    private int mXboxAxisIndexCount = XBox360Constrol.XboxAxisNames.Count;
-    private int mLastMovedXboxStickIndex = 0;
-    private bool mAStickHasMoved = false;
+    private AxisName mLastMovedAxis = AxisName.NONE;
 
     private const float mChangeModeSuspendTime = .05f;
 
@@ -45,8 +57,6 @@ public class SettingSlotForCommandBinding : SettingSlotBase
         if (KeybindContainer != null)
             mBindContainerMG = KeybindContainer.GetComponent<CanvasGroup>();
         ActiveChangeMode(false);
-
-        mLastMovedXboxStickIndex = mXboxAxisIndexCount;
     }
 
     public override void Update()
@@ -109,34 +119,26 @@ public class SettingSlotForCommandBinding : SettingSlotBase
         if (UnityEngine.Input.GetButtonDown(XBox360Constrol.XboxButtonNames[9]))
             SetXboxButtonCodeToData(XBoxButton.R_Thumb);
 
-        if (CheckXBoxAnalogeIsNeutural(0) && mXboxStickValue == -1)
-            SetXboxButtonCodeToData(XBoxButton.L_Thumb_Left);
-        if (CheckXBoxAnalogeIsNeutural(0) && mXboxStickValue == 1)
-            SetXboxButtonCodeToData(XBoxButton.L_Thumb_Right);
-        if (CheckXBoxAnalogeIsNeutural(1) && mXboxStickValue == 1)
-            SetXboxButtonCodeToData(XBoxButton.L_Thumb_Down);
-        if (CheckXBoxAnalogeIsNeutural(1) && mXboxStickValue == -1)
-            SetXboxButtonCodeToData(XBoxButton.L_Thumb_Up);
-        if (CheckXBoxAnalogeIsNeutural(2) && mXboxStickValue == -1)
-            SetXboxButtonCodeToData(XBoxButton.L_Trigger);
-        if (CheckXBoxAnalogeIsNeutural(2) && mXboxStickValue == 1)
-            SetXboxButtonCodeToData(XBoxButton.R_Trigger);
-        if (CheckXBoxAnalogeIsNeutural(3) && mXboxStickValue == -1)
-            SetXboxButtonCodeToData(XBoxButton.R_Thumb_Left);
-        if (CheckXBoxAnalogeIsNeutural(3) && mXboxStickValue == 1)
-            SetXboxButtonCodeToData(XBoxButton.R_Thumb_Right);
-        if (CheckXBoxAnalogeIsNeutural(4) && mXboxStickValue == -1)
-            SetXboxButtonCodeToData(XBoxButton.R_Thumb_Down);
-        if (CheckXBoxAnalogeIsNeutural(4) && mXboxStickValue == -1)
-            SetXboxButtonCodeToData(XBoxButton.R_Thumb_Up);
-        if (CheckXBoxAnalogeIsNeutural(5) && mXboxStickValue == 1)
-            SetXboxButtonCodeToData(XBoxButton.DPad_Left);
-        if (CheckXBoxAnalogeIsNeutural(5) && mXboxStickValue == 1)
-            SetXboxButtonCodeToData(XBoxButton.DPad_Right);
-        if (CheckXBoxAnalogeIsNeutural(6) && mXboxStickValue == -1)
-            SetXboxButtonCodeToData(XBoxButton.DPad_Down);
-        if (CheckXBoxAnalogeIsNeutural(6) && mXboxStickValue == 1)
-            SetXboxButtonCodeToData(XBoxButton.DPad_Up);
+       
+        foreach (AxisName axis in Enum.GetValues(typeof(AxisName)))
+        {
+            if (axis == AxisName.NONE)
+                continue;
+
+            mXboxStickValue = (int)UnityEngine.Input.GetAxis(XBox360Constrol.XboxAxisNames[(int)axis]);
+
+            if (mXboxStickValue != 0 && mLastMovedAxis == AxisName.NONE)
+            {
+                mLastMovedAxis = axis;
+                CheckForAnalogueInput(axis, mXboxStickValue);
+                break;
+            }
+            else if(mXboxStickValue == 0 && mLastMovedAxis == axis)
+            {
+                mLastMovedAxis = AxisName.NONE;
+                break;
+            }
+        }
     }
 
     protected virtual void Display()
@@ -170,23 +172,60 @@ public class SettingSlotForCommandBinding : SettingSlotBase
         
         //Display();
     }
-    
-    private bool CheckXBoxAnalogeIsNeutural(int anAxisIndex)
+
+    private void CheckForAnalogueInput(AxisName anAxisName, int anAxisDirection)
     {
-        if (mAStickHasMoved )
-            return false;
+        XBoxButton button = XBoxButton.NONE;
 
-        mXboxStickValue = (int)UnityEngine.Input.GetAxis(XBox360Constrol.XboxAxisNames[anAxisIndex]);
-
-        if (mXboxStickValue != 0)
+        if(anAxisName == AxisName.L_STICK_HORI)
         {
-            mAStickHasMoved = true;
-            Debug.Log(XBox360Constrol.XboxAxisNames[anAxisIndex] + " " + mXboxStickValue);
-            return false;
+            if(anAxisDirection == 1)
+                button = XBoxButton.L_Thumb_Right;
+            else if(anAxisDirection == -1)
+                button = XBoxButton.L_Thumb_Left;
         }
-
-        mAStickHasMoved = false;
-        
-        return true;
+        if (anAxisName == AxisName.L_STICK_VERT)
+        {
+            if (anAxisDirection == 1)
+                button = XBoxButton.L_Thumb_Up;
+            else if (anAxisDirection == -1)
+                button = XBoxButton.L_Thumb_Down;
+        }
+        if (anAxisName == AxisName.TRIGGERS)
+        {
+            if (anAxisDirection == 1)
+                button = XBoxButton.R_Trigger;
+            else if (anAxisDirection == -1)
+                button = XBoxButton.L_Trigger;
+        }
+        if (anAxisName == AxisName.R_STICK_HORI)
+        {
+            if (anAxisDirection == 1)
+                button = XBoxButton.R_Thumb_Right;
+            else if (anAxisDirection == -1)
+                button = XBoxButton.R_Thumb_Left;
+        }
+        if (anAxisName == AxisName.R_STICK_VERT)
+        {
+            if (anAxisDirection == 1)
+                button = XBoxButton.R_Thumb_Up;
+            else if (anAxisDirection == -1)
+                button = XBoxButton.R_Thumb_Down;
+        }
+        if (anAxisName == AxisName.D_PAD_HORI)
+        {
+            if (anAxisDirection == 1)
+                button = XBoxButton.DPad_Right;
+            else if (anAxisDirection == -1)
+                button = XBoxButton.DPad_Left;
+        }
+        if (anAxisName == AxisName.D_PAD_VERT)
+        {
+            if (anAxisDirection == 1)
+                button = XBoxButton.DPad_Up;
+            else if (anAxisDirection == -1)
+                button = XBoxButton.DPad_Down;
+        }
+        SetXboxButtonCodeToData(button);
     }
 }

@@ -138,6 +138,11 @@ public class ControlManager
         return mControls.Any(c => c.Type == aSeekingType);
     }
 
+    public bool GetGamePadStateTest(XBoxButton aButton)
+    {
+        return mActiveControl.TestGamePadState(aButton);
+    }
+
     private bool MultiControlButton(CommandIndex aCommand)
     {
         for(int i = 0; i < mControls.Count; i++)

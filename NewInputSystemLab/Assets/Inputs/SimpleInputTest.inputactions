@@ -1,0 +1,74 @@
+{
+    "name": "SimpleInputTest",
+    "maps": [
+        {
+            "name": "GamePad",
+            "id": "95d8c547-c685-4a40-957b-7afd3138b501",
+            "actions": [
+                {
+                    "name": "North_Press",
+                    "type": "Button",
+                    "id": "e6929d7a-a34e-477d-b2b0-2d88e796490a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "South_Hold",
+                    "type": "Button",
+                    "id": "53ccadbf-3346-4b04-bfd5-fec0bd522222",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a581360a-ede2-4584-885a-57310ece3b42",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "North_Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b223cdba-90a9-4c30-9695-e280c34ee869",
+                    "path": "<XInputController>/buttonNorth",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "North_Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c07b0e58-37b6-4a49-a9d9-ab9ad66f5821",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "South_Hold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "669c532f-ede5-4569-8e15-d2505caa4f13",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "South_Hold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

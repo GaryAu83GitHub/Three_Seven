@@ -110,15 +110,6 @@ public class TimeTextBox : ScoreboardComponentBase
 
         mGameTime += mTimerDirection * Time.deltaTime;
 
-        //int seconds = (int)(mGameTime % 60);
-        //int minutes = (int)((mGameTime / 60) % 60);
-        //int hours = (int)((mGameTime / 3600) % 60);
-
-        //if(hours > 0)
-        //    mTimeInText = string.Format("{0:00}:{1:00}:{2:00}", hours, minutes, seconds);
-        //else
-        //    mTimeInText = string.Format("{0:00}:{1:00}", minutes, seconds);
-
         ValueText.text = TimeTool.TimeString(mGameTime);
     }
 

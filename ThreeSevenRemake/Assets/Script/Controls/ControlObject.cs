@@ -37,6 +37,7 @@ public enum NavigatorType
 {
     BLOCK_NAVIGATOR,
     POWER_UP_NAVIGATOR,
+    GAME_PAD_TESTING,
     NONE
 }
 
@@ -98,6 +99,8 @@ public class ControlObject
     public virtual bool MenuConfirm() { return KeyPress(CommandIndex.CONFIRM); }
 
     public virtual bool MenuBack() { return KeyPress(CommandIndex.BACK); }
+
+    public virtual bool TestGamePadState(XBoxButton aButton) { return false; }
 
     public Vector3 GameMoveBlockHorizontal()
     {

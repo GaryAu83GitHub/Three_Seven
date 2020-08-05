@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotBase
+public class SetNavigatebindingSlot : SettingSlotForCommandBinding
 {
     public NavigatorType NavigatorType;
 
@@ -24,6 +24,8 @@ public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotB
     private Dictionary<CommandIndex, Sprite> mDisplayingSprites = new Dictionary<CommandIndex, Sprite>();
 
     private bool mSlotIsActive = false;
+    private float mDelayTimer = 0;
+    private const float MAX_DELAY_TIME = 0.15f;
 
     public override void Awake()
     {
@@ -42,7 +44,20 @@ public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotB
         base.Start();
         ActiveKeyboardBox();
     }
-    
+
+    public override void Update()
+    {
+        base.Update();
+
+        if (mDelayTimer > 0)
+        {
+            mDelayTimer -= Time.deltaTime;
+            Debug.Log(mDelayTimer);
+            if (mCurrentInputIndex == NaviInputBindBoxes.Count && mDelayTimer <= 0)
+                ActiveChangeMode(false);
+        }
+    }
+
     protected override void Display()
     {
         for(int i = 0; i < CommandIndexes.Count; i++)
@@ -88,13 +103,21 @@ public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotB
     {
         //base.SetXboxButtonCodeToData(aButtonCode);
 
+        if (mDelayTimer > 0)
+            return;
+
         CommandIndex command = CommandIndexes[mCurrentInputIndex];
-        mKeybindingDatas[command].ChangeXBoxBotton(aButtonCode);
+        if(XBox360Constrol.Buttons.Contains(aButtonCode))
+            mKeybindingDatas[command].ChangeXBoxButton(aButtonCode);
+        else if(XBox360Constrol.Analogue.Contains(aButtonCode))
+            mKeybindingDatas[command].ChangeXBoxAnaloge(aButtonCode);
 
         mDisplayingSprites[command] = InputSpritesManager.Instance.GetXboxButton(aButtonCode);
         keybindingSettingHaveChange?.Invoke(command, mKeybindingDatas[command]);
         KeyboardbindBoxAppearence();
         Display();
+
+        mDelayTimer = MAX_DELAY_TIME;
     }
 
     public override void SetKey(ControlType aDisplayControlType, KeybindData aData)
@@ -115,8 +138,8 @@ public class SetNavigatebindingSlot : SettingSlotForCommandBinding//SettingSlotB
     private void KeyboardbindBoxAppearence()
     {   
         mCurrentInputIndex++;
-        if (mCurrentInputIndex == NaviInputBindBoxes.Count)
-            ActiveChangeMode(false);
+        //if (mCurrentInputIndex == NaviInputBindBoxes.Count)
+        //    ActiveChangeMode(false);
         ActiveKeyboardBox();
     }
 
