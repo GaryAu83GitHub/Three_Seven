@@ -25,6 +25,7 @@ public class GamePadLabInput : MonoBehaviour
     public bool isAxis;
     public GPB aName;
     public List<XBoxButton> Buttons;
+    public AnalogueSticks Stick;
     
     private Vector3 startPos;
     private Transform thisTransform;
@@ -87,62 +88,19 @@ public class GamePadLabInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //GamePadStat stat = ControlManager.Ins.GetGamePadStateTest();
-
         if (mCurrentDisplayState == DisplayState.DISPLAY_PRESS)
             CheckForInputPress();
         else if (mCurrentDisplayState == DisplayState.DISPLAY_HOLD)
             CheckForInputHold();
         else if (mCurrentDisplayState == DisplayState.DISPLAY_PRESS_AND_RELEASE)
             CheckForInputPressAndRelease();
-
-
-
-        //if (isButton)
-        //{
-        //    mr.enabled = !Input.GetButton(nameList[(int)aName]);
-        //}
-
-            //if (isAxis)
-            //{
-            //    Vector3 inputDirection = Vector3.zero;
-            //    if (aName == GPB.L_Thumb_Button)
-            //    {
-            //        inputDirection.x = Input.GetAxis(nameList[10]);
-            //        inputDirection.y = Input.GetAxis(nameList[11]);
-            //    }
-            //    if (aName == GPB.Trigger)
-            //    {
-            //        inputDirection.x = Input.GetAxis(nameList[12]);
-            //    }
-            //    if (aName == GPB.R_Thumb_Button)
-            //    {
-            //        inputDirection.x = Input.GetAxis(nameList[13]);
-            //        inputDirection.y = Input.GetAxis(nameList[14]);
-            //    }
-            //    if (aName == GPB.DPad)
-            //    {
-            //        inputDirection.x = Input.GetAxis(nameList[15]);
-            //        inputDirection.y = Input.GetAxis(nameList[16]);
-            //    }
-            //    thisTransform.position = startPos + inputDirection;
-            //}
-
-            //Debug.Log("Left stick (" + Input.GetAxis(nameList[10]).ToString() + " : " + Input.GetAxis(nameList[11]).ToString() + ")");
-            //Debug.Log("Trigger (" + Input.GetAxis(nameList[12]).ToString() + ")");
-            //Debug.Log("Right stick (" + Input.GetAxis(nameList[13]).ToString() + " : " + Input.GetAxis(nameList[14]).ToString() + ")");
-            //Debug.Log("DPad (" + Input.GetAxis(nameList[15]).ToString() + " : " + Input.GetAxis(nameList[16]).ToString() + ")");
+        else if (mCurrentDisplayState == DisplayState.DISPLAY_ANALOGUE)
+            CheckForAnalogue();
     }
 
     public void ButtonPressed(bool aButtonPressed)
     {
         mr.enabled = !aButtonPressed;
-    }
-
-    public void AxisOnMove(Vector2 aMovement)
-    {
-        Vector3 direction = new Vector3(aMovement.x, aMovement.y, 0f);
-        thisTransform.position = startPos + direction;
     }
 
     private void SetInputDisplayState(DisplayState aState)
@@ -157,6 +115,12 @@ public class GamePadLabInput : MonoBehaviour
     {
         if (isButtonPress)
             mVisibleTimer = VISIBLE_TIME;
+    }
+
+    public void AxisOnMove(Vector2 aMovement)
+    {
+        Vector3 direction = new Vector3(aMovement.x, aMovement.y, 0f);
+        thisTransform.position = startPos + direction;
     }
 
     private void SetButtonHold(XBoxButton theHoldButton)
@@ -236,8 +200,22 @@ public class GamePadLabInput : MonoBehaviour
         DisplayPress();
     }
 
-    private void Analogue()
+    private void CheckForAnalogue()
     {
+        if (Stick == AnalogueSticks.NONE)
+            return;
+
+        DisplayAnalogue();
+    }
+
+    private void DisplayAnalogue()
+    {
+        Vector3 inputDirection = Vector3.zero;
+
+        inputDirection.x = mControl.InputAnalogueDirection(Stick).x;
+        inputDirection.y = mControl.InputAnalogueDirection(Stick).y;
+
+        thisTransform.position = startPos + inputDirection;
     }
 
     private void MoveAnalogueSphere(Vector2Int aDir)

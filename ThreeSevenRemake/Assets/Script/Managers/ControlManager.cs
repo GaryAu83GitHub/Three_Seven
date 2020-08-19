@@ -47,7 +47,7 @@ public class ControlManager
             {
                 if (temp[i].Any())
                 {
-                    mControls.Add(new XBox360Constrol());
+                    mControls.Add(new XBoxControl/*XBox360Constrol*/());
                     mActiveControl = mControls[1];
                 }
             }
@@ -89,13 +89,13 @@ public class ControlManager
 
 
     // these are for in game mode
-    public Vector3 MoveBlockHorizontal() { return mActiveControl.GameMoveBlockHorizontal(); }
+    public Vector3 MoveBlockHorizontal() { return mActiveControl.GameMoveBlock();/*GameMoveBlockHorizontal();*/ }
 
     public int PowerUpSelection() { return mActiveControl.GameMovePowerUpSelection(); }
 
     public bool GamePause() { return mActiveControl.GamePause(); }
 
-    public bool DropBlockGradually(float aBlockNextDropTime) { return mActiveControl.GameDropBlockGradually(aBlockNextDropTime); }
+    public bool DropBlockGradually(/*float aBlockNextDropTime*/) { return mActiveControl.GameSlowDropBlock()/*GameDropBlockGradually(aBlockNextDropTime)*/; }
 
     public bool DropBlockInstantly() { return mActiveControl.GameInstantBlockDrop(); }
 
@@ -115,17 +115,27 @@ public class ControlManager
 
     public bool DumpPreview() { return mActiveControl.GameDumpPreview(); }
 
+    /// <summary>
+    /// Return the boolian of the input to the requesting command is being held down on
+    /// the active control
+    /// </summary>
+    /// <param name="anCommand">Requesting command</param>
+    /// <returns>return true if the input is being held</returns>
+    public bool KeyHold(CommandIndex anCommand)
+    {
+        return mActiveControl.KeyHold(anCommand);
+    }
+
+    /// <summary>
+    /// Return the boolian of the input to the requesting command has been pressed on
+    /// the active control
+    /// </summary>
+    /// <param name="anCommand">Requesting command</param>
+    /// <returns>return true if the input is been pressed</returns>
 
     public bool KeyPress(CommandIndex anCommand)
     {
         return mActiveControl.KeyPress(anCommand);
-        //return Input.GetKey(mKeyBoard[anCommand]);
-    }
-
-    public bool KeyDown(CommandIndex anCommand)
-    {
-        return mActiveControl.KeyDown(anCommand);
-        //return Input.GetKeyDown(mKeyBoard[anCommand]);
     }
 
     public void SetActiveControl(ControlType aControlType)
@@ -159,6 +169,7 @@ public class ControlManager
         return false;
     }
 
+    // this function has not been called anyway, will investigate if it shall be removed
     private bool MultiControlNavigation(CommandIndex aCommand, float anDelayIntervall = 0f)
     {
         for (int i = 0; i < mControls.Count; i++)

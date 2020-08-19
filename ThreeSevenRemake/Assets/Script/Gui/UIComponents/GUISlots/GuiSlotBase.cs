@@ -12,12 +12,12 @@ public class GuiSlotBase : MonoBehaviour
 
     public virtual void Awake()
     {
-
+        mCG = GetComponent<CanvasGroup>();
     }
 
     public virtual void Start()
     {
-        mCG = GetComponent<CanvasGroup>();
+        
     }
 
     public virtual void Update()

@@ -3,18 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum XBoxButton
-{
-    A, B, X, Y,
-    L_Shoulder, R_Shoulder,
-    Back, Start,
-    L_Thumb, R_Thumb,
-    L_Thumb_Up, L_Thumb_Right, L_Thumb_Down, L_Thumb_Left,
-    L_Trigger, R_Trigger,
-    R_Thumb_Up, R_Thumb_Right, R_Thumb_Down, R_Thumb_Left,
-    DPad_Up, DPad_Right, DPad_Down, DPad_Left,
-    NONE,
-}
 
 public enum GP_InputType
 {
@@ -23,15 +11,11 @@ public enum GP_InputType
     NONE
 }
 
-public enum AxisInput
-{
-    L_STICK,
-    TRIGGER,
-    R_STICK,
-    D_PAD,
-    NONE
-}
 
+/// <summary>
+/// this class will properly be removed and replace by XboxControl with have a much
+/// cleaner structure
+/// </summary>
 public class XBox360Constrol : ControlObject
 {
     //private readonly AxisInput mNavigation = AxisInput.L_STICK;
@@ -96,7 +80,7 @@ public class XBox360Constrol : ControlObject
 
     private readonly Dictionary<XBoxButton, string> mButtonIndex = new Dictionary<XBoxButton, string>();
     private readonly Dictionary<CommandIndex, ControlInput> mCommands = new Dictionary<CommandIndex, ControlInput>();
-    private readonly Dictionary<AxisInput, bool> mEnableNavigationSticks = new Dictionary<AxisInput, bool>();
+    private readonly Dictionary<AnalogueSticks, bool> mEnableNavigationSticks = new Dictionary<AnalogueSticks, bool>();
 
     private Vector2Int mCurrentMenuNavigateDireciton = Vector2Int.zero;
     private Vector2Int mLastNavigateAxisDirection = Vector2Int.zero;
@@ -108,10 +92,10 @@ public class XBox360Constrol : ControlObject
         {NavigatorType.POWER_UP_NAVIGATOR, Vector2Int.zero },
     };
 
-    private readonly Dictionary<NavigatorType, AxisInput> mLastPulledAxis = new Dictionary<NavigatorType, AxisInput>
+    private readonly Dictionary<NavigatorType, AnalogueSticks> mLastPulledAxis = new Dictionary<NavigatorType, AnalogueSticks>
     {
-        {NavigatorType.BLOCK_NAVIGATOR, AxisInput.NONE },
-        {NavigatorType.POWER_UP_NAVIGATOR, AxisInput.NONE },
+        {NavigatorType.BLOCK_NAVIGATOR, AnalogueSticks.NONE },
+        {NavigatorType.POWER_UP_NAVIGATOR, AnalogueSticks.NONE },
     };
 
     private float mMenuNavigationSuppressTimer = 0f;
@@ -164,24 +148,24 @@ public class XBox360Constrol : ControlObject
         Dictionary<CommandIndex, ControlInput> defaultSets = new Dictionary<CommandIndex, ControlInput>
         {
             // navigation
-            { CommandIndex.NAVI_LEFT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Left, Vector2Int.left) },
-            { CommandIndex.NAVI_RIGHT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Right, Vector2Int.right) },
-            { CommandIndex.NAVI_DOWN, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Down, Vector2Int.down) },
-            { CommandIndex.NAVI_UP, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Up, Vector2Int.up) },
+            { CommandIndex.NAVI_LEFT, new ControlInput(AnalogueSticks.L_STICK, XBoxButton.L_Thumb_Left, Vector2Int.left) },
+            { CommandIndex.NAVI_RIGHT, new ControlInput(AnalogueSticks.L_STICK, XBoxButton.L_Thumb_Right, Vector2Int.right) },
+            { CommandIndex.NAVI_DOWN, new ControlInput(AnalogueSticks.L_STICK, XBoxButton.L_Thumb_Down, Vector2Int.down) },
+            { CommandIndex.NAVI_UP, new ControlInput(AnalogueSticks.L_STICK, XBoxButton.L_Thumb_Up, Vector2Int.up) },
             { CommandIndex.SELECT, new ControlInput(XBoxButton.A) },
             { CommandIndex.CANCEL, new ControlInput(XBoxButton.B) },
             { CommandIndex.CONFIRM, new ControlInput(XBoxButton.Start) },
             { CommandIndex.BACK, new ControlInput(XBoxButton.Back) },
             // gameplay
-            { CommandIndex.BLOCK_MOVE_LEFT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Left, Vector2Int.left) },
-            { CommandIndex.BLOCK_MOVE_RIGHT, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Right, Vector2Int.right) },
-            { CommandIndex.BLOCK_DROP, new ControlInput(AxisInput.L_STICK, XBoxButton.L_Thumb_Down, Vector2Int.down) },
+            { CommandIndex.BLOCK_MOVE_LEFT, new ControlInput(AnalogueSticks.L_STICK, XBoxButton.L_Thumb_Left, Vector2Int.left) },
+            { CommandIndex.BLOCK_MOVE_RIGHT, new ControlInput(AnalogueSticks.L_STICK, XBoxButton.L_Thumb_Right, Vector2Int.right) },
+            { CommandIndex.BLOCK_DROP, new ControlInput(AnalogueSticks.L_STICK, XBoxButton.L_Thumb_Down, Vector2Int.down) },
             { CommandIndex.BLOCK_INSTANT_DROP, new ControlInput(XBoxButton.A) },
             { CommandIndex.BLOCK_ROTATE, new ControlInput(XBoxButton.X) },
             { CommandIndex.BLOCK_INVERT, new ControlInput(XBoxButton.Y) },
             { CommandIndex.POWER_UP_USE, new ControlInput(XBoxButton.B) },
-            { CommandIndex.POWER_UP_NAVI_LEFT, new ControlInput(AxisInput.R_STICK, XBoxButton.R_Thumb_Left, Vector2Int.left) },
-            { CommandIndex.POWER_UP_NAVI_RIGHT, new ControlInput(AxisInput.R_STICK, XBoxButton.R_Thumb_Right, Vector2Int.right) },
+            { CommandIndex.POWER_UP_NAVI_LEFT, new ControlInput(AnalogueSticks.R_STICK, XBoxButton.R_Thumb_Left, Vector2Int.left) },
+            { CommandIndex.POWER_UP_NAVI_RIGHT, new ControlInput(AnalogueSticks.R_STICK, XBoxButton.R_Thumb_Right, Vector2Int.right) },
             { CommandIndex.PREVIEW_ROTATE, new ControlInput(XBoxButton.R_Shoulder) },
             { CommandIndex.INGAME_PAUSE, new ControlInput(XBoxButton.Start) }
         };
@@ -197,7 +181,7 @@ public class XBox360Constrol : ControlObject
         foreach (CommandIndex com in defaultSets.Keys)
         {
             mCommands[com] = (ControlInput)defaultSets[com];
-            if(mCommands[com].AxisType != AxisInput.NONE)
+            if(mCommands[com].AxisType != AnalogueSticks.NONE)
             {
                 if (EnableAnalogNavigator != null)
                 {
@@ -206,16 +190,16 @@ public class XBox360Constrol : ControlObject
                 }
                 switch (mCommands[com].AxisType)
                 {
-                    case AxisInput.L_STICK:
+                    case AnalogueSticks.L_STICK:
                         EnableAnalogNavigator += LeftStick;
                         break;
-                    case AxisInput.TRIGGER:
+                    case AnalogueSticks.TRIGGER:
                         EnableAnalogNavigator += Trigger;
                         break;
-                    case AxisInput.R_STICK:
+                    case AnalogueSticks.R_STICK:
                         EnableAnalogNavigator += RightStick;
                         break;
-                    case AxisInput.D_PAD:
+                    case AnalogueSticks.D_PAD:
                         EnableAnalogNavigator += DPad;
                         break;
                 }
@@ -244,13 +228,13 @@ public class XBox360Constrol : ControlObject
 
                 switch(someNewBinding[navi].BindingAxis)
                 {
-                    case AxisInput.L_STICK:
+                    case AnalogueSticks.L_STICK:
                         GameBlockNavigation += LeftStickNew;
                         break;
-                    case AxisInput.R_STICK:
+                    case AnalogueSticks.R_STICK:
                         GameBlockNavigation += RightStickNew;
                         break;
-                    case AxisInput.D_PAD:
+                    case AnalogueSticks.D_PAD:
                         GameBlockNavigation += DPadNew;
                         break;
                 }
@@ -267,13 +251,13 @@ public class XBox360Constrol : ControlObject
 
                 switch (someNewBinding[navi].BindingAxis)
                 {
-                    case AxisInput.L_STICK:
+                    case AnalogueSticks.L_STICK:
                         GamePowerUpNavigation += LeftStickNew;
                         break;
-                    case AxisInput.R_STICK:
+                    case AnalogueSticks.R_STICK:
                         GamePowerUpNavigation += RightStickNew;
                         break;
-                    case AxisInput.D_PAD:
+                    case AnalogueSticks.D_PAD:
                         GamePowerUpNavigation += DPadNew;
                         break;
                 }
@@ -318,14 +302,14 @@ public class XBox360Constrol : ControlObject
     /// </summary>
     /// <param name="aCommand">Requesting mapping command</param>
     /// <returns>Return true as long the mapping button is held down</returns>
-    public override bool KeyDown(CommandIndex aCommand) { return ButtonDown(aCommand); }
+    public override bool KeyPress(CommandIndex aCommand) { return ButtonPressed(aCommand); }
 
     /// <summary>
     /// Return true if the button mapped to the requested command was pressed
     /// </summary>
     /// <param name="aCommand">Requesting mapping command</param>
     /// <returns></returns>
-    public override bool KeyPress(CommandIndex aCommand) { return ButtonPressed(aCommand); }
+    public override bool KeyHold(CommandIndex aCommand) { return ButtonHold(aCommand); }
 
     public override int GameMovePowerUpSelection()
     {
@@ -378,12 +362,18 @@ public class XBox360Constrol : ControlObject
         return base.TestGamePadState(aButton);
     }
 
+    /// <summary>
+    /// Get the button set to the requesting command into the bind data reference
+    /// </summary>
+    /// <param name="aCommand">requesting command index</param>
+    /// <param name="aBindData">reference bind data to set button of the requesting
+    /// command index</param>
     public void GetButtonFor(CommandIndex aCommand, ref XBoxButton aButton)
     {
         aButton = mCommands[aCommand].Button;
     }
 
-    public void GetButtonFor(CommandIndex aCommand, ref KeybindData aBindData)
+    public override void GetInputFor(CommandIndex aCommand, ref KeybindData aBindData)
     {
         XBoxButton button = mCommands[aCommand].Button;
         if (XBox360Constrol.Analogue.Contains(button))
@@ -392,7 +382,7 @@ public class XBox360Constrol : ControlObject
             aBindData.ChangeXBoxButton(button);
     }
 
-    public void GetNavigationSticksFor(NavigatorType aType, ref AxisInput anAxis)
+    public void GetNavigationSticksFor(NavigatorType aType, ref AnalogueSticks anAxis)
     {
         if (aType == NavigatorType.BLOCK_NAVIGATOR)
             anAxis = mCommands[CommandIndex.BLOCK_DROP].AxisType;
@@ -460,7 +450,7 @@ public class XBox360Constrol : ControlObject
     /// </summary>
     /// <param name="aCommand"></param>
     /// <returns>True when the butten to the requested command has been pressed and not released.</returns>
-    private bool ButtonDown(CommandIndex aCommand)
+    private bool ButtonHold(CommandIndex aCommand)
     {
         if (!mCommands.ContainsKey(aCommand))
             return false;
@@ -539,16 +529,16 @@ public class XBox360Constrol : ControlObject
 
         switch (mCommands[aCommand].AxisType)
         {
-            case AxisInput.L_STICK:
+            case AnalogueSticks.L_STICK:
                 dir = LeftStick();
                 break;
-            case AxisInput.TRIGGER:
+            case AnalogueSticks.TRIGGER:
                 dir = Trigger();
                 break;
-            case AxisInput.R_STICK:
+            case AnalogueSticks.R_STICK:
                 dir = RightStick();
                 break;
-            case AxisInput.D_PAD:
+            case AnalogueSticks.D_PAD:
                 dir = DPad();
                 break;
         }
@@ -571,13 +561,13 @@ public class XBox360Constrol : ControlObject
 
     // this might be removed later and replace by each type of navigat moved method
     // It'll be used for a moment
-    private bool GetAxisInput(AxisInput theCheckingAxis)
+    private bool GetAxisInput(AnalogueSticks theCheckingAxis)
     {
-        if (theCheckingAxis == AxisInput.L_STICK)
+        if (theCheckingAxis == AnalogueSticks.L_STICK)
             return CheckThisMoves(LeftStick());
-        else if (theCheckingAxis == AxisInput.R_STICK)
+        else if (theCheckingAxis == AnalogueSticks.R_STICK)
             return CheckThisMoves(RightStick());
-        else if (theCheckingAxis == AxisInput.D_PAD)
+        else if (theCheckingAxis == AnalogueSticks.D_PAD)
             return CheckThisMoves(DPad());
         return false;
     }
@@ -589,18 +579,18 @@ public class XBox360Constrol : ControlObject
         return false;
     }
 
-    private Vector2Int GetDirectionFromAxis(AxisInput aSelectedAxis)
+    private Vector2Int GetDirectionFromAxis(AnalogueSticks aSelectedAxis)
     {
         Vector2Int returnDirection = Vector2Int.zero;
         switch (aSelectedAxis)
         {
-            case AxisInput.TRIGGER:
+            case AnalogueSticks.TRIGGER:
                 returnDirection = Trigger();//new Vector2Int(Trigger(), 0);
                 break;
-            case AxisInput.R_STICK:
+            case AnalogueSticks.R_STICK:
                 returnDirection = RightStick();
                 break;
-            case AxisInput.D_PAD:
+            case AnalogueSticks.D_PAD:
                 returnDirection = DPad();
                 break;
             default:
@@ -627,7 +617,7 @@ public class XBox360Constrol : ControlObject
     private Vector2Int LeftStickNew(NavigatorType aType)
     {
         Vector2Int returnVector = new Vector2Int((int)Input.GetAxis(mAxisNames[0]), (int)Input.GetAxis(mAxisNames[1]));
-        SetLastNavigationTo(aType, AxisInput.L_STICK, ref returnVector);
+        SetLastNavigationTo(aType, AnalogueSticks.L_STICK, ref returnVector);
         return returnVector;
     }
 
@@ -640,7 +630,7 @@ public class XBox360Constrol : ControlObject
     private Vector2Int TriggerNew(NavigatorType aType)
     {
         Vector2Int returnVector = new Vector2Int((int)Input.GetAxis(mAxisNames[2]), 0);
-        SetLastNavigationTo(aType, AxisInput.TRIGGER, ref returnVector);
+        SetLastNavigationTo(aType, AnalogueSticks.TRIGGER, ref returnVector);
         return returnVector;
     }
 
@@ -653,7 +643,7 @@ public class XBox360Constrol : ControlObject
     private Vector2Int RightStickNew(NavigatorType aType)
     {
         Vector2Int returnVector = new Vector2Int((int)Input.GetAxis(mAxisNames[3]), (int)Input.GetAxis(mAxisNames[4]));
-        SetLastNavigationTo(aType, AxisInput.R_STICK, ref returnVector);
+        SetLastNavigationTo(aType, AnalogueSticks.R_STICK, ref returnVector);
         return returnVector;
     }
 
@@ -666,7 +656,7 @@ public class XBox360Constrol : ControlObject
     private Vector2Int DPadNew(NavigatorType aType)
     {
         Vector2Int returnVector = new Vector2Int(Mathf.RoundToInt(Input.GetAxis(mAxisNames[5])), Mathf.RoundToInt(Input.GetAxis(mAxisNames[6])));
-        SetLastNavigationTo(aType, AxisInput.D_PAD, ref returnVector);
+        SetLastNavigationTo(aType, AnalogueSticks.D_PAD, ref returnVector);
         return returnVector;
     }
 
@@ -676,12 +666,12 @@ public class XBox360Constrol : ControlObject
     /// <param name="aType">Reqeusting checking navigation type from the dictionary with stored the last pulled axisInput</param>
     /// <param name="aPullingAxis">The current pulled axisInput</param>
     /// <param name="aVector">returning vector value of the pulling axisInput that been pulled</param>
-    private void SetLastNavigationTo(NavigatorType aType, AxisInput aPullingAxis,  ref Vector2Int aVector)
+    private void SetLastNavigationTo(NavigatorType aType, AnalogueSticks aPullingAxis,  ref Vector2Int aVector)
     {
         if (mLastPulledAxis[aType] == aPullingAxis && aVector == Vector2Int.zero)
         {
             mCurrentActiveNavigation[aType] = Vector2Int.zero;
-            mLastPulledAxis[aType] = AxisInput.NONE;
+            mLastPulledAxis[aType] = AnalogueSticks.NONE;
         }
         else if (mCurrentActiveNavigation[aType] != Vector2Int.zero)
             aVector = mCurrentActiveNavigation[aType];
@@ -701,8 +691,8 @@ public class ControlInput
     private readonly GP_InputType mInputType = GP_InputType.NONE;
     public GP_InputType Type { get { return mInputType; } }
 
-    private readonly AxisInput mAxisType = AxisInput.NONE;
-    public AxisInput AxisType { get { return mAxisType; } }
+    private readonly AnalogueSticks mAxisType = AnalogueSticks.NONE;
+    public AnalogueSticks AxisType { get { return mAxisType; } }
 
     private readonly Vector2Int mAxisDirection = Vector2Int.zero;
     public Vector2Int Direction { get { return mAxisDirection; } }
@@ -716,7 +706,7 @@ public class ControlInput
         mButtonIndex = anIndex;
     }
 
-    public ControlInput(AxisInput anAxis, XBoxButton anIndex, Vector2Int aDirection)
+    public ControlInput(AnalogueSticks anAxis, XBoxButton anIndex, Vector2Int aDirection)
     {
         mInputType = GP_InputType.AXIS;
         mAxisType = anAxis;
@@ -725,22 +715,22 @@ public class ControlInput
 
         switch(anAxis)
         {
-            case AxisInput.L_STICK:
+            case AnalogueSticks.L_STICK:
                 mAxisName = "LeftStick";
                 break;
-            case AxisInput.R_STICK:
+            case AnalogueSticks.R_STICK:
                 mAxisName = "RightStick";
                 break;
-            case AxisInput.TRIGGER:
+            case AnalogueSticks.TRIGGER:
                 mAxisName = "Trigger";
                 break;
-            case AxisInput.D_PAD:
+            case AnalogueSticks.D_PAD:
                 mAxisName = "DPad";
                 break;
         }
     }
 
-    public bool AxisMatched(AxisInput theAxis, Vector2Int aDirection)
+    public bool AxisMatched(AnalogueSticks theAxis, Vector2Int aDirection)
     {
         if (theAxis == mAxisType && mAxisDirection == aDirection)
             return true;

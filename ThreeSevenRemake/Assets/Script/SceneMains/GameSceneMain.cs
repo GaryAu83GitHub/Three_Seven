@@ -60,14 +60,21 @@ public class GameSceneMain : MonoBehaviour
     private bool mTimeOver = false;
     private bool mGameIsPausing = false;
 
+    private enum DelayTimerID
+    {
+        MOVE_BLOCK_HORIZONTAL,
+        MOVE_BLOCK_DROP,
+    }
+    private Dictionary<DelayTimerID, float> mDelayTimers = new Dictionary<DelayTimerID, float>()
+    {
+        { DelayTimerID.MOVE_BLOCK_HORIZONTAL, 0f },
+        { DelayTimerID.MOVE_BLOCK_DROP, 0f },
+    };
+
     private void Awake()
     {
         GridManager.Instance.GenerateGrid();
-
-        // only for debug purpose
         GameRoundManager.Instance.SetUpGameRound(GameMode.SURVIVAL);
-        //GenerateScoreCombinationPositions.Instance.GenerateCombinationPositions();
-        //TaskManagerNew.Instance.PrepareNewTaskSubjects();
     }
 
     void Start()
@@ -141,17 +148,20 @@ public class GameSceneMain : MonoBehaviour
             return;
         }
 
-        if (mCurrentBlock != null)
-        {
-            if (mBlockDropTimer > 0)
-            {
-                mBlockDropTimer -= Time.deltaTime;
-                getNextDropTime?.Invoke(mBlockDropTimer);
-            }
+        BlockDescend();
+        //if (mCurrentBlock != null)
+        //{
+        //    if (mBlockDropTimer > 0)
+        //    {
+        //        mBlockDropTimer -= Time.deltaTime;
+        //        if (mBlockDropTimer < 0f)
+        //            mBlockDropTimer = 0f;
+        //        //getNextDropTime?.Invoke(mBlockDropTimer);
+        //    }
 
-            mGuideBlock.SetupGuideBlock(mCurrentBlock);
-            mGuideBlock.SetPosition(mCurrentBlock);
-        }
+        //    mGuideBlock.SetupGuideBlock(mCurrentBlock);
+        //    mGuideBlock.SetPosition(mCurrentBlock);
+        //}
     }
 
     private IEnumerator GameStart()
@@ -189,7 +199,7 @@ public class GameSceneMain : MonoBehaviour
         ControlManager.Ins.ResetButtonPressTimer();
         //mNextDropTime = GamingManager.Instance.BlockNextDropTime;//Time.time + GamingManager.Instance.DropRate;//mDropRate;
         mBlockDropTimer = GamingManager.Instance.DropRate;
-        getNextDropTime?.Invoke(mBlockDropTimer);
+        //getNextDropTime?.Invoke(mBlockDropTimer);
         activeTimer?.Invoke(true);
         mBlockLanded = false;
     }
@@ -206,40 +216,72 @@ public class GameSceneMain : MonoBehaviour
                     BlockManager.Instance.RearrangeBlock();
                 else if (BlockManager.Instance.IsScoring())
                     BlockManager.Instance.ScoreCalculationProgression();
-                else if(!BlockManager.Instance.BlockPassedGameOverLine())
+                else if (!BlockManager.Instance.BlockPassedGameOverLine())
                     TaskManagerNew.Instance.CheckForCompletedTasks();
                 else
                     passingTheTop?.Invoke();
             }
         }
-        //else
-        //    BlockDropGradually();
     }
 
-    // These are the method subscribed to MainGamePanels delegate for navigate the block
-    private void BlockMoveHorizontal(Vector3 aDir)
+    /// <summary>
+    /// Decreasing the timer over the descend block and check if the timer is going
+    /// to restart depending on if the block has landed or still is floating in the 
+    /// air
+    /// </summary>
+    private void BlockDescend()
     {
-        if (mCurrentBlock == null)
-            return;
+        if (mCurrentBlock != null)
+        {
+            if (mBlockDropTimer > 0)
+            {
+                mBlockDropTimer -= Time.deltaTime;
+                if (mBlockDropTimer < 0f)
+                {
+                    DropBlock();
+                }
+            }
 
-        mCurrentBlock.Move(aDir);
+            mGuideBlock.SetupGuideBlock(mCurrentBlock);
+            mGuideBlock.SetPosition(mCurrentBlock);
+        }
     }
 
-    private void BlockDropGradually()
+    private void DropBlock()
     {
-        if (mCurrentBlock == null)
-            return;
-
         if (!mCurrentBlock.CheckIfCellIsVacantBeneath())
             RegistrateNewLandedBlock();
         else
             mCurrentBlock.DropDown();
 
         mBlockDropTimer = GamingManager.Instance.DropRate;
-        getNextDropTime?.Invoke(mBlockDropTimer);
-        //getNextDropTime?.Invoke(GamingManager.Instance.BlockNextDropTime);
     }
 
+    #region These are the method subscribed to MainGamePanels delegate for navigate the block
+
+    /// <summary>
+    /// Subscribe method
+    /// </summary>
+    private void BlockMoveHorizontal(Vector3 aDir)
+    {
+        if (mCurrentBlock == null)
+            return;
+        mCurrentBlock.Move(aDir);
+    }
+
+    /// <summary>
+    /// Subscribe method
+    /// </summary>
+    private void BlockDropGradually()
+    {
+        if (mCurrentBlock == null)
+            return;
+        DropBlock();
+    }
+
+    /// <summary>
+    /// Subscribe method
+    /// </summary>
     private void BlockDropInstantly()
     {
         if (mCurrentBlock == null)
@@ -251,6 +293,9 @@ public class GameSceneMain : MonoBehaviour
         //getNextDropTime?.Invoke(GamingManager.Instance.BlockNextDropTime);
     }
 
+    /// <summary>
+    /// Subscribe method
+    /// </summary>
     private void BlockRotate()
     {
         if (mCurrentBlock == null)
@@ -259,6 +304,9 @@ public class GameSceneMain : MonoBehaviour
         mCurrentBlock.RotateBlockUpgrade();
     }
 
+    /// <summary>
+    /// Subscribe method
+    /// </summary>
     private void BlockInvert()
     {
         if (mCurrentBlock == null)
@@ -267,6 +315,9 @@ public class GameSceneMain : MonoBehaviour
         mCurrentBlock.InvertBlock();
     }
 
+    /// <summary>
+    /// Subscribe method
+    /// </summary>
     private void UsePowerUp(PowerUpType aPowerUpType)
     {
         switch(aPowerUpType)
@@ -277,6 +328,9 @@ public class GameSceneMain : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Subscribe method
+    /// </summary>
     private void BlockSwaping()
     {
         if (mCurrentBlock == null)
@@ -285,6 +339,9 @@ public class GameSceneMain : MonoBehaviour
         swapingWithPreview?.Invoke(mCurrentBlock);
     }
 
+    /// <summary>
+    /// Subscribe method
+    /// </summary>
     private void GamePause(bool isGamePausing)
     {
         mGameIsPausing = isGamePausing;
@@ -292,6 +349,9 @@ public class GameSceneMain : MonoBehaviour
             TableDebugPanel.SetActive(false);
     }
 
+    /// <summary>
+    /// Subscribe method
+    /// </summary>
     private void BlockSwapWithPreview(List<int> givenNumbers, ref List<int> retrieveNumbers)
     {
         if (mCurrentBlock == null)
@@ -300,7 +360,9 @@ public class GameSceneMain : MonoBehaviour
         retrieveNumbers = new List<int>(mCurrentBlock.CubeNumbers);
         mCurrentBlock.SetCubeNumbers(givenNumbers);
     }
+    #endregion
 
+    // this method have no call, remove it  later
     private void AccomplishAnimationIsPlaying(bool isPlaying)
     {
         mIsAccomplishAnimationPlaying = isPlaying;
@@ -339,4 +401,6 @@ public class GameSceneMain : MonoBehaviour
     {
         mTimeOver = aTimeIsOver;
     }
+
+    
 }

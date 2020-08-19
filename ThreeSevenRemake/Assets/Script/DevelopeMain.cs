@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class has been deactivated from the main game scene and is replaced by GameSceneMain
+/// </summary>
 public class DevelopeMain : MonoBehaviour
 {
     // Object sync with the unity
@@ -128,7 +131,7 @@ public class DevelopeMain : MonoBehaviour
 
         // input for move the block downward one row if the row below is vacant
         // and if the time between each keypress has expired
-        if (ControlManager.Ins.DropBlockGradually(mNextDropTime)/* || Time.time > mNextDropTime*/)
+        if (ControlManager.Ins.DropBlockGradually(/*mNextDropTime*/)/* || Time.time > mNextDropTime*/)
         {
             if (!mCurrentBlock.CheckIfCellIsVacantBeneath())
                 RegistrateNewLandedBlock();

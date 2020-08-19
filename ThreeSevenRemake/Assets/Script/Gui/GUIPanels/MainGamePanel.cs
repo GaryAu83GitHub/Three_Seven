@@ -64,12 +64,20 @@ public class MainGamePanel : GUIPanelBase
     private bool mGameRoundOver = false;
     public bool GameRoundOver { get { return mGameRoundOver; } }
 
+    private enum TimerSubject
+    {
+        DROP_BLOCK,
+        MOVE_BLOCK
+    }
+
     private Animator mAnimator;
 
     private float mCurrentBlockNextDropTime = 0;
     private bool mBlockLanded = false;
     private bool mPreviewFunctionEnable = true;
     private bool mGamePause = false;
+
+    private List<float> mDelayTimers = new List<float>() { 0f, 0f };
 
     public override void Awake()
     {
@@ -114,12 +122,14 @@ public class MainGamePanel : GUIPanelBase
 
     private void InputHandle()
     {
-        blockMoveHorizontal?.Invoke(ControlManager.Ins.MoveBlockHorizontal());
+        blockMoveHorizontal?.Invoke(MoveBlockInput());
 
         navigatePowerUps?.Invoke(ControlManager.Ins.PowerUpSelection());
 
-        if (ControlManager.Ins.DropBlockGradually(0) || mCurrentBlockNextDropTime <= 0f)
+        if (CanDropBlockByHold())
             GivenCommand(CommandIndex.BLOCK_DROP);
+
+        DelayTimers();
 
         if (!mPreviewFunctionEnable)
             return;
@@ -210,6 +220,51 @@ public class MainGamePanel : GUIPanelBase
                 OnPreviewInputEnable(false);
                 break;
 
+        }
+    }
+
+    private Vector3 MoveBlockInput(TimerSubject aSubject = TimerSubject.MOVE_BLOCK)
+    {
+        if (GetIsTimeOutFor(aSubject) && ControlManager.Ins.MoveBlockHorizontal() != Vector3.zero)
+        {
+            ResetTimerFor(aSubject);
+            return ControlManager.Ins.MoveBlockHorizontal();
+        }
+            
+        return Vector3.zero;
+    }
+
+    private bool CanDropBlockByHold(TimerSubject aSubject = TimerSubject.DROP_BLOCK)
+    {
+        if (GetIsTimeOutFor(aSubject) && ControlManager.Ins.DropBlockGradually())
+        {
+            ResetTimerFor(aSubject);
+            return true;
+        }
+        return false;
+    }
+
+    private void ResetTimerFor(TimerSubject aTimer)
+    {
+        mDelayTimers[(int)aTimer] = Constants.BUTTON_DOWN_INTERVAL;
+    }
+
+    private bool GetIsTimeOutFor(TimerSubject aTimer)
+    {
+        if (mDelayTimers[(int)aTimer] <= 0f)
+            return true;
+        return (false);
+    }
+
+    private void DelayTimers()
+    {
+        for(int i = 0; i < mDelayTimers.Count; i++)
+        {
+            if (mDelayTimers[i] > 0f)
+                mDelayTimers[i] -= Time.deltaTime;
+
+            if (mDelayTimers[i] <= 0f)
+                mDelayTimers[i] = 0f;
         }
     }
 

@@ -45,6 +45,7 @@ public enum ControlType
 {
     KEYBOARD,
     XBOX_360,
+    XBOX,
     //PS4_DUALSHOCK
 }
 
@@ -62,6 +63,8 @@ public class ControlObject
     protected int mCurrentHorizontDirection = 0;
 
     protected const int mIncreaseDeltaTimeConst = 10;
+
+    private float mMenuNavigateHoldDelayTimer = 0f;
 
     public ControlObject()
     { }
@@ -84,11 +87,26 @@ public class ControlObject
 
     public virtual bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall)
     {
+        if(KeyHold(aCommand) && mMenuNavigateHoldDelayTimer <= 0f)
+        {
+            mMenuNavigateHoldDelayTimer = anDelayIntervall;
+            return true;
+        }
+
+        if (!KeyHold(aCommand))
+            mMenuNavigateHoldDelayTimer = 0f;
+
+        if (mMenuNavigateHoldDelayTimer > 0f)
+            mMenuNavigateHoldDelayTimer -= Time.deltaTime;
+
         return false;
     }
 
     public virtual bool MenuNavigatePress(CommandIndex aCommand)
     {
+        if (KeyPress(aCommand))
+            return true;
+
         return false;
     }
 
@@ -100,41 +118,27 @@ public class ControlObject
 
     public virtual bool MenuBack() { return KeyPress(CommandIndex.BACK); }
 
-    public virtual bool TestGamePadState(XBoxButton aButton) { return false; }
-
-    public Vector3 GameMoveBlockHorizontal()
+    #region public Gameplay methods
+    public virtual Vector3 GameMoveBlock()
     {
-        if (!MoveHorizontButtonTimePassed())
-            return Vector3.zero;
-
-        Vector3 dir = Vector3.zero;
-        if (HorizontBottomHit(ref dir))
-            ResetMoveHorizontTimer();
-
-        return dir;
+        if (KeyHold(CommandIndex.BLOCK_MOVE_LEFT))
+            return Vector3.left;
+        if (KeyHold(CommandIndex.BLOCK_MOVE_RIGHT))
+            return Vector3.right;
+        return Vector3.zero;
     }
 
     public virtual int GameMovePowerUpSelection()
     {
-        int diretion = 0;
-
         if (KeyPress(CommandIndex.POWER_UP_NAVI_LEFT))
-            diretion = -1;
+            return -1;
         if (KeyPress(CommandIndex.POWER_UP_NAVI_RIGHT))
-            diretion = 1;
+            return 1;
 
-        return diretion;
+        return 0;
     }
 
-    public virtual bool GameDropBlockGradually(float aBlockNextDropTime)
-    {
-        if ((KeyDown(CommandIndex.BLOCK_DROP) && DropButtonTimePassed()))
-        {
-            ResetDropTimer();
-            return true;
-        }
-        return false;
-    }
+    public virtual bool GameSlowDropBlock() { return KeyHold(CommandIndex.BLOCK_DROP); }
 
     public virtual bool GameInstantBlockDrop() { return KeyPress(CommandIndex.BLOCK_INSTANT_DROP); }
 
@@ -155,6 +159,38 @@ public class ControlObject
     public virtual bool GameDumpPreview() { return KeyPress(CommandIndex.PREVIEW_DUMP); }
 
     public virtual bool GamePause() { return KeyPress(CommandIndex.INGAME_PAUSE); }
+
+    public virtual void GetInputFor(CommandIndex aCommand, ref KeybindData aBindData) { }
+    #endregion
+
+    #region Future removing methods
+    // this method was only for temporary test of the control, it'll be removed
+    public virtual bool TestGamePadState(XBoxButton aButton) { return false; }
+
+    // this method is to be replaced by GameMoveBlock without the timer checking on this class
+    public Vector3 GameMoveBlockHorizontal()
+    {
+        if (!MoveHorizontButtonTimePassed())
+            return Vector3.zero;
+
+        Vector3 dir = Vector3.zero;
+        if (HorizontBottomHit(ref dir))
+            ResetMoveHorizontTimer();
+
+        return dir;
+    }
+
+    // this method will be replaced by GameSlowDropBlock without the timer function on this class
+    public virtual bool GameDropBlockGradually(float aBlockNextDropTime)
+    {
+        if ((KeyHold(CommandIndex.BLOCK_DROP) && DropButtonTimePassed()))
+        {
+            ResetDropTimer();
+            return true;
+        }
+        return false;
+    }
+    #endregion
 
     protected virtual bool HorizontBottomHit(ref Vector3 aDir, float aHorizontValue = 0f)
     {
@@ -194,13 +230,9 @@ public class ControlObject
     /// </summary>
     /// <param name="aCommand">The requesting command</param>
     /// <returns>true if the command was registrate and was pressed</returns>
-    public virtual bool KeyDown(CommandIndex aCommand)
+    public virtual bool KeyPress(CommandIndex aCommand)
     {
         return false;
-        //if (!mKeybindList.ContainsKey(aCommand))
-        //    return false;
-
-        //return Input.GetKey(mKeybindList[aCommand]);
     }
 
     /// <summary>
@@ -208,13 +240,9 @@ public class ControlObject
     /// </summary>
     /// <param name="aCommand">The requesting command</param>
     /// <returns>true if the command was registrate and is holding down</returns>
-    public virtual bool KeyPress(CommandIndex aCommand)
+    public virtual bool KeyHold(CommandIndex aCommand)
     {
         return false;
-        //if (!mKeybindList.ContainsKey(aCommand))
-        //    return false;
-
-        //return Input.GetKeyDown(mKeybindList[aCommand]);
     }
 
 

@@ -475,6 +475,7 @@ MonoBehaviour:
   isAxis: 0
   aName: 7
   Buttons: 07000000
+  Stick: 4
 --- !u!65 &73097638
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2187,6 +2188,7 @@ MonoBehaviour:
   isAxis: 0
   aName: 5
   Buttons: 05000000
+  Stick: 4
 --- !u!65 &383428339
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2656,6 +2658,7 @@ MonoBehaviour:
   isAxis: 1
   aName: 9
   Buttons: 0900000010000000110000001200000013000000
+  Stick: 2
 --- !u!135 &443406761
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -8683,6 +8686,7 @@ MonoBehaviour:
   isAxis: 0
   aName: 0
   Buttons: 00000000
+  Stick: 4
 --- !u!65 &730602744
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9134,6 +9138,7 @@ MonoBehaviour:
   isAxis: 1
   aName: 13
   Buttons: 14000000150000001600000017000000
+  Stick: 3
 --- !u!135 &829301147
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -11263,6 +11268,7 @@ MonoBehaviour:
   isAxis: 1
   aName: 11
   Buttons: 0e0000000f000000
+  Stick: 1
 --- !u!135 &1282215075
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -11449,6 +11455,7 @@ MonoBehaviour:
   isAxis: 0
   aName: 1
   Buttons: 01000000
+  Stick: 4
 --- !u!65 &1336961941
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11558,6 +11565,7 @@ MonoBehaviour:
   isAxis: 1
   aName: 8
   Buttons: 080000000a0000000b0000000c0000000d000000
+  Stick: 0
 --- !u!135 &1346001115
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -11889,6 +11897,7 @@ MonoBehaviour:
   isAxis: 0
   aName: 6
   Buttons: 06000000
+  Stick: 4
 --- !u!65 &1387760833
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13811,6 +13820,7 @@ MonoBehaviour:
   isAxis: 0
   aName: 4
   Buttons: 04000000
+  Stick: 4
 --- !u!65 &1739001850
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17155,6 +17165,7 @@ MonoBehaviour:
   isAxis: 0
   aName: 3
   Buttons: 03000000
+  Stick: 4
 --- !u!65 &1905200532
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18365,6 +18376,7 @@ MonoBehaviour:
   isAxis: 0
   aName: 2
   Buttons: 02000000
+  Stick: 4
 --- !u!65 &2059891537
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -269,7 +269,7 @@ public class KeybindingSettings : SettingsContainerBase
                 continue;
             if (mActiveControlType == ControlType.XBOX_360 && mNewNavigateBindings[navi].BindingAxis == aData.BindingAxis)
             {
-                AxisInput tempAxis = mNewNavigateBindings[aNavigate].BindingAxis;
+                AnalogueSticks tempAxis = mNewNavigateBindings[aNavigate].BindingAxis;
                 mNewNavigateBindings[navi].ChangeAxis(tempAxis);
                 mNewNavigateBindings[aNavigate].ChangeAxis(aData.BindingAxis);
                 return true;
@@ -333,7 +333,7 @@ public class KeybindingSettings : SettingsContainerBase
 
 public class KeybindData
 {
-    private readonly CommandIndex mCommand = CommandIndex.MAX_INPUT;
+    private CommandIndex mCommand = CommandIndex.MAX_INPUT;
     public CommandIndex Command { get { return mCommand; } }
 
     private KeyCode mBindingKeyCode = KeyCode.None;
@@ -368,24 +368,12 @@ public class KeybindData
         mBindingXBoxButton = aButton;
     }
 
-    //private List<XBoxButton> mBindingXboxButtons = new List<XBoxButton>();
-    //public List<XBoxButton> BindingXboxButtons { get { return mBindingXboxButtons; } }
-    //public void ChangeBindingXboxButtons(List<XBoxButton> someXboxButtons)
-    //{
-    //    mBindingXboxButtons.Clear();
-    //    mBindingXboxButtons = new List<XBoxButton>(someXboxButtons);
-    //}
-    //public void ChangeBindingXboxButtonAt(int anIndex, XBoxButton aButton)
-    //{
-    //    mBindingXboxButtons[anIndex] = aButton;
-    //}
-
-    private AxisInput mBindingAxis = AxisInput.NONE;
+    private AnalogueSticks mBindingAxis = AnalogueSticks.NONE;
     private Vector2Int mAxisCommandDirection = Vector2Int.zero;
-    public AxisInput BindingAxis { get { return mBindingAxis; } }
+    public AnalogueSticks BindingAxis { get { return mBindingAxis; } }
     public Vector2Int AxisCommandDirection { get { return mAxisCommandDirection; } }
-    public void ChangeAxis(AxisInput anAxis) { mBindingAxis = anAxis; }
-    public void ChangeAxisCommand(AxisInput anAxis, Vector2Int aCommandDireciton) { mBindingAxis = anAxis; mAxisCommandDirection = aCommandDireciton; }
+    public void ChangeAxis(AnalogueSticks anAxis) { mBindingAxis = anAxis; }
+    public void ChangeAxisCommand(AnalogueSticks anAxis, Vector2Int aCommandDireciton) { mBindingAxis = anAxis; mAxisCommandDirection = aCommandDireciton; }
 
     /// <summary>
     /// Default constructor for an empty data object
@@ -398,11 +386,22 @@ public class KeybindData
         List<ControlObject> availableControls = ControlManager.Ins.Controls;
         foreach(ControlObject control in availableControls)
         {
-            if(control.Type == ControlType.KEYBOARD)
-                (control as KeyboardControl).GetKeyCodeFor(mCommand, ref mBindingKeyCode);
-            if(control.Type == ControlType.XBOX_360)
-                (control as XBox360Constrol).GetButtonFor(mCommand, ref mBindingXBoxButton);
+            KeybindData data = this;
+            control.GetInputFor(mCommand, ref data);
+            //if(control.Type == ControlType.KEYBOARD)
+            //    (control as KeyboardControl).GetKeyCodeFor(mCommand, ref mBindingKeyCode);
+            //if(control.Type == ControlType.XBOX_360)
+            //    (control as XBoxControl/*XBox360Constrol*/).GetButtonFor(mCommand, ref mBindingXBoxButton);
+            CopyData(data);
         }
+    }
+
+    private void CopyData(KeybindData aData)
+    {
+        mCommand = aData.Command;
+        mBindingKeyCode = aData.BindingKeyCode;
+        mBindingKeyCodes = aData.BindingKeyCodes;
+        mBindingXBoxButton = aData.BindingXBoxButton;
     }
 
     public KeybindData(NavigatorType aNavigateType)
@@ -423,7 +422,7 @@ public class KeybindData
         mBindingXBoxButton = aBindingXBoxButton;
     }
 
-    public KeybindData(List<KeyCode> someBindingCodes, AxisInput aBindingAxis)
+    public KeybindData(List<KeyCode> someBindingCodes, AnalogueSticks aBindingAxis)
     {
         mBindingKeyCodes = someBindingCodes;
         mBindingAxis = aBindingAxis;

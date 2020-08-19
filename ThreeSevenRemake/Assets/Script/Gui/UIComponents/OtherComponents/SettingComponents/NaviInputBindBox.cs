@@ -15,11 +15,11 @@ public class NaviInputBindBox : MonoBehaviour
 
     private Image mBackgroundImage;
 
-    void Start()
+    private void Awake()
     {
-        mBackgroundImage = GetComponent<Image>();        
+        mBackgroundImage = GetComponent<Image>();
     }
-
+    
     public void SetBindingText(string aBindingText)
     {
         BindText.text = aBindingText;

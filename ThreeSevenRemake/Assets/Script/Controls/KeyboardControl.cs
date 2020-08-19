@@ -68,23 +68,28 @@ public class KeyboardControl : ControlObject
         }
     }
 
-    public override bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall = .1f)
-    {
-        if(KeyPress(aCommand) && mMenuNavigationSuppressTimer <= 0f)
-        {
-            mMenuNavigationSuppressTimer = anDelayIntervall;
-            return true;
-        }
+    
 
-        if(!KeyPress(aCommand))
-            mMenuNavigationSuppressTimer = 0;
+    // this method is outcommented is due to it's function has been transfered to its
+    // parents class virutal method, it is possible this method will be removed in he
+    // future
+    //public override bool MenuNavigateHold(CommandIndex aCommand, float anDelayIntervall = .1f)
+    //{
+    //    if(KeyHold(aCommand) && mMenuNavigationSuppressTimer <= 0f)
+    //    {
+    //        mMenuNavigationSuppressTimer = anDelayIntervall;
+    //        return true;
+    //    }
 
-        if (mMenuNavigationSuppressTimer > 0f)
-            mMenuNavigationSuppressTimer -= Time.deltaTime;
+    //    if(!KeyHold(aCommand))
+    //        mMenuNavigationSuppressTimer = 0;
 
-        //return KeyPress(aCommand);
-        return false;
-    }
+    //    if (mMenuNavigationSuppressTimer > 0f)
+    //        mMenuNavigationSuppressTimer -= Time.deltaTime;
+
+    //    //return KeyPress(aCommand);
+    //    return false;
+    //}
 
     public override bool MenuNavigatePress(CommandIndex aCommand)
     {
@@ -93,26 +98,37 @@ public class KeyboardControl : ControlObject
         return base.MenuNavigatePress(aCommand);
     }
 
-    public override bool KeyDown(CommandIndex aCommand)
-    {
-        if(!mCommands.ContainsKey(aCommand))
-            return base.KeyDown(aCommand);
-
-        return Input.GetKey(mCommands[aCommand]);
-    }
-
     public override bool KeyPress(CommandIndex aCommand)
     {
-        if (!mCommands.ContainsKey(aCommand))
+        if(!mCommands.ContainsKey(aCommand))
             return base.KeyPress(aCommand);
 
         return Input.GetKeyDown(mCommands[aCommand]);
     }
 
+    public override bool KeyHold(CommandIndex aCommand)
+    {
+        if (!mCommands.ContainsKey(aCommand))
+            return base.KeyHold(aCommand);
+
+        return Input.GetKey(mCommands[aCommand]);
+    }
+
     protected override bool HorizontBottomHit(ref Vector3 aDir, float aHorizontValue = 0f)
     {
         return base.HorizontBottomHit(ref aDir, HorizontNavigation());
-    }   
+    }
+
+    /// <summary>
+    /// Get the key set to the requesting command into the bind data reference
+    /// </summary>
+    /// <param name="aCommand">requesting command index</param>
+    /// <param name="aBindData">reference bind data to set button of the requesting
+    /// command index</param>
+    public override void GetInputFor(CommandIndex aCommand, ref KeybindData aBindData)
+    {
+        aBindData.ChangeBindingKeyCode(mCommands[aCommand]);
+    }
 
     public void GetKeyCodeFor(CommandIndex aCommand, ref KeyCode aKeyCode)
     {
@@ -143,9 +159,9 @@ public class KeyboardControl : ControlObject
     private float HorizontNavigation()
     {
         float navi = 0;
-        if (KeyDown(CommandIndex.BLOCK_MOVE_LEFT))
+        if (KeyHold(CommandIndex.BLOCK_MOVE_LEFT))
             navi = -1f;
-        if (KeyDown(CommandIndex.BLOCK_MOVE_RIGHT))
+        if (KeyHold(CommandIndex.BLOCK_MOVE_RIGHT))
             navi = 1f;
         return navi;
     }

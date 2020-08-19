@@ -129,7 +129,7 @@ public class SetKeybindSlot : SettingSlotForCommandBinding//SettingSlotBase
         ActiveChangeMode(false);
     }
 
-    private void SetXboxAxisToData(AxisInput anAxis, Vector2Int aCommandDirection)
+    private void SetXboxAxisToData(AnalogueSticks anAxis, Vector2Int aCommandDirection)
     {
         mKeybindingData.ChangeAxisCommand(anAxis, aCommandDirection);
     }

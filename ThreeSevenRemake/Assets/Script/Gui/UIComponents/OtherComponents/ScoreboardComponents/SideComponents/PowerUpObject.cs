@@ -103,6 +103,9 @@ public class PowerUpObject : MonoBehaviour
 
     public void Selected(bool isSelected)
     {
+        if (mCG == null)
+            return;
+
         if (!isSelected)
             mCG.alpha = .5f;
         else
