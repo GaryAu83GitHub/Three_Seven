@@ -8,7 +8,7 @@ using UnityEngine;
 public static class Constants
 {
     public const int BLOCK_START_POSITION_X = 5;
-    public const int BLOCK_START_POSITION_Y = 18;
+    public const int BLOCK_START_POSITION_Y = 15;
 
     public const float DROPPING_VALUE = .09f;//.03f;
     public const float MINIMAL_DROPRATE = .1f;
@@ -19,7 +19,7 @@ public static class Constants
     public const int MINIMAL_TASK_VALUE = 18;
 
     public const int DEFAULT_ROOF_HEIGHT = 14;
-    public const int MAX_CEILING_HIGH = 18;
+    public const int MAX_CEILING_HIGH = 16;
     public const int MIN_CEILING_HIGH = 9;
 
     public const int MAX_LEVEL = 100;

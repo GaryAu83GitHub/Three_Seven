@@ -46,11 +46,6 @@ public class GridManager
     public Dictionary<int, List<Cube>> Grid { get { return mGrid; } }
 
     /// <summary>
-    /// Keep track of the tallest cell row on the board
-    /// </summary>
-    //private int mCurrentTallestCellInGrid = 0;
-
-    /// <summary>
     ///  Generate the grid with default value along with the list of the
     ///  highest row to each column which is 0
     /// </summary>
@@ -79,10 +74,6 @@ public class GridManager
     public void RegistrateCell(Cube aCube)
     {
         mGrid[aCube.GridPos.x][aCube.GridPos.y] = aCube;
-
-        //if (aCube.GridPos.y > mCurrentTallestCellInGrid)
-        //    mCurrentTallestCellInGrid = aCube.GridPos.y;
-
         //Debug.LogFormat("Current tallest cell row: {0}", mCurrentTallestCellInGrid);
     }
 

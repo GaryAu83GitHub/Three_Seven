@@ -34,9 +34,9 @@ public class GamingManager
     public int MaxCombo { get { return mCurrentMaxCombo; } set { mCurrentMaxCombo = value; } }
 
     private float mCurrentDropRate = (float)Constants.DROPPING_INITIAL_SPEED;
-    public float DropRate { get { return (float)MathTools.ExponentialFormula(Constants.DROPPING_INITIAL_SPEED, Constants.DROPPING_COEFFICIENT, (double)LevelManager.Instance.CurrentLevel);/*mCurrentDropRate*/; } }
-    // this should not be used anymore
-    public float BlockNextDropTime { get { return Time.time + DropRate; } }
+    public float DropRate { get { return (float)MathTools.ExponentialFormula(Constants.DROPPING_INITIAL_SPEED, Constants.DROPPING_COEFFICIENT, (double)LevelManager.Instance.CurrentLevel); } }
+    
+    public float BlockNextDropTime { get { return Time.time + DropRate; } } // this should not be used anymore
 
     public float GameTime { get; set; }
 

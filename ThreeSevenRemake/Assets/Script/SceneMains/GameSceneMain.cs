@@ -94,7 +94,7 @@ public class GameSceneMain : MonoBehaviour
         ResultPanel.leaveGameScene += LeaveGameScene;
         TimeTextBox.timeOver += TimeOver;
 
-        LimitLine.transform.position += new Vector3(0f, .625f + (Constants.CUBE_GAP_DISTANCE * GameSettings.Instance.LimitHigh), 0f);
+        //LimitLine.transform.position += new Vector3(0f, .625f + (Constants.CUBE_GAP_DISTANCE * GameSettings.Instance.LimitHigh), 0f);
 
         mDebugTable = TableDebugPanel.GetComponent<TableDebugPanel>();
 
@@ -149,19 +149,6 @@ public class GameSceneMain : MonoBehaviour
         }
 
         BlockDescend();
-        //if (mCurrentBlock != null)
-        //{
-        //    if (mBlockDropTimer > 0)
-        //    {
-        //        mBlockDropTimer -= Time.deltaTime;
-        //        if (mBlockDropTimer < 0f)
-        //            mBlockDropTimer = 0f;
-        //        //getNextDropTime?.Invoke(mBlockDropTimer);
-        //    }
-
-        //    mGuideBlock.SetupGuideBlock(mCurrentBlock);
-        //    mGuideBlock.SetPosition(mCurrentBlock);
-        //}
     }
 
     private IEnumerator GameStart()
@@ -197,9 +184,7 @@ public class GameSceneMain : MonoBehaviour
         GuideBlockObject.SetActive(true);
 
         ControlManager.Ins.ResetButtonPressTimer();
-        //mNextDropTime = GamingManager.Instance.BlockNextDropTime;//Time.time + GamingManager.Instance.DropRate;//mDropRate;
         mBlockDropTimer = GamingManager.Instance.DropRate;
-        //getNextDropTime?.Invoke(mBlockDropTimer);
         activeTimer?.Invoke(true);
         mBlockLanded = false;
     }

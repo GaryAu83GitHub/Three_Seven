@@ -117,9 +117,6 @@ public class MenuEnablePanelBase : GUIPanelBase
 
     public void ActivateButtons(bool activateInput)
     {
-        mIsPanelInputsActive = activateInput;//!mIsPanelInputsActive;
-
-        //for (int i = 0; i < Buttons.Count; i++)
-        //    Buttons[i].interactable = mIsPanelInputsActive;
+        mIsPanelInputsActive = activateInput;
     }
 }
